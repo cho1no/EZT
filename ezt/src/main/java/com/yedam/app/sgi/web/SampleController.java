@@ -9,7 +9,7 @@ public class SampleController {
 
 	@GetMapping("main")
 	public String all() {
-		return "loginTest";
+		return "sgi/loginTest";
 	}
 	
 	@GetMapping("user")
@@ -23,6 +23,6 @@ public class SampleController {
 	
 	@GetMapping("login")
 	public String login() {
-		return "doc/login";
+		return "sgi/login";
 	}
 }
