@@ -1,5 +1,5 @@
 package com.yedam.app.sgi.service;
 
-public interface SgiService {
+public interface SignInService {
 
 }

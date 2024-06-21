@@ -1,5 +1,5 @@
 package com.yedam.app.sgu.service;
 
-public interface SguService {
+public interface SingUpService {
 
 }

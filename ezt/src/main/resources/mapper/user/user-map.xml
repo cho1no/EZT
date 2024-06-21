@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.usr.mapper.UserMapper">
+	<select id="selectUsrInfo" resultType="UsrVO">
+		SELECT users_no
+				, users_id
+				, users_pw
+				, users_email
+				, users_birth
+				, users_rnn
+				, users_gender
+				, users_name
+				, users_phone
+				, users_nick
+				, users_role
+				, users_join_dt
+				, users_state_change_dt
+				, users_state
+				, file_id
+		FROM users
+		WHERE users_id = #{id}
+	</select>
+</mapper>
