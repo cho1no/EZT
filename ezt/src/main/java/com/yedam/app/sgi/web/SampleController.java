@@ -7,10 +7,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class SampleController {
 
-	@GetMapping("all")
-	@ResponseBody
+	@GetMapping("main")
 	public String all() {
-		return "LOGIN SUCCESS";
+		return "loginTest";
 	}
 	
 	@GetMapping("user")
@@ -22,4 +21,8 @@ public class SampleController {
 	@GetMapping("admin")
 	public void admin() {}
 	
+	@GetMapping("login")
+	public String login() {
+		return "doc/login";
+	}
 }
