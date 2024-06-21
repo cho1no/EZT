@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="css/quill.snow.css">
+<title></title>
+</head>
+<body>
+	<section class="site-section">
+		<div class="container">
+			<div class="row mb-5">
+				<div class="col-lg-12">
+					<form class="p-4 p-md-5 border rounded" method="post">
+						<h3 class="text-black mb-5 border-bottom pb-2">견적서 작성</h3>
+						<div class="row form-group">
+							<div class="col-4">
+								<label for="uname">성명</label> <input type="text"
+									class="form-control" id="uname">
+							</div>
+							<div class="col-5">
+								<label for="tel">전화번호</label> <input type="tel"
+									class="form-control" id="tel">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-4">
+								<label for="uId">의뢰자ID</label> <input type="text"
+									class="form-control" id="uId" readonly>
+							</div>
+							<div class="col-5">
+								<label for="category">시공분야</label> <input type="text"
+									class="form-control" id="category" readonly>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-6">
+								<label for="startDt">공사시작날짜</label> <input type="date"
+									class="form-control" id="startDt">
+							</div>
+							<div class="col-6">
+								<label for="endDt">공사마감날짜</label> <input type="date"
+									class="form-control" id="endDt">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-6">
+								<label for="writeDt">작성 일시</label> <input type="text"
+									class="form-control" id="writeDt" readonly>
+							</div>
+						</div>
+						<div class="row form-group" style="padding-top: 20px">
+							<div class="col-auto">
+								<label for="postCode" style="margin: 0">우편번호</label>
+							</div>
+							<div class="col-4">
+								<input type="text" class="form-control" id="postCode">
+							</div>
+							<div class="col-3">
+								<button type="button" class="btn btn-primary">우편번호 찾기</button>
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-10">
+								<label for="addr">주소</label> <input type="text"
+									class="form-control" id="addr">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-10">
+								<label for="detailAddr">상세주소</label> <input type="text"
+									class="form-control" id="detailAddr">
+							</div>
+						</div>
+						<div class="row form-group"
+							style="padding-top: 20px; padding-bottom: 20px">
+							<div class="col-5">
+								<label for="comment">비고</label>
+								<textarea cols="90"></textarea>
+							</div>
+						</div>
+						<table class="table table-hover">
+							<thead>
+								<tr class="text-center">
+									<th scope="col">품명</th>
+									<th scope="col" width="80px">규격</th>
+									<th scope="col" width="120px">수량</th>
+									<th scope="col">단가</th>
+									<th scope="col" width="200px">금액</th>
+									<th scope="col" width="250px">비고</th>
+									<th width="53px"><button type="button" class="btn btn-primary"
+											style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">+</button></th>
+								</tr>
+							</thead>
+							<tbody class="content">
+
+							</tbody>
+						</table>
+					</form>
+				</div>
+
+			</div>
+			<div class="row align-items-center mb-5">
+				<div class="col-lg-4 ml-auto">
+					<div class="row">
+						<div class="col-6">
+							<a href="#" class="btn btn-block btn-light btn-md"><span
+								class="icon-open_in_new mr-2"></span>미리보기</a>
+						</div>
+						<div class="col-6">
+							<a href="#" class="btn btn-block btn-primary btn-md">저장</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<script>
+	$('table thead button').on('click', addForm);
+	function addForm(e){
+		console.log("button");
+		$('.content').append(`<tr>
+				<td><input type="text" style="border: 0; width: 100%;" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" /></td>
+				<td><button type="button" class="btn btn-outline-danger" name="deleteBtn"
+					style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">-</button></td>
+			</tr>`);
+	}
+	
+	$(document).on('click', 'button[name=deleteBtn]', function(e) {
+	    console.log(e.target);
+	    e.target.closest('tr').remove();
+	    
+	});
+	
+	$('#writeDt').val(new Date().toISOString().substring(0, 10));
+
+	</script>
+	
+</body>
+</html>
