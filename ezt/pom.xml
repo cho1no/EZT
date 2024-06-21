@@ -87,7 +87,17 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
-
+		
+		<!-- websokect -->
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+		<dependency>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+      </dependency>
 	</dependencies>
 
 
