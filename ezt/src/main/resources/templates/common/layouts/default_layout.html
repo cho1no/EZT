@@ -1,37 +1,46 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-<meta charset="UTF-8">
-<th:block th:replace="common/configs/default_config :: ConfigFragment"></th:block>
-</head>
-<body id="top">
-
-
-<div class="site-wrap">
-
-	<mobile th:insert="common/fragments/default_mobile :: mobileFragment"></mobile>
-	<header class="site-navbar mt-3" th:insert="common/fragments/default_header :: headerFragment"></header>
-	<section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
-	<div class="container">
-        <div class="row">
-          <div class="col-md-7">
-            <h1 class="text-white font-weight-bold">Our Blog</h1>
-            <div class="custom-breadcrumbs">
-              <a href="#">Home</a> <span class="mx-2 slash">/</span>
-              <span class="text-white"><strong>About Us</strong></span>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <th:block
+      th:replace="common/configs/default_config :: ConfigFragment"
+    ></th:block>
+    <scr th:insert="common/fragments/default_scr :: scrFragment"></scr>
+  </head>
+  <body id="top">
+    <div class="site-wrap">
+      <mobile
+        th:insert="common/fragments/default_mobile :: mobileFragment"
+      ></mobile>
+      <header
+        class="site-navbar mt-3"
+        th:insert="common/fragments/default_header :: headerFragment"
+      ></header>
+      <section
+        class="section-hero overlay inner-page bg-image"
+        style="background-image: url('images/hero_1.jpg')"
+        id="home-section"
+      >
+        <div class="container">
+          <div class="row">
+            <div class="col-md-7">
+              <h1 class="text-white font-weight-bold">Our Blog</h1>
+              <div class="custom-breadcrumbs">
+                <a href="#">Home</a> <span class="mx-2 slash">/</span>
+                <span class="text-white"><strong>About Us</strong></span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-	<main layout:fragment="Content"></main>
-	<footer class="site-footer" th:insert="common/fragments/default_footer :: footerFragment"></footer>
-	
-</div>
-
-	<scr th:insert="common/fragments/default_scr :: scrFragment"></scr>
-
-</body>
-
+      </section>
+      <main layout:fragment="Content"></main>
+      <footer
+        class="site-footer"
+        th:insert="common/fragments/default_footer :: footerFragment"
+      ></footer>
+    </div>
+  </body>
 </html>

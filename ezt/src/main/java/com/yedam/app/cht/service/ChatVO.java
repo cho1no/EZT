@@ -9,6 +9,7 @@ public class ChatVO {
 	private Integer chatNo;
 	private String content;
 	private Date ChatTime;
+	private String writer;
 	private Integer UsersNo;
-	private Integer ChatRoomNo;
+	private String ChatRoomNo;
 }
