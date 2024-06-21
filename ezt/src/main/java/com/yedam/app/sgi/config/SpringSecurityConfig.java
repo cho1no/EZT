@@ -23,17 +23,19 @@ public class SpringSecurityConfig {
 	@Bean
 	SecurityFilterChain filterChin(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()
-				.antMatchers("/", "/all").permitAll()
-				.antMatchers("/user/**").hasAnyRole("USER")
-				.antMatchers("/worker/**").hasAnyRole("WORKER")
+				.antMatchers("/", "/main", "/login", "/css/**", "/fonts/**", "/images/**", "/js/**").permitAll()
+				.antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+				.antMatchers("/worker/**").hasAnyRole("WORKER", "ADMIN")
 				.antMatchers("/admin/**").hasAnyAuthority("ROLE ADMIN")
 				.anyRequest().authenticated()
 			.and()
-			.formLogin()
-				.defaultSuccessUrl("/all")
+			.formLogin().loginPage("/login").usernameParameter("id")
+				.defaultSuccessUrl("/main")
 			.and()
 			.logout()
-				.logoutSuccessUrl("/all");
+				.logoutSuccessUrl("/main")
+				.and()
+				.csrf().disable();
 		
 		return http.build();
 	}
