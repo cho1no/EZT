@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="Content">
+<style>
+.title{
+	margin:30px;
+}
+.search{
+	text-align:center;
+	margin:50px;
+}
+.input{
+	width:500px;
+}
+
+</style>
+<head>
+<meta charset="UTF-8">
+<title>의뢰 목록</title>
+</head>
+<body>
+
+<section class="site-section">
+<h2 class="title">의뢰 신청 목록</h2>
+	<div class="search">
+	<select>
+		<option value="category_code">작업분야</option>
+		<option value="region_code">지역</option>
+	</select>
+	<input class="input" type="text">
+	<button class="btn btn-primary">검색</button>
+	<button class="btn btn-primary">글쓰기</button>
+	</div>
+      <div class="container">
+        <div class="row mb-5">
+        <th:block th:each="request : ${requestList}">
+          <div class="col-md-6 col-lg-3 mb-5">
+            <a href="blog-single.html"><img src="images/interior.jpg" alt="Image" class="img-fluid rounded mb-4"></a>
+            <h3><a href="blog-single.html" class="text-black">[[${request.title}]] </a></h3>
+            <div>[[${request.regionCode}]] <span class="mx-2">|</span>[[${request.categoryCode}]]</div>
+            <div>[[${#dates.format(request.writeDt,'yyyy년 MM월 dd일')}]] <span class="mx-2">|</span>[[${request.usersName}]] </div>
+          </div>
+         </th:block>
+        </div>
+        <div class="row pagination-wrap mt-5">
+          
+          <div class="col-md-12 text-center ">
+            <div class="custom-pagination ml-auto">
+              <a href="#" class="prev">Prev</a>
+              <div class="d-inline-block">
+              <a href="#" class="active">1</a>
+              <a href="#">2</a>
+              <a href="#">3</a>
+              <a href="#">4</a>
+              </div>
+              <a href="#" class="next">Next</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+	
+</body>
+</html>

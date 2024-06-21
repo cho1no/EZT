@@ -6,20 +6,25 @@ import lombok.Data;
 
 @Data
 public class RequestVO {
-	private Integer requestNo;
-	private int requester;
-	private String cttPlace;
-	private int cttPlaceArea;
-	private String cttPlaceSituation;
-	private int hopeCttBudget;
-	private Date hopeCttStartDt;
-	private Date hopeCttEndDt;
-	private String postcode;
-	private String address;
-	private String detailAddress;
-	private String title;
-	private String content;
-	private Date writeDt;
-	private String requestState;
-	private String regionCode;
+	private Integer requestNo;             //의뢰번호
+	private int requester;				   //의뢰자
+	private String cttPlace;			   //공사공간
+	private int cttPlaceArea;			   //공사공간면적
+	private String cttPlaceSituation;	   //공사공간상황
+	private int hopeCttBudget;			   //희망공사예산
+	private Date hopeCttStartDt;		   //희망공사시작일
+	private Date hopeCttEndDt;			   //희망공사종료일
+	private String postcode;			   //우편번호	
+	private String address;				   //주소
+	private String detailAddress;		   //상세주소
+	private String title;				   //제목
+	private String content;				   //내용
+	private Date writeDt;				   //작성일시
+	private String requestState;		   //의뢰상태
+	private String regionCode;			   //지역코드
+	private int fileId;					   //파일아이디
+	private String categoryCode;		   //분야코드
+	
+	//조인 컬럼
+	private String usersName;
 }
