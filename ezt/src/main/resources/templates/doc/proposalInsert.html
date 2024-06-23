@@ -4,81 +4,88 @@
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
 <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" href="css/quill.snow.css">
-<title></title>
+
+  <!-- jQuery datePicker -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+  
+<title>견적서 작성</title>
 </head>
 <body>
 	<section class="site-section">
 		<div class="container">
 			<div class="row mb-5">
 				<div class="col-lg-12">
-					<form class="p-4 p-md-5 border rounded" method="post">
+					<form class="p-4 p-md-5 border rounded" id="ppsInsertForm" th:action="@{/ppsInsert}" method="post" th:object="${proposalVO}">
 						<h3 class="text-black mb-5 border-bottom pb-2">견적서 작성</h3>
+						<input type="hidden" class="form-control" name="requestNo" th:value="${reqInfo.requestNo}">
+						<input type="hidden" class="form-control" name="requester" th:value="${reqInfo.requester}">
+						<input type="hidden" class="form-control" name="worker" value="10002">
 						<div class="row form-group">
 							<div class="col-4">
-								<label for="uname">성명</label> <input type="text"
-									class="form-control" id="uname">
+								<label for="uname">작성자ID</label> <input type="text"
+									class="form-control" th:value="${#authentication.name}" readonly>
 							</div>
 							<div class="col-5">
 								<label for="tel">전화번호</label> <input type="tel"
-									class="form-control" id="tel">
+									class="form-control" >
 							</div>
 						</div>
 						<div class="row form-group">
 							<div class="col-4">
 								<label for="uId">의뢰자ID</label> <input type="text"
-									class="form-control" id="uId" readonly>
+									class="form-control" th:value="${reqInfo.usersId}" readonly>
 							</div>
 							<div class="col-5">
 								<label for="category">시공분야</label> <input type="text"
-									class="form-control" id="category" readonly>
+									class="form-control" th:value="${reqInfo.categoryCode}" readonly>
 							</div>
 						</div>
+						
+						<!-- datepicker : id&type="text"-->
 						<div class="row form-group">
 							<div class="col-6">
-								<label for="startDt">공사시작날짜</label> <input type="date"
-									class="form-control" id="startDt">
+								<label for="startDt">공사시작날짜</label> <input type="text"
+									class="form-control" id="startDt" th:field="*{cttStartDt}">
 							</div>
 							<div class="col-6">
-								<label for="endDt">공사마감날짜</label> <input type="date"
-									class="form-control" id="endDt">
+								<label for="endDt">공사마감날짜</label> <input type="text"
+									class="form-control" id="endDt" th:field="*{cttEndDt}">
 							</div>
 						</div>
-						<div class="row form-group">
-							<div class="col-6">
-								<label for="writeDt">작성 일시</label> <input type="text"
-									class="form-control" id="writeDt" readonly>
-							</div>
-						</div>
+						<!-- datepicker -->
+						
+						<!-- postcode : id&onclick-->
 						<div class="row form-group" style="padding-top: 20px">
 							<div class="col-auto">
 								<label for="postCode" style="margin: 0">우편번호</label>
 							</div>
 							<div class="col-4">
-								<input type="text" class="form-control" id="postCode">
+								<input type="text" class="form-control" id="input_postcode" th:field="*{workerPostcode}">
 							</div>
 							<div class="col-3">
-								<button type="button" class="btn btn-primary">우편번호 찾기</button>
+								<button type="button" class="btn btn-primary" onclick="input_execDaumPostcode()">우편번호 찾기</button>
 							</div>
 						</div>
 						<div class="row form-group">
 							<div class="col-10">
 								<label for="addr">주소</label> <input type="text"
-									class="form-control" id="addr">
+									class="form-control" id="input_addr" th:field="*{workerAddress}">
 							</div>
 						</div>
 						<div class="row form-group">
 							<div class="col-10">
 								<label for="detailAddr">상세주소</label> <input type="text"
-									class="form-control" id="detailAddr">
+									class="form-control" id="input_detailAddr" th:field="*{workerDetailAddress}">
 							</div>
 						</div>
+						<!-- postcode -->
+						
 						<div class="row form-group"
 							style="padding-top: 20px; padding-bottom: 20px">
 							<div class="col-5">
 								<label for="comment">비고</label>
-								<textarea cols="90"></textarea>
+								<textarea cols="90" th:field="*{comments}"></textarea>
 							</div>
 						</div>
 						<table class="table table-hover">
@@ -110,7 +117,7 @@
 								class="icon-open_in_new mr-2"></span>미리보기</a>
 						</div>
 						<div class="col-6">
-							<a href="#" class="btn btn-block btn-primary btn-md">저장</a>
+							<button type="submit" class="btn btn-block btn-primary btn-md" form="ppsInsertForm">저장</button>
 						</div>
 					</div>
 				</div>
@@ -119,9 +126,10 @@
 	</section>
 	
 	<script>
+	// + 버튼 : tbody tr 추가
 	$('table thead button').on('click', addForm);
 	function addForm(e){
-		console.log("button");
+		//console.log("button");
 		$('.content').append(`<tr>
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
@@ -134,15 +142,20 @@
 			</tr>`);
 	}
 	
+	// - 버튼 : tbody tr 제거
 	$(document).on('click', 'button[name=deleteBtn]', function(e) {
-	    console.log(e.target);
+	    //console.log(e.target);
 	    e.target.closest('tr').remove();
 	    
 	});
 	
-	$('#writeDt').val(new Date().toISOString().substring(0, 10));
-
-	</script>
 	
+	</script>
+	<!-- datepicker -->
+	<script type="text/javascript" th:src="@{/js/doc/datepicker.js}"></script>
+	
+	<!-- postcode -->
+	<script type="text/javascript" th:src="@{/js/doc/postcode.js}"></script>
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </body>
 </html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.doc.mapper.ProposalMapper">
+
+
+	<select id="selectReqInfo" resultType="ProposalVO">
+		SELECT r.request_no as request_no
+		, r.requester as requester
+        , u.users_id as users_id
+		, FIND_COMMONCODE(r.category_code) as category_code
+		FROM request r 
+		join users u 
+		on r.requester = u.users_no
+		WHERE r.request_no = #{requestNo}
+	</select>
+
+
+	<select id="selectPpsInfo" resultType="ProposalVO">
+		SELECT
+		proposal_no
+		, request_no
+		, ctt_start_dt
+		, ctt_end_dt
+		, write_dt
+		, worker_postcode
+		, worker_address
+		, worker_detail_address
+		, comments
+		, file_id
+		, worker
+		, requester
+		, update_dt
+		, proposal_state
+		FROM proposal
+		WHERE proposal_no =
+		#{proposalNo}
+	</select>
+
+
+	<insert id="insertPpsInfo" parameterType="ProposalVO">
+		<selectKey keyProperty="proposalNo" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_PROPOSAL.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO proposal(
+		proposal_no
+		, request_no
+		, ctt_start_dt
+		, ctt_end_dt
+		, write_dt
+		, worker_postcode
+		, worker_address
+		, worker_detail_address
+		, comments
+		, file_id
+		, worker
+		, requester
+		, update_dt
+		, proposal_state
+		)
+		VALUES(
+		#{proposalNo}
+		, #{requestNo}
+		, #{cttStartDt}
+		, #{cttEndDt}
+		, sysdate
+		, #{workerPostcode}
+		, #{workerAddress}
+		, #{workerDetailAddress}
+		, #{comments}
+		<if test="fileId != null">
+		, #{fileId}
+		</if>
+		, #{worker}
+		, #{requester}
+		, sysdate
+		, 'A01'
+		)
+	</insert>
+
+</mapper>
