@@ -20,4 +20,10 @@
 		FROM users
 		WHERE users_id = #{id}
 	</select>
+	
+	<insert id="saveUsr" parameterType="com.yedam.app.usr.service.UsrVO">
+		INSERT INTO users
+		(users_role, users_id, users_pw, users_name, users_rnn, users_phone, users_phone, users_nick, users_email)
+		VALUES(#{usersRole}, #{usersId}, #{usersPw}, #{usersName}, #{usersRnn}, #{usersPhone}, #{usersPhone}, #{usersNick}, #{usersEmail})
+	</insert>
 </mapper>
