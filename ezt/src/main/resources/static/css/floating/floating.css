@@ -1,0 +1,146 @@
+body {
+  background: linear-gradient(to right, #4568dc, #b06ab3);
+}
+
+.floating-menu {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: orange;
+  position: fixed;
+  bottom: 35px;
+  right: 35px;
+  input[type="checkbox"] {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    &:checked {
+      & ~ .plus-icon {
+        transform: rotate(135deg);
+      }
+      & ~ .floating-nav {
+        li {
+          &:nth-child(1) {
+            transform: translatey(-48px);
+          }
+          &:nth-child(2) {
+            transform: translatey(-88px);
+          }
+          &:nth-child(3) {
+            transform: translatey(-128px);
+          }
+          &:nth-child(4) {
+            transform: translatey(-168px);
+          }
+        }
+      }
+    }
+    & ~ .plus-icon {
+      transform: rotate(0);
+    }
+  }
+  & > .plus-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    line-height: 1;
+    color: #ffffff;
+    background: orange;
+    border-radius: 50%;
+    transform: rotate(0);
+    transition: all 0.5s ease;
+    pointer-events: none;
+    position: absolute;
+    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+  }
+  & > .floating-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    li {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: orange;
+      cursor: pointer;
+      position: absolute;
+      transition: all 0.5s ease;
+      span {
+        font-size: 14px;
+        line-height: 1;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+#closeChat {
+  cursor: pointer;
+}
+.floated-window {
+  display: none;
+  position: fixed;
+  bottom: 30px;
+  right: 20px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.floated-header {
+  background-color: orange;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.floated-body {
+  padding: 10px;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.chat-footer {
+  display: none;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.chat-footer #chat-input {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.chat-footer > button {
+  background-color: orange;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.cht.mapper.ChatMapper">
+	<select id="selectMyRooms" resultType="ChatRoomVO" parameterType="int">
+		SELECT cr.chat_room_no chat_room_no
+				, cr.title title
+				, cr.content content
+				, cr.update_dt update_dt
+		FROM users_chat_room ucr
+			JOIN chat_room cr
+			ON ucr.chat_room_no = cr.chat_room_no
+		WHERE users_no = #{usersNo}
+	</select>
+	<select id="selectChatRoom" resultType="ChatRoomVO" parameterType="int">
+		SELECT chat_room_no
+				, title
+				, content
+				, update_dt
+		FROM chat_room
+		WHERE chat_room_no = #{chatRoomNo}
+	</select>
+	
+	<select id="selectChatHistory" resultType="ChatVO" parameterType="int">
+		SELECT chat_no
+				, users_no
+				, chat_room_no
+				, content
+				, chat_time
+		FROM chat
+		WHERE chat_room_no = #{chatRoomNo}
+		ORDER BY chat_time ASC
+	</select>
+	
+	<insert id="insertChat" parameterType="ChatVO">
+		INSERT INTO chat(
+			chat_no
+			, users_no
+			, chat_room_no
+			, content
+			, chat_time
+		) VALUES (
+			seq_chat.NEXTVAL
+			, #{usersNo}
+			, #{chatRoomNo}
+			, #{content}
+			, sysdate
+		)
+	</insert>
+	
+</mapper>
