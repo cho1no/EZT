@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.usr.mapper.UserMapper">
-	<select id="selectUsrInfo" resultType="UsrVO">
+	<select id="selectUserInfo" resultType="UserVO">
 		SELECT users_no
 				, users_id
 				, users_pw
@@ -21,9 +21,9 @@
 		WHERE users_id = #{id}
 	</select>
 	
-	<insert id="saveUsr" parameterType="com.yedam.app.usr.service.UsrVO">
+	<insert id="saveUser" parameterType="com.yedam.app.usr.service.UserVO">
 		INSERT INTO users
-		(users_role, users_id, users_pw, users_name, users_rnn, users_phone, users_phone, users_nick, users_email)
-		VALUES(#{usersRole}, #{usersId}, #{usersPw}, #{usersName}, #{usersRnn}, #{usersPhone}, #{usersPhone}, #{usersNick}, #{usersEmail})
+		(users_no, users_role, users_id, users_pw, users_name, users_phone, users_nick, users_email)
+		VALUES(SEQ_USERS.NEXTVAL, #{usersRole}, #{usersId}, #{usersPw}, #{usersName}, #{usersPhone}, #{usersNick}, #{usersEmail})
 	</insert>
 </mapper>

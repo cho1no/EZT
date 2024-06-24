@@ -8,35 +8,36 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.yedam.app.usr.service.UsrVO;
+import com.yedam.app.usr.service.UserVO;
 
 import lombok.Getter;
 
 @Getter
-public class LoginUsrVO implements UserDetails{
+public class LoginUserVO implements UserDetails{
 
-	private UsrVO usrVO;
+	private UserVO userVO;
 	
-	public LoginUsrVO(UsrVO usrVO) {
-		this.usrVO = usrVO;
+	public LoginUserVO(UserVO userVO) {
+		this.userVO = userVO;
 	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> auths = new ArrayList<>();
-		auths.add(new SimpleGrantedAuthority(usrVO.getUsersRole()));
+		auths.add(new SimpleGrantedAuthority(userVO.getUsersRole()));
 		return auths;
 	}
 
 	@Override
 	public String getPassword() {
-		return usrVO.getUsersPw();
+		return userVO.getUsersPw();
 	}
 
 	@Override
 	public String getUsername() {
-		return usrVO.getUsersId();
+		return userVO.getUsersNo().toString();
 	}
+	
 
 	@Override
 	public boolean isAccountNonExpired() {
