@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.req.mapper.RequestMapper">
+<!-- 전체 조회 -->
+<select id="selectRequestAll" resultType="RequestVO">
+	SELECT r.request_no
+		  ,r.requester
+		  ,FIND_COMMONCODE(r.ctt_place) as ctt_place_nm
+		  ,r.ctt_place_area
+		  ,FIND_COMMONCODE(r.ctt_place_situation) as ctt_place_situation
+		  ,r.hope_ctt_budget
+		  ,r.hope_ctt_start_dt
+		  ,r.hope_ctt_end_dt
+		  ,r.postcode
+		  ,r.address
+		  ,r.detail_address
+		  ,r.title
+		  ,r.content
+		  ,r.write_dt
+		  ,FIND_COMMONCODE(r.request_state) as request_state
+		  ,FIND_COMMONCODE(r.region_code) as region_code
+		  ,r.file_id
+		  ,f.save_name
+		  ,FIND_COMMONCODE(r.category_code) as category_code
+          ,u.users_name
+	FROM request r
+        JOIN users u
+        ON r.requester = u.users_no
+        JOIN file_detail_info f
+        ON r.file_id = f.file_id
+	ORDER BY r.request_no desc
+</select>
+
+
+<resultMap id="requestMap" type="RequestVO">
+	<result property="fileId" column="file_id"></result>
+	<result property="requestNo" column="request_no"></result>
+	<result property="cttPlace" column="ctt_place"></result>
+	<result property="cttPlaceNm" column="ctt_place_nm"></result>
+	<result property="cttPlaceArea" column="ctt_place_Area"></result>
+	<result property="cttPlaceSituation" column="ctt_Place_Situation"></result>
+	<result property="cttPlaceSituationNm" column="ctt_Place_Situation_nm"></result>
+	<result property="hopeCttBudget" column="hope_Ctt_Budget"></result>
+	<result property="hopeCttStartDt" column="hope_Ctt_Start_Dt"></result>
+	<result property="hopeCttEndDt" column="hope_Ctt_End_Dt"></result>
+	<result property="postcode" column="postcode"></result>
+	<result property="address" column="address"></result>
+	<result property="detailAddress" column="detail_Address"></result>
+	<result property="title" column="title"></result>
+	<result property="content" column="content"></result>
+	<result property="writeDt" column="write_Dt"></result>
+	<result property="requestState" column="request_State"></result>
+	<result property="requestStateNm" column="request_State_nm"></result>
+	<result property="regionCode" column="region_Code"></result>
+	<result property="regionCodeNm" column="region_Code_nm"></result>
+	<result property="categoryCode" column="category_Code"></result>
+	<result property="categoryCodeNm" column="category_Code_nm"></result>
+	<result property="usersName" column="users_Name"></result>
+	
+	
+	<collection property="fileVO" ofType="FileVO">
+		<id property="fileId" column="file_id"></id>
+		<id property="saveName" column="save_name"></id>
+		<id property="ext" column="ext"></id>
+	</collection>
+</resultMap>
+<!-- 단건조회 -->
+<select id="selectRequestInfo" resultMap="requestMap">
+	SELECT r.request_no
+		  ,r.requester
+		  ,r.ctt_place
+		  ,FIND_COMMONCODE(r.ctt_place) as ctt_place_nm
+		  ,r.ctt_place_area
+		  ,r.ctt_place_situation
+		  ,FIND_COMMONCODE(r.ctt_place_situation) as ctt_place_situation_nm
+		  ,r.hope_ctt_budget
+		  ,r.hope_ctt_start_dt
+		  ,r.hope_ctt_end_dt
+		  ,r.postcode
+		  ,r.address
+		  ,r.detail_address
+		  ,r.title
+		  ,r.content
+		  ,r.write_dt
+		  ,r.request_state
+		  ,FIND_COMMONCODE(r.request_state) as request_state_nm
+		  ,r.region_code
+		  ,FIND_COMMONCODE(r.region_code) as region_code_nm
+		  ,r.file_id
+		  ,f.save_name
+		  ,f.ext
+		  ,r.category_code
+		  ,FIND_COMMONCODE(r.category_code) as category_code_nm
+          ,u.users_name
+	FROM request r
+        JOIN users u
+        ON r.requester = u.users_no
+        LEFT OUTER JOIN file_detail_info f
+        ON r.file_id = f.file_id
+        
+	WHERE r.request_no = #{requestNo}
+</select>
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.common.mapper.CommonCodeMapper">
+<select id="selectCommonCodeAll" resultType="CommonCodeVO">
+	SELECT CODE_NO
+			,CODE_NAME
+			,DESCRIPTION
+			,USE_TF
+			,CODE_TYPE
+	FROM common_code
+	WHERE code_type = #{codeType}
+</select>
+
+</mapper>
