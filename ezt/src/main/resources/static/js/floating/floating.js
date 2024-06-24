@@ -17,7 +17,7 @@ function CCRLW() {
     success: function (response) {
       $(response).each((i, e) => {
         $(".floated-body").append(
-          $("<p data-cno=" + e.chatRoomNo + ">" + e.title + "</p>").click(
+          $("<p data-cno=" + e.chatRoomNo + ">" + e.title + "</p>").addClass('cpointer').click(
             () => {
               DCH(e.chatRoomNo);
               openSocket(e.chatRoomNo);
@@ -99,13 +99,8 @@ function openSocket(roomNo) {
     msg.value = "";
   });
 }
-function closeSocket() {
-  if (stomp !== null) {
-    stomp.disconnect();
-  }
-}
+
 $("#closeFloatedWindow").click(() => {
-  closeSocket();
   $(".floated-body").html("");
   $("#floatedWindow").css("display", "none");
 });

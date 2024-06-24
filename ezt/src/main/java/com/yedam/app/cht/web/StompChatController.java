@@ -26,14 +26,14 @@ public class StompChatController {
     //"/pub/chat/enter"
     @MessageMapping(value = "/chat/enter")
     public void enter(ChatVO message){
-        message.setContent(message.getWriter() + "님이 채팅방에 참여하였습니다.");
-        template.convertAndSend("/sub/chat/room/" + message.getChatRoomNo(), message);
+//        message.setContent(message.getWriter() + "님이 채팅방에 참여하였습니다.");
+//        template.convertAndSend("/sub/chat/room/" + message.getChatRoomNo(), message);
     }
 
     @MessageMapping(value = "/chat/message")
     public void message(ChatVO message){
-    	log.info(message);
     	csv.addChat(message);
         template.convertAndSend("/sub/chat/room/" + message.getChatRoomNo(), message);
+//        template.convertAndSend("/sub/chat/room", message);
     }
 }
