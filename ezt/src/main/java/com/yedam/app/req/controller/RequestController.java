@@ -22,6 +22,7 @@ public class RequestController {
 	@GetMapping("requestList")
 	public String requestList(Model model) {
 		List<RequestVO> list = requestService.requestList();
+		System.out.println(list);
 		model.addAttribute("requestList", list);
 
 		return "req/requestList";
