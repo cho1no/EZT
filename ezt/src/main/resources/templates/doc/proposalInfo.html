@@ -25,16 +25,6 @@
 							</div>
 						</div>
 						<div class="row form-group">
-							<div class="col-4">
-								<label for="uId">의뢰자ID</label> <input type="text"
-									class="form-control" th:value="${reqInfo.usersId}" readonly>
-							</div>
-							<div class="col-5">
-								<label for="category">시공분야</label> <input type="text"
-									class="form-control" th:value="${reqInfo.categoryCode}" readonly>
-							</div>
-						</div>
-						<div class="row form-group">
 							<div class="col-6">
 								<label for="startDt">공사시작날짜</label> <input type="date"
 									class="form-control" id="startDt" th:value="${#dates.format(ppsInfo.cttStartDt, 'yyyy-MM-dd')}" readonly>
@@ -85,12 +75,12 @@
 							<thead>
 								<tr class="text-center">
 									<th scope="col">품명</th>
-									<th scope="col" width="80px">구분</th>
+									<th scope="col" width="120px">구분</th>
 									<th scope="col" width="60px">단위</th>
-									<th scope="col" width="120px">수량</th>
-									<th scope="col">단가</th>
-									<th scope="col" width="200px">금액</th>
-									<th scope="col" width="250px">비고</th>
+									<th scope="col" width="80px">수량</th>
+									<th scope="col" width="120px">단가</th>
+									<th scope="col" width="180px">금액</th>
+									<th scope="col">비고</th>
 								</tr>
 							</thead>
 							<tbody class="content">
@@ -100,8 +90,8 @@
 									<td th:text="${list.division}" />
 									<td th:text="${list.unit}" />
 									<td th:text="${list.qty}" />
-									<td th:text="${list.unitprice}" />
-									<td  />
+									<td th:text="${#numbers.formatInteger(list.unitprice,1,'COMMA')}" />
+									<td th:text="${#numbers.formatInteger(list.qty * list.unitprice,1,'COMMA')}"/>
 									<td th:text="${list.comments}" />
 									</tr>
 								</th:block>
@@ -109,17 +99,19 @@
 						</table>
 					</form>
 				</div>
-
+				
 			</div>
 			<div class="row align-items-center mb-5">
 				<div class="col-lg-4 ml-auto">
-					<div class="row" sec:authorize="hasRole('ROLE_WORKER')">
+					<div class="row">
+					<th:block th:if="${#authentication.name == #strings.toString(ppsInfo.worker)}">
 						<div class="col-6">
 							<a href="#" class="btn btn-block btn-light btn-md">수정</a>
 						</div>
 						<div class="col-6">
 							<button type="button" class="btn btn-block btn-primary btn-md">삭제</button>
 						</div>
+						</th:block>
 					</div>
 				</div>
 			</div>

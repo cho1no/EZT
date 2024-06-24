@@ -6,11 +6,12 @@ import org.apache.ibatis.annotations.Param;
 
 import com.yedam.app.doc.service.ProposalDetailVO;
 import com.yedam.app.doc.service.ProposalVO;
+import com.yedam.app.req.service.RequestVO;
 
 public interface ProposalMapper {
 	
 	// 견적서 의뢰정보조회
-	public ProposalVO selectReqInfo(ProposalVO proposalVO);
+	public RequestVO selectReqInfo(RequestVO requestVO);
 	
 	// 견적서 단건조회
 	public ProposalVO selectPpsInfo(ProposalVO proposalVO);
