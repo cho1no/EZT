@@ -14,9 +14,5 @@ public class docController {
 		return "doc/index";
 	}
 	
-	@GetMapping("proposalInsert")
-	public String proposalInsert(Model model) {
-
-		return "doc/proposalInsert";
-	}
+	
 }
