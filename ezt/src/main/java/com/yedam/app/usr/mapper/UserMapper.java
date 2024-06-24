@@ -8,4 +8,6 @@ import com.yedam.app.usr.service.UsrVO;
 public interface UserMapper {
 	
 	public UsrVO selectUsrInfo(String id);
+	
+	void saveUsr(UsrVO usrVO);
 }
