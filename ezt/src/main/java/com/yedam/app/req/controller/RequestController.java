@@ -24,6 +24,15 @@ public class RequestController {
 		return "request/requestList";
 	}
 	//단건조회
+	@GetMapping("requestInfo")
+	public String boardInfo(RequestVO requestVO, Model model) {
+		
+		//RequestVO findVO = requestService.requestInfo(requestVO);
+		
+		//model.addAttribute("request",findVO);
+		
+		return "request/requestInfo";
+	}
 	
 	//등록
 	

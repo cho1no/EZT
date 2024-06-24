@@ -4,8 +4,8 @@
 		layout:decorate="~{common/layouts/default_layout}"
 		layout:fragment="Content">
 <style>
-.title{
-	margin:30px;
+.margin{
+	margin:10px 50px;
 }
 .search{
 	text-align:center;
@@ -23,15 +23,19 @@
 <body>
 
 <section class="site-section">
-<h2 class="title">의뢰 신청 목록</h2>
-	<div class="search">
-	<select>
-		<option value="category_code">작업분야</option>
-		<option value="region_code">지역</option>
-	</select>
-	<input class="input" type="text">
-	<button class="btn btn-primary">검색</button>
-	<button class="btn btn-primary">글쓰기</button>
+<h2 class="margin">의뢰 신청 목록</h2>
+	<div>
+		<div class="search">
+			<select>
+				<option value="category_code">작업분야</option>
+				<option value="region_code">지역</option>
+			</select>
+			<input class="input" type="text">
+			<button class="btn btn-primary">검색</button>	
+		</div>
+		<div style="text-align:right" class="margin">
+			<button class="btn btn-primary">글쓰기</button>
+		</div>
 	</div>
       <div class="container">
         <div class="row mb-5">
@@ -40,7 +44,7 @@
             <a href="blog-single.html"><img src="images/interior.jpg" alt="Image" class="img-fluid rounded mb-4"></a>
             <h3><a href="blog-single.html" class="text-black">[[${request.title}]] </a></h3>
             <div>[[${request.regionCode}]] <span class="mx-2">|</span>[[${request.categoryCode}]]</div>
-            <div>[[${#dates.format(request.writeDt,'yyyy년 MM월 dd일')}]] <span class="mx-2">|</span>[[${request.usersName}]] </div>
+            <div>[[${#dates.format(request.writeDt,'MM.dd.yy')}]] <span class="mx-2">|</span>[[${request.usersName}]] </div>
           </div>
          </th:block>
         </div>
@@ -51,6 +55,7 @@
               <a href="#" class="prev">Prev</a>
               <div class="d-inline-block">
               <a href="#" class="active">1</a>
+			  
               <a href="#">2</a>
               <a href="#">3</a>
               <a href="#">4</a>
