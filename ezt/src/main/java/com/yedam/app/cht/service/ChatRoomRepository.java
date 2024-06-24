@@ -8,13 +8,15 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class ChatRoomRepository {
 
     private Map<String, ChatRoomVO> chatRoomVOMap;
-
+    @Autowired
+    ChatService csv;
     @PostConstruct
     private void init(){
         chatRoomVOMap = new LinkedHashMap<>();
@@ -34,7 +36,7 @@ public class ChatRoomRepository {
 
     public ChatRoomVO createChatRoomVO(String name){
         ChatRoomVO room = ChatRoomVO.create(name);
-        chatRoomVOMap.put(room.getChatRoomNo(), room);
+//        chatRoomVOMap.put(room.getChatRoomNo(), room);
 
         return room;
     }
