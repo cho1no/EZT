@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<title></title>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body>
+	<script th:inline="javascript">
+	Swal.fire({
+		title:([[${msg}]]),
+		icon:'success',
+		allowOutsideClick: false,
+		}).then(result => {
+			if(result.isConfirmed){
+				location.href=[[${url}]]
+			}
+		});
+	</script>
+</body>
+</html>

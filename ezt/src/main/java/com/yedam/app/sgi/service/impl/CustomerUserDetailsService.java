@@ -6,9 +6,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.yedam.app.sgi.service.LoginUsrVO;
+import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.mapper.UserMapper;
-import com.yedam.app.usr.service.UsrVO;
+import com.yedam.app.usr.service.UserVO;
 
 @Service
 public class CustomerUserDetailsService implements UserDetailsService{
@@ -18,13 +18,13 @@ public class CustomerUserDetailsService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UsrVO usrVO = userMapper.selectUsrInfo(username);
+		UserVO userVO = userMapper.selectUserInfo(username);
 		
-		if(usrVO == null) {
+		if(userVO == null) {
 			throw new UsernameNotFoundException(username);
 		}
 		    
-		return new LoginUsrVO(usrVO);
+		return new LoginUserVO(userVO);
 	}
 	
 	

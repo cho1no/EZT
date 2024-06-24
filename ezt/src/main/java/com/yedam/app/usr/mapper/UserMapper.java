@@ -2,12 +2,12 @@ package com.yedam.app.usr.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.yedam.app.usr.service.UsrVO;
+import com.yedam.app.usr.service.UserVO;
 
 @Mapper
 public interface UserMapper {
 	
-	public UsrVO selectUsrInfo(String id);
+	public UserVO selectUserInfo(String id);
 	
-	void saveUsr(UsrVO usrVO);
+	void saveUser(UserVO userVO);
 }
