@@ -10,4 +10,6 @@ public interface ProposalService {
 	
 	// 견적서 등록
 	public int ppsInsert(ProposalVO proposalVO);
+
 }
+

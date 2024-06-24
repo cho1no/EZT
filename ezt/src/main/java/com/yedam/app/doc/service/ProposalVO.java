@@ -1,6 +1,7 @@
 package com.yedam.app.doc.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,4 +31,6 @@ public class ProposalVO {
 	// 유저 정보
 	private String categoryCode; // 분야코드
 	private String usersId; // 유저 아이디
+	
+	private List<ProposalDetailVO> list;
 }
