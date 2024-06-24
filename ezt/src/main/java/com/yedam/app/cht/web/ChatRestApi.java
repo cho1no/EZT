@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yedam.app.cht.service.ChatRoomVO;
 import com.yedam.app.cht.service.ChatService;
 import com.yedam.app.cht.service.ChatVO;
-import com.yedam.app.sgi.service.LoginUsrVO;
+import com.yedam.app.sgi.service.LoginUserVO;
 
 @RestController
 public class ChatRestApi {
@@ -20,7 +20,7 @@ public class ChatRestApi {
     ChatService csv;
 	
 	@GetMapping("getRooms")
-	public List<ChatRoomVO> getRooms(Model model, @AuthenticationPrincipal LoginUsrVO vo) {
+	public List<ChatRoomVO> getRooms(Model model, @AuthenticationPrincipal LoginUserVO vo) {
     	return csv.getMyRooms(Integer.parseInt(vo.getUsername()));
     }
 	
