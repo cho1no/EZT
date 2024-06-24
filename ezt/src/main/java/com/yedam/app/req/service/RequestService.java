@@ -7,7 +7,7 @@ public interface RequestService {
 	//전체조회
 	public List<RequestVO> requestList();
 	//단건조회
-	
+	public RequestVO requestInfo(RequestVO requestVO);
 	//등록
 	
 	//수정

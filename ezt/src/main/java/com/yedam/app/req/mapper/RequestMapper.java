@@ -8,7 +8,7 @@ public interface RequestMapper {
 	//전체조회
 	public List<RequestVO> selectRequestAll();
 	//단건조회
-	
+	public RequestVO selectRequestInfo(RequestVO requestVO);
 	//등록
 	
 	//수정
