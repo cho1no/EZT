@@ -37,6 +37,22 @@
 	</select>
 
 
+	<select id="selectPpszDetailList" resultType="ProposalDetailVO">
+		SELECT
+		proposal_detail_no
+		, proposal_no
+		, product
+		, unit
+		, qty
+		, unitprice
+		, comments
+		, division
+		FROM proposal_detail
+		WHERE proposal_no =
+		#{proposalNo}
+	</select>
+
+
 	<insert id="insertPpsInfo" parameterType="ProposalVO">
 		<selectKey keyProperty="proposalNo" resultType="Integer"
 			order="BEFORE">
@@ -76,6 +92,34 @@
 		, #{requester}
 		, sysdate
 		, 'A01'
+		)
+	</insert>
+
+	<insert id="insertPpsDetailInfo" parameterType="ProposalDetailVO">
+		<selectKey keyProperty="proposalDetailNo" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_PROPOSALDETAIL.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO proposal_detail(
+		proposal_detail_no
+		, proposal_no
+		, product
+		, unit
+		, qty
+		, unitprice
+		, comments
+		, division
+		)
+		VALUES(
+		#{proposalDetailNo}
+		, #{proposalNo}
+		, #{product}
+		, #{unit}
+		, #{qty}
+		, #{unitprice}
+		, #{comments}
+		, #{division}
 		)
 	</insert>
 

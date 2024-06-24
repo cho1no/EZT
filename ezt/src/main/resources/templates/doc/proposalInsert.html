@@ -21,6 +21,7 @@
 						<input type="hidden" class="form-control" name="requestNo" th:value="${reqInfo.requestNo}">
 						<input type="hidden" class="form-control" name="requester" th:value="${reqInfo.requester}">
 						<input type="hidden" class="form-control" name="worker" value="10002">
+						
 						<div class="row form-group">
 							<div class="col-4">
 								<label for="uname">작성자ID</label> <input type="text"
@@ -88,21 +89,23 @@
 								<textarea cols="90" th:field="*{comments}"></textarea>
 							</div>
 						</div>
+						
 						<table class="table table-hover">
 							<thead>
 								<tr class="text-center">
 									<th scope="col">품명</th>
-									<th scope="col" width="80px">규격</th>
-									<th scope="col" width="120px">수량</th>
-									<th scope="col">단가</th>
+									<th scope="col" width="80px">구분</th>
+									<th scope="col" width="60px">단위</th>
+									<th scope="col" width="80px">수량</th>
+									<th scope="col" width="120px">단가</th>
 									<th scope="col" width="200px">금액</th>
-									<th scope="col" width="250px">비고</th>
+									<th scope="col" >비고</th>
 									<th width="53px"><button type="button" class="btn btn-primary"
 											style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">+</button></th>
 								</tr>
 							</thead>
 							<tbody class="content">
-
+								
 							</tbody>
 						</table>
 					</form>
@@ -134,7 +137,8 @@
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
 				<td><button type="button" class="btn btn-outline-danger" name="deleteBtn"
@@ -147,6 +151,29 @@
 	    //console.log(e.target);
 	    e.target.closest('tr').remove();
 	    
+	});
+	
+	$('button[type="submit"]').on('click', function(e) {
+		
+			let startDt = $('#startDt');
+			let endDt = $('#endDt');
+			
+			if(startDt.val() == ''){
+				startDt.val('1900-01-01');
+			}
+			if(endDt.val() == ''){
+				endDt.val('1900-01-01');
+			}
+		
+		
+	    for(i=0; i < $('tbody tr').length; i++){
+	    	$('tbody tr:eq('+i+') td:eq(0) input').attr('name', 'list['+i+'].product');
+	    	$('tbody tr:eq('+i+') td:eq(1) input').attr('name', 'list['+i+'].division');
+	    	$('tbody tr:eq('+i+') td:eq(2) input').attr('name', 'list['+i+'].unit');
+	    	$('tbody tr:eq('+i+') td:eq(3) input').attr('name', 'list['+i+'].qty');
+	    	$('tbody tr:eq('+i+') td:eq(4) input').attr('name', 'list['+i+'].unitprice');
+	    	$('tbody tr:eq('+i+') td:eq(6) input').attr('name', 'list['+i+'].comments');
+	    }
 	});
 	
 	
