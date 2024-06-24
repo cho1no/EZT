@@ -4,8 +4,14 @@
 	<select id="selectMyRooms" resultType="ChatRoomVO" parameterType="int">
 		SELECT cr.chat_room_no chat_room_no
 				, cr.title title
-				, cr.content content
-				, cr.update_dt update_dt
+				, (SELECT c.content
+				   FROM chat c
+				   WHERE c.chat_room_no = cr.chat_room_no
+				   		AND chat_time = (
+				   			SELECT MAX(chat_time) 
+				   			FROM chat cc WHERE cc.chat_room_no = cr.chat_room_no)) content
+				, (SELECT MAX(chat_time) 
+				   FROM chat cc WHERE cc.chat_room_no = cr.chat_room_no) update_dt
 		FROM users_chat_room ucr
 			JOIN chat_room cr
 			ON ucr.chat_room_no = cr.chat_room_no
@@ -16,7 +22,7 @@
 				, title
 				, content
 				, update_dt
-		FROM chat_room
+		FROM chat_room cr
 		WHERE chat_room_no = #{chatRoomNo}
 	</select>
 	

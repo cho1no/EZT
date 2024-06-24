@@ -42,7 +42,7 @@
           <span class="floatedTitle">플롯메뉴</span>
           <span
             id="closeFloatedWindow"
-            class="fa fa-x"
+            class="fa fa-x cpointer"
             aria-hidden="true"
           ></span>
         </div>
@@ -50,7 +50,7 @@
           <!-- content -->
         </div>
         <div class="chat-footer">
-          <input id="chat-input" type="text">
+          <input id="chat-input" type="text" onkeyup="enterKeyDown()">
           <button id="chat-send" class="fa fa-play" type="button"></button>
         </div>
       </div>
@@ -64,6 +64,7 @@
     <script th:inline="javascript">
       let uno = /*[[${#authentication.principal.username}]]*/ "users no";
     </script>
-    <script src="/js/floating/floating.js"></script>
+    <!-- <script src="/js/floating/floating.js"></script> -->
+    <script src="/js/floating/float.js"></script>
   </th:block>
 </html>

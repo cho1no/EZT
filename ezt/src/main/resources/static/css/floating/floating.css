@@ -89,8 +89,35 @@ body {
     }
   }
 }
-
-#closeChat {
+.chatTime {
+  font-size: 10pt !important;
+  color: #aaa;
+}
+.chatRoomDiv {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #aaa;
+}
+.chatRoomDiv p{
+  margin: 0;
+}
+.chatDiv {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+.cMine {
+  margin-left: 25px;
+  border: 1px solid #ccc;
+}
+.cNotMine{
+  background-color: #eee;
+}
+.chatDiv p{
+  margin: 0;
+}
+.cpointer {
   cursor: pointer;
 }
 .floated-window {
