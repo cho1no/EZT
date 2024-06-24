@@ -9,6 +9,7 @@ import com.yedam.app.doc.mapper.ProposalMapper;
 import com.yedam.app.doc.service.ProposalDetailVO;
 import com.yedam.app.doc.service.ProposalService;
 import com.yedam.app.doc.service.ProposalVO;
+import com.yedam.app.req.service.RequestVO;
 
 @Service
 public class ProposalServiceImpl implements ProposalService {
@@ -18,8 +19,8 @@ public class ProposalServiceImpl implements ProposalService {
 	
 	// 견적서 의뢰정보조회
 	@Override
-	public ProposalVO reqInfo(ProposalVO proposalVO) {
-		return ppsMapper.selectReqInfo(proposalVO);
+	public RequestVO reqInfo(RequestVO requestVO) {
+		return ppsMapper.selectReqInfo(requestVO);
 	}
 	
 	// 견적서 단건조회 & 상세 동시 처리

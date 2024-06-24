@@ -15,8 +15,9 @@
 	<section class="site-section">
 		<div class="container">
 			<div class="row mb-5">
-				<div class="col-lg-12">
 					<form class="p-4 p-md-5 border rounded" id="ppsInsertForm" th:action="@{/ppsInsert}" method="post" th:object="${proposalVO}">
+					<div class="row form-group">
+				<div class="col-lg-7 mb-5 mb-lg-0">
 						<h3 class="text-black mb-5 border-bottom pb-2">견적서 작성</h3>
 						<input type="hidden" class="form-control" name="requestNo" th:value="${reqInfo.requestNo}">
 						<input type="hidden" class="form-control" name="requester" th:value="${reqInfo.requester}">
@@ -32,26 +33,17 @@
 									class="form-control" >
 							</div>
 						</div>
-						<div class="row form-group">
-							<div class="col-4">
-								<label for="uId">의뢰자ID</label> <input type="text"
-									class="form-control" th:value="${reqInfo.usersId}" readonly>
-							</div>
-							<div class="col-5">
-								<label for="category">시공분야</label> <input type="text"
-									class="form-control" th:value="${reqInfo.categoryCode}" readonly>
-							</div>
-						</div>
+						
 						
 						<!-- datepicker : id&type="text"-->
 						<div class="row form-group">
 							<div class="col-6">
 								<label for="startDt">공사시작날짜</label> <input type="text"
-									class="form-control" id="startDt" th:field="*{cttStartDt}">
+									class="form-control" id="startDt" th:field="*{cttStartDt}" readonly>
 							</div>
 							<div class="col-6">
 								<label for="endDt">공사마감날짜</label> <input type="text"
-									class="form-control" id="endDt" th:field="*{cttEndDt}">
+									class="form-control" id="endDt" th:field="*{cttEndDt}" readonly>
 							</div>
 						</div>
 						<!-- datepicker -->
@@ -64,18 +56,18 @@
 							<div class="col-4">
 								<input type="text" class="form-control" id="input_postcode" th:field="*{workerPostcode}">
 							</div>
-							<div class="col-3">
+							<div class="col-auto">
 								<button type="button" class="btn btn-primary" onclick="input_execDaumPostcode()">우편번호 찾기</button>
 							</div>
 						</div>
 						<div class="row form-group">
-							<div class="col-10">
+							<div class="col-12">
 								<label for="addr">주소</label> <input type="text"
 									class="form-control" id="input_addr" th:field="*{workerAddress}">
 							</div>
 						</div>
 						<div class="row form-group">
-							<div class="col-10">
+							<div class="col-12">
 								<label for="detailAddr">상세주소</label> <input type="text"
 									class="form-control" id="input_detailAddr" th:field="*{workerDetailAddress}">
 							</div>
@@ -86,34 +78,48 @@
 							style="padding-top: 20px; padding-bottom: 20px">
 							<div class="col-5">
 								<label for="comment">비고</label>
-								<textarea cols="90" th:field="*{comments}"></textarea>
+								<textarea cols="65" th:field="*{comments}"></textarea>
 							</div>
 						</div>
-						
-						<table class="table table-hover">
+				</div>
+				<div class="col-lg-5 ml-auto" style="padding-top:60px">
+            <div class="p-4 mb-3 bg-white border p-4 rounded">
+              <h3 class="text-primary mt-3 h5 pl-3 mb-3 "> 의뢰 </h3>
+              <ul class="list-unstyled pl-3 mb-0">
+                <li class="mb-2"><strong class="text-black">시공분야 :</strong> [[${reqInfo.categoryCode}]]</li>
+                <li class="mb-2"><strong class="text-black">공사공간 :</strong> [[${reqInfo.cttPlace}]]</li>
+                <li class="mb-2"><strong class="text-black">공사공간 면적 :</strong> [[${reqInfo.cttPlaceArea}]]</li>
+                <li class="mb-2"><strong class="text-black">공사공간 상황 :</strong> [[${reqInfo.cttPlaceSituation}]]</li>
+                <li class="mb-2"><strong class="text-black">희망 공사 예산 :</strong> [[${reqInfo.hopeCttBudget}]]</li>
+                <li class="mb-2"><strong class="text-black">희망 공사 시작일 :</strong> [[${#dates.format(reqInfo.hopeCttStartDt, 'yyyy-MM-dd')}]]</li>
+                <li class="mb-2"><strong class="text-black">희망 공사 종료일 :</strong> [[${#dates.format(reqInfo.hopeCttEndDt, 'yyyy-MM-dd')}]]</li>
+                <li class="mb-2"><strong class="text-black">내용</strong></li>
+                <li class="mb-2">[[${reqInfo.content}]]</li>
+              </ul>
+            </div>
+            </div>
+				<table class="table table-hover">
 							<thead>
 								<tr class="text-center">
 									<th scope="col">품명</th>
-									<th scope="col" width="80px">구분</th>
+									<th scope="col" width="120px">구분</th>
 									<th scope="col" width="60px">단위</th>
 									<th scope="col" width="80px">수량</th>
 									<th scope="col" width="120px">단가</th>
-									<th scope="col" width="200px">금액</th>
+									<th scope="col" width="180px">금액</th>
 									<th scope="col" >비고</th>
 									<th width="53px"><button type="button" class="btn btn-primary"
 											style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">+</button></th>
 								</tr>
 							</thead>
-							<tbody class="content">
+							<tbody class="content" >
 								
 							</tbody>
 						</table>
 					</form>
-				</div>
-
 			</div>
 			<div class="row align-items-center mb-5">
-				<div class="col-lg-4 ml-auto">
+				<div class="col-lg-4 ml-auto" style="padding-top:30px">
 					<div class="row">
 						<div class="col-6">
 							<a href="#" class="btn btn-block btn-light btn-md"><span
@@ -137,11 +143,11 @@
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'').replace('-','');" value="0" maxlength="4" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'').replace('-','');" value="0" maxlength="10" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" value="0" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><button type="button" class="btn btn-outline-danger" name="deleteBtn"
+				<td><button type="button" class="btn btn-outline-dark" name="deleteBtn"
 					style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">-</button></td>
 			</tr>`);
 	}
@@ -174,9 +180,10 @@
 	    	$('tbody tr:eq('+i+') td:eq(4) input').attr('name', 'list['+i+'].unitprice');
 	    	$('tbody tr:eq('+i+') td:eq(6) input').attr('name', 'list['+i+'].comments');
 	    }
+	    
+	    
 	});
-	
-	
+
 	</script>
 	<!-- datepicker -->
 	<script type="text/javascript" th:src="@{/js/doc/datepicker.js}"></script>

@@ -3,15 +3,19 @@
 <mapper namespace="com.yedam.app.doc.mapper.ProposalMapper">
 
 
-	<select id="selectReqInfo" resultType="ProposalVO">
-		SELECT r.request_no as request_no
-		, r.requester as requester
-        , u.users_id as users_id
-		, FIND_COMMONCODE(r.category_code) as category_code
-		FROM request r 
-		join users u 
-		on r.requester = u.users_no
-		WHERE r.request_no = #{requestNo}
+	<select id="selectReqInfo" resultType="RequestVO">
+		SELECT request_no
+		, requester
+		, FIND_COMMONCODE(category_code) as category_code
+		, FIND_COMMONCODE(ctt_place) as ctt_place
+		, FIND_COMMONCODE(ctt_place_area) as ctt_place_area
+		, FIND_COMMONCODE(ctt_place_situation) as ctt_place_situation
+		, hope_ctt_budget
+		, hope_ctt_start_dt
+		, hope_ctt_end_dt
+		, content
+		FROM request 
+		WHERE request_no = #{requestNo}
 	</select>
 
 

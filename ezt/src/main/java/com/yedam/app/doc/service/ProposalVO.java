@@ -28,9 +28,6 @@ public class ProposalVO {
 	private Date updateDt; //수정 일
 	private String proposalState; //견적서 상태
 	
-	// 유저 정보
-	private String categoryCode; // 분야코드
-	private String usersId; // 유저 아이디
 	
 	private List<ProposalDetailVO> list;
 }
