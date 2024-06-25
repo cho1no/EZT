@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.doc.service.ProposalService;
+import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
 
@@ -28,7 +29,6 @@ public class RequestController {
 	@GetMapping("requestList")
 	public String requestList(Model model) {
 		List<RequestVO> list = requestService.requestList();
-		System.out.println(list);
 		model.addAttribute("requestList", list);
 
 		return "req/requestList";
@@ -37,9 +37,9 @@ public class RequestController {
 //단건조회
 	// 의뢰
 	@GetMapping("requestInfo")
-	public String boardInfo(RequestVO requestVO, Model model) {
+	public String requestInfo(RequestVO requestVO,ProposalVO proposalVO, Model model) {
 
-		
+		//의뢰 목록조회
 		RequestVO findVO = requestService.requestInfo(requestVO);
 		System.out.println(findVO);
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
@@ -49,13 +49,17 @@ public class RequestController {
 		model.addAttribute("regionCode", commonCodeService.selectCommonCodeAll("0B"));
 		model.addAttribute("request", findVO);
 		
+		// 견적서 목록 조회
+		List<ProposalVO> list = requestService.proposalList(proposalVO);
+
+		model.addAttribute("proposal", list);
+		
+		//견적서 상세보기 조회
+		
+		//계약서 조회
+		
 		return "req/requestInfo";
 	}
-	// 견적서
-
-	// 견적서 상세보기
-	
-	// 계약서
 
 	// 등록
 

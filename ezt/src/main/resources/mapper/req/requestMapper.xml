@@ -20,14 +20,15 @@
 		  ,FIND_COMMONCODE(r.request_state) as request_state
 		  ,FIND_COMMONCODE(r.region_code) as region_code
 		  ,r.file_id
-		  ,f.save_name
+          ,f.save_name
+		  ,f.ext
 		  ,FIND_COMMONCODE(r.category_code) as category_code
           ,u.users_name
 	FROM request r
-        JOIN users u
-        ON r.requester = u.users_no
-        JOIN file_detail_info f
-        ON r.file_id = f.file_id
+	    JOIN users u
+	    ON r.requester = u.users_no
+	    LEFT OUTER JOIN file_detail_info f
+	    ON r.file_id = f.file_id
 	ORDER BY r.request_no desc
 </select>
 
@@ -125,9 +126,20 @@
 </delete>
 
 <!-- 견적서 단건조회 -->
-<select id="selectProposalAll" resultType="proposalVO">
+<select id="selectProposalAll" parameterType="RequestVO" resultType="ProposalVO">
 	SELECT p.worker
-		  ,u.user_name
-		  ,
+		  ,u.users_name
+		  ,p.ctt_start_dt
+		  ,p.ctt_end_dt
+		  ,u.users_phone
+		  ,p.comments
+		  ,r.request_no
+	FROM proposal p
+		JOIN users u
+		ON u.users_no = p.worker
+		LEFT OUTER JOIN request r
+		ON r.request_no = p.request_no
+	WHERE r.request_no =#{requestNo}
+	ORDER BY p.proposal_no desc
 </select>
 </mapper>

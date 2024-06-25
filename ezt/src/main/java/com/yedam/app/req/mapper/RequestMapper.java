@@ -18,7 +18,7 @@ public interface RequestMapper {
 	
 	
 	//견적서 단건조회
-	public List<ProposalVO> selectProposalAll();
+	public List<ProposalVO> selectProposalAll(ProposalVO proposalVO);
 	//견적서 상세 단건조회
 	
 	//계약서 단건조회

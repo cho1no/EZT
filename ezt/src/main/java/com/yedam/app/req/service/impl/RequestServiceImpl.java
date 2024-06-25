@@ -37,13 +37,13 @@ public class RequestServiceImpl implements RequestService {
 		return requestMapper.updateRequestInfo(requestVO) == 1;
 	}
 
+	//견적서 전체조회
 	@Override
-	public List<ProposalVO> proposalList() {
+	public List<ProposalVO> proposalList(ProposalVO proposalVO) {
 		
-		return requestMapper.selectProposalAll();
+		return requestMapper.selectProposalAll(proposalVO);
 	}
 	
-	//견적서 전체조회
 
 
 	
