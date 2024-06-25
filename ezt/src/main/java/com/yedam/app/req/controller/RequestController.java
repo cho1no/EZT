@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.doc.service.ProposalService;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
 
@@ -17,6 +21,8 @@ public class RequestController {
 	RequestService requestService;	
 	@Autowired
 	CommonCodeService commonCodeService;
+	@Autowired
+	ProposalService proposalService;
 
 	// 전체조회
 	@GetMapping("requestList")
@@ -47,11 +53,18 @@ public class RequestController {
 	}
 	// 견적서
 
+	// 견적서 상세보기
+	
 	// 계약서
 
 	// 등록
 
 	// 수정
 
+	@PostMapping("requestUpdate")
+	@ResponseBody
+	public boolean requestUpdateJASON(@RequestBody RequestVO requestVO) {
+		return requestService.updateRequest(requestVO);
+	}
 	// 삭제
 }

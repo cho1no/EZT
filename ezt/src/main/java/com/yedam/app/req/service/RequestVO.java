@@ -3,6 +3,9 @@ package com.yedam.app.req.service;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yedam.app.common.service.FileVO;
 
 import lombok.Data;
@@ -18,7 +21,11 @@ public class RequestVO {
 	private String cttPlaceSituation;	   //공사공간상황
 	private String cttPlaceSituationNm;	   //공사공간상황
 	private int hopeCttBudget;			   //희망공사예산
+	@DateTimeFormat(pattern="yyyy/MM/dd")
+	@JsonFormat(pattern="yyyy/MM/dd")
 	private Date hopeCttStartDt;		   //희망공사시작일
+	@DateTimeFormat(pattern="yyyy/MM/dd")
+	@JsonFormat(pattern="yyyy/MM/dd")
 	private Date hopeCttEndDt;			   //희망공사종료일
 	private String postcode;			   //우편번호	
 	private String address;				   //주소
@@ -29,7 +36,7 @@ public class RequestVO {
 	private String requestState;		   //의뢰상태
 	private String requestStateNm;		   //의뢰상태
 	private String regionCode;			   //지역코드
-	private String regionCodeNm;			   //지역코드
+	private String regionCodeNm;		   //지역코드
 	private int fileId;					   //파일아이디
 	private String categoryCode;		   //분야코드
 	private String categoryCodeNm;		   //분야코드

@@ -36,7 +36,11 @@
           </div>
         </div>
       </section>
-      <main layout:fragment="Content"></main>
+      <section class="site-section">
+	      <div class="container">
+	      <main layout:fragment="Content"></main>
+	      </div>
+      </section>
       <footer
         class="site-footer"
         th:insert="common/fragments/default_footer :: footerFragment"
