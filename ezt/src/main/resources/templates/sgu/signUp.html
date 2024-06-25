@@ -7,7 +7,15 @@
 <title>회원가입</title>
 <meta charset="utf-8">
 <style>
-  form span {color: red}
+form span.error {
+	color: red;
+	font-size: 10pt;
+}
+
+form span {
+	color: blue;
+	font-size: 10pt;
+}
 </style>
 </head>
 <body id="top">
@@ -45,69 +53,193 @@
 		<section class="site-section">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-6 mb-5" style="margin:auto">
-						<h2 class="mb-4">Sign Up To EZT</h2>
+					<div class="col-lg-6 mb-5" style="margin: auto">
+						<h2 class="mb-4">사용자 회원가입</h2>
 						<!-- 회원가입 폼 -->
-						 <form th:action="@{/signUp}" th:object="${userVO}" method="post" class="p-4 border rounded">
-                        <div class="row form-group">
-                            <div class="col-md-12 mb-3 mb-md-0">
-                                <label class="text-black" for="usersId">아이디</label>
-                                <input name="usersId" type="text" id="usersId" th:field="*{usersId}" class="form-control" placeholder="아이디를 입력해주세요">
-                                <span th:errors="*{usersId}"></span>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-12 mb-3 mb-md-0">
-                                <label class="text-black" for="usersPw">비밀번호</label>
-                                <input name="usersPw" type="password" id="usersPw" th:field="*{usersPw}" class="form-control" placeholder="비밀번호를 입력해주세요">
-                                <span th:errors="*{usersPw}"></span>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-12 mb-3 mb-md-0">
-                                <label class="text-black" for="usersPw">비밀번호확인</label>
-                                <input name="usersPwCheck" type="password" id="usersPwCheck" th:field="*{usersPwCheck}" class="form-control" placeholder="비밀번호 확인">
-                                <span th:errors="*{usersPwCheck}"></span>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-12 mb-3 mb-md-0">
-                                <label class="text-black" for="usersName">성명</label>
-                                <input name="usersName" type="text" id="usersName" th:field="*{usersName}" class="form-control" placeholder="성명을 입력해주세요">
-                                <span th:errors="*{usersName}"></span>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-12 mb-3 mb-md-0">
-                                <label class="text-black" for="usersPhone">전화번호</label>
-                                <input name="usersPhone" type="text" id="usersPhone" th:field="*{usersPhone}" class="form-control" placeholder="-제외 숫자만 입력해주세요">
-                                <span th:errors="*{usersPhone}"></span>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-12 mb-3 mb-md-0">
-                                <label class="text-black" for="usersNick">닉네임</label>
-                                <input name="usersNick" type="text" id="usersNick" th:field="*{usersNick}" class="form-control" placeholder="닉네임을 입력해주세요">
-                                <span th:errors="*{usersNick}"></span>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-12 mb-3 mb-md-0">
-                                <label class="text-black" for="usersEmail">이메일</label>
-                                <input name="usersEmail" type="text" id="usersEmail" th:field="*{usersEmail}" class="form-control" placeholder="example@google.com">
-                                <span th:errors="*{usersEmail}"></span>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-12">
-                                <input type="submit" value="가입하기" class="btn px-4 btn-primary text-white">
-                            </div>
-                        </div>
-                    </form>
+						<form th:action="@{/signUp}" th:object="${userVO}" method="post"
+							class="p-4 border rounded">
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersId">아이디</label> <input
+										name="usersId" type="text" id="usersId" th:field="*{usersId}"
+										class="form-control" placeholder="아이디를 입력해주세요">
+								<span></span>
+								</div>
+								<div class="col-md-12">
+									<button type="button" style="float: right" id="checkBtn"
+										class="btn px-4 btn-primary text-white">중복확인</button>
+								</div>
+								 <span th:errors="*{usersId}"
+									class="error"></span>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersPw">비밀번호</label> <input
+										name="usersPw" type="password" id="usersPw"
+										th:field="*{usersPw}" class="form-control"
+										placeholder="비밀번호를 입력해주세요"> <span class="error"
+										th:errors="*{usersPw}"></span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersPw">비밀번호확인</label> <input
+										name="usersPwCheck" type="password" id="usersPwCheck"
+										th:field="*{usersPwCheck}" class="form-control"
+										placeholder="비밀번호 확인"> <span class="error"
+										th:errors="*{usersPwCheck}"></span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersName">성명</label> <input
+										name="usersName" type="text" id="usersName"
+										th:field="*{usersName}" class="form-control"
+										placeholder="성명을 입력해주세요"> <span
+										th:errors="*{usersName}" class="error"></span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersPhone">전화번호</label> <input
+										name="usersPhone" type="text" id="usersPhone"
+										th:field="*{usersPhone}" class="form-control"
+										placeholder="-제외 숫자만 입력해주세요"> <span
+										th:errors="*{usersPhone}" class="error"></span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersNick">닉네임</label> <input
+										name="usersNick" type="text" id="usersNick"
+										th:field="*{usersNick}" class="form-control"
+										placeholder="닉네임을 입력해주세요"> <span></span> <span
+										th:errors="*{usersNick}" class="error"></span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersEmail">이메일</label> <input
+										name="usersEmail" type="text" id="usersEmail"
+										th:field="*{usersEmail}" class="form-control"
+										 placeholder="example@google.com"><span></span>
+									<span th:errors="*{usersEmail}" class="error"></span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12">
+									<input type="button" id="joinBtn" value="가입하기"
+										class="btn px-4 btn-primary text-white" style="float: right">
+								</div>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
 		</section>
 	</div>
 </body>
+<script th:inline="javascript">
+		//닉네임 중복체크
+		var nick = $('#usersNick');
+		checkNick();
+		
+		function checkNick() {
+			nick.on("change", function() { //키보드에서 손을 땠을 때 실행
+				var reqExp = /^[ㄱ-ㅎ가-힣A-Za-z0-9-_]{2,10}$/;
+			
+				if(!reqExp.test(nick.val())){
+					nick.next().text('닉네임은 특수문자를 제외한 2~10자리여야 합니다.')
+					nick.next().addClass('error')
+					return ;		
+				}
+				
+				$.ajax({
+					type : "get",
+					url : "/signUp/checkNick/"+nick.val(),
+					success : function(dt) {
+						if (dt == '중복') {
+							nick.next().text('이미 사용중인 닉네임입니다.')
+							nick.next().addClass('error')
+						} else {
+							nick.next().text('사용가능한 닉네임입니다.')
+							nick.next().removeClass('error')
+						}
+					}
+				})
+				
+			})
+		}
+		
+		//이메일 중복체크
+		var email = $('#usersEmail');
+		checkEmail();
+		
+		function checkEmail() {
+			email.on("change", function() { //키보드에서 손을 땠을 때 실행
+				var reqExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+		
+				if (!reqExp.test(email.val())) {
+					email.next().text('이메일 형식이 올바르지 않습니다.')
+					email.next().addClass('error')
+					return ;
+				}
+				
+				$.ajax({
+					type : "get",
+					url : "/signUp/checkEmail?email="+email.val(),
+					success : function(dt) {
+						if (dt == '중복') { 
+							email.next().text('이미 사용중인 이메일입니다.')
+							email.next().addClass('error')
+						} else {
+							email.next().text('사용가능한 이메일입니다.')
+							email.next().removeClass('error')
+						}
+					}
+				})
+			})
+		}
+		//아이디 중복체크(버튼)
+		$('#checkBtn').click(()=>{checkId()});
+		function checkId() {
+			var id = $('#usersId');
+			var reqExp = /^([A-za-z]{0,0})(?=.*[a-zA-Z])(?=.*[0-9]).{4,20}$/;
+			
+			if(id.val() == ''){
+				id.next().text('아이디는 필수 입력 값입니다.')
+				id.next().addClass('error')
+				return ; 
+			} else if(!reqExp.test(id.val())){
+				id.next().text('아이디는 영어,숫자가 포함된 4~20자리여야 합니다.')
+				id.next().addClass('error')
+				return ;
+			}
+			$.ajax({
+				type : "get",
+				url : "/signUp/checkId/"+id.val(),
+				success : function(dt) {
+					if (dt == '중복') {
+						id.next().text('이미 사용중인 아이디입니다.')
+						id.next().addClass('error')
+					} else {
+						id.next().text('사용가능한 아이디입니다.')
+						id.next().removeClass('error')
+					}
+				}
+			})
+			
+		}
+		
+		//가입하기 버튼
+		$('#joinBtn').click(() => {inputChk()});
+		function inputChk(){
+			if($('input').val() == ''){
+				alert('내용을 입력해주세요');
+				return false;
+			}else {
+				submit();
+			}
+		}
+</script>
 </html>
