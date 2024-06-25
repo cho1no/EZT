@@ -1,7 +1,3 @@
-body {
-  background: linear-gradient(to right, #4568dc, #b06ab3);
-}
-
 .floating-menu {
   width: 50px;
   height: 50px;
@@ -98,7 +94,7 @@ body {
   margin-bottom: 10px;
   border-bottom: 1px solid #aaa;
 }
-.chatRoomDiv p{
+.chatRoomDiv p {
   margin: 0;
 }
 .chatDiv {
@@ -111,10 +107,10 @@ body {
   margin-left: 25px;
   border: 1px solid #ccc;
 }
-.cNotMine{
+.cNotMine {
   background-color: #eee;
 }
-.chatDiv p{
+.chatDiv p {
   margin: 0;
 }
 .cpointer {

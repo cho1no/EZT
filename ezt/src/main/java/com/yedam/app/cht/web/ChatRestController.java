@@ -15,7 +15,7 @@ import com.yedam.app.cht.service.ChatVO;
 import com.yedam.app.sgi.service.LoginUserVO;
 
 @RestController
-public class ChatRestApi {
+public class ChatRestController {
 	@Autowired
     ChatService csv;
 	

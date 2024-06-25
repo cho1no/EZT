@@ -1,4 +1,4 @@
-package com.yedam.app.cht.config;
+package com.yedam.app.skt.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -11,9 +11,15 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/stomp/chat")
-                .setAllowedOrigins("http://localhost:8080")
-                .withSockJS();
+//        registry.addEndpoint("/stomp/chat")
+//                .setAllowedOrigins("http://localhost:8080")
+//                .withSockJS();
+//        registry.addEndpoint("/stomp/alarm")
+//        		.setAllowedOrigins("http://localhost:8080")
+//        		.withSockJS();
+        registry.addEndpoint("/stomp")
+		.setAllowedOrigins("http://localhost:8080")
+		.withSockJS();
     }
 
     /*어플리케이션 내부에서 사용할 path를 지정할 수 있음*/
