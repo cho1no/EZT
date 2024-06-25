@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.alm.mapper.AlarmMapper">
+	<select id="selectMyAllAlarm" parameterType="int" resultType="AlarmVO">
+		SELECT alarm_no
+				, title
+				, content
+				, alarm_time
+				, users_no
+				, read_tf
+		FROM alarm
+		WHERE users_no = #{usersNo}
+		ORDER BY alarm_time DESC
+	</select>
+	
+	<select id="selectMyAlarm" parameterType="int" resultType="AlarmVO">
+		SELECT alarm_no
+				, title
+				, content
+				, alarm_time
+				, users_no
+				, read_tf
+		FROM alarm
+		WHERE alarm_no = #{alarmNo}
+	</select>
+	
+	<select id="selectNotReadAlarm" parameterType="int" resultType="int">
+		SELECT COUNT(1)
+		FROM alarm
+		WHERE read_tf = 'Y'
+			AND users_no = #{usersNo}
+	</select>
+	
+	<insert id="insertAlarm" parameterType="AlarmVO">
+		<selectKey	keyProperty="alarmNo"
+					resultType="Integer"
+					order="AFTER">
+			SELECT seq_alarm.CURRVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO alarm (alarm_no, title, content, alarm_time, users_no)
+		VALUES (seq_alarm.NEXTVAL, #{title}, #{content}, sysdate, #{usersNo})
+	</insert>
+	
+	<update id="updateAlarm" parameterType="int">
+		UPDATE alarm
+		SET read_tf = 'Y'
+		WHERE alarm_no = #{alarmNo}
+	</update>
+	
+	<update id="updateAllAlarm" parameterType="int">
+		UPDATE alarm
+		SET read_tf = 'Y'
+		WHERE users_no = #{usersNo}
+	</update>
+</mapper>

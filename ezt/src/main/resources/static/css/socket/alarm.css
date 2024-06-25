@@ -1,0 +1,86 @@
+.alarm-menu {
+  position: relative;
+}
+.alarm-circle {
+  display: none;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: red;
+  border-radius: 50%;
+  z-index: 4;
+  /* 원하는 위치에 배치 */
+  top: 0px; /* 위에서 10px */
+  left: 15px; /* 왼쪽에서 10px */
+}
+.alarm-header {
+  background-color: orange;
+  color: white;
+  padding: 10px;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  align-items: center;
+}
+.alarm-window {
+  display: none;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  flex-direction: column;
+  overflow: hidden;
+}
+.alarm-body {
+  padding: 10px;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.alarmTime {
+  font-size: 10pt !important;
+  color: #aaa;
+}
+#alarmReadTF {
+  font-size: 10pt !important;
+}
+.alarmHistoryDiv {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #aaa;
+}
+.alarmHistoryDiv p {
+  margin: 0;
+}
+
+#alarmDetailDiv p {
+  margin: 0;
+}
+#alarmDetailDiv p:nth-child(2) {
+  margin-bottom: 10px;
+  font-size: 10pt;
+  color: #aaa;
+}
+
+.alarm-notification {
+  max-width: 300px;
+  margin: 0 auto;
+  background-color: #444;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+
+.alarm-notification.alarm-show {
+  opacity: 1;
+  visibility: visible;
+}
