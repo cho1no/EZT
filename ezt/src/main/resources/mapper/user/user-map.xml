@@ -21,6 +21,24 @@
 		WHERE users_id = #{id}
 	</select>
 	
+	<select id="idChk" resultType="int">
+		SELECT COUNT(*)
+		FROM users
+		WHERE users_id = #{usersId}
+	</select>
+	
+	<select id="emailChk" resultType="int">
+		SELECT COUNT(*)
+		FROM users
+		WHERE users_email = #{usersEmail}
+	</select>
+	
+	<select id="nickChk" resultType="int">
+		SELECT COUNT(*)
+		FROM users
+		WHERE users_nick = #{usersNick}
+	</select>
+	
 	<insert id="saveUser" parameterType="com.yedam.app.usr.service.UserVO">
 		INSERT INTO users
 		(users_no, users_role, users_id, users_pw, users_name, users_phone, users_nick, users_email)

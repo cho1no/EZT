@@ -27,5 +27,4 @@ public class CustomerUserDetailsService implements UserDetailsService{
 		return new LoginUserVO(userVO);
 	}
 	
-	
 }

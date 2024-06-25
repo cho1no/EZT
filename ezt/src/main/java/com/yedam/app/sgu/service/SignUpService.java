@@ -53,7 +53,34 @@ public class SignUpService {
 		
 		return validatorResult;
 	}
-
 	
+	//아이디 중복체크 (버튼)
+	public String idChk(UserVO vo) {
+		if (userMapper.idChk(vo.getUsersId()) > 0) {
+			return "중복";
+		}else{
+			return "중복아님";
+		}
+	}
+	
+	//닉네임 중복체크
+	public String nickChk(UserVO vo) {
+		if (userMapper.nickChk(vo.getUsersNick()) > 0) {
+			return "중복";
+		}else{
+			return "중복아님";
+		}
+	}
+	//이메일 중복체크 
+	public String emailChk(UserVO vo) {
+		if (userMapper.emailChk(vo.getUsersEmail()) > 0) {
+			return "중복";
+		}else{
+			return "중복아님";
+		}
+	}
+	
+	
+
 	
 }
