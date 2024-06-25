@@ -15,10 +15,10 @@
 	<section class="site-section">
 		<div class="container">
 			<div class="row mb-5">
-					<form class="p-4 p-md-5 border rounded" id="ppsInsertForm" th:action="@{/ppsInsert}" method="post" th:object="${proposalVO}">
+					<form class="p-4 p-md-5 border rounded" id="ppsInsertForm" name="updateForm">
 					<div class="row form-group">
 				<div class="col-lg-7 mb-5 mb-lg-0">
-						<h3 class="text-black mb-5 border-bottom pb-2">견적서 작성</h3>
+						<h3 class="text-black mb-5 border-bottom pb-2">견적서 수정</h3>
 						<input type="hidden" class="form-control" name="requestNo" th:value="${reqInfo.requestNo}">
 						<input type="hidden" class="form-control" name="requester" th:value="${reqInfo.requester}">
 						<input type="hidden" class="form-control" name="worker" th:value="${#authentication.name}">
@@ -43,12 +43,12 @@
 						<!-- datepicker : id&type="text"-->
 						<div class="row form-group">
 							<div class="col-6">
-								<label for="startDt">공사시작날짜</label> <input type="text"
-									class="form-control" id="startDt" th:field="*{cttStartDt}" readonly placeholder="날짜 선택">
+								<label for="startDt">공사시작날짜</label> <input type="text" name="cttStartDt"
+									class="form-control" id="startDt" th:value="${#dates.format(ppsInfo.cttStartDt, 'yyyy-MM-dd')}" readonly placeholder="날짜 선택">
 							</div>
 							<div class="col-6">
-								<label for="endDt">공사마감날짜</label> <input type="text"
-									class="form-control" id="endDt" th:field="*{cttEndDt}" readonly placeholder="날짜 선택">
+								<label for="endDt">공사마감날짜</label> <input type="text" name="cttEndDt"
+									class="form-control" id="endDt" th:value="${#dates.format(ppsInfo.cttEndDt, 'yyyy-MM-dd')}" readonly placeholder="날짜 선택">
 							</div>
 						</div>
 						<!-- datepicker -->
@@ -59,7 +59,7 @@
 								<label for="postCode" style="margin: 0">우편번호</label>
 							</div>
 							<div class="col-4">
-								<input type="text" class="form-control" id="input_postcode" th:field="*{workerPostcode}">
+								<input type="text" class="form-control" id="input_postcode" name="workerPostcode" th:value="${ppsInfo.workerPostcode}">
 							</div>
 							<div class="col-auto">
 								<button type="button" class="btn btn-primary" onclick="input_execDaumPostcode()">우편번호 찾기</button>
@@ -68,13 +68,13 @@
 						<div class="row form-group">
 							<div class="col-12">
 								<label for="addr">주소</label> <input type="text"
-									class="form-control" id="input_addr" th:field="*{workerAddress}">
+									class="form-control" id="input_addr" name="workerAddress" th:value="${ppsInfo.workerAddress}">
 							</div>
 						</div>
 						<div class="row form-group">
 							<div class="col-12">
 								<label for="detailAddr">상세주소</label> <input type="text"
-									class="form-control" id="input_detailAddr" th:field="*{workerDetailAddress}">
+									class="form-control" id="input_detailAddr" name="workerDetailAddress" th:value="${ppsInfo.workerDetailAddress}">
 							</div>
 						</div>
 						<!-- postcode -->
@@ -83,7 +83,7 @@
 							style="padding-top: 20px; padding-bottom: 20px">
 							<div class="col-5">
 								<label for="comment">비고</label>
-								<textarea cols="68" th:field="*{comments}"></textarea>
+								<textarea cols="68" name="comments">[[${ppsInfo.comments}]]</textarea>
 							</div>
 						</div>
 				</div>
@@ -118,7 +118,19 @@
 								</tr>
 							</thead>
 							<tbody class="content" >
-								
+								<th:block th:each=" list : ${ppsInfo.list}">
+									<tr class="text-center">
+										<td><input type="text" style="border: 0; width: 100%;" th:value="${list.product}" /></td>
+										<td><input type="text" style="border: 0; width: 100%;" th:value="${list.division}" /></td>
+										<td><input type="text" style="border: 0; width: 100%;" th:value="${list.unit}" /></td>
+										<td><input type="text" style="border: 0; width: 100%;" th:value="${#numbers.formatInteger(list.qty,1,'COMMA')}" /></td>
+										<td><input type="text" style="border: 0; width: 100%;" th:value="${#numbers.formatInteger(list.unitprice,1,'COMMA')}" /></td>
+										<td><input type="text" style="border: 0; width: 100%;" th:value="${#numbers.formatInteger(list.qty * list.unitprice,1,'COMMA')}" /></td>
+										<td><input type="text" style="border: 0; width: 100%;" th:value="${list.comments}" /></td>
+										<td><button type="button" class="btn btn-outline-dark" name="deleteBtn"
+					style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">-</button></td>
+									</tr>
+								</th:block>
 							</tbody>
 						</table>
 						

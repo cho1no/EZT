@@ -12,63 +12,83 @@
 		<div class="container">
 			<div class="row mb-5">
 				<div class="col-lg-12">
-					<form class="p-4 p-md-5 border rounded">
+					<form class="p-4 p-md-5 border rounded" name="updateForm">
 						<h3 class="text-black mb-5 border-bottom pb-2">견적서 상세</h3>
+						<input type="hidden" name="proposalNo" th:value="${ppsInfo.proposalNo}">
 						<div class="row form-group">
+							<div class="col-2">
+							<p class="text-black">작성자ID</p> 
+							</div>
+							<div class="col-3">
+							<p>[[${userInfo.usersId}]]</p>
+							
+							</div>
+							<div class="col-3">
+								<p class="text-black">전화번호</p>
+							</div>
 							<div class="col-4">
-								<label for="uname">작성자ID</label> <input type="text"
-									class="form-control" th:value="${#authentication.name}" readonly>
-							</div>
-							<div class="col-5">
-								<label for="tel">전화번호</label> <input type="tel"
-									class="form-control" readonly>
+							<p>[[${userInfo.usersPhone}]]</p>
 							</div>
 						</div>
+						
+						<div class="row form-group">
+							<div class="col-2">
+							<p class="text-black">작성 일시</p> 
+							</div>
+							<div class="col-3">
+							<p>[[${#dates.format(ppsInfo.writeDt, 'yyyy-MM-dd')}]]</p>
+							</div>
+							<div class="col-2">
+								<p class="text-black">수정 일시</p>
+							</div>
+							<div class="col-3">
+							<p>[[${#dates.format(ppsInfo.updateDt, 'yyyy-MM-dd')}]]</p>
+							</div>
+						</div>
+						
 						<div class="row form-group">
 							<div class="col-6">
-								<label for="startDt">공사시작날짜</label> <input type="date"
-									class="form-control" id="startDt" th:value="${#dates.format(ppsInfo.cttStartDt, 'yyyy-MM-dd')}" readonly>
+								<label for="startDt">공사시작날짜</label> <input type="text"
+									class="form-control" id="startDt" name="cttStartDt"
+									th:value="${#dates.format(ppsInfo.cttStartDt, 'yyyy-MM-dd')}"
+									readonly>
 							</div>
 							<div class="col-6">
-								<label for="endDt">공사마감날짜</label> <input type="date"
-									class="form-control" id="endDt" th:value="${#dates.format(ppsInfo.cttEndDt, 'yyyy-MM-dd')}" readonly>
+								<label for="endDt">공사마감날짜</label> <input type="text"
+									class="form-control" id="endDt" name="cttEndDt"
+									th:value="${#dates.format(ppsInfo.cttEndDt, 'yyyy-MM-dd')}"
+									readonly>
 							</div>
 						</div>
-						<div class="row form-group">
-							<div class="col-6">
-								<label for="writeDt">작성 일시</label> <input type="text"
-									class="form-control" id="writeDt" th:value="${#dates.format(ppsInfo.writeDt, 'yyyy-MM-dd')}" readonly>
-							</div>
-							<div class="col-6">
-								<label for="editDt">수정 일시</label> <input type="text"
-									class="form-control" id="editDt" th:value="${#dates.format(ppsInfo.updateDt, 'yyyy-MM-dd')}" readonly>
-							</div>
-						</div>
+						
 						<div class="row form-group" style="padding-top: 20px">
 							<div class="col-auto">
 								<label for="postCode" style="margin: 0">우편번호</label>
 							</div>
 							<div class="col-4">
-								<input type="text" class="form-control" id="postCode" th:value="${ppsInfo.workerPostcode}" readonly>
+								<input type="text" class="form-control" id="postCode" name="workerPostcode"
+									th:value="${ppsInfo.workerPostcode}" readonly>
 							</div>
 						</div>
 						<div class="row form-group">
 							<div class="col-10">
 								<label for="addr">주소</label> <input type="text"
-									class="form-control" id="addr" th:value="${ppsInfo.workerAddress}" readonly>
+									class="form-control" id="addr" name="workerAddress"
+									th:value="${ppsInfo.workerAddress}" readonly>
 							</div>
 						</div>
 						<div class="row form-group">
 							<div class="col-10">
 								<label for="detailAddr">상세주소</label> <input type="text"
-									class="form-control" id="detailAddr" th:value="${ppsInfo.workerDetailAddress}" readonly>
+									class="form-control" id="detailAddr" name="workerDetailAddress"
+									th:value="${ppsInfo.workerDetailAddress}" readonly>
 							</div>
 						</div>
 						<div class="row form-group"
 							style="padding-top: 20px; padding-bottom: 20px">
 							<div class="col-5">
 								<label for="comment">비고</label>
-								<textarea cols="90" readonly>[[${ppsInfo.comments}]]</textarea>
+								<textarea cols="90" name="comments" readonly>[[${ppsInfo.comments}]]</textarea>
 							</div>
 						</div>
 						<table class="table table-hover">
@@ -77,8 +97,8 @@
 									<th scope="col">품명</th>
 									<th scope="col" width="120px">구분</th>
 									<th scope="col" width="60px">단위</th>
-									<th scope="col" width="80px">수량</th>
-									<th scope="col" width="120px">단가</th>
+									<th scope="col" width="70px">수량</th>
+									<th scope="col" width="130px">단가</th>
 									<th scope="col" width="180px">금액</th>
 									<th scope="col">비고</th>
 								</tr>
@@ -86,47 +106,94 @@
 							<tbody class="content">
 								<th:block th:each=" list : ${ppsInfo.list}">
 									<tr class="text-center">
-									<td th:text="${list.product}" />
-									<td th:text="${list.division}" />
-									<td th:text="${list.unit}" />
-									<td th:text="${list.qty}" />
-									<td th:text="${#numbers.formatInteger(list.unitprice,1,'COMMA')}" />
-									<td th:text="${#numbers.formatInteger(list.qty * list.unitprice,1,'COMMA')}"/>
-									<td th:text="${list.comments}" />
+										<td th:text="${list.product}" />
+										<td th:text="${list.division}" />
+										<td th:text="${list.unit}" />
+										<td th:text="${#numbers.formatInteger(list.qty,1,'COMMA')}" />
+										<td th:text="${#numbers.formatInteger(list.unitprice,1,'COMMA')} + 원" />
+										<td th:text="${#numbers.formatInteger(list.qty * list.unitprice,1,'COMMA')} + 원" />
+										<td th:text="${list.comments}" />
 									</tr>
 								</th:block>
 							</tbody>
 						</table>
 					</form>
 				</div>
-				
+
 			</div>
 			<div class="row align-items-center mb-5">
 				<div class="col-lg-4 ml-auto">
 					<div class="row">
-					<th:block th:if="${#authentication.name == #strings.toString(ppsInfo.worker)}">
-						<div class="col-6">
-							<a href="#" class="btn btn-block btn-light btn-md">수정</a>
-						</div>
-						<div class="col-6">
-							<button type="button" class="btn btn-block btn-primary btn-md">삭제</button>
-						</div>
+						<th:block th:if="${#authentication.name == #strings.toString(ppsInfo.worker)}">
+							<div class="col-6">
+								<button type="button" class="btn btn-block btn-light btn-md"
+								th:onClick="|location.href='@{/ppsUpdate(proposalNo=${ppsInfo.proposalNo},requestNo=${ppsInfo.requestNo})}'|">수정</button>
+							</div>
+							<div class="col-6">
+								<button type="button" class="btn btn-block btn-primary btn-md" 
+								th:onClick="|location.href='@{/ppsDelete(proposalNo=${ppsInfo.proposalNo})}'|">삭제</button>
+							</div>
 						</th:block>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-	
-	<script>
-		if($('#startDt').val() == '1900-01-01'){
+
+	<script th:inline="javascript">
+		if ($('#startDt').val() == '1900-01-01') {
 			$('#startDt').val('');
 		}
-		if($('#endDt').val() == '1900-01-01'){
+		if ($('#endDt').val() == '1900-01-01') {
 			$('#endDt').val('');
 		}
-
+		
+		
+		/*
+		$('#updateSuccess').on('click', function(e){
+			
+			
+				//1) 보낼 데이터 확인
+				let info = getPpsInfo();
+				
+				//2) AJAX
+				$.ajax('ppsUpdate', {
+					type : 'post',
+					contentType : 'application/json',
+					data : JSON.stringify(info)
+					
+				})
+				.done(result => {
+					if(result){
+						alert('정상적으로 수정되었습니다.');
+					}else{
+						alert('수정되지 않았습니다. \n데이터를 확인해주세요.');
+					}
+					console.log(result);
+				})
+				.fail(err => console.log(err));
+			
+			function getPpsInfo(){
+				let formData = $('form[name="updateForm"]').serializeArray();
+				console.log('1) serializeArray', formData);
+				
+				let objData = {};
+				$.each(formData, (idx, input) => {
+					console.log('2) input', idx, input);
+					objData[input.name] = input.value;
+				});
+				console.log('3) objData', objData);
+				return objData
+			}
+				$('input').attr("readonly", true);
+				$('textarea').attr("readonly", true);
+				$('#updateSuccess').parent().attr('style', "display:none");
+				$('#updateBtn').parent().removeAttr('style');
+			
+		});
+		*/
+		
 	</script>
-	
+
 </body>
 </html>
