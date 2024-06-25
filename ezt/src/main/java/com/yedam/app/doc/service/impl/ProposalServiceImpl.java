@@ -56,6 +56,7 @@ public class ProposalServiceImpl implements ProposalService {
 
 	@Override
 	public int ppsUpdate(ProposalVO proposalVO) {
+		System.out.println(proposalVO);
 		ppsMapper.deletePpsDetailInfo(proposalVO.getProposalNo());
 		int result = ppsMapper.updatePpsInfo(proposalVO);
 		if (proposalVO.getList() != null) {
@@ -63,9 +64,7 @@ public class ProposalServiceImpl implements ProposalService {
 				e.setProposalNo(proposalVO.getProposalNo());
 				ppsMapper.insertPpsDetailInfo(e);
 			});
-
 		}
-
 		return result == 1 ? proposalVO.getProposalNo() : -1;
 	}
 

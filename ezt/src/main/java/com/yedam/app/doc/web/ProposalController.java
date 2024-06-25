@@ -49,8 +49,7 @@ public class ProposalController {
 		// 유저 정보 조회
 		UserVO usrVO = ppsSerivce.userInfo(Integer.parseInt(principal.getName()));
 		model.addAttribute("userInfo", usrVO);
-		
-		System.out.println(principal.getName());
+
 		return "doc/proposalInsert";
 	}
 
@@ -88,9 +87,9 @@ public class ProposalController {
 	} 
 	
 	@PostMapping("ppsUpdate")
-	@ResponseBody
-	public int ppsUpdateJSON(@RequestBody ProposalVO proposalVO){
-		return ppsSerivce.ppsUpdate(proposalVO);
+	public String ppsUpdateJSON(ProposalVO proposalVO){
+		int no = ppsSerivce.ppsUpdate(proposalVO);
+		return "redirect:ppsInfo?proposalNo=" + no + "&requestNo=" + proposalVO.getRequestNo();
 	}
 	
 	// 견적서 삭제
