@@ -64,7 +64,7 @@
 		<id property="ext" column="ext"></id>
 	</collection>
 </resultMap>
-<!-- 단건조회 -->
+<!-- 의뢰 단건조회 -->
 <select id="selectRequestInfo" resultMap="requestMap">
 	SELECT r.request_no
 		  ,r.requester
@@ -99,5 +99,35 @@
         ON r.file_id = f.file_id
         
 	WHERE r.request_no = #{requestNo}
+</select>
+<!-- 등록 -->
+<!-- 수정 -->
+<update id="updateRequestInfo" parameterType="RequestVO">
+	UPDATE request
+	SET
+		category_code=#{categoryCode}
+		,hope_ctt_start_dt=#{hopeCttStartDt}
+		,hope_ctt_end_dt=#{hopeCttEndDt}
+		,hope_ctt_budget=#{hopeCttBudget}
+		,ctt_place=#{cttPlace}
+		,ctt_place_situation=#{cttPlaceSituation}
+		,ctt_place_area=#{cttPlaceArea}
+		,content=#{content}
+		,postcode=#{postcode}
+		,address=#{address}
+		,detail_address=#{detailAddress}
+	WHERE request_no=#{requestNo}
+</update>
+<!-- 삭제 -->
+<delete id="">
+	DELETE FROM request
+	WHERE request_no = {request_no}
+</delete>
+
+<!-- 견적서 단건조회 -->
+<select id="selectProposalAll" resultType="proposalVO">
+	SELECT p.worker
+		  ,u.user_name
+		  ,
 </select>
 </mapper>
