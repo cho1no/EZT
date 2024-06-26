@@ -1,5 +1,6 @@
 package com.yedam.app.req.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.yedam.app.doc.service.ProposalService;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
+import com.yedam.app.usr.service.UserVO;
 
 @Controller
 public class RequestController {
@@ -41,7 +43,7 @@ public class RequestController {
 
 		//의뢰 목록조회
 		RequestVO findVO = requestService.requestInfo(requestVO);
-		System.out.println(findVO);
+
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
 		model.addAttribute("cttPlace", commonCodeService.selectCommonCodeAll("0P"));
 		model.addAttribute("cttPlaceSituation", commonCodeService.selectCommonCodeAll("0H"));
@@ -52,8 +54,8 @@ public class RequestController {
 		// 견적서 목록 조회
 		List<ProposalVO> list = requestService.proposalList(proposalVO);
 
-		model.addAttribute("proposal", list);
-		
+		model.addAttribute("proposalList", list);
+
 		//견적서 상세보기 조회
 		
 		//계약서 조회
@@ -62,7 +64,29 @@ public class RequestController {
 	}
 
 	// 등록
-
+	@GetMapping("requestInsert")
+	public String requestInsert(Model model, Principal principal) {
+		//의뢰 등록
+		model.addAttribute("requestVO", new RequestVO());
+		
+		//공통코드 정보
+		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
+		model.addAttribute("cttPlace", commonCodeService.selectCommonCodeAll("0P"));
+		model.addAttribute("cttPlaceSituation", commonCodeService.selectCommonCodeAll("0H"));
+		model.addAttribute("requestState", commonCodeService.selectCommonCodeAll("0R"));
+		model.addAttribute("regionCode", commonCodeService.selectCommonCodeAll("0B"));
+		//유저 정보 조회
+		UserVO userVO = requestService.userInfo(Integer.parseInt(principal.getName()));
+		model.addAttribute("user", userVO);
+		
+		return "req/requestInsert";
+	}
+	
+	@PostMapping("requestInsert")
+	public String requestInsert(RequestVO requestVO) {
+		requestService.insertRequest(requestVO);
+		return "redirect:requestList";
+	}
 	// 수정
 
 	@PostMapping("requestUpdate")
@@ -71,4 +95,9 @@ public class RequestController {
 		return requestService.updateRequest(requestVO);
 	}
 	// 삭제
+	@GetMapping("requestDelete")
+	public String requestDelet(Integer requestNo) {
+		requestService.deleteRequest(requestNo);
+		return "redirect:requestList";
+	}
 }

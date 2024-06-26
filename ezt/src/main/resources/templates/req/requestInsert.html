@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
+
+<head>
+
+<script src="https://kit.fontawesome.com/fdebdddca5.js" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<title>의뢰 신청</title>
+</head>
+<body>
+<h3>의뢰 신청</h3>
+<form name="insertRequest" th:action="@{/requestInsert}" th:object="${requestVO}" method="post">
+	<table class="table">
+		<tr>
+			<td><input type="hidden" name="requestNo"></td>
+			<td><input type="hidden" name="requestState"></td>
+			<td><input type="hidden" name="requester" th:value="${#authentication.name}"></td>
+		</tr>
+		<tr>
+			<th>제목</th>
+			<td colspan="3"><input type="text" name="title"/>
+		</tr>
+		<tr>
+			<th>시공분야</th>
+			<td colspan="3">
+				<select th:field="*{categoryCode}" >
+                    <option th:each="category :${categoryCode}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
+                </select>
+			</td>
+		</tr>
+		<tr>
+			<th>희망시공일정</th>
+			<td><input type="date" name="hopeCttStartDt" ></td>
+			<td>~</td>
+			<td><input type="date" name="hopeCttEndDt"  ></td>
+		</tr>
+		<tr>
+			<th>희망시공예산</th>
+			<td colspan="3"><input type="text" name="hopeCttBudget"/>
+		</tr>
+		<tr>
+			<th>시공공간</th>
+			<td colspan="3">
+				<select th:field="*{cttPlace}" >
+                    <option th:each="category :${cttPlace}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
+                </select>		
+			</td>
+		</tr>
+		<tr>
+			<th>시공공간상황</th>
+			<td colspan="3">
+				<select th:field="*{cttPlaceSituation}" >
+                    <option th:each="category :${cttPlaceSituation}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
+                </select>
+			</td>
+		</tr>
+		<tr>
+			<th>시공공간면적</th>
+			<td colspan="3"><input type="text" name="cttPlaceArea" style="width:50px;">평</td>
+		</tr>		
+		<tr>
+			<th>의뢰 상세 내용</th>
+			<td colspan="3"><textarea name="content" style="width:500px; height:200px;"></textarea></td>
+		</tr>
+		<tr>
+			<th>이미지 첨부</th>
+			<td colspan="3">이미지 첨부 들어갈 자리이이이이</td>
+		</tr>				
+		<tr>
+			<th>지역</th>
+			<td colspan="3">
+				<select th:field="*{regionCode}" >
+                    <option th:each="category :${regionCode}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
+                </select>
+			</td>
+		</tr>		
+		<tr>
+           <th>우편번호</th>
+           <td><input type="text" name="postcode" id="input_postcode" ></td>
+           <td><button type="button" class="btn btn-secondary postcode" onclick="input_execDaumPostcode()">우편번호 찾기</button></td>
+        </tr>
+        <tr>
+           <th>주소</th>
+           <td colspan="3"><input name="address" style="width:300px;" class="input" type="text" id="input_addr" ></td>
+        </tr>
+        <tr>
+           <th>상세주소</th>    
+           <td colspan="3"><input name="detailAddress" style="width:300px;" class="input" type="text" id="input_detailAddr"></td>
+        </tr>    
+			
+	</table>
+		<button type="submit" class="btn btn-primary insertBtn">등록</button>
+
+</form>
+
+
+
+
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/js/doc/postcode.js"></script>
+</body>
+</html>

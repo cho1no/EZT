@@ -67,14 +67,15 @@
                 <tr>
                     <td><h4>의뢰 내용</h4></td>
                     <td><button type="button" class="btn btn-secondary upBtn update">수정</button></td>
+                    <td><button type="button" class="btn btn-secondary delBtn" th:onclick="|location.href='@{/requestDelete(requestNo=${request.requestNo})}'|">삭제</button></td>
                 </tr>
                 <tr>
                     <th>의뢰자명</th>
-                    <td>[[${request.usersName}]]</td>
+                    <td colspan="2">[[${request.usersName}]]</td>
                 </tr>    
                 <tr>
                     <th>시공분야</th>
-                    <td>
+                    <td colspan="2">
                     <select th:field="*{categoryCode}" disabled>
                         <option th:each="category :${categoryCode}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
                     </select>
@@ -82,16 +83,16 @@
                 </tr>
                 <tr>
                     <th>희망 공사일정</th>
-                    <td><input type="text" style="width:90px" readonly name="hopeCttStartDt" placeholder="yyyy/MM/dd" th:value="${#dates.format(request.hopeCttStartDt, 'yyyy/MM/dd')}" /> ~
-                    <input type="text" name="hopeCttEndDt" placeholder="yyyy/MM/dd" th:value="${#dates.format(request.hopeCttEndDt, 'yyyy/MM/dd')}" readonly /></td>
+                    <td colspan="2"><input type="text" style="width:90px" readonly name="hopeCttStartDt" placeholder="yyyy-MM-dd" th:value="${#dates.format(request.hopeCttStartDt, 'yyyy-MM-dd')}" /> ~
+                    <input type="text" name="hopeCttEndDt" placeholder="yyyy-MM-dd" th:value="${#dates.format(request.hopeCttEndDt, 'yyyy-MM-dd')}" readonly /></td>
                 </tr>
                 <tr>
                     <th>희망 시공예산</th>
-                    <td><input type="text" name="hopeCttBudget" th:value="${request.hopeCttBudget}" readonly /></td>
+                    <td colspan="2"><input type="text" name="hopeCttBudget" th:value="${request.hopeCttBudget}" readonly /></td>
                 </tr>
                 <tr>
                     <th>시공 공간</th>
-                    <td>
+                    <td colspan="2">
                     <select th:field="*{cttPlace}" disabled>
                         <option th:each="category :${cttPlace}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
                     </select>
@@ -99,7 +100,7 @@
                 </tr>
                 <tr>
                     <th>시공 공간상황</th>
-                    <td>
+                    <td colspan="2">
                     <select th:field="*{cttPlaceSituation}" disabled>
                         <option th:each="category :${cttPlaceSituation}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
                     </select>
@@ -107,11 +108,11 @@
                 </tr>
                 <tr>
                     <th>시공 공간면적</th>
-                    <td><input type="text" style="text-align:right; width:50px;" name="cttPlaceArea" th:value="|${request.cttPlaceArea}|" readonly />평</td>
+                    <td colspan="2"><input type="text" style="text-align:right; width:50px;" name="cttPlaceArea" th:value="|${request.cttPlaceArea}|" readonly />평</td>
                 </tr>
                 <tr>
                     <th>상세내용</th>
-                    <td> <textarea class="input" name="content" th:text="${request.content}" readonly></textarea> </td>
+                    <td colspan="2"> <textarea class="input" name="content" th:text="${request.content}" readonly></textarea> </td>
                 </tr>
             </table>
         </div>
@@ -140,7 +141,7 @@
     <div>
         <table class="table">
             <tr>
-                <td colspan="5"><h4>견적서</h4></td>
+                <td colspan="6"><h4>견적서</h4></td>
                 <td>
                     <select style="float: right">
                         <option value="price">총금액 낮은 순</option>
@@ -150,23 +151,25 @@
             </tr>
             <tr>
                 <th>담당자명</th>
-                <th>공사기간</th>
+                <th colspan="2">공사기간</th>
                 <th>공사총금액</th>
                 <th>전화번호</th>
                 <th>비고</th>
-                <th></th>
+                <th/>
                 
             </tr>
+            <th:block th:each="proposal : ${proposalList}">
             <tr>
-                <td>dd</td>
+            	<td style="display:none" th:text="${proposal.requestNo}"/> 
+            	<td th:text="${proposal.usersName}"/>
+                <td colspan="2" th:text="|${#dates.format(proposal.cttStartDt, 'yyyy/MM/dd')} ~ ${#dates.format(proposal.cttEndDt, 'yyyy/MM/dd')}|"/>
                 <td>ddd</td>
-                <td>ddd</td>
-                <td>dd</td>
-                <td>dd</td>
+             	<td th:text="${proposal.usersPhone}"/>
+                <td th:text="${proposal.comments}"/>
                 <td><i class="fa-solid fa-caret-down fa-xl down"></i></td>
             </tr>
             <tr>
-            <td colspan="6">
+            <td colspan="7">
                 <table class="table innerT" style="display:none">
                     <tr>
                         <th>품명</th>
@@ -189,38 +192,7 @@
                     </tr>
                 </table></td>
             </tr>
-             <tr>
-                <td>dd</td>
-                <td>ddd</td>
-                <td>ddd</td>
-                <td>dd</td>
-                <td>dd</td>
-                <td><i class="fa-solid fa-caret-down fa-xl down"></i></td>
-            </tr>
-            <tr>
-            <td colspan="6">
-                <table class="table innerT" style="display:none">
-                    <tr>
-                        <th>품명</th>
-                        <th>규격</th>
-                        <th>수량</th>
-                        <th>단가</th>
-                        <th>금액</th>
-                        <th>비고</th>
-                        <th></th>
-                        
-                    </tr>
-                    <tr>
-                        <td>dd</td>
-                        <td>ddd</td>
-                        <td>ddd</td>
-                        <td>ddd</td>
-                        <td>dd</td>
-                        <td>dd</td>
-                        <td><button class="btnn">상세보기</button></td>
-                    </tr>
-                </table></td>
-            </tr>
+  			</th:block>
         </table>
     </div>
     <div>
