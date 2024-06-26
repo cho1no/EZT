@@ -21,11 +21,11 @@ public class RequestVO {
 	private String cttPlaceSituation;	   //공사공간상황
 	private String cttPlaceSituationNm;	   //공사공간상황
 	private int hopeCttBudget;			   //희망공사예산
-	@DateTimeFormat(pattern="yyyy/MM/dd")
-	@JsonFormat(pattern="yyyy/MM/dd")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date hopeCttStartDt;		   //희망공사시작일
-	@DateTimeFormat(pattern="yyyy/MM/dd")
-	@JsonFormat(pattern="yyyy/MM/dd")
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date hopeCttEndDt;			   //희망공사종료일
 	private String postcode;			   //우편번호	
 	private String address;				   //주소
