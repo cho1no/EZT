@@ -2,14 +2,22 @@ package com.yedam.app.doc.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.http.HttpHeaders;
 import java.nio.file.Files;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.service.ProposalService;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.req.service.RequestVO;
@@ -121,7 +130,7 @@ public class ProposalController {
 		ppsSerivce.ppsSend(proposalVO.getProposalNo());
 		return "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo() + "&requestNo=" + proposalVO.getRequestNo();
 	}
-
+	// 폴더 저장 경로
 	private String getForder() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -129,7 +138,7 @@ public class ProposalController {
 		String str = sdf.format(date);
 		return str.replace("-", File.separator);
 	}
-	
+	// 이미지 체크
 	private boolean checkImageType(File file) {
 		try {
 			String contentType = Files.probeContentType(file.toPath());
@@ -142,14 +151,16 @@ public class ProposalController {
 	}
 	
 
-	@PostMapping("/uploadAjaxAction")
+	@PostMapping( value="/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public void uploadAjaxPost(MultipartFile[] uploadFile) {
+	public ResponseEntity<List<FileVO>> uploadAjaxPost(MultipartFile[] uploadFile) {
 		// 폴더 경로
 		String uploadFolder = "C:/temp";
+		List<FileVO> list = new ArrayList<>();
 		
+		String uploadFolderPath = getForder();
 		// 폴더 만들기
-		File uploadPath = new File(uploadFolder, getForder());
+		File uploadPath = new File(uploadFolder, uploadFolderPath);
 		log.info("upload path: " + uploadPath);
 		
 		if(uploadPath.exists() == false) {
@@ -157,8 +168,9 @@ public class ProposalController {
 		}
 		
 		
-		
 		for(MultipartFile multipartFile : uploadFile) {
+			
+			FileVO fileVO = new FileVO();
 			// 콘솔 출력
 			log.info("Upload File Name : " + multipartFile.getOriginalFilename());
 			log.info("Upload File Size : " + multipartFile.getSize());
@@ -166,10 +178,13 @@ public class ProposalController {
 			log.info("Upload ContentType : " + multipartFile.getContentType());
 			
 			String uploadFileName = multipartFile.getOriginalFilename();
+			fileVO.setOriginalFileName(uploadFileName);
 			
 			UUID uuid = UUID.randomUUID();
 			uploadFileName = uuid.toString() + "_" + uploadFileName;
 			
+			fileVO.setSaveName(uploadFileName);
+			fileVO.setSavePath(uuid.toString());
 			
 			
 			try {
@@ -178,12 +193,35 @@ public class ProposalController {
 				if(!checkImageType(saveFile)) {
 				// 파일 저장
 				multipartFile.transferTo(saveFile);
+				list.add(fileVO);
 				}
+				
 			} catch (Exception e) {
-				log.error(e.getMessage());
+				e.printStackTrace();
 			}
 		}
-		
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
+	
+	@GetMapping(value="/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile(String fileName){
+		
+		log.info("download file: " + fileName);
+		
+		FileSystemResource resource = new FileSystemResource("C:\\temp\\" + fileName);
+		
+		log.info("resource : " + resource);
+		
+		String resourceName = resource.getFilename();
+		
+		org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+		try {
+			headers.add("Content-Disposition", "attachment; filename=" + new String(resourceName.getBytes("UTF-8"),"ISO-8859-1"));
+		} catch( UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+	}
 }

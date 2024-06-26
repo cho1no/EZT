@@ -17,6 +17,20 @@ var maxSize = 5242880; // 5MB
             return true;
         }
 
+// 파일 이름 출력
+var uploadResult = $('.uploadResult ul');
+
+function nameList(){
+	$('.uploadResult ul li').remove();
+	var inp = document.getElementById("multiFile");
+	for( var i = 0; i < inp.files.length; ++i){
+		var name = inp.files.item(i).name;
+		uploadResult.append("<li>" + name + "</li>");
+	}
+	
+}
+
+
 
 $('#uploadBtn').on("click", function(e){
 	var formData = new FormData();
@@ -47,9 +61,21 @@ $('#uploadBtn').on("click", function(e){
 		contentType : false,
 		data : formData,
 		type :'Post',
+		dataType:'JSON',
 		success : function(result){
-			alert("Uploaded");
+			console.log(result);
+			
+			showUploadedFile(result);
 		}
 	});
 	
 });
+
+// 모달 창 닫혔을 때 폼 초기화
+$('#sendModal').on('hidden.bs.modal', function (e) {   
+
+$('input[name="uploadFile"]').val('');
+$('.uploadResult ul li').remove();
+});checkExtentsion
+
+

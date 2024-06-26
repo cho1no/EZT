@@ -229,7 +229,11 @@
         <p>이 견적서를 보내시겠습니까?</p>
            <p>첨부 파일 업로드</p>
            <div class="uploadDiv">
-           <input type="file" multiple="multiple" name="uploadFile">	
+           <input type="file" multiple="multiple" name="uploadFile" id="multiFile" onChange="nameList()">	
+           </div>
+           <div class="uploadResult">
+           	<ul>
+           	</ul>
            </div>
 	   <button id="uploadBtn">Upload</button>
       </div>
