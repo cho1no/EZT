@@ -25,6 +25,7 @@ public class ProposalController {
 	// 견적서 단건조회
 	@GetMapping("ppsInfo")
 	public String ppsInfo(RequestVO requestVO, ProposalVO proposalVO, Model model) {
+		// 견적서 정보 조회
 		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO);
 		model.addAttribute("ppsInfo", findVO);
 
@@ -49,8 +50,7 @@ public class ProposalController {
 		// 유저 정보 조회
 		UserVO usrVO = ppsSerivce.userInfo(Integer.parseInt(principal.getName()));
 		model.addAttribute("userInfo", usrVO);
-		
-		System.out.println(principal.getName());
+
 		return "doc/proposalInsert";
 	}
 
@@ -60,7 +60,6 @@ public class ProposalController {
 		int no = ppsSerivce.ppsInsert(proposalVO);
 		String url = null;
 
-		// 견적서 의뢰정보조회
 		RequestVO reqVO = ppsSerivce.reqInfo(requestVO);
 
 		if (no > -1) {
@@ -72,8 +71,10 @@ public class ProposalController {
 		return url;
 	}
 	
+	// 견적서 수정
 	@GetMapping("ppsUpdate")
 	public String ppsUpdate(RequestVO requestVO, ProposalVO proposalVO, Model model) {
+		// 견적서 정보 조회
 		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO);
 		model.addAttribute("ppsInfo", findVO);
 
@@ -88,9 +89,9 @@ public class ProposalController {
 	} 
 	
 	@PostMapping("ppsUpdate")
-	@ResponseBody
-	public int ppsUpdateJSON(@RequestBody ProposalVO proposalVO){
-		return ppsSerivce.ppsUpdate(proposalVO);
+	public String ppsUpdateJSON(ProposalVO proposalVO){
+		int no = ppsSerivce.ppsUpdate(proposalVO);
+		return "redirect:ppsInfo?proposalNo=" + no + "&requestNo=" + proposalVO.getRequestNo();
 	}
 	
 	// 견적서 삭제

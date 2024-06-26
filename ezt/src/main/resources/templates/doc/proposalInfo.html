@@ -12,83 +12,124 @@
 		<div class="container">
 			<div class="row mb-5">
 				<div class="col-lg-12">
-					<form class="p-4 p-md-5 border rounded" name="updateForm">
-						<h3 class="text-black mb-5 border-bottom pb-2">견적서 상세</h3>
-						<input type="hidden" name="proposalNo" th:value="${ppsInfo.proposalNo}">
+					<form class="p-4 p-md-5 border rounded">
 						<div class="row form-group">
-							<div class="col-2">
-							<p class="text-black">작성자ID</p> 
+							<div class="col-lg-7 mb-5 mb-lg-0">
+								<h3 class="text-black mb-5 border-bottom pb-2">
+									<b>견적서 상세</b>
+								</h3>
+								<div class="row form-group">
+									<div class="col-2">
+										<b class="text-black">작성자ID</b>
+									</div>
+									<div class="col-3">
+										<p>[[${userInfo.usersId}]]</p>
+
+									</div>
+									<div class="col-2">
+										<b class="text-black">전화번호</b>
+									</div>
+									<div class="col-4">
+										<p>[[${userInfo.usersPhone}]]</p>
+									</div>
+								</div>
+
+								<th:block
+									th:if="${#authentication.name == #strings.toString(ppsInfo.worker)}">
+									<div class="row form-group">
+										<div class="col-2">
+											<b class="text-black">작성 일시</b>
+										</div>
+										<div class="col-3">
+											<p>[[${#dates.format(ppsInfo.writeDt, 'yyyy-MM-dd')}]]</p>
+										</div>
+										<div class="col-2">
+											<b class="text-black">수정 일시</b>
+										</div>
+										<div class="col-3">
+											<p>[[${#dates.format(ppsInfo.updateDt, 'yyyy-MM-dd')}]]</p>
+										</div>
+									</div>
+								</th:block>
+
+								<div class="row form-group">
+									<div class="col-3">
+										<b class="text-black">공사시작날짜</b>
+									</div>
+									<div class="col">
+										<p id="startDt">[[${#dates.format(ppsInfo.cttStartDt,
+											'yyyy-MM-dd')}]]</p>
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-3">
+										<b class="text-black">공사마감날짜</b>
+									</div>
+									<div class="col">
+										<p id="endDt">[[${#dates.format(ppsInfo.cttEndDt,
+											'yyyy-MM-dd')}]]</p>
+									</div>
+								</div>
+
+								<div class="row form-group">
+									<div class="col-2">
+										<b class="text-black">우편번호</b>
+									</div>
+									<div class="col-3">
+										<p id="postCode">[[${ppsInfo.workerPostcode}]]</p>
+									</div>
+								</div>
+
+								<div class="row form-group">
+									<div class="col-2">
+										<b class="text-black">주소</b>
+									</div>
+									<div class="col">
+										<p id="addr">[[${ppsInfo.workerAddress}]]</p>
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-2">
+										<b class="text-black">상세주소</b>
+									</div>
+									<div class="col">
+										<p id="detailAddr">[[${ppsInfo.workerDetailAddress}]]</p>
+									</div>
+								</div>
+								<div class="row form-group">
+									<div class="col-2">
+										<b class="text-black">비고</b>
+									</div>
+									<div class="col">
+										<p id="comments">[[${ppsInfo.comments}]]</p>
+									</div>
+								</div>
+
 							</div>
-							<div class="col-3">
-							<p>[[${userInfo.usersId}]]</p>
-							
-							</div>
-							<div class="col-3">
-								<p class="text-black">전화번호</p>
-							</div>
-							<div class="col-4">
-							<p>[[${userInfo.usersPhone}]]</p>
-							</div>
-						</div>
-						
-						<div class="row form-group">
-							<div class="col-2">
-							<p class="text-black">작성 일시</p> 
-							</div>
-							<div class="col-3">
-							<p>[[${#dates.format(ppsInfo.writeDt, 'yyyy-MM-dd')}]]</p>
-							</div>
-							<div class="col-2">
-								<p class="text-black">수정 일시</p>
-							</div>
-							<div class="col-3">
-							<p>[[${#dates.format(ppsInfo.updateDt, 'yyyy-MM-dd')}]]</p>
-							</div>
-						</div>
-						
-						<div class="row form-group">
-							<div class="col-6">
-								<label for="startDt">공사시작날짜</label> <input type="text"
-									class="form-control" id="startDt" name="cttStartDt"
-									th:value="${#dates.format(ppsInfo.cttStartDt, 'yyyy-MM-dd')}"
-									readonly>
-							</div>
-							<div class="col-6">
-								<label for="endDt">공사마감날짜</label> <input type="text"
-									class="form-control" id="endDt" name="cttEndDt"
-									th:value="${#dates.format(ppsInfo.cttEndDt, 'yyyy-MM-dd')}"
-									readonly>
-							</div>
-						</div>
-						
-						<div class="row form-group" style="padding-top: 20px">
-							<div class="col-auto">
-								<label for="postCode" style="margin: 0">우편번호</label>
-							</div>
-							<div class="col-4">
-								<input type="text" class="form-control" id="postCode" name="workerPostcode"
-									th:value="${ppsInfo.workerPostcode}" readonly>
-							</div>
-						</div>
-						<div class="row form-group">
-							<div class="col-10">
-								<label for="addr">주소</label> <input type="text"
-									class="form-control" id="addr" name="workerAddress"
-									th:value="${ppsInfo.workerAddress}" readonly>
-							</div>
-						</div>
-						<div class="row form-group">
-							<div class="col-10">
-								<label for="detailAddr">상세주소</label> <input type="text"
-									class="form-control" id="detailAddr" name="workerDetailAddress"
-									th:value="${ppsInfo.workerDetailAddress}" readonly>
-							</div>
-						</div>
-						<div class="row form-group"
-							style="padding-top: 20px; padding-bottom: 20px">
-							<div class="col-5">
-								<label for="comment">비고</label>
-								<textarea cols="90" name="comments" readonly>[[${ppsInfo.comments}]]</textarea>
+							<div class="col-lg-5 ml-auto" style="padding-top: 60px">
+								<div class="p-4 mb-3 bg-white border p-4 rounded">
+									<h3 class="text-primary mt-3 h5 pl-3 mb-3 ">의뢰</h3>
+									<ul class="list-unstyled pl-3 mb-0">
+										<li class="mb-2"><strong class="text-black">시공분야
+												:</strong> [[${reqInfo.categoryCode}]]</li>
+										<li class="mb-2"><strong class="text-black">공사공간
+												:</strong> [[${reqInfo.cttPlace}]]</li>
+										<li class="mb-2"><strong class="text-black">공사공간
+												면적 :</strong> [[${reqInfo.cttPlaceArea}]]</li>
+										<li class="mb-2"><strong class="text-black">공사공간
+												상황 :</strong> [[${reqInfo.cttPlaceSituation}]]</li>
+										<li class="mb-2"><strong class="text-black">희망
+												공사 예산 :</strong> [[${reqInfo.hopeCttBudget}]]</li>
+										<li class="mb-2"><strong class="text-black">희망
+												공사 시작일 :</strong> [[${#dates.format(reqInfo.hopeCttStartDt,
+											'yyyy-MM-dd')}]]</li>
+										<li class="mb-2"><strong class="text-black">희망
+												공사 종료일 :</strong> [[${#dates.format(reqInfo.hopeCttEndDt,
+											'yyyy-MM-dd')}]]</li>
+										<li class="mb-2"><strong class="text-black">내용</strong></li>
+										<li class="mb-2">[[${reqInfo.content}]]</li>
+									</ul>
+								</div>
 							</div>
 						</div>
 						<table class="table table-hover">
@@ -110,13 +151,18 @@
 										<td th:text="${list.division}" />
 										<td th:text="${list.unit}" />
 										<td th:text="${#numbers.formatInteger(list.qty,1,'COMMA')}" />
-										<td th:text="${#numbers.formatInteger(list.unitprice,1,'COMMA')} + 원" />
-										<td th:text="${#numbers.formatInteger(list.qty * list.unitprice,1,'COMMA')} + 원" />
+										<td
+											th:text="${#numbers.formatInteger(list.unitprice,1,'COMMA')} + 원" />
+										<td
+											th:text="${#numbers.formatInteger(list.qty * list.unitprice,1,'COMMA')} + 원" />
 										<td th:text="${list.comments}" />
 									</tr>
 								</th:block>
 							</tbody>
 						</table>
+						<h5 class="text-right text-black" style="padding-top: 10px">
+							<b> 총 예상금액 : </b><span class="total"></span><b> 원</b>
+						</h5>
 					</form>
 				</div>
 
@@ -124,14 +170,15 @@
 			<div class="row align-items-center mb-5">
 				<div class="col-lg-4 ml-auto">
 					<div class="row">
-						<th:block th:if="${#authentication.name == #strings.toString(ppsInfo.worker)}">
+						<th:block
+							th:if="${#authentication.name == #strings.toString(ppsInfo.worker)}">
 							<div class="col-6">
 								<button type="button" class="btn btn-block btn-light btn-md"
-								th:onClick="|location.href='@{/ppsUpdate(proposalNo=${ppsInfo.proposalNo},requestNo=${ppsInfo.requestNo})}'|">수정</button>
+									th:onClick="|location.href='@{/ppsUpdate(proposalNo=${ppsInfo.proposalNo},requestNo=${ppsInfo.requestNo})}'|">수정</button>
 							</div>
 							<div class="col-6">
-								<button type="button" class="btn btn-block btn-primary btn-md" 
-								th:onClick="|location.href='@{/ppsDelete(proposalNo=${ppsInfo.proposalNo})}'|">삭제</button>
+								<button type="button" class="btn btn-block btn-primary btn-md"
+									th:onClick="|location.href='@{/ppsDelete(proposalNo=${ppsInfo.proposalNo})}'|">삭제</button>
 							</div>
 						</th:block>
 					</div>
@@ -141,58 +188,35 @@
 	</section>
 
 	<script th:inline="javascript">
-		if ($('#startDt').val() == '1900-01-01') {
-			$('#startDt').val('');
+		// 빈값 => 입력 필요
+		if ($('#startDt').html() == '1900-01-01') {
+			$('#startDt').html('입력 필요');
 		}
-		if ($('#endDt').val() == '1900-01-01') {
-			$('#endDt').val('');
+		if ($('#endDt').html() == '1900-01-01') {
+			$('#endDt').html('입력 필요');
 		}
-		
-		
-		/*
-		$('#updateSuccess').on('click', function(e){
-			
-			
-				//1) 보낼 데이터 확인
-				let info = getPpsInfo();
-				
-				//2) AJAX
-				$.ajax('ppsUpdate', {
-					type : 'post',
-					contentType : 'application/json',
-					data : JSON.stringify(info)
-					
-				})
-				.done(result => {
-					if(result){
-						alert('정상적으로 수정되었습니다.');
-					}else{
-						alert('수정되지 않았습니다. \n데이터를 확인해주세요.');
-					}
-					console.log(result);
-				})
-				.fail(err => console.log(err));
-			
-			function getPpsInfo(){
-				let formData = $('form[name="updateForm"]').serializeArray();
-				console.log('1) serializeArray', formData);
-				
-				let objData = {};
-				$.each(formData, (idx, input) => {
-					console.log('2) input', idx, input);
-					objData[input.name] = input.value;
-				});
-				console.log('3) objData', objData);
-				return objData
-			}
-				$('input').attr("readonly", true);
-				$('textarea').attr("readonly", true);
-				$('#updateSuccess').parent().attr('style', "display:none");
-				$('#updateBtn').parent().removeAttr('style');
-			
-		});
-		*/
-		
+		if ($('#postCode').html() == '') {
+			$('#postCode').html('입력 필요');
+		}
+		if ($('#addr').html() == '') {
+			$('#addr').html('입력 필요');
+		}
+		if ($('#detailAddr').html() == '') {
+			$('#detailAddr').html('입력 필요');
+		}
+		if ($('#comments').html() == '') {
+			$('#comments').html('입력된 내용이 없습니다');
+		}
+		// 총 예상금액 계산
+		var total = 0;
+		for (i = 0; i < $('tbody tr').length; i++) {
+			console.log(total);
+			total += Number($('tbody tr:eq(' + i + ') td:eq(5)').html()
+					.replaceAll(',', '').replace('원', ''));
+		}
+		var comTotal = total.toString().replace(
+				/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		$('.total').html(comTotal);
 	</script>
 
 </body>

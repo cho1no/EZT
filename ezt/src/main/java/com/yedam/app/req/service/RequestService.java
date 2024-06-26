@@ -18,7 +18,7 @@ public interface RequestService {
 	
 	
 	//견적서 단건조회
-	public List<ProposalVO> proposalList();
+	public List<ProposalVO> proposalList(ProposalVO proposalVO);
 	
 	//견적서 상세 단건조회
 	
