@@ -53,10 +53,9 @@ public class ProposalServiceImpl implements ProposalService {
 		}
 		return result == 1 ? proposalVO.getProposalNo() : -1;
 	}
-
+	// 견적서 수정
 	@Override
 	public int ppsUpdate(ProposalVO proposalVO) {
-		System.out.println(proposalVO);
 		ppsMapper.deletePpsDetailInfo(proposalVO.getProposalNo());
 		int result = ppsMapper.updatePpsInfo(proposalVO);
 		if (proposalVO.getList() != null) {
@@ -67,7 +66,7 @@ public class ProposalServiceImpl implements ProposalService {
 		}
 		return result == 1 ? proposalVO.getProposalNo() : -1;
 	}
-
+	// 견적서 삭제
 	@Override
 	public int ppsDelete(int proposalNo) {
 		boolean result = false;
@@ -81,6 +80,17 @@ public class ProposalServiceImpl implements ProposalService {
 		} else {
 			return -1;
 		}
+	}
+	// 견적서 목록 조회(특정 의뢰와 관련해 본인이 작성한 견적서 목록)
+	@Override
+	public List<ProposalVO> ppsListInfo(ProposalVO proposalVO) {
+		return ppsMapper.selectPpsListInfo(proposalVO);
+	}
+	// 견적서 단건 전송
+	@Override
+	public int ppsSend(int proposalNo) {
+		int result = ppsMapper.sendPpsInfo(proposalNo);
+		return result == 1 ? proposalNo : -1;
 	}
 
 }
