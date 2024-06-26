@@ -10,20 +10,22 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class SpringSecurityConfig {
+public class SpringSecurityConfig{
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
-	// test
-	//@Bean
+
+    @Bean
+    LoginFailHandler loginFailHandler() {
+		return new LoginFailHandler();
+	}
 	
 	
 	@Bean
 	SecurityFilterChain filterChin(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()
-				.antMatchers("/", "/main", "/login", "/signUp", "/signUp/**", "/css/**", "/fonts/**", "/images/**", "/js/**").permitAll()
+				.antMatchers("/", "/main", "/api/**", "/verify/**", "/login", "/signUp", "/signUp/**", "/css/**", "/fonts/**", "/images/**", "/js/**").permitAll()
 				.antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				.antMatchers("/worker/**").hasAnyRole("WORKER", "ADMIN")
 				.antMatchers("/admin/**").hasAnyAuthority("ROLE ADMIN")
@@ -31,6 +33,7 @@ public class SpringSecurityConfig {
 			.and()
 			.formLogin().loginPage("/login").usernameParameter("id")
 				.defaultSuccessUrl("/main")
+				.failureHandler(loginFailHandler()) //로그인실패시 처리하는 핸들러
 			.and()
 			.logout()
 				.logoutSuccessUrl("/main")
@@ -39,4 +42,6 @@ public class SpringSecurityConfig {
 		
 		return http.build();
 	}
+	
+	
 }

@@ -158,5 +158,35 @@
 		DELETE FROM proposal_detail
 		WHERE proposal_no = #{proposalNo}
 	</delete>
+	
+	
+	<select id="selectPpsListInfo" resultType="ProposalVO">
+		SELECT
+		proposal_no
+		, request_no
+		, ctt_start_dt
+		, ctt_end_dt
+		, write_dt
+		, worker_postcode
+		, worker_address
+		, worker_detail_address
+		, comments
+		, file_id
+		, worker
+		, requester
+		, update_dt
+		, proposal_state
+		FROM proposal
+		WHERE request_no =
+		#{requestNo} and worker= #{worker} and proposal_state IS NULL
+	</select>
+	
+	<update id="sendPpsInfo" parameterType="int">
+		UPDATE proposal
+		SET
+		proposal_state = 'A01'
+		WHERE proposal_no = #{proposalNo}
+	</update>
+	
 
 </mapper>

@@ -10,6 +10,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.sgu.service.SignUpService;
@@ -44,6 +45,14 @@ public class SgiController {
 	public String login() {
 		return "sgi/login";
 	}
+	
+	@GetMapping("/loginForm")
+    public String loginForm(@RequestParam(value = "error", required = false) String error,
+                            @RequestParam(value = "exception", required = false) String exception, Model model) {
+        model.addAttribute("error", error);
+        model.addAttribute("exception", exception);
+        return "/login/loginForm";
+    }
 	
 	@GetMapping("signUp")
     public String signUpForm(Model model) {

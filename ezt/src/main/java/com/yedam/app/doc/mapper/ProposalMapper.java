@@ -37,5 +37,11 @@ public interface ProposalMapper {
 	
 	// 견적서 상세 삭제
 	public int deletePpsDetailInfo(@Param("proposalNo")int proposalNo);
+	
+	// 견적서 목록 조회(특정 의뢰와 관련해 본인이 작성한 견적서 목록)
+	public List<ProposalVO> selectPpsListInfo(ProposalVO proposalVO);
+	
+	// 견적서 단건 전송
+	public int sendPpsInfo(@Param("proposalNo")int proposalNo);
 }
 
