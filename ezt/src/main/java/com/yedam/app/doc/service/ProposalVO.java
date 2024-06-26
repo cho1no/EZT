@@ -30,4 +30,9 @@ public class ProposalVO {
 	
 	
 	private List<ProposalDetailVO> list;
+	
+	//조인 컬럼
+	private String usersName;  //유저이름
+	private String usersPhone; //유저 휴대폰번호
+	private int total;  //총금액
 }

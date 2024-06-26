@@ -34,7 +34,7 @@
 			<button class="btn btn-primary">검색</button>	
 		</div>
 		<div style="text-align:right" class="margin">
-			<button class="btn btn-primary">글쓰기</button>
+			<button class="btn btn-primary" th:onclick="|location.href='@{/requestInsert}'|">글쓰기</button>
 		</div>
 	</div>
       <div class="container">
@@ -44,7 +44,7 @@
             <a th:onclick="|location.href='@{/requestInfo(requestNo=${request.requestNo})}'|"><img src="images/interior.jpg" alt="Image" class="img-fluid rounded mb-4"></a>
             <h3><a th:onclick="|location.href='@{/requestInfo(requestNo=${request.requestNo})}'|" class="text-black">[[${request.title}]] </a></h3>
             <div>[[${request.regionCode}]] <span class="mx-2">|</span>[[${request.categoryCode}]]</div>
-            <div>[[${#dates.format(request.writeDt,'MM.dd.yy')}]] <span class="mx-2">|</span>[[${request.usersName}]] </div>
+            <div>[[${#dates.format(request.writeDt,'yy.MM.dd')}]] <span class="mx-2">|</span>[[${request.usersName}]] </div>
           </div>
          </th:block>
         </div>

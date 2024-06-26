@@ -58,15 +58,43 @@ function alarmNew() {
 function sendAlarm(
   data = { title: "test", content: "test alarm", usersNo: 10001 }
 ) {
-  stomp.send(
-    "/pub/alarm/message",
-    {},
-    JSON.stringify({
-      title: data.title,
-      content: data.content,
-      usersNo: data.usersNo,
-    })
-  );
+  //   stomp.send(
+  //     "/pub/alarm/message",
+  //     {},
+  //     JSON.stringify({
+  //       title: data.title,
+  //       content: data.content,
+  //       usersNo: data.usersNo,
+  //     })
+  //   );
+
+  var data = {
+    JUMIN: "991109", // 생년월일
+    NAME: "최원호", // 성명
+    LNCAREANUMBER: "22", // 면허번호(발급지역)
+    LNCYEARNUMBER: "22", // 면허번호(교부년도)
+    LNCSERIALNUMBER: "030572", // 면허번호(일련번호)
+    LNCNUMBER: "70", // 면허번호
+    PWDSERIALNUMBER: "WI666G", // 암호일련번호
+  };
+  console.log(data);
+  var url = "https://developers.nonghyup.com/";
+  var add = "InquireDepositorAccountNumber.nh";
+  $.ajax({
+    url: url,
+    type: "POST",
+    headers: {
+      Authorization: "Token ******************************",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    data: JSON.stringify(data),
+    success: function (response) {
+      console.log("Success:", response);
+    },
+    error: function (error) {
+      console.error("Error:", error);
+    },
+  });
 }
 
 // 알림창 열고 닫기
