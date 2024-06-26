@@ -69,14 +69,7 @@
 			<th>이미지 첨부</th>
 			<td colspan="3">이미지 첨부 들어갈 자리이이이이</td>
 		</tr>				
-		<tr>
-			<th>지역</th>
-			<td colspan="3">
-				<select th:field="*{regionCode}" >
-                    <option th:each="category :${regionCode}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
-                </select>
-			</td>
-		</tr>		
+			
 		<tr>
            <th>우편번호</th>
            <td><input type="text" name="postcode" id="input_postcode" ></td>

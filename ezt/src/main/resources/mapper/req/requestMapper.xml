@@ -12,7 +12,7 @@
 	WHERE users_no = #{usersNo}
 </select>
 <!-- 전체 조회 -->
-<select id="selectRequestAll" resultType="RequestVO">
+<select id="selectRequestAll" resultType="RequestVO" parameterType="">
 	SELECT r.request_no
 		  ,r.requester
 		  ,FIND_COMMONCODE(r.ctt_place) as ctt_place
@@ -28,17 +28,20 @@
 		  ,r.content
 		  ,r.write_dt
 		  ,FIND_COMMONCODE(r.request_state) as request_state
-		  ,SUBSTR(r.address,0, 2) as region_code
 		  ,r.file_id
           ,f.save_name
 		  ,f.ext
 		  ,FIND_COMMONCODE(r.category_code) as category_code
+		  ,FIND_COMMONCODE(r.region_code) as region_code
           ,u.users_name
 	FROM request r
 	    JOIN users u
 	    ON r.requester = u.users_no
 	    LEFT OUTER JOIN file_detail_info f
 	    ON r.file_id = f.file_id
+	    JOIN file_attr p
+        ON p.file_id = f.file_id
+    WHERE p.file_id = #{fileId} and boss_tf = 'y'
 	ORDER BY r.request_no desc
 </select>
 
@@ -96,7 +99,6 @@
 		  ,r.request_state
 		  ,FIND_COMMONCODE(r.request_state) as request_state_nm
 		  ,r.region_code
-		  ,FIND_COMMONCODE(r.region_code) as region_code_nm
 		  ,r.file_id
 		  ,f.save_name
 		  ,f.ext
@@ -156,7 +158,8 @@
 			,#{title}
 			,#{content}
 			,'S01'
-			,#{regionCode}
+			,(SELECT REGION(#{postcode})
+			  FROM dual)
 			,#{categoryCode}		
 		)
 		
