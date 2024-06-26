@@ -42,7 +42,7 @@ public class ProposalController {
 
 	// 견적서 단건조회
 	@GetMapping("ppsInfo")
-	public String ppsInfo(RequestVO requestVO, ProposalVO proposalVO, Model model, Principal principal) {
+	public String ppsInfo(RequestVO requestVO, ProposalVO proposalVO, Model model) {
 		// 견적서 정보 조회
 		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO);
 		model.addAttribute("ppsInfo", findVO);
@@ -55,7 +55,7 @@ public class ProposalController {
 		RequestVO reqVO = ppsSerivce.reqInfo(requestVO);
 		model.addAttribute("reqInfo", reqVO);
 
-		proposalVO.setWorker(Integer.parseInt(principal.getName()));
+		proposalVO.setWorker(findVO.getWorker());
 		List<ProposalVO> list = ppsSerivce.ppsListInfo(proposalVO);
 		model.addAttribute("ppsList", list);
 		return "doc/proposalInfo";
