@@ -19,6 +19,7 @@ public class UserVO {
 	private Integer usersNo;
 	
 	@NotBlank(message = "아이디는 필수 입력 값입니다.")
+	@Pattern(regexp = "^([A-za-z]{0,0})(?=.*[a-zA-Z])(?=.*[0-9]).{4,20}$", message = "아이디는 영어,숫자가 포함된 4~20자리여야 합니다.")
 	private String usersId;
 	
 	@NotEmpty(message = "비밀번호를 입력해주세요")
