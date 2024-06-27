@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.mapper.ProposalMapper;
 import com.yedam.app.doc.service.ProposalDetailVO;
 import com.yedam.app.doc.service.ProposalService;
@@ -35,8 +36,10 @@ public class ProposalServiceImpl implements ProposalService {
 	@Override
 	public ProposalVO ppsInfo(ProposalVO proposalVO) {
 		List<ProposalDetailVO> list = ppsMapper.selectPpsDetailList(proposalVO.getProposalNo());
+		List<FileVO> fileList = ppsMapper.selectFileList(proposalVO.getProposalNo());
 		ProposalVO pps = ppsMapper.selectPpsInfo(proposalVO);
 		pps.setList(list);
+		pps.setFileList(fileList);
 		return pps;
 	}
 
@@ -86,11 +89,25 @@ public class ProposalServiceImpl implements ProposalService {
 	public List<ProposalVO> ppsListInfo(ProposalVO proposalVO) {
 		return ppsMapper.selectPpsListInfo(proposalVO);
 	}
-	// 견적서 단건 전송
+	
+	// 견적서 파일 첨부
 	@Override
-	public int ppsSend(int proposalNo) {
-		int result = ppsMapper.sendPpsInfo(proposalNo);
-		return result == 1 ? proposalNo : -1;
+	public int ppsFileUpdate(ProposalVO proposalVO) {
+		
+		if (proposalVO.getFileList() != null) {
+			ppsMapper.insertFileAttrInfo(proposalVO);
+			
+			proposalVO.getFileList().forEach(e -> {
+				e.setFileId(proposalVO.getFileId());
+				ppsMapper.insertFileInfo(e);
+			});
+			System.out.println(proposalVO);
+			ppsMapper.updatePpsFileInfo(proposalVO);
+			ppsMapper.sendPpsInfo(proposalVO.getProposalNo());
+		}
+		
+		return proposalVO.getProposalNo();
 	}
+	
 
 }

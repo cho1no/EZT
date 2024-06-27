@@ -36,6 +36,7 @@ function nameList(){
 
 
 $('#uploadBtn').on("click", function(e){
+	
 	var formData = new FormData();
 	
 	var inputFile = $("input[name='uploadFile']");
@@ -61,6 +62,7 @@ $('#uploadBtn').on("click", function(e){
 		
 	}
 	
+	formData.append("proposalNo", proposalNo);
 	// Ajax
 	$.ajax({
 		url: '/uploadAjaxAction',
@@ -68,12 +70,16 @@ $('#uploadBtn').on("click", function(e){
 		contentType : false,
 		data : formData,
 		type :'Post',
-		dataType:'JSON',
+		async : false
+		/*
 		success : function(result){
 			console.log(result);
+			location.reload();
 
-		}
-	});
+		}*/
+	})
+		//console.log(result);
+			location.reload();
 	
 });
 

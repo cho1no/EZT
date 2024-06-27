@@ -24,28 +24,27 @@
 }
 
 .uploadDiv label {
-    display: inline-block;
-    padding: 10px 20px;
-    color: #fff;
-    vertical-align: middle;
-    background-color: #999999;
-    cursor: pointer;
-    height: 40px;
+	display: inline-block;
+	padding: 10px 20px;
+	color: #fff;
+	vertical-align: middle;
+	background-color: #999999;
+	cursor: pointer;
+	height: 40px;
 }
 
 .uploadDiv input[type="file"] {
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
+	position: absolute;
+	width: 0;
+	height: 0;
+	padding: 0;
+	overflow: hidden;
+	border: 0;
 }
 
-.uploadTitle{
-	margin:0;
+.uploadTitle {
+	margin: 0;
 }
-
 </style>
 
 </head>
@@ -58,16 +57,25 @@
 						<div class="row form-group">
 							<div class="col-lg-7 mb-5 mb-lg-0">
 								<th:block
-									th:if="${#authentication.name == userInfo.usersName} and ${ppsInfo.proposalState == null}">
+									th:if="${#authentication.principal.userNo == userInfo.usersNo} and ${ppsInfo.proposalState == null}">
 									<button style="width: 50px; padding: 0" type="button"
 										class="btn btn-outline-success sendBtn" data-bs-toggle="modal"
 										data-bs-target="#sendModal">전송</button>
 								</th:block>
 								<h3 class="text-black mb-5 border-bottom pb-2 title">
 									<b>견적서 상세</b>
-								<th:block th:if="${#authentication.name == userInfo.usersName} and ${ppsInfo.proposalState != null}">
-									<span class="fs-6 fw-light text-success">[ 승인 대기 ]</span>
-								</th:block>
+									<th:block
+										th:if="${#authentication.principal.userNo == userInfo.usersNo} and ${ppsInfo.proposalState == 'A01'}">
+										<span class="fs-6 fw-light text-success">[ 승인 대기 ]</span>
+									</th:block>
+									<th:block
+										th:if="${#authentication.principal.userNo == userInfo.usersNo} and ${ppsInfo.proposalState == 'A02'}">
+										<span class="fs-6 fw-light text-success">[ 승인 ]</span>
+									</th:block>
+									<th:block
+										th:if="${#authentication.principal.userNo == userInfo.usersNo} and ${ppsInfo.proposalState == 'A03'}">
+										<span class="fs-6 fw-light text-success">[ 반려 ]</span>
+									</th:block>
 								</h3>
 								<div class="row form-group">
 									<div class="col-2">
@@ -86,7 +94,7 @@
 								</div>
 
 								<th:block
-									th:if="${#authentication.name == userInfo.usersName}">
+									th:if="${#authentication.principal.userNo == userInfo.usersNo}">
 									<div class="row form-group">
 										<div class="col-2">
 											<b class="text-black">작성 일시</b>
@@ -155,6 +163,15 @@
 										<p id="comments">[[${ppsInfo.comments}]]</p>
 									</div>
 								</div>
+								<th:block th:if="${ppsInfo.fileId != 0}">
+									<div class="row form-group">
+										<div class="col-2">
+											<b class="text-black">첨부 파일</b>
+										</div>
+										<div class="col" id="fileDownload"></div>
+									</div>
+								</th:block>
+
 
 							</div>
 							<div class="col-lg-5 ml-auto" style="padding-top: 60px">
@@ -216,6 +233,7 @@
 						</h5>
 
 					</form>
+
 				</div>
 
 			</div>
@@ -223,15 +241,19 @@
 				<div class="col-lg-4 ml-auto">
 					<div class="row">
 						<th:block
-							th:if="${#authentication.name == userInfo.usersName}">
-							<div class="col-6">
-								<button type="button" class="btn btn-block btn-light btn-md"
-									th:onClick="|location.href='@{/ppsUpdate(proposalNo=${ppsInfo.proposalNo},requestNo=${ppsInfo.requestNo})}'|">수정</button>
-							</div>
-							<div class="col-6">
-								<button type="button" class="btn btn-block btn-primary btn-md"
-									th:onClick="|location.href='@{/ppsDelete(proposalNo=${ppsInfo.proposalNo})}'|">삭제</button>
-							</div>
+							th:if="${#authentication.principal.userNo == userInfo.usersNo}">
+							<th:block th:if="${ppsInfo.proposalState == null} or ${ppsInfo.proposalState == 'A03'}">
+								<div class="col-6">
+									<th:block th:if="${ppsInfo.proposalState != 'A03'}">
+										<button type="button" class="btn btn-block btn-light btn-md"
+											th:onClick="|location.href='@{/ppsUpdate(proposalNo=${ppsInfo.proposalNo},requestNo=${ppsInfo.requestNo})}'|">수정</button>
+									</th:block>
+								</div>
+								<div class="col-6">
+									<button type="button" class="btn btn-block btn-primary btn-md"
+										th:onClick="|location.href='@{/ppsDelete(proposalNo=${ppsInfo.proposalNo})}'|">삭제</button>
+								</div>
+							</th:block>
 						</th:block>
 					</div>
 				</div>
@@ -241,33 +263,37 @@
 
 
 	<!-- Modal -->
-<div class="modal fade" id="sendModal" tabindex="-1" aria-labelledby="sendModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="sendModalLabel">견적서 전송</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body " >
-        <p class="text-center">이 견적서를 보내시겠습니까?</p>
-           <p class="uploadTitle">첨부 파일 업로드</p>
-           <div class="uploadDiv">
-           <label for="multiFile">파일찾기</label> 
-           <input type="file" accept="파일 확장자" multiple="multiple" name="uploadFile" id="multiFile" onChange="nameList()">	
-           </div>
-           <div class="uploadResult">
-           	<ul>
-           	</ul>
-           </div>
-	   <button id="uploadBtn">Upload</button>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-        <button type="button" class="btn btn-primary" th:onClick="|location.href='@{/ppsSend(proposalNo=${ppsInfo.proposalNo},requestNo=${ppsInfo.requestNo})}'|">전송</button>
-      </div>
-    </div>
-  </div>
-</div>
+	<div class="modal fade" id="sendModal" tabindex="-1"
+		aria-labelledby="sendModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="sendModalLabel">견적서 전송</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body ">
+					<h5 class="text-center">이 견적서를 의뢰인에게 보내시겠습니까?</h5>
+					<p class="uploadTitle" style="padding-top: 10px">첨부 파일 업로드</p>
+					<div class="uploadDiv">
+						<label for="multiFile">파일찾기</label> <input type="file"
+							multiple="multiple" name="uploadFile" id="multiFile"
+							onChange="nameList()">
+					</div>
+					<div class="uploadResult">
+						<ul>
+						</ul>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">닫기</button>
+					<button type="button" id="uploadBtn" class="btn btn-primary">전송</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	<script th:inline="javascript">
 		// 빈값 => 입력 필요
@@ -303,11 +329,22 @@
 			$('.modalForm').append(` `)
 		})
 
+		var proposalNo = [[${ppsInfo.proposalNo}]];
 		
+		// 첨부 파일 다운로드 
+		for(i = 0; i < [[${ppsInfo.fileList}]].length; i++){
+			var path = [[${ppsInfo.fileList}]][i].savePath.replaceAll('\\', '/');
+			var orgname = [[${ppsInfo.fileList}]][i].originalFileName;
+			var name = [[${ppsInfo.fileList}]][i].saveName;
+			var ext = [[${ppsInfo.fileList}]][i].ext;
+			console.log(path+'/'+name);
+			$('#fileDownload').append(`<p><a href="download?fileName=${path}/${name}_${orgname}.${ext}">${orgname}.${ext}</a></p> `)
+		}
+			
 	</script>
 
 	<!-- uploadAjax -->
 	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
-	
+
 </body>
 </html>

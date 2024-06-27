@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.yedam.app.common.service.FileVO;
+
 import lombok.Data;
 
 @Data
@@ -30,6 +32,8 @@ public class ProposalVO {
 	
 	
 	private List<ProposalDetailVO> list;
+	
+	private List<FileVO> fileList;
 	
 	//조인 컬럼
 	private String usersName;  //유저이름

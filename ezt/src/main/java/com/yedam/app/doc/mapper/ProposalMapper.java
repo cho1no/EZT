@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.yedam.app.common.service.FileVO;
+import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.service.ProposalDetailVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.req.service.RequestVO;
@@ -45,6 +47,18 @@ public interface ProposalMapper {
 	public int sendPpsInfo(@Param("proposalNo")int proposalNo);
 	
 	// 견적서 파일 첨부
-
+	public int updatePpsFileInfo(ProposalVO proposalVO);
+	
+	// 파일 정보 DB 등록 attr
+	public int insertFileAttrInfo(ProposalVO proposalVO);
+	
+	// 파일 정보 DB 등록
+	public int insertFileInfo(FileVO fileVO);
+	
+	// 파일 정보 DB 삭제
+	public int deleteFileInfo(@Param("fileId")int fileId);
+	
+	// 파일 정보 조회
+	public List<FileVO> selectFileList(@Param("proposalNo")int proposalNo);
 }
 
