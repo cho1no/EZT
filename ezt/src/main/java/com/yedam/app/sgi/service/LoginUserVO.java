@@ -41,6 +41,10 @@ public class LoginUserVO implements UserDetails{
 	public Integer getUserNo() {
 		return userVO.getUsersNo();
 	}
+	
+	public UserVO getUserVO() {
+		return userVO;
+	}
 
 	@Override
 	public boolean isAccountNonExpired() {

@@ -8,9 +8,13 @@ import com.yedam.app.usr.service.UserVO;
 public interface UserMapper {
 	
 	public UserVO selectUserInfo(String id);
-		
-	// 회원가입
+			
+	//사용자 회원가입
 	void saveUser(UserVO userVO);
+	
+	//작업자 회원가입
+	void saveWorker(UserVO userVO);
+	
 	
 	//중복체크
 	public int idChk(String id);
