@@ -14,7 +14,8 @@ public interface UserMapper {
 	
 	//작업자 회원가입
 	void saveWorker(UserVO userVO);
-	
+	void insertActiveRegion(UserVO userVO);
+	void insertActiveCategory(UserVO userVO);
 	
 	//중복체크
 	public int idChk(String id);
