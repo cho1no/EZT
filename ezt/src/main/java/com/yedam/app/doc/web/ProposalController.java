@@ -70,7 +70,7 @@ public class ProposalController {
 		model.addAttribute("reqInfo", reqVO);
 
 		// 유저 정보 조회
-		UserVO usrVO = ppsSerivce.userInfo(user.getUser().getUsersNo());
+		UserVO usrVO = ppsSerivce.userInfo(user.getUserVO().getUsersNo());
 		model.addAttribute("userInfo", usrVO);
 
 		return "doc/proposalInsert";
@@ -101,7 +101,7 @@ public class ProposalController {
 		model.addAttribute("ppsInfo", findVO);
 
 		// 유저 정보 조회
-		UserVO usrVO = ppsSerivce.userInfo(user.getUser().getUsersNo());
+		UserVO usrVO = ppsSerivce.userInfo(user.getUserVO().getUsersNo());
 		model.addAttribute("userInfo", usrVO);
 
 		// 견적서 의뢰정보조회
