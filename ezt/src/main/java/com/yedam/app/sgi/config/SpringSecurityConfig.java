@@ -26,10 +26,10 @@ public class SpringSecurityConfig {
 	@Bean
 	SecurityFilterChain filterChin(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()
-				.antMatchers("/", "/main", "/api/**", "/verify/**", "/login/**", "/signUp", "/signUp/**", "/css/**", "/fonts/**", "/images/**", "/js/**").permitAll()
+				.antMatchers("/", "/main", "/adm", "/api/**", "/verify/**", "/login/**", "/signUp/**", "/css/**", "/fonts/**", "/images/**", "/js/**").permitAll()
 				.antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				.antMatchers("/worker/**").hasAnyRole("WORKER", "ADMIN")
-				.antMatchers("/admin/**").hasAnyAuthority("ROLE ADMIN")
+				.antMatchers("/adm/**").hasAnyAuthority("ROLE ADMIN")
 				.anyRequest().authenticated()
 			.and()
 			.formLogin().loginPage("/login").usernameParameter("id")

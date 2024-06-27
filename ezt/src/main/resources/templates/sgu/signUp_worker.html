@@ -1,0 +1,380 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<title>회원가입</title>
+<meta charset="utf-8">
+<style>
+form span.error {
+	color: red;
+	font-size: 10pt;
+}
+
+form span {
+	color: blue;
+	font-size: 10pt;
+}
+.site-section {
+    padding-top: 3rem;
+}
+</style>
+</head>
+<body id="top">
+<!-- 	<div id="overlayer"></div> -->
+<!-- 	<div class="loader"> -->
+<!-- 		<div class="spinner-border text-primary" role="status"> -->
+<!-- 			<span class="sr-only">Loading...</span> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- 	<div class="site-wrap"> -->
+<!-- 		<div class="site-mobile-menu site-navbar-target"> -->
+<!-- 			<div class="site-mobile-menu-header"> -->
+<!-- 				<div class="site-mobile-menu-close mt-3"> -->
+<!-- 					<span class="icon-close2 js-menu-toggle"></span> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 			<div class="site-mobile-menu-body"></div> -->
+<!-- 		</div> -->
+		<!-- .site-mobile-menu -->
+		<!-- HOME -->
+		<section class="site-section">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6 mb-5" style="margin: auto">
+						<h2 class="mb-4">작업자 회원가입</h2>
+						<!-- 회원가입 폼 -->
+						<form th:action="@{/signUp/joinWorker}" th:object="${userVO}" method="post"
+							class="p-4 border rounded" name="joinEzt">
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersId">아이디</label> 
+									<div class="row">
+										<div class="col-8">
+										<input name="usersId" type="text" id="usersId" th:field="*{usersId}"
+											class="form-control" placeholder="아이디를 입력해주세요">
+										</div>
+										<div class="col-4">
+										<button type="button" id="checkBtn"
+										class="btn btn-primary float-end text-white px-4">중복확인</button>
+										<input type="hidden" name="checked_id" value="">
+										</div>
+									</div>
+									<span id="erMsg"></span>
+								</div>
+								<!-- <div class="col-md-4">
+
+									<button type="button" style="float: right" id="checkBtn"
+										class="btn px-4 btn-primary text-white">중복확인</button>
+								</div> -->
+								<span th:errors="*{usersId}" class="error"></span>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersPw">비밀번호</label> <input
+										name="usersPw" type="password" id="usersPw"
+										th:field="*{usersPw}" class="form-control"
+										placeholder="비밀번호를 입력해주세요"> <span class="error"
+										th:errors="*{usersPw}"></span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersPw">비밀번호확인</label> <input
+										name="usersPwCheck" type="password" id="usersPwCheck"
+										th:field="*{usersPwCheck}" class="form-control"
+										placeholder="비밀번호 확인"> <span class="error"
+										th:errors="*{usersPwCheck}"></span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-6 mb-3 mb-md-0">
+									<label class="text-black" for="usersName">성명</label>
+									 <input name="usersName" type="text" id="usersName"
+										th:field="*{usersName}" class="form-control" placeholder="홍길동">
+									<span th:errors="*{usersName}" class="error"></span>
+								</div>
+								<div class="col-md-6 mb-3 mb-md-0" >
+									<label class="text-block" for="issuDate">발급일자</label>
+									<input type="text" id="issuDate" name="issuDate" class="form-control">
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<div>
+									<label class="text-black" for="usersRnn">주민등록번호</label>
+									</div> 
+									<input type="text" id="JUMIN1" maxlength="6" class="form-control col-md-4 d-inline-flex"
+										name="JUMIN1" placeholder="880101">
+									<label class="d-inline-flex">-</label>
+									<input  type="password" id="JUMIN2" maxlength="7" class="form-control col-md-4 d-inline-flex"
+										name="JUMIN2" placeholder="1234567"><span></span>
+									<input type="button" style="float: right" id="rnnChkBtn" value="실명인증"
+										class="btn px-4 btn-primary text-white">
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersPhone">전화번호</label> <input
+										name="usersPhone" type="text" id="usersPhone"
+										th:field="*{usersPhone}" class="form-control"
+										placeholder="-제외 숫자만 입력해주세요"> <span
+										th:errors="*{usersPhone}" class="error"></span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersNick">닉네임</label> <input
+										name="usersNick" type="text" id="usersNick"
+										th:field="*{usersNick}" class="form-control"
+										placeholder="닉네임을 입력해주세요"> <span></span> <span
+										th:errors="*{usersNick}" class="error"></span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+									<label class="text-black" for="usersEmail">이메일</label> <input
+										name="usersEmail" type="text" id="usersEmail"
+										th:field="*{usersEmail}" class="form-control"
+										placeholder="example@google.com"><span></span> <span
+										th:errors="*{usersEmail}" class="error"></span>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-12 mb-3 mb-md-0">
+								<div>
+								<label class="text-black" for="usersRnn">국가기술 자격증</label>
+								</div>
+									<input type="text" id="license" maxlength="12" class="form-control col-md-8 d-inline-flex" 
+											name="JUMIN1" placeholder="자격증 번호">
+									<input type="button" style="float: right" id="licChkBtn" value="자격증 검증"
+										class="btn px-4 btn-primary text-white d-inline-flex">
+										<div class="row col-md-12 d-inline-flex">
+										<label class="d-inline-flex text-black">자격증 첨부파일</label>
+										<input class="d-inline-flex" type="file" name="licFile" style="float:right;">
+										<input type="button" style="float: right" value="테스트" id="testBtn">
+										</div>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-8 mb-3 mb-md-0">
+									<label class="text-black" for="region">주 활동지역</label>
+									<select name="region" id="region" class="form-control select">
+										<option value="select-region" style="text-align:center;" disabled selected>=======지역 선택=======</option>
+										<option th:each="region : ${regions}" value="${region.codeNo}" th:text="${region.codeName}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="row form-group">
+								<div class="col-md-8 mb-3 mb-md-0">
+									<label class="text-black" for="category">작업 분야</label>
+									<select name="category" id="category" class="form-control select">
+										<option value="select" style="text-align:center;" disabled selected>=======분야 선택=======</option>
+										<option th:each="category : ${categories}"value="${category.codeNo}">[[${category.codeName}]]</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="row form-group">
+								<div class="col-md-12">
+									<input type="button" id="joinBtn" value="가입하기"
+										class="btn px-4 btn-primary text-white" style="float: right">
+								</div>
+							</div>
+<!-- 							<input type="button" id="testBtn" value="로딩테스트" -->
+<!-- 								class="btn px-4 btn-primary text-white" style="float: right"> -->
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+</body>
+<script th:inline="javascript">
+	$('.page-title').text('회원가입');
+	$('.page-desc').text('작업자');
+	
+	//주민등록증 진위여부
+	$('#rnnChkBtn').click(() => {checkRnn()});
+	function checkRnn(){
+		var userName = $('#usersName').val();
+		var jumin1 = $('#JUMIN1').val();
+		var jumin2 = $('#JUMIN2').val();
+		var rnn = jumin1 + jumin2; 
+		var issuDate = $('#issuDate').val();
+		//console.log(userName, rnn, issuDate);
+		
+		var reqExp = /^[0-9]*$/;
+		if(!reqExp.test(jumin2)){
+			$('#JUMIN2').next().text('숫자를 입력해주세요.');
+			$('#JUMIN2').next().addClass('error');
+			return ;
+		}
+			
+		$.ajax({
+				url : "/api/idCardCheck",
+				type : "POST",
+				contentType : "application/json;charset=UTF-8",
+				data : JSON.stringify({
+						NAME : userName,
+						JUMIN : rnn,
+						ISSUEDATE : issuDate
+				}),
+				success : function(re){
+					if(re.result == "SUCCESS"){
+						alert('실명인증 완료.');
+					}else {
+						alert('입력오류');
+					}
+				},
+				error : function(er){
+					alert('error');
+				}
+			})
+	}
+		
+	//닉네임 중복체크
+	var nick = $('#usersNick');
+	checkNick();
+	
+	function checkNick() {
+		nick.on("change", function() { 
+			var reqExp = /^[ㄱ-ㅎ가-힣A-Za-z0-9-_]{2,10}$/;
+		
+			if(!reqExp.test(nick.val())){
+				nick.next().text('닉네임은 특수문자를 제외한 2~10자리여야 합니다.')
+				nick.next().addClass('error')
+				return ;		
+			}
+			
+			$.ajax({
+				type : "get",
+				url : "/signUp/checkNick/"+nick.val(),
+				success : function(dt) {
+					if (dt == '중복') {
+						nick.next().text('이미 사용중인 닉네임입니다.')
+						nick.next().addClass('error')
+					} else {
+						nick.next().text('사용가능한 닉네임입니다.')
+						nick.next().removeClass('error')
+					}
+				}
+			})
+			
+		})
+	}
+		
+	//이메일 중복체크
+	var email = $('#usersEmail');
+	checkEmail();
+	
+	function checkEmail() {
+		email.on("change", function() { 
+			var reqExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+	
+			if (!reqExp.test(email.val())) {
+				email.next().text('이메일 형식이 올바르지 않습니다.')
+				email.next().addClass('error')
+				return ;
+			}
+			
+			$.ajax({
+				type : "get",
+				url : "/signUp/checkEmail?email="+email.val(),
+				success : function(dt) {
+					if (dt == '중복') { 
+						email.next().text('이미 사용중인 이메일입니다.')
+						email.next().addClass('error')
+					} else {
+						email.next().text('사용가능한 이메일입니다.')
+						email.next().removeClass('error')
+					}
+				}
+			})
+		})
+	}
+	//아이디 중복체크(버튼)
+	$('#checkBtn').click(()=>{checkId()});
+	function checkId() {
+		var id = $('#usersId');
+		var erMsg = $('#erMsg');
+		
+		var reqExp = /^([A-za-z]{0,0})(?=.*[a-zA-Z])(?=.*[0-9]).{4,20}$/;
+		
+		if(id.val() == ''){
+			//id.next().text('아이디는 필수 입력 값입니다.')
+			//id.next().addClass('error')
+			erMsg.text('아이디는 필수 입력 값입니다.')
+			erMsg.addClass('error')
+			return ; 
+		} else if(!reqExp.test(id.val())){
+			//id.next().text('아이디는 영어,숫자가 포함된 4~20자리여야 합니다.')
+			//id.next().addClass('error')
+			erMsg.text('아이디는 영어,숫자가 포함된 4~20자리여야 합니다.')
+			erMsg.addClass('error')
+			return ;
+		}
+		$.ajax({
+			type : "get",
+			url : "/signUp/checkId/"+id.val(),
+			success : function(dt) {
+				if (dt == '중복') {
+					//id.next().text('이미 사용중인 아이디입니다.')
+					//id.next().addClass('error')
+					erMsg.text('이미 사용중인 아이디입니다.')
+					erMsg.addClass('error')
+				} else {
+					//id.next().text('사용가능한 아이디입니다.')
+					//id.next().removeClass('error')
+					erMsg.text('사용가능한 아이디입니다.')
+					erMsg.removeClass('error')
+					$('input[name=checked_id]').val("y");
+				}
+			}
+		})
+	}
+	//로딩테스트
+// 	$('#testBtn').on('click', function (e) {
+// 		   e.preventDefault();
+// 		   var link = $(this).attr("href");
+// 		   if (link != "#") {
+// 		      $('#load').show();
+// 		      setTimeout(function() {
+// 		          $('#load').hide();
+
+// 		         location.href = link;
+// 		      }, 1000);
+
+// 		   }
+// 	});
+		//파일첨부 테스트
+		$('#testBtn').click(()=> {getFileInfo()});
+		function getFileInfo(){
+	 		let formData= $('form[name="joinEzt"]').serializeArray();
+	 		console.log('1) serializeArray', formData);
+	 		
+	 		let objData = {};
+	 		$.each(formData, (idx, input) => {
+	 			console.log('2) input', idx, input);
+	 			objData[input.name] = input.value;	 			
+	 		});
+	 		
+	 		console.log('3) objData', objData);
+	 		return objData;
+	 	}
+		
+	//가입하기 버튼
+	$('#joinBtn').click(() => {inputChk()});
+	function inputChk(){
+		if($('input[name=checked_id]').val() == ''){
+			Swal.fire({
+			 text:'아이디 중복확인이 완료되지않았습니다.',
+			 icon: 'warning'
+			})
+			return false;
+		}else {
+			$(joinEzt).submit();
+		}
+	}
+</script>
+</html>

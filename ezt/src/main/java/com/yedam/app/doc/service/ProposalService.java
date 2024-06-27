@@ -2,6 +2,7 @@ package com.yedam.app.doc.service;
 
 import java.util.List;
 
+import com.yedam.app.common.service.FileVO;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.usr.service.UserVO;
 
@@ -28,8 +29,8 @@ public interface ProposalService {
 	// 견적서 목록 조회(특정 의뢰와 관련해 본인이 작성한 견적서 목록)
 	public List<ProposalVO> ppsListInfo(ProposalVO proposalVO);
 	
-	// 견적서 단건 전송
-	public int ppsSend(int proposalNo);
+	// 견적서 파일 첨부
+	public int ppsFileUpdate(ProposalVO proposalVO);
 
 }
 

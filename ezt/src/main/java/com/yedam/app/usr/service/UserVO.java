@@ -1,6 +1,7 @@
 package com.yedam.app.usr.service;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -46,5 +47,14 @@ public class UserVO {
 	private Date usersJoinDt;
 	private Date usersStateChangeDt;
 	private String usersState;
+	
+	
+	private Integer licenseNo;
+	private String licenseDetailNo;
 	private Integer fileId;
+	
+	//작업분야(카테고리)
+	private List<String> categoryCode;
+	//활동지역
+	private List<String> regionCode;
 }

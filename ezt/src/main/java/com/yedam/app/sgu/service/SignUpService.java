@@ -31,11 +31,21 @@ public class SignUpService {
 	@Autowired
 	UserMapper userMapper;
 	
+	//사용자 회원가입
 	@Transactional
 	public void joinUser(@Valid UserVO userVO) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		userVO.setUsersPw(passwordEncoder.encode(userVO.getUsersPw()));
 		userVO.setUsersRole("ROLE_USER");
+		userMapper.saveUser(userVO);
+	}
+	
+	//작업자 회원가입
+	@Transactional
+	public void joinWorker(@Valid UserVO userVO) {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		userVO.setUsersPw(passwordEncoder.encode(userVO.getUsersPw()));
+		userVO.setUsersRole("ROLE_WORKER");
 		userMapper.saveUser(userVO);
 	}
 	

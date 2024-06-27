@@ -41,7 +41,10 @@
 	
 	<insert id="saveUser" parameterType="com.yedam.app.usr.service.UserVO">
 		INSERT INTO users
-		(users_no, users_role, users_id, users_pw, users_name, users_phone, users_nick, users_email)
-		VALUES(SEQ_USERS.NEXTVAL, #{usersRole}, #{usersId}, #{usersPw}, #{usersName}, #{usersPhone}, #{usersNick}, #{usersEmail})
+		(users_no, users_role, users_id, users_pw, users_name, users_phone, users_nick, users_email, users_rnn)
+		VALUES(SEQ_USERS.NEXTVAL, #{usersRole}, #{usersId}, #{usersPw}, #{usersName}, #{usersPhone}, #{usersNick}, #{usersEmail}, #{usersRnn})
 	</insert>
+	
+	
+
 </mapper>
