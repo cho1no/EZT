@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yedam.app.common.service.FileVO;
+import com.yedam.app.doc.service.ProposalDetailVO;
 
 import lombok.Data;
 
@@ -43,6 +44,13 @@ public class RequestVO {
 	
 	//조인 컬럼
 	private String usersName;			  //유저이름
-	
+	private String saveName;
+	private String ext;
+	private Date cttStartDt;
+	private Date cttEndDt;
+	private String usersPhone;
+	private String comments;
+	private int proposalNo;
 	List<FileVO> fileVO;
+
 }

@@ -17,7 +17,7 @@
 		<tr>
 			<td><input type="hidden" name="requestNo"></td>
 			<td><input type="hidden" name="requestState"></td>
-			<td><input type="hidden" name="requester" th:value="${#authentication.name}"></td>
+			<td><input type="hidden" name="requester" th:value="${#authentication.principal.userNo}"></td>
 		</tr>
 		<tr>
 			<th>제목</th>
