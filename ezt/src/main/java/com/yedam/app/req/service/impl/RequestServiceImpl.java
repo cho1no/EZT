@@ -60,12 +60,16 @@ public class RequestServiceImpl implements RequestService {
 		return requestMapper.deleteRequest(requestNo);
 	}
 
-	//견적서 전체조회
+	//견적서 조회
 	@Override
 	public List<ProposalVO> proposalList(ProposalVO proposalVO) {
-		
-		return requestMapper.selectProposalAll(proposalVO);
+		List<ProposalVO> list = requestMapper.selectProposalAll(proposalVO);
+	
+		return list;
 	}
+
+	
+
 
 
 	

@@ -15,4 +15,12 @@ public class ReviewVO {
 	private Date writeDt;
 	private String reviewDivision;
 	private int fileId;
+	
+	//조인컬럼
+	private String regionCode;
+	private String writerName;
+	private String workerName;
+	private String saveName;
+	private String ext;
+	
 }
