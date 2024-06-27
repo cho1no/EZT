@@ -150,29 +150,31 @@ form span {
 											name="JUMIN1" placeholder="자격증 번호">
 									<input type="button" style="float: right" id="licChkBtn" value="자격증 검증"
 										class="btn px-4 btn-primary text-white d-inline-flex">
-										<div class="row col-md-12 d-inline-flex">
-										<label class="d-inline-flex text-black">자격증 첨부파일</label>
-										<input class="d-inline-flex" type="file" name="licFile" style="float:right;">
-										<input type="button" style="float: right" value="테스트" id="testBtn">
+										<div class="row ">
+											<label class="col text-black">자격증 첨부파일</label>
+											<div class="col-md-4">
+											<input class="form-control" type="file" name="licFile">
+											</div>
+											<input class="col" type="button" value="테스트" id="testBtn">
 										</div>
 								</div>
 							</div>
 							<div class="row form-group">
-								<div class="col-md-8 mb-3 mb-md-0">
 									<label class="text-black" for="region">주 활동지역</label>
-									<select name="region" id="region" class="form-control select">
-										<option value="select-region" style="text-align:center;" disabled selected>=======지역 선택=======</option>
-										<option th:each="region : ${regions}" value="${region.codeNo}" th:text="${region.codeName}"></option>
-									</select>
+								<div class="col-md-12 mb-3 mb-md-0">
+									<th:block th:each="region : ${regions}">
+										<input type="checkbox" name="${region.codeNo}">
+										<label for="${region.codeNo}">[[${region.codeName}]]</label>
+									</th:block>
 								</div>
 							</div>
 							<div class="row form-group">
-								<div class="col-md-8 mb-3 mb-md-0">
 									<label class="text-black" for="category">작업 분야</label>
-									<select name="category" id="category" class="form-control select">
-										<option value="select" style="text-align:center;" disabled selected>=======분야 선택=======</option>
-										<option th:each="category : ${categories}"value="${category.codeNo}">[[${category.codeName}]]</option>
-									</select>
+								<div class="col-md-12 mb-3 mb-md-0">
+										<th:block th:each="category : ${categories}">
+											<input type="checkbox" name="${category.codeNo}">
+											<label for="${category.codeNo}">[[${category.codeName}]]</label>
+										</th:block>
 								</div>
 							</div>
 							

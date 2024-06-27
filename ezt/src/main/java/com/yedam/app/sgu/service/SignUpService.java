@@ -47,6 +47,9 @@ public class SignUpService {
 		userVO.setUsersPw(passwordEncoder.encode(userVO.getUsersPw()));
 		userVO.setUsersRole("ROLE_WORKER");
 		userMapper.saveUser(userVO);
+//		userMapper.insertLicense(userVO);
+//		userMapper.insertActiveRegion(userVO);
+//		userMapper.insertActiveCategory(userVO);
 	}
 	
 	//회원가입시 유효성 체크
