@@ -17,12 +17,14 @@ import com.yedam.app.sgu.service.SignUpService;
 import com.yedam.app.usr.service.UserVO;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class SgiController {
 	@Autowired
 	SignUpService signUpService;
@@ -31,7 +33,7 @@ public class SgiController {
 	public String all() {
 		return "sgi/loginTest";
 	}
-	
+	 
 	@GetMapping("user")
 	public void user() {}
 	
@@ -42,17 +44,23 @@ public class SgiController {
 	public void admin() {}
 	
 	@GetMapping("login")
-	public String login() {
+	public String login(@RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "exception", required = false) String exception, Model model) {
+        model.addAttribute("error", error);
+        log.info(exception);
+        log.info(error);
+        model.addAttribute("exception", exception);
 		return "sgi/login";
 	}
 	
-	@GetMapping("/loginForm")
-    public String loginForm(@RequestParam(value = "error", required = false) String error,
-                            @RequestParam(value = "exception", required = false) String exception, Model model) {
-        model.addAttribute("error", error);
-        model.addAttribute("exception", exception);
-        return "/login/loginForm";
-    }
+//	@GetMapping("/loginForm")
+//    public String loginForm(@RequestParam(value = "error", required = false) String error,
+//                            @RequestParam(value = "exception", required = false) String exception, Model model) {
+//		log.info(exception);
+//        model.addAttribute("error", error);
+//        model.addAttribute("exception", exception);
+//        return "sgi/login";
+//    }
 	
 	@GetMapping("signUp")
     public String signUpForm(Model model) {

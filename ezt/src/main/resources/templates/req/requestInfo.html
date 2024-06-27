@@ -173,23 +173,26 @@
                 <table class="table innerT" style="display:none">
                     <tr>
                         <th>품명</th>
-                        <th>규격</th>
+                        <th>단위</th>
                         <th>수량</th>
                         <th>단가</th>
                         <th>금액</th>
                         <th>비고</th>
-                        <th></th>
+                        <th><button class="btnn">상세보기</button></th>
+                        
                         
                     </tr>
+             <th:block th:each="ppd : ${proposal.list}">
                     <tr>
-                        <td>dd</td>
-                        <td>ddd</td>
-                        <td>ddd</td>
-                        <td>ddd</td>
-                        <td>dd</td>
-                        <td>dd</td>
-                        <td><button class="btnn">상세보기</button></td>
+                        <td th:text="${ppd.product}" ></td>
+                        <td th:text="${ppd.unit}"></td>
+                        <td th:text="${ppd.qty}"></td>
+                        <td th:text="${ppd.unitprice}"></td>
+                        <td th:text="${ppd.qty} * ${ppd.unitprice}"></td>
+                        <td th:text="${ppd.comments}"></td>
+                        <td></td>
                     </tr>
+              </th:block>
                 </table></td>
             </tr>
   			</th:block>

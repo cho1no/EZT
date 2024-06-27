@@ -37,7 +37,7 @@ public class LoginUserVO implements UserDetails{
 	public String getUsername() {
 		return userVO.getUsersName();
 	}
-	
+
 	public Integer getUserNo() {
 		return userVO.getUsersNo();
 	}

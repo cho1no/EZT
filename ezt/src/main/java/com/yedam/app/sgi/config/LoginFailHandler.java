@@ -12,6 +12,8 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
+
 
 public class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
 
@@ -32,8 +34,7 @@ public class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
         }
 
         errorMessage= URLEncoder.encode(errorMessage,"UTF-8");//한글 인코딩 깨지는 문제 방지
-        setDefaultFailureUrl("/loginForm?error=true&exception=" + errorMessage);
-        super.onAuthenticationFailure(httpServletRequest,httpServletResponse,e);
+        httpServletResponse.sendRedirect("/login?error=true&exception=" + errorMessage);
     }
 
 

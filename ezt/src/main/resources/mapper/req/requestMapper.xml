@@ -12,7 +12,7 @@
 	WHERE users_no = #{usersNo}
 </select>
 <!-- 전체 조회 -->
-<select id="selectRequestAll" resultType="RequestVO" parameterType="">
+<select id="selectRequestAll" resultType="RequestVO">
 	SELECT r.request_no
 		  ,r.requester
 		  ,FIND_COMMONCODE(r.ctt_place) as ctt_place
@@ -38,10 +38,7 @@
 	    JOIN users u
 	    ON r.requester = u.users_no
 	    LEFT OUTER JOIN file_detail_info f
-	    ON r.file_id = f.file_id
-	    JOIN file_attr p
-        ON p.file_id = f.file_id
-    WHERE p.file_id = #{fileId} and boss_tf = 'y'
+	    ON( r.file_id = f.file_id and f.boss_tf = 'Y')
 	ORDER BY r.request_no desc
 </select>
 
@@ -188,8 +185,13 @@
 	WHERE request_no = #{requestNo}
 </delete>
 
+<resultMap id="ppMap" type="ProposalVO">
+  <id column="proposal_no" property="proposalNo"></id>
+  <collection property="list" javaType="ArrayList" column="proposal_no" ofType="ProposalDetailVO" select="selectPpDetailAll" />
+</resultMap>
+
 <!-- 견적서 단건조회 -->
-<select id="selectProposalAll" parameterType="RequestVO" resultType="ProposalVO">
+<select id="selectProposalAll" parameterType="ProposalVO" resultMap="ppMap">
 	SELECT p.worker
 		  ,u.users_name
 		  ,p.ctt_start_dt
@@ -197,6 +199,7 @@
 		  ,u.users_phone
 		  ,p.comments
 		  ,r.request_no
+		  ,p.proposal_no
 	FROM proposal p
 		JOIN users u
 		ON u.users_no = p.worker
@@ -204,5 +207,18 @@
 		ON r.request_no = p.request_no
 	WHERE r.request_no =#{requestNo}
 	ORDER BY p.proposal_no desc
+</select>
+<!-- 견적서 상세조회 -->
+<select id="selectPpDetailAll" resultType="ProposalDetailVO">
+	SELECT proposal_detail_no
+			,proposal_no
+			,product
+			,unit
+			,qty
+			,unitprice
+			,comments
+	FROM proposal_detail
+	WHERE proposal_no =#{proposalNo}
+	ORDER BY proposal_detail_no desc
 </select>
 </mapper>

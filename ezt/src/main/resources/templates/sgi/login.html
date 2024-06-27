@@ -29,19 +29,21 @@
 		<div class="row">
 			<div class="col-lg-8" style="margin: auto">
 				<h2 class="mb-4">Log In To EZT</h2>
-				<form method="post" action="/login" class="p-4 border rounded">
+				<form method="post" action="/login" th:object="${loginForm}"
+					class="p-4 border rounded">
 					<div class="row form-group">
 						<div class="col-md-10">
 							<label class="text-black" for="fname">아이디</label> <input
 								type="text" name="id" id="fname" class="form-control"
-								placeholder="ID">
+								placeholder="ID"><span></span>
 						</div>
 					</div>
 					<div class="row form-group">
 						<div class="col-md-10">
 							<label class="text-black" for="fname">비밀번호</label> <input
 								type="password" name="password" id="fname" class="form-control"
-								placeholder="Password">
+								placeholder="Password"> 
+								<span id="asdf">[[${exception}]]</span>
 							<!-- 
 							<span th:errors="{error}" class="loginFail"></span>
 							<div class="loginFail">{{#error}} {{exception}} {{/error}}
@@ -49,7 +51,7 @@
 							 -->
 						</div>
 					</div>
-					<div class="row form-group col-lg-20" >
+					<div class="row form-group col-lg-20">
 						<div class="col-md-4">
 							<a href="/signUp" class="btn px-4 btn-primary text-white">회원가입</a>
 						</div>
@@ -60,7 +62,7 @@
 						</div>
 						 -->
 						<div class="col-md-4">
-							<input type="submit" value="로그인"
+							<input type="submit" value="로그인" id="loginBtn"
 								class="btn px-4 btn-primary text-white">
 						</div>
 					</div>
@@ -73,6 +75,11 @@
 </section>
 <script type="text/javascript">
 	
+	$('#loginBtn').on('click', () => {
+		
+	}) 
+		
+
 </script>
 </body>
 </html>

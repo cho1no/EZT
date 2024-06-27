@@ -2,6 +2,7 @@ package com.yedam.app.req.service;
 
 import java.util.List;
 
+import com.yedam.app.doc.service.ProposalDetailVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.usr.service.UserVO;
 
@@ -18,11 +19,8 @@ public interface RequestService {
 	public boolean updateRequest(RequestVO requestVO);
 	//삭제
 	public int deleteRequest(int requestNo);
-	
 	//견적서 단건조회
 	public List<ProposalVO> proposalList(ProposalVO proposalVO);
-	
-	//견적서 상세 단건조회
-	
+
 	//계약서 조회
 }

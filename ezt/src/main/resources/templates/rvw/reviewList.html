@@ -22,38 +22,28 @@ img{
 </style>
 <head>
 <meta charset="UTF-8">
-<title>의뢰 목록</title>
+<title>후기 목록</title>
 </head>
 <body>
 
 <section class="site-section">
-<h2 class="margin">의뢰 신청 목록</h2>
+<h2 class="margin">후기 목록</h2>
 	<div>
 		<div class="search">
-			<select>
-				<option value="category_code">작업분야</option>
-				<option value="region_code">지역</option>
-			</select>
 			<input class="input" type="text">
 			<button class="btn btn-primary">검색</button>	
-		</div>
-		<div style="text-align:right" class="margin">
-			<button class="btn btn-primary" th:onclick="|location.href='@{/requestInsert}'|">글쓰기</button>
 		</div>
 	</div>
       <div class="container">
         <div class="row mb-5">
-        <th:block th:each="request : ${requestList}">
+        <th:block th:each=" rv : ${rvList}">
           <div class="col-md-6 col-lg-3 mb-5">
-            <a th:onclick="|location.href='@{/requestInfo(requestNo=${request.requestNo})}'|">
-            <th:block>
-             <img th:if ="${request.fileId == 0}"  th:src="@{/images/interior.jpg}" alt="Image" class="rounded mb-4">
-    	     <img th:unless ="${request.fileId == 0}"  th:src="@{'/images/req/' + ${request.saveName} + '.' + ${request.ext}}" alt="Image" class=" rounded mb-4">
-            </th:block>
+            <a>
+             <img th:src="@{/images/interior.jpg}" alt="Image" class="rounded mb-4">
             </a>
-            <h3><a th:onclick="|location.href='@{/requestInfo(requestNo=${request.requestNo})}'|" class="text-black">[[${request.title}]] </a></h3>
-            <div>[[${request.regionCode}]] <span class="mx-2">|</span>[[${request.categoryCode}]]</div>
-            <div>[[${#dates.format(request.writeDt,'yy.MM.dd')}]] <span class="mx-2">|</span>[[${request.usersName}]] </div>
+            <h3><a class="text-black"></a></h3>
+            <div>[[${rv.star}]]</span></div>
+            <div>작업자명 : [[${rv.workerName}]] <span class="mx-2">|</span> [[${rv.regionCode}]] </div>
           </div>
          </th:block>
         </div>

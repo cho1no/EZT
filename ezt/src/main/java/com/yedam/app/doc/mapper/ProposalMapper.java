@@ -43,5 +43,8 @@ public interface ProposalMapper {
 	
 	// 견적서 단건 전송
 	public int sendPpsInfo(@Param("proposalNo")int proposalNo);
+	
+	// 견적서 파일 첨부
+
 }
 
