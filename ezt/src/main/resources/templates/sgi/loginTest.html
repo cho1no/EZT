@@ -15,6 +15,7 @@
 		<div class="row align-items-center justify-content-center">
 			<div class="col-md-12">
 				<div class="mb-5 text-center">
+
 					<p th:text="${#authentication.name}"></p>
 					<p th:text="${#authentication.authorities}"></p>
 					<p th:text="${#authentication.authenticated}"></p>
@@ -23,6 +24,8 @@
 						<button type="button" id="logout">
 							로그아웃
 						</button>
+						<p>[[${#authentication.principal.username}]]님 안녕하세요</p>
+					<p>[[${#authentication.principal.userVO.usersName}]]님 안녕하세요</p>
 					</div>
 					<div sec:authorize="hasRole('ROLE_ANONYMOUS')">
 						<button type="button" id="login">
