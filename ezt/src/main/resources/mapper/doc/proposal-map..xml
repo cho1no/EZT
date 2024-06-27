@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.doc.mapper.ProposalMapper">
 
-
+	<!-- 유저정보조회 -->
 	<select id="selectUserInfo" resultType="UserVO">
 		SELECT users_no
 		, users_id
@@ -11,7 +11,7 @@
 		FROM users
 		WHERE users_no = #{usersNo}
 	</select>
-
+	<!-- 견적서 의뢰정보조회 -->
 	<select id="selectReqInfo" resultType="RequestVO">
 		SELECT request_no
 		, requester
@@ -27,7 +27,7 @@
 		WHERE request_no = #{requestNo}
 	</select>
 
-
+	<!-- 견적서 단건조회 -->
 	<select id="selectPpsInfo" resultType="ProposalVO">
 		SELECT
 		proposal_no
@@ -49,7 +49,7 @@
 		#{proposalNo}
 	</select>
 
-
+	<!-- 견적서 상세조회 -->
 	<select id="selectPpsDetailList" resultType="ProposalDetailVO">
 		SELECT
 		proposal_detail_no
@@ -65,7 +65,7 @@
 		#{proposalNo}
 	</select>
 
-
+<!-- 견적서 등록 -->
 	<insert id="insertPpsInfo" parameterType="ProposalVO">
 		<selectKey keyProperty="proposalNo" resultType="Integer"
 			order="BEFORE">
@@ -105,7 +105,7 @@
 		, sysdate
 		)
 	</insert>
-
+<!-- 견적서 상세 등록 -->
 	<insert id="insertPpsDetailInfo" parameterType="ProposalDetailVO">
 		<selectKey keyProperty="proposalDetailNo" resultType="Integer"
 			order="BEFORE">
@@ -134,7 +134,7 @@
 		)
 	</insert>
 	
-	
+	<!-- 견적서 수정 -->
 	<update id="updatePpsInfo" parameterType="ProposalVO">
 		
 		UPDATE proposal
@@ -149,18 +149,18 @@
 		WHERE proposal_no = #{proposalNo}
 	</update>
 	
-	
+	<!-- 견적서 삭제 -->
 	<delete id="deletePpsInfo" parameterType="int">
 		DELETE FROM proposal
 		WHERE proposal_no = #{proposalNo}
 	</delete>
-	
+	<!-- 견적서 상세 삭제 -->
 	<delete id="deletePpsDetailInfo" parameterType="int">
 		DELETE FROM proposal_detail
 		WHERE proposal_no = #{proposalNo}
 	</delete>
 	
-	
+	<!-- 견적서 목록 조회 -->
 	<select id="selectPpsListInfo" resultType="ProposalVO">
 		SELECT
 		proposal_no
@@ -181,7 +181,7 @@
 		WHERE request_no =
 		#{requestNo} and worker= #{worker} and proposal_state IS NULL
 	</select>
-	
+	<!-- 견적서 단건 전송 -->
 	<update id="sendPpsInfo" parameterType="int">
 		UPDATE proposal
 		SET
@@ -189,5 +189,69 @@
 		WHERE proposal_no = #{proposalNo}
 	</update>
 	
+	<!-- 견적서 파일 첨부 -->
+	<update id="updatePpsFileInfo" parameterType="int">
+		UPDATE proposal
+		SET
+		file_id = #{fileId}
+		WHERE proposal_no = #{proposalNo}
+	</update>
+	<!-- 파일 정보 DB 등록 attr -->
+	<insert id="insertFileAttrInfo" parameterType="ProposalVO">
+		<selectKey keyProperty="fileId" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_FILEID.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO file_attr
+		VALUES(
+		#{fileId}
+		, sysdate
+		, 'Y'
+		)
+	</insert>
+<!--파일 정보 DB 등록 -->
+	<insert id="insertFileInfo" parameterType="FileVO">
+		<selectKey keyProperty="fileNo" resultType="int"
+			order="BEFORE">
+			SELECT SEQ_FILENO.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO file_detail_info
+		VALUES(
+		#{fileId}
+		, #{fileNo}
+		, #{savePath}
+		, #{saveName}
+		, #{originalFileName}
+		, #{ext}
+		, #{fileSize}
+		, 'N'
+		)
+	</insert>
+	<!-- 파일 정보 조회 -->
+	<select id="selectFileList" resultType="FileVO">
+		SELECT 
+				f.FILE_ID
+				, f.FILE_NO
+				, f.SAVE_PATH
+				, f.SAVE_NAME
+				, f.ORIGINAL_FILE_NAME
+				, f.EXT
+				, f.FILE_SIZE
+				, f.BOSS_TF
+		FROM file_detail_info f 
+		join proposal p 
+		on p.file_id = f.file_id
+		WHERE p.proposal_no = #{proposalNo}
+	</select>
+	
+	
+	<!-- 파일 정보 DB 삭제 -->
+	<delete id="deleteFileInfo" parameterType="int">
+		DELETE FROM file_detail_info
+		WHERE file_id = #{fileId}
+	</delete>
+
 
 </mapper>

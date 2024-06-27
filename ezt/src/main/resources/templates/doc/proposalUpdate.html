@@ -29,7 +29,7 @@
 								class="form-control" name="requester"
 								th:value="${reqInfo.requester}"> <input type="hidden"
 								class="form-control" name="worker"
-								th:value="${#authentication.name}"> <input type="hidden"
+								th:value="${#authentication.principal.userNo}"> <input type="hidden"
 								name="proposalNo" th:value="${ppsInfo.proposalNo}">
 							<div class="row form-group">
 								<div class="col-2">
