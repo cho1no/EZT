@@ -154,9 +154,9 @@
 										th:value="${list.division}" /></td>
 									<td><input type="text" style="border: 0; width: 100%;"
 										th:value="${list.unit}" /></td>
-									<td><input type="text" style="border: 0; width: 100%;"
+									<td><input type="text" style="border: 0; width: 100%;" maxlength="4"
 										th:value="${#numbers.formatInteger(list.qty,1)}" /></td>
-									<td><input type="text" style="border: 0; width: 100%;"
+									<td><input type="text" style="border: 0; width: 100%;" maxlength="8"
 										th:value="${#numbers.formatInteger(list.unitprice,1)}" /></td>
 									<td><input type="text" style="border: 0; width: 100%;"
 										th:value="${#numbers.formatInteger(list.qty * list.unitprice,1,'COMMA')}" /></td>
@@ -198,9 +198,9 @@
 	for(i=0; i < $('tbody tr').length; i++){
 
     	$('tbody tr:eq('+i+') td:eq(3) input').addClass("qty_"+num);
-    	$('tbody tr:eq('+i+') td:eq(3) input').attr("onKeyup", "GetSum("+num+")");
+    	$('tbody tr:eq('+i+') td:eq(3) input').attr("onKeyup", "this.value=this.value.replace(/[^-0-9]/g,'').replace('-','').replace(/^0+/, ''); GetSum("+num+")");
     	$('tbody tr:eq('+i+') td:eq(4) input').addClass("price_"+num);
-    	$('tbody tr:eq('+i+') td:eq(4) input').attr("onKeyup", "GetSum("+num+")");
+    	$('tbody tr:eq('+i+') td:eq(4) input').attr("onKeyup", "this.value=this.value.replace(/[^-0-9]/g,'').replace('-','').replace(/^0+/, ''); GetSum("+num+")");
     	$('tbody tr:eq('+i+') td:eq(5) input').addClass("result_"+num);
 
     	num += 1;

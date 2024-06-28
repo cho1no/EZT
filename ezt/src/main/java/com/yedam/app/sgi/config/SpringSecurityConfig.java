@@ -4,10 +4,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.yedam.app.sgi.handler.LoginFailHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -26,10 +27,10 @@ public class SpringSecurityConfig {
 	@Bean
 	SecurityFilterChain filterChin(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()
-				.antMatchers("/", "/main", "/adm", "/api/**", "/verify/**", "/login/**", "/signUp/**", "/css/**", "/fonts/**", "/images/**", "/js/**").permitAll()
+				.antMatchers("/", "/main", "/adm/**", "/api/**", "/verify/**", "/login/**", "/signUp/**", "/css/**", "/fonts/**", "/images/**", "/js/**").permitAll()
 				.antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				.antMatchers("/worker/**").hasAnyRole("WORKER", "ADMIN")
-				.antMatchers("/adm/**").hasAnyAuthority("ROLE ADMIN")
+				.antMatchers("/admin/**").hasAnyAuthority("ROLE ADMIN")
 				.anyRequest().authenticated()
 			.and()
 			.formLogin().loginPage("/login").usernameParameter("id")

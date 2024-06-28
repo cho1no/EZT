@@ -31,6 +31,9 @@ public interface ProposalService {
 	
 	// 견적서 파일 첨부
 	public int ppsFileUpdate(ProposalVO proposalVO);
+	
+	// 파일&견적서 삭제
+	public int ppsFileDelete(int fileId);
 
 }
 
