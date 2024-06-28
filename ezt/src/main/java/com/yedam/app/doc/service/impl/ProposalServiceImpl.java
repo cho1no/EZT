@@ -1,8 +1,6 @@
 package com.yedam.app.doc.service.impl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -93,7 +91,7 @@ public class ProposalServiceImpl implements ProposalService {
 	// 견적서 파일 첨부
 	@Override
 	public int ppsFileUpdate(ProposalVO proposalVO) {
-		
+		System.out.println(proposalVO);
 		if (proposalVO.getFileList() != null) {
 			ppsMapper.insertFileAttrInfo(proposalVO);
 			
@@ -103,10 +101,20 @@ public class ProposalServiceImpl implements ProposalService {
 			});
 			System.out.println(proposalVO);
 			ppsMapper.updatePpsFileInfo(proposalVO);
-			ppsMapper.sendPpsInfo(proposalVO.getProposalNo());
 		}
+		ppsMapper.sendPpsInfo(proposalVO);
 		
 		return proposalVO.getProposalNo();
+	}
+	// 파일&견적서 삭제
+	@Override
+	public int ppsFileDelete(int fileId) {
+		boolean result = false;
+		if (ppsMapper.deleteFileInfo(fileId) == 1) {
+			result = true;
+		}
+
+		return result == true ? 1 : -1 ;
 	}
 	
 
