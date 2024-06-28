@@ -57,7 +57,9 @@
 						<div class="row form-group">
 							<div class="col-lg-7 mb-5 mb-lg-0">
 								<th:block
-									th:if="${#authentication.principal.userNo == userInfo.usersNo} and ${ppsInfo.proposalState == null}">
+									th:if="${#authentication.principal.userNo == userInfo.usersNo} and ${ppsInfo.proposalState == null}
+									and ${ppsInfo.cttStartDt != '1900-01-01'} and ${ppsInfo.cttEndDt != '1900-01-01'}
+									and ${ppsInfo.workerPostcode != null} and ${ppsInfo.workerAddress != null} and ${ppsInfo.workerDetailAddress != null}">
 									<button style="width: 50px; padding: 0" type="button"
 										class="btn btn-outline-success sendBtn" data-bs-toggle="modal"
 										data-bs-target="#sendModal">전송</button>
@@ -242,7 +244,8 @@
 					<div class="row">
 						<th:block
 							th:if="${#authentication.principal.userNo == userInfo.usersNo}">
-							<th:block th:if="${ppsInfo.proposalState == null} or ${ppsInfo.proposalState == 'A03'}">
+							<th:block
+								th:if="${ppsInfo.proposalState == null} or ${ppsInfo.proposalState == 'A03'}">
 								<div class="col-6">
 									<th:block th:if="${ppsInfo.proposalState != 'A03'}">
 										<button type="button" class="btn btn-block btn-light btn-md"
@@ -250,17 +253,27 @@
 									</th:block>
 								</div>
 								<th:block th:if="${ppsInfo.fileId != 0}">
-								<div class="col-6">
-									<button type="button" class="btn btn-block btn-primary btn-md" id="deleteBtn">삭제</button>
-								</div>
+									<div class="col-6">
+										<button type="button" class="btn btn-block btn-primary btn-md"
+											id="deleteBtn">삭제</button>
+									</div>
 								</th:block>
 								<th:block th:unless="${ppsInfo.fileId != 0}">
-								<div class="col-6">
-									<button type="button" class="btn btn-block btn-primary btn-md"
-										th:onClick="|location.href='@{/ppsDelete(proposalNo=${ppsInfo.proposalNo})}'|">삭제</button>
-								</div>
+									<div class="col-6">
+										<button type="button" class="btn btn-block btn-primary btn-md"
+											th:onClick="|location.href='@{/ppsDelete(proposalNo=${ppsInfo.proposalNo})}'|">삭제</button>
+									</div>
+								</th:block>
 							</th:block>
 						</th:block>
+						<th:block
+							th:if="${#authentication.principal.userNo == ppsInfo.requester}">
+							<div class="col-6"></div>
+							<div class="col-6">							
+								<button type="button" class="btn btn-block btn-primary btn-md">승인</button>
+							</div>
+						</th:block>
+
 					</div>
 				</div>
 			</div>

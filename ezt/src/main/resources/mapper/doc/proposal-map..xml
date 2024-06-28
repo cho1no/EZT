@@ -183,7 +183,7 @@
 	</select>
 
 	<!-- 견적서 단건 전송 -->
-	<update id="sendPpsInfo" statementType="CALLABLE">
+	<update id="sendPpsInfo" statementType="CALLABLE" parameterType="ProposalVO">
 		{Call 
 			send_proposal( #{proposalNo}, #{requestNo}, #{worker})
 		}
@@ -248,7 +248,7 @@
 	</select>
 	
 	
-	<!-- 파일 정보 DB 삭제 -->
+	<!-- 파일 정보 DB&견적서 삭제 -->
 	<delete id="deleteFileInfo" statementType="CALLABLE">
 		{CALL
 			delete_file_id(#{fileId})

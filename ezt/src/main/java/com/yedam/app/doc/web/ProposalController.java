@@ -134,7 +134,7 @@ public class ProposalController {
 	// 견적서 단건 전송
 	@GetMapping("ppsSend")
 	public String ppsSend(ProposalVO proposalVO) {
-
+		ppsSerivce.ppsFileUpdate(proposalVO);
 		return "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo() + "&requestNo=" + proposalVO.getRequestNo();
 	}
 

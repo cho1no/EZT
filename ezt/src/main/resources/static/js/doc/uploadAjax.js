@@ -45,6 +45,8 @@ $('#uploadBtn').on("click", function(e){
 	
 	console.log(files);
 	
+	if(files.length != 0){
+	
 	// formData에 데이터 넣기
 	for(var i = 0; i < files.length; i++){
 		if(!checkExtentsion(files[i].name, files[i].size)){
@@ -83,6 +85,9 @@ $('#uploadBtn').on("click", function(e){
 		//console.log(result);
 			location.reload();
 	
+	}else{
+		location.href='/ppsSend?proposalNo='+proposalNo+'&requestNo='+requestNo+'&worker=' + worker;
+	}
 });
 
 // 모달 창 닫혔을 때 폼 초기화

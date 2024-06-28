@@ -44,7 +44,7 @@ public interface ProposalMapper {
 	public List<ProposalVO> selectPpsListInfo(ProposalVO proposalVO);
 	
 	// 견적서 단건 전송
-	public int sendPpsInfo(@Param("proposalNo")int proposalNo, @Param("requestNo")int requestNo, @Param("worker")int worker);
+	public int sendPpsInfo(ProposalVO proposalVO);
 	
 	// 견적서 파일 첨부
 	public int updatePpsFileInfo(ProposalVO proposalVO);
