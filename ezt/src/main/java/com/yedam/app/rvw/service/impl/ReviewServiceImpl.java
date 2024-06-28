@@ -36,13 +36,13 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public boolean updateReview(ReviewVO reviewVO) {
 		
-		return false;
+		return reviewMapper.updateReview(reviewVO) == 1;
 	}
 	//후기 삭제
 	@Override
 	public int deleteReview(int reviewNo) {
 		
-		return 0;
+		return reviewMapper.deleteReview(reviewNo);
 	}
 
 }

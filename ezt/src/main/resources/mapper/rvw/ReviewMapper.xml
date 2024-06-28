@@ -25,7 +25,53 @@
 	    ON( r.file_id = f.file_id and f.boss_tf = 'Y')
 	  ORDER BY review_no desc
 </select>
+<resultMap id="imgMap" type="ReviewVO">
+	<collection property="fileVO" javaType="ArrayList" column="file_id" ofType="FileVO" select="selectImgALl" />
+</resultMap>
+<!-- 후기 단건 조회 -->
+<select id="reviewInfo" resultMap="imgMap" >
+	SELECT	r.review_no
+			,r.request_no
+			,FIND_COMMONCODE(q.region_code) as region_code
+			,FIND_COMMONCODE(q.category_code) as category_code
+			,FIND_COMMONCODE(q.ctt_place) as ctt_place
+			,q.ctt_place_area
+			,r.writer
+			,r.worker
+			,USERNAME(r.writer) as writer_name
+            ,USERNAME(r.worker) as worker_name
+			,r.star
+			,r.content
+			,r.write_dt
+			,r.review_division
+			,r.file_id
+	  FROM review r
+	  	JOIN request q
+	  	ON r.request_no = q.request_no
+	  WHERE r.review_no = #{reviewNo}
+</select>
+<!-- 이미지 파일 조회 -->
+<select id="selectImgALl" resultType="FileVO">
+	SELECT file_id
+			,file_no
+			,save_name
+			,ext
+			,boss_tf
+	FROM file_detail_info
+	WHERE file_id = #{fileId}
+	ORDER BY file_no
+</select>
 
-
-
+<!-- 후기 수정(별점 및 내용)  -->
+<update id="updateReview" parameterType="ReviewVO">
+	UPDATE review
+	SET	content = #{content}
+		,star = #{star}
+	WHERE review_no = #{reviewNo}
+</update>
+<!-- 후기 삭제 -->
+<delete id="deleteReview" parameterType="int">
+	DELETE FROM review
+	WHERE review_no = #{reviewNo}
+</delete>
 </mapper>
