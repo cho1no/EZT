@@ -26,7 +26,7 @@ public interface UserMapper {
 	public int emailChk(String email);
 
 	//사용자정보 수정
-	public int updateUserInfo(UserVO userNo);
+	public int updateUserInfo(UserVO userVO);
 	
 	//사용자정보 삭제
 	public int deleteUserInfo(int userNo);

@@ -23,22 +23,22 @@ form span{
 	<h3>[[${userId.usersName}]]님 안녕하세요.</h3>
 	<hr>
 	<h1>회원정보 수정</h1>
-	<form>
+	<form th:action="userUpdate" th:object="${userId}">
 	  <div>
 		<div>
 			<label for="usersNick">닉네임</label>
 			<input class="form-control" type="text" 
-			id="usersNick" th:value="${userId.usersNick}" th:field="*{userId.usersNick}"><span></span>
+			id="usersNick"  th:field="*{usersNick}"><span></span>
 		</div>
 		<div>
 			<label for="usersPhone">전화번호</label>
 			<input class="form-control" type="text" 
-			id="usersPhone" th:value="${userId.usersPhone}" th:field="*{userId.usersPhone}"><span></span>
+			id="usersPhone" th:field="*{usersPhone}"><span></span>
 		</div>
 		<div>
 			<label for="usersEmail">이메일</label>
 			<input class="form-control" type="email" 
-			id="usersEmail" th:value="${userId.usersEmail}" th:field="*{userId.usersEmail}"><span></span>
+			id="usersEmail"  th:field="*{usersEmail}"><span></span>
 		</div>
 		<button type="button" id="updateBtn">수정하기</button>
 	  </div>
@@ -47,7 +47,7 @@ form span{
 <script th:inline="javascript">
 	$('#updateBtn').on('click', updateUser);
 	
-	function updateUser(){
+	function updateUser(e){
 		
 		let dataObj = getUsrObj();
 		console.log(dataObj);
