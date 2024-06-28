@@ -107,13 +107,16 @@ form span {
 									<label class="text-black" for="usersRnn">주민등록번호</label>
 									</div> 
 										<input type="text" id="JUMIN1" maxlength="6" class="form-control col-md-4 d-inline-flex"
-											name="JUMIN1" placeholder="880101">
+											name="usersBirth" placeholder="880101">
 									<label class="d-inline-flex">-</label>
 									<input  type="password" id="JUMIN2" maxlength="7" class="form-control col-md-4 d-inline-flex"
-										name="JUMIN2" placeholder="1234567"><span></span>
+										name="usersRnn" placeholder="1234567"><span></span>
 									<input type="button" style="float: right" id="rnnChkBtn" value="실명인증"
 										class="btn px-4 btn-primary text-white">
 								</div>
+							</div>
+							<div>
+								<input type="text" name="usersGender" id="usersGender"> 
 							</div>
 							<div class="row form-group">
 								<div class="col-md-12 mb-3 mb-md-0">
@@ -304,13 +307,17 @@ form span {
 	function inputChk(){
 		if($('input[name=checked_id]').val() == ''){
 			Swal.fire({
-				 text:'아이디 중복확인이 완료되지않았습니다.',
-				 icon: 'warning'
-				})
+			 text:'아이디 중복확인이 완료되지않았습니다.',
+			 icon: 'warning'
+			})
 			return false;
-		}else {
-			$(joinEzt).submit();
 		}
+		if($('#JUMIN2').val()[0] == 1 || $('#JUMIN2').val()[0] == 3){
+			$('#usersGender').val('남');
+		}else{
+			$('#usersGender').val('여');
+		}
+			$(joinEzt).submit();
 	}
 </script>
 </html>

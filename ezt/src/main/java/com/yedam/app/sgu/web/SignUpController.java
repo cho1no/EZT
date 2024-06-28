@@ -1,7 +1,5 @@
 package com.yedam.app.sgu.web;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
-import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.sgu.service.SignUpService;
 import com.yedam.app.usr.service.UserVO;
 
@@ -25,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class SguController {
+public class SignUpController {
 	@Autowired
 	SignUpService signUpService;
 	
@@ -59,7 +56,7 @@ public class SguController {
             return "sgu/signUp_user";
         }
         //  주석풀어야 회원가입됨
-        //  signUpService.joinUser(userVO);
+         signUpService.joinUser(userVO);
         model.addAttribute("msg", "회원가입 완료!");
         model.addAttribute("url", "/sgi/login");
         return "gongtong/message";
