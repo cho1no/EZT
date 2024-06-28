@@ -1,0 +1,77 @@
+button{
+	text-align:center;
+}
+#container{
+	margin:0 auto;
+}
+#mainPhoto{
+  display: block;
+  width: 600px;
+  height:400px;
+  margin: 200px 50px 30px 50px;
+
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.6);
+}
+#gallery{
+	text-align: center;
+	width:300px;	
+}
+
+#gallery > li {
+  display: block;
+  margin: 0 10px;
+  width: 200px;
+  
+  
+}
+ 
+#gallery > li > img{
+  display: block;
+  margin: 20px 3px;
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+}
+input {
+	border:none;
+}
+textarea {
+	border:none;
+	width:500px;
+	height:200px;
+}
+.star-rating {
+  display: flex;
+  margin-left:20px;
+}
+.yellow{
+	text-align:center;
+	color:rgba(250, 208, 0, 0.99);
+	font-size:50px;
+}
+
+fieldset{
+    display: inline-block;
+    direction: rtl;
+    border:0;
+}
+fieldset legend{
+    text-align: right;
+}
+.reStar input[type=radio]{
+    display: none;
+}
+.reStar label{
+    font-size: 50px;
+    color: transparent;
+    text-shadow: 0 0 0 #f0f0f0;
+}
+.reStar label:hover{
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+.reStar label:hover ~ label{
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+.reStar input[type=radio]:checked ~ label{
+    text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}

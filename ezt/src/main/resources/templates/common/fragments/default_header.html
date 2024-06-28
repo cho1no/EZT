@@ -7,10 +7,10 @@
 
           <nav class="col-5 site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-              <li><a href="index.html" class="nav-link">의뢰 목록</a></li>
+              <li><a th:href="@{/requestList}" class="nav-link">의뢰 목록</a></li>
               <li><a href="about.html">작업자 찾기</a></li>
               <li class="has-children">
-                <a href="job-listings.html">후기 목록</a>
+                <a th:href="@{/reviewList}">후기 목록</a>
                 <ul class="dropdown">
                   <li><a href="job-single.html">Job Single</a></li>
                   <li><a href="post-job.html">Post a Job</a></li>
