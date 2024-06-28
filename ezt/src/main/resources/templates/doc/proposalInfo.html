@@ -249,6 +249,12 @@
 											th:onClick="|location.href='@{/ppsUpdate(proposalNo=${ppsInfo.proposalNo},requestNo=${ppsInfo.requestNo})}'|">수정</button>
 									</th:block>
 								</div>
+								<th:block th:if="${ppsInfo.fileId != 0}">
+								<div class="col-6">
+									<button type="button" class="btn btn-block btn-primary btn-md" id="deleteBtn">삭제</button>
+								</div>
+								</th:block>
+								<th:block th:unless="${ppsInfo.fileId != 0}">
 								<div class="col-6">
 									<button type="button" class="btn btn-block btn-primary btn-md"
 										th:onClick="|location.href='@{/ppsDelete(proposalNo=${ppsInfo.proposalNo})}'|">삭제</button>
@@ -330,6 +336,9 @@
 		})
 
 		var proposalNo = [[${ppsInfo.proposalNo}]];
+		var requestNo = [[${ppsInfo.requestNo}]];
+		var worker = [[${ppsInfo.worker}]];
+		var fileList = [[${ppsInfo.fileList}]];
 		
 		// 첨부 파일 다운로드 
 		for(i = 0; i < [[${ppsInfo.fileList}]].length; i++){

@@ -63,6 +63,8 @@ $('#uploadBtn').on("click", function(e){
 	}
 	
 	formData.append("proposalNo", proposalNo);
+	formData.append("requestNo", requestNo);
+	formData.append("worker", worker);
 	// Ajax
 	$.ajax({
 		url: '/uploadAjaxAction',
@@ -90,4 +92,18 @@ $('input[name="uploadFile"]').val('');
 $('.uploadResult ul li').remove();
 });checkExtentsion
 
-
+$('#deleteBtn').on("click", function(e){
+	
+	
+	$.ajax({
+		url: '/deleteFile',
+		type : 'post',
+		contentType : 'application/json',
+		data : JSON.stringify(fileList),
+		async : false
+		
+	})
+	
+	location.href='/main';
+	
+})

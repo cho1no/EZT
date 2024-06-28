@@ -181,12 +181,12 @@
 		WHERE request_no =
 		#{requestNo} and worker= #{worker} and proposal_state IS NULL
 	</select>
+
 	<!-- 견적서 단건 전송 -->
-	<update id="sendPpsInfo" parameterType="int">
-		UPDATE proposal
-		SET
-		proposal_state = 'A01'
-		WHERE proposal_no = #{proposalNo}
+	<update id="sendPpsInfo" statementType="CALLABLE">
+		{Call 
+			send_proposal( #{proposalNo}, #{requestNo}, #{worker})
+		}
 	</update>
 	
 	<!-- 견적서 파일 첨부 -->
@@ -229,6 +229,7 @@
 		, 'N'
 		)
 	</insert>
+	
 	<!-- 파일 정보 조회 -->
 	<select id="selectFileList" resultType="FileVO">
 		SELECT 
@@ -248,9 +249,10 @@
 	
 	
 	<!-- 파일 정보 DB 삭제 -->
-	<delete id="deleteFileInfo" parameterType="int">
-		DELETE FROM file_detail_info
-		WHERE file_id = #{fileId}
+	<delete id="deleteFileInfo" statementType="CALLABLE">
+		{CALL
+			delete_file_id(#{fileId})
+			}
 	</delete>
 
 

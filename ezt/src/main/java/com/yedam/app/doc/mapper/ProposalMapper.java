@@ -44,7 +44,7 @@ public interface ProposalMapper {
 	public List<ProposalVO> selectPpsListInfo(ProposalVO proposalVO);
 	
 	// 견적서 단건 전송
-	public int sendPpsInfo(@Param("proposalNo")int proposalNo);
+	public int sendPpsInfo(@Param("proposalNo")int proposalNo, @Param("requestNo")int requestNo, @Param("worker")int worker);
 	
 	// 견적서 파일 첨부
 	public int updatePpsFileInfo(ProposalVO proposalVO);
@@ -55,10 +55,10 @@ public interface ProposalMapper {
 	// 파일 정보 DB 등록
 	public int insertFileInfo(FileVO fileVO);
 	
-	// 파일 정보 DB 삭제
-	public int deleteFileInfo(@Param("fileId")int fileId);
-	
 	// 파일 정보 조회
 	public List<FileVO> selectFileList(@Param("proposalNo")int proposalNo);
+	
+	// 파일&견적서 삭제 : 프로시저
+	public int deleteFileInfo(@Param("fileId")int fileId);
 }
 

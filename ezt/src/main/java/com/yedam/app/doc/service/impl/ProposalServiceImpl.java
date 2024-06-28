@@ -103,10 +103,20 @@ public class ProposalServiceImpl implements ProposalService {
 			});
 			System.out.println(proposalVO);
 			ppsMapper.updatePpsFileInfo(proposalVO);
-			ppsMapper.sendPpsInfo(proposalVO.getProposalNo());
+			ppsMapper.sendPpsInfo(proposalVO.getProposalNo(), proposalVO.getRequestNo(), proposalVO.getWorker());
 		}
 		
 		return proposalVO.getProposalNo();
+	}
+	
+	@Override
+	public int ppsFileDelete(int fileId) {
+		boolean result = false;
+		if (ppsMapper.deleteFileInfo(fileId) == 1) {
+			result = true;
+		}
+
+		return result == true ? 1 : -1 ;
 	}
 	
 
