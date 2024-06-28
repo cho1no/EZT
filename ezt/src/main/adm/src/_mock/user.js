@@ -1,25 +1,22 @@
-import { sample } from 'lodash';
-import { faker } from '@faker-js/faker';
-
+// eslint-disable-next-line import/no-extraneous-dependencies
+import axios from 'axios';
 // ----------------------------------------------------------------------
+let data = [];
 
-export const users = [...Array(24)].map((_, index) => ({
-  id: faker.string.uuid(),
-  avatarUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
-  name: faker.person.fullName(),
-  company: faker.company.name(),
-  isVerified: faker.datatype.boolean(),
-  status: sample(['active', 'banned']),
-  role: sample([
-    'Leader',
-    'Hr Manager',
-    'UI Designer',
-    'UX Designer',
-    'UI/UX Designer',
-    'Project Manager',
-    'Backend Developer',
-    'Full Stack Designer',
-    'Front End Developer',
-    'Full Stack Developer',
-  ]),
-}));
+await axios
+  .get('/adm/usersInfo')
+  .then((resp) => {
+    data = [...resp.data].map((_, index) => ({
+      usersNo: _.usersNo,
+      usersName: _.usersName ? _.usersName : '이름 없음',
+      usersEmail: _.usersEmail ? _.usersEmail : '이메일 없음',
+      usersId: _.usersId,
+      usersPhone: _.usersPhone ? _.usersPhone : '전화번호 없음',
+      usersJoinDt: _.usersJoinDt,
+      usersRole: _.usersRole,
+      usersState: _.usersState,
+    }));
+  })
+  .catch(() => {});
+
+export const users = data;
