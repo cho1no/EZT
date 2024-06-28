@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.adm.mapper.AdminMapper">
+	<select id="selectUsers" resultType="UserVO">
+		SELECT users_no
+				, users_id
+				, users_email
+				, users_birth
+				, users_rnn
+				, users_gender
+				, users_name
+				, users_phone
+				, FIND_COMMONCODE(users_state) users_state
+				, users_nick
+				, users_role
+				, users_join_dt
+				, file_id
+		FROM users
+	</select>
+	<select id="selectUser" parameterType="int" resultType="UserVO">
+		SELECT users_no
+				, users_id
+				, users_email
+				, users_birth
+				, users_rnn
+				, users_gender
+				, users_name
+				, users_phone
+				, FIND_COMMONCODE(users_state) users_state
+				, users_nick
+				, users_role
+				, users_join_dt
+				, file_id
+		FROM users
+		WHERE users_no = #{uno}
+	</select>
+</mapper>
