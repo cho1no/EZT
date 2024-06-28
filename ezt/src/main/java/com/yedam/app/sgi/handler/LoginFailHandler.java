@@ -1,4 +1,4 @@
-package com.yedam.app.sgi.config;
+package com.yedam.app.sgi.handler;
 
 import java.io.IOException;
 import java.net.URLEncoder;

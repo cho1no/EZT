@@ -106,12 +106,15 @@ form span {
 									<label class="text-black" for="usersRnn">주민등록번호</label>
 									</div> 
 									<input type="text" id="JUMIN1" maxlength="6" class="form-control col-md-4 d-inline-flex"
-										name="JUMIN1" placeholder="880101">
+										name="usersBirth" placeholder="880101" th:field="*{usersBirth}">
 									<label class="d-inline-flex">-</label>
 									<input  type="password" id="JUMIN2" maxlength="7" class="form-control col-md-4 d-inline-flex"
-										name="JUMIN2" placeholder="1234567"><span></span>
+										name="usersRnn" placeholder="1234567" th:field="*{usersRnn}"><span></span>
 									<input type="button" style="float: right" id="rnnChkBtn" value="실명인증"
-										class="btn px-4 btn-primary text-white">
+										class="btn px-4 btn-primary text-white" disabled>
+								</div>
+								<div>
+								<input type="text" name="usersGender" id="usersGender" style="display:none;"> 
 								</div>
 							</div>
 							<div class="row form-group">
@@ -147,13 +150,13 @@ form span {
 								<label class="text-black" for="usersRnn">국가기술 자격증</label>
 								</div>
 									<input type="text" id="license" maxlength="12" class="form-control col-md-8 d-inline-flex" 
-											name="JUMIN1" placeholder="자격증 번호">
+											th:field="*{licenseDetailNo}" name="licenseDetailNo" placeholder="자격증 번호">
 									<input type="button" style="float: right" id="licChkBtn" value="자격증 검증"
-										class="btn px-4 btn-primary text-white d-inline-flex">
+										class="btn px-4 btn-primary text-white d-inline-flex" >
 										<div class="row ">
 											<label class="col text-black">자격증 첨부파일</label>
 											<div class="col-md-4">
-											<input class="form-control" type="file" name="licFile">
+											<input class="form-control" type="file" name="fileId" multiple>
 											</div>
 											<input class="col" type="button" value="테스트" id="testBtn">
 										</div>
@@ -163,8 +166,8 @@ form span {
 									<label class="text-black" for="region">주 활동지역</label>
 								<div class="col-md-12 mb-3 mb-md-0">
 									<th:block th:each="region : ${regions}">
-										<input type="checkbox" name="${region.codeNo}">
-										<label for="${region.codeNo}">[[${region.codeName}]]</label>
+										<input type="checkbox" name="regionCode" th:value="${region.codeNo}">
+										<label th:for="${region.codeNo}">[[${region.codeName}]]</label>
 									</th:block>
 								</div>
 							</div>
@@ -172,8 +175,8 @@ form span {
 									<label class="text-black" for="category">작업 분야</label>
 								<div class="col-md-12 mb-3 mb-md-0">
 										<th:block th:each="category : ${categories}">
-											<input type="checkbox" name="${category.codeNo}">
-											<label for="${category.codeNo}">[[${category.codeName}]]</label>
+											<input type="checkbox" name="categoryCode" th:value="${category.codeNo}">
+											<label th:for="${category.codeNo}">[[${category.codeName}]]</label>
 										</th:block>
 								</div>
 							</div>
@@ -374,9 +377,13 @@ form span {
 			 icon: 'warning'
 			})
 			return false;
-		}else {
-			$(joinEzt).submit();
 		}
+		if($('#JUMIN2').val()[0] == 1 || $('#JUMIN2').val()[0] == 3){
+			$('#usersGender').attr('value', '남');
+		}else{
+			$('#usersGender').attr('value', '여');
+		}
+			$(joinEzt).submit();
 	}
 </script>
 </html>

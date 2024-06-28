@@ -6,7 +6,7 @@ import com.yedam.app.usr.service.UserVO;
 
 @Mapper
 public interface UserMapper {
-	
+	//사용자 정보조회
 	public UserVO selectUserInfo(String id);
 			
 	//사용자 회원가입
@@ -14,9 +14,9 @@ public interface UserMapper {
 	
 	//작업자 회원가입
 	void saveWorker(UserVO userVO);
-	void insertLicense(UserVO userVO);
-	void insertActiveRegion(UserVO userVO);
-	void insertActiveCategory(UserVO userVO);
+//	void insertLicense(UserVO userVO);
+//	void insertActiveRegion(UserVO userVO);
+//	void insertActiveCategory(UserVO userVO);
 
 	//중복체크
 	public int idChk(String id);
@@ -24,5 +24,10 @@ public interface UserMapper {
 	public int nickChk(String nick);
 	
 	public int emailChk(String email);
+
+	//사원정보 수정
+	public int updateUserInfo(UserVO userNo);
 	
+	//사원정보 삭제
+	public int deleteUserInfo(int userNo);
 }
