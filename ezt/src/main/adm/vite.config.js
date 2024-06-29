@@ -27,9 +27,22 @@ export default defineConfig({
     ],
   },
   server: {
-    port: 3030,
+    port: 3000,
+    proxy: {
+      // 옵션과 함께: http://localhost:5173/api/bar-> http://jsonplaceholder.typicode.com/bar
+      '/adm': {
+        target: 'http://localhost:8080/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      // 웹소켓 또는 socket.io 프락시: ws://localhost:5173/socket.io -> ws://localhost:5174/socket.io
+      '/socket.io': {
+        target: 'ws://localhost:5174',
+        ws: true,
+      },
+    },
   },
   preview: {
-    port: 3030,
+    port: 3000,
   },
 });

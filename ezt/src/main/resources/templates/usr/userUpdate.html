@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>사용자 마이페이지</title>
+<style>
+form span.error{
+	color: red;
+	font-size: 10pt;
+}
+
+form span{
+	color: blue;
+	font-size: 10pt;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+	<h3>[[${userId.usersName}]]님 안녕하세요.</h3>
+	<hr>
+	<h1>회원정보 수정</h1>
+	<form>
+	  <div>
+		<div>
+			<label for="usersNick">닉네임</label>
+			<input class="form-control" type="text" 
+			id="usersNick" th:value="${userId.usersNick}" th:field="*{userId.usersNick}"><span></span>
+		</div>
+		<div>
+			<label for="usersPhone">전화번호</label>
+			<input class="form-control" type="text" 
+			id="usersPhone" th:value="${userId.usersPhone}" th:field="*{userId.usersPhone}"><span></span>
+		</div>
+		<div>
+			<label for="usersEmail">이메일</label>
+			<input class="form-control" type="email" 
+			id="usersEmail" th:value="${userId.usersEmail}" th:field="*{userId.usersEmail}"><span></span>
+		</div>
+		<button type="button" id="updateBtn">수정하기</button>
+	  </div>
+	</form>
+  </div>
+<script th:inline="javascript">
+	$('#updateBtn').on('click', updateUser);
+	
+	function updateUser(){
+		
+		let dataObj = getUsrObj();
+		console.log(dataObj);
+		
+		$.ajax('userUpdate', {
+			type : 'post',
+			contentType : 'application/json',
+			data : JSON.stringify(dataObj)
+		})
+		.done(re => {
+			console.log(re);
+		})
+		.fail(err => console.log(err));
+	};
+
+	function getUsrObj(){
+		let formAry = $('form').serializeArray();
+		
+		let formObj = {};
+		formAry.forEach(inputTag => {
+			formObj[inputTag.name] = inputTag.value;
+		});
+		
+		return formObj;
+	};
+	
+	//닉네임 중복체크
+	var nick = $('#usersNick');
+	var basicNick = $('#usersNick').val();
+	checkNick();
+	function checkNick() {
+		nick.on("change", function() { 
+			var reqExp = /^[ㄱ-ㅎ가-힣A-Za-z0-9-_]{2,10}$/;
+				
+				if(nick.val() == ''){
+					nick.next().text('닉네임을 입력해주세요')
+					nick.next().addClass('error')
+					nick.focus();
+					return ;
+				}
+				
+				if(!reqExp.test(nick.val())){
+					nick.next().text('닉네임은 특수문자를 제외한 2~10자리여야 합니다.')
+					nick.next().addClass('error')
+					return ;		
+				}
+				
+				if(basicNick == nick.val()){
+					nick.next().text('');
+					nick.next().removeClass('error');
+				}
+			
+				$.ajax({
+					type : "get",
+					url : "/signUp/checkNick/"+nick.val(),
+					success : function(dt) {
+						if(basicNick == nick.val()){
+							nick.next().text('');
+							nick.next().removeClass('error');
+						}else if (dt == '중복') {
+							nick.next().text('이미 사용중인 닉네임입니다.')
+							nick.next().addClass('error')
+						} else {
+							nick.next().text('사용가능한 닉네임입니다.')
+							nick.next().removeClass('error')
+						}
+					}
+				})
+		})
+	}
+	//이메일 중복체크
+	var email = $('#usersEmail');
+	var basicEmail = $('#usersEmail').val();
+	checkEmail();
+	
+	function checkEmail() {
+		email.on("change", function() { 
+			var reqExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+			
+			if(email.val() == ''){
+				email.next().text('이메일을 입력해주세요')
+				email.next().addClass('error')
+				nick.focus();
+				return ;
+			}
+			
+			if (!reqExp.test(email.val())) {
+				email.next().text('이메일 형식이 올바르지 않습니다.')
+				email.next().addClass('error')
+				nick.focus();
+				return ;
+			}
+			
+			
+			
+			$.ajax({
+				type : "get",
+				url : "/signUp/checkEmail?email="+email.val(),
+				success : function(dt) {
+					if (dt == '중복') { 
+						email.next().text('이미 사용중인 이메일입니다.')
+						email.next().addClass('error')
+					} else {
+						email.next().text('사용가능한 이메일입니다.')
+						email.next().removeClass('error')
+					}
+				}
+			})
+		})
+	}
+</script>
+</body>
+</html>

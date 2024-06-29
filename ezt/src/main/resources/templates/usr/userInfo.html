@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>사용자 마이페이지</title>
+</head>
+<body>
+	 <div class="container">
+	<h3>[[${userId.usersName}]]님 안녕하세요.</h3>
+	<hr>
+	<h1>회원 정보</h1>
+	<div>
+		<div>
+			<label for="usersNick">닉네임</label>
+			<input class="form-control" type="text" 
+			id="usersNick" th:value="${userId.usersName}" disabled readonly>
+		</div>
+		<div>
+			<label for="usersPhone">전화번호</label>
+			<input class="form-control" type="text" 
+			id="usersPhone" th:value="${userId.usersPhone}" disabled readonly>
+		</div>
+		<div>
+			<label for="usersEmail">이메일</label>
+			<input class="form-control" type="email" 
+			id="usersEmail" th:value="${userId.usersEmail}" disabled readonly>
+		</div>
+		<button type="button" th:onclick="|location.href='@{/userUpdate}'|">수정하기</button>
+	</div>
+  </div>
+</body>
+</html>
