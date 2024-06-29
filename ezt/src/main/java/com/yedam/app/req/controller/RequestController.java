@@ -88,7 +88,7 @@ public class RequestController {
 
 	@PostMapping("requestUpdate")
 	@ResponseBody
-	public boolean requestUpdateJASON(@RequestBody RequestVO requestVO) {
+	public boolean requestUpdate(@RequestBody RequestVO requestVO) {
 		return requestService.updateRequest(requestVO);
 	}
 	// 삭제

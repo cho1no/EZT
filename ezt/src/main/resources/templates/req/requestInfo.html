@@ -138,114 +138,115 @@
         </div>
     </div>
 </form>
-    <div>
-        <table class="table">
+<div>
+    <table class="table">
+        <tr>
+            <td colspan="6"><h4>견적서</h4></td>
+            <td>
+                <select style="float: right">
+                    <option value="price">총금액 낮은 순</option>
+                    <option value="period">공사기간 짧은 순</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>담당자명</th>
+            <th colspan="2">공사기간</th>
+            <th>공사총금액</th>
+            <th>전화번호</th>
+            <th>비고</th>
+            <th/>
+            
+        </tr>
+        <th:block th:each="proposal : ${proposalList}">
+        <tr>
+        	<td style="display:none" th:text="${proposal.requestNo}"/> 
+        	<td th:text="${proposal.usersName}"/>
+            <td colspan="2" th:text="|${#dates.format(proposal.cttStartDt, 'yyyy/MM/dd')} ~ ${#dates.format(proposal.cttEndDt, 'yyyy/MM/dd')}|"/>
+            <td>ddd</td>
+         	<td th:text="${proposal.usersPhone}"/>
+            <td th:text="${proposal.comments}"/>
+            <td><i class="fa-solid fa-caret-down fa-xl down"></i></td>
+        </tr>
+        <tr>
+        <td colspan="7">
+            <table class="table innerT" style="display:none">
+                <tr>
+                    <th>품명</th>
+                    <th>단위</th>
+                    <th>수량</th>
+                    <th>단가</th>
+                    <th>금액</th>
+                    <th>비고</th>
+                    <th><button class="btnn">상세보기</button></th>
+                    
+                    
+                </tr>
+         <th:block th:each="ppd : ${proposal.list}">
+                <tr>
+                    <td th:text="${ppd.product}" ></td>
+                    <td th:text="${ppd.unit}"></td>
+                    <td th:text="${ppd.qty}"></td>
+                    <td th:text="${ppd.unitprice}"></td>
+                    <td th:text="${ppd.qty} * ${ppd.unitprice}"></td>
+                    <td th:text="${ppd.comments}"></td>
+                    <td></td>
+                </tr>
+          </th:block>
+            </table></td>
+        </tr>
+	</th:block>
+    </table>
+</div>
+<div>
+    <div class="row">
+        <table class="table col" >
             <tr>
-                <td colspan="6"><h4>견적서</h4></td>
-                <td>
-                    <select style="float: right">
-                        <option value="price">총금액 낮은 순</option>
-                        <option value="period">공사기간 짧은 순</option>
-                    </select>
-                </td>
+            <td><h4>계약서</h4><td>
+            <td><button class="btnn">상세보기</button></td>
             </tr>
             <tr>
-                <th>담당자명</th>
-                <th colspan="2">공사기간</th>
-                <th>공사총금액</th>
-                <th>전화번호</th>
-                <th>비고</th>
-                <th/>
-                
-            </tr>
-            <th:block th:each="proposal : ${proposalList}">
-            <tr>
-            	<td style="display:none" th:text="${proposal.requestNo}"/> 
-            	<td th:text="${proposal.usersName}"/>
-                <td colspan="2" th:text="|${#dates.format(proposal.cttStartDt, 'yyyy/MM/dd')} ~ ${#dates.format(proposal.cttEndDt, 'yyyy/MM/dd')}|"/>
-                <td>ddd</td>
-             	<td th:text="${proposal.usersPhone}"/>
-                <td th:text="${proposal.comments}"/>
-                <td><i class="fa-solid fa-caret-down fa-xl down"></i></td>
+                <th>시공자 성명</th>
+                <td><input type="text" readonly /></td>
+                <th>결제상태</th>
+                <td><input type="text" readonly /></td>
             </tr>
             <tr>
-            <td colspan="7">
-                <table class="table innerT" style="display:none">
-                    <tr>
-                        <th>품명</th>
-                        <th>단위</th>
-                        <th>수량</th>
-                        <th>단가</th>
-                        <th>금액</th>
-                        <th>비고</th>
-                        <th><button class="btnn">상세보기</button></th>
-                        
-                        
-                    </tr>
-             <th:block th:each="ppd : ${proposal.list}">
-                    <tr>
-                        <td th:text="${ppd.product}" ></td>
-                        <td th:text="${ppd.unit}"></td>
-                        <td th:text="${ppd.qty}"></td>
-                        <td th:text="${ppd.unitprice}"></td>
-                        <td th:text="${ppd.qty} * ${ppd.unitprice}"></td>
-                        <td th:text="${ppd.comments}"></td>
-                        <td></td>
-                    </tr>
-              </th:block>
-                </table></td>
+                <th>공사기간</th>
+                <td><input type="text" readonly /></td>
             </tr>
-  			</th:block>
-        </table>
+            <tr>
+                <th>공사금액</th>
+                <td><input type="text" readonly /></td>
+            </tr>
+            <tr>
+                <th>공사상태</th>
+                <td><input type="text" readonly /></td>
+            </tr>
+            </table>
+            <table class="table col">
+
+                <tr>
+                    <th>전화번호</th>
+                    <td><input type="text" readonly /></td>
+                </tr>
+                <tr>
+                    <th>주소</th>
+                    <td><input type="text" readonly /></td>
+                </tr>
+                <tr>
+                    <th>상세주소</th>
+                    <td><input type="text" readonly /></td>
+                </tr>
+                <tr>
+                    <th>하자보수기간</th>
+                    <td><input type="text" readonly /></td>
+                    <td><button class="btnn">신청하기</button></td>
+                </tr>
+            </table>
     </div>
-    <div>
-        <div class="row">
-            <table class="table col" >
-                <tr>
-                <td><h4>계약서</h4><td>
-                <td><button class="btnn">상세보기</button></td>
-                </tr>
-                <tr>
-                    <th>시공자 성명</th>
-                    <td><input type="text" readonly /></td>
-                    <th>결제상태</th>
-                    <td><input type="text" readonly /></td>
-                </tr>
-                <tr>
-                    <th>공사기간</th>
-                    <td><input type="text" readonly /></td>
-                </tr>
-                <tr>
-                    <th>공사금액</th>
-                    <td><input type="text" readonly /></td>
-                </tr>
-                <tr>
-                    <th>공사상태</th>
-                    <td><input type="text" readonly /></td>
-                </tr>
-                </table>
-                <table class="table col">
-    
-                    <tr>
-                        <th>전화번호</th>
-                        <td><input type="text" readonly /></td>
-                    </tr>
-                    <tr>
-                        <th>주소</th>
-                        <td><input type="text" readonly /></td>
-                    </tr>
-                    <tr>
-                        <th>상세주소</th>
-                        <td><input type="text" readonly /></td>
-                    </tr>
-                    <tr>
-                        <th>하자보수기간</th>
-                        <td><input type="text" readonly /></td>
-                        <td><button class="btnn">신청하기</button></td>
-                    </tr>
-                </table>
-        </div>
-    </div>
+    <button type="button" class="btn btn-secondary delBtn"  onclick="history.back()">뒤로가기</button>
+</div>
 
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>

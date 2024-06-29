@@ -53,8 +53,8 @@ public class UserVO {
 	private String licenseDetailNo;
 	private Integer fileId;
 	
-	//작업분야(카테고리)
-	private List<String> categoryCode;
 	//활동지역
 	private List<String> regionCode;
+	//작업분야(카테고리)
+	private List<String> categoryCode;
 }

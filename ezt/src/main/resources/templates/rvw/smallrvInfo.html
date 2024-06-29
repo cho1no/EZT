@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>소규모 후기 상세</title>
+<link rel="stylesheet" href="/css/rvw/smallrvInfo.css">
+</head>
+<body>
+	
+<form name="rvInfoForm" th:object="${review}">
+<div id="container" class="row">
+	<div class="col">
+		<img src="/images/rvw/interior1.jpg" alt="photo" id="mainPhoto">
+		<div class="star-rating">
+	          	<div>
+	           	<p th:text="${review.star}" class="star" style="display:none" ></p>
+	           	<div class="stars star-rating">평점 : </div>
+	          	</div>
+		 </div>
+		 <fieldset class="reStar" style="display:none">
+			<span class="text-bold" >평점 : </span>
+			<input type="radio" th:name="${review.star}" th:value="5" ><label
+				for="rate1">★</label>
+			<input type="radio" th:name="${review.star}" th:value="4"><label
+				for="rate2">★</label>
+			<input type="radio" th:name="${review.star}" th:value="3"><label
+				for="rate3">★</label>
+			<input type="radio" th:name="${review.star}" th:value="2" ><label
+				for="rate4">★</label>
+			<input type="radio" th:name="${review.star}" th:value="1"><label
+				for="rate5">★</label>
+		</fieldset>
+	</div>
+	<div class="col">
+		<ul id="gallery">
+			<li>
+				<img th:each="img : ${review.fileVO}" th:src="@{'/images/rvw/' + ${img.saveName} + '.' + ${img.ext}}" alt="thumbnail">
+			</li>
+
+		</ul>
+	</div>
+</div>
+
+	<div >
+	<h4>후기</h4>
+		<table class="table">
+		<td><input type="hidden" th:value="${review.reviewNo}" name="reviewNo"/></td>
+		<tr>
+			<th>작성자</th>
+			<td>[[${review.writerName}]]</td>
+			<td>/</td>
+			<th>작업자</th>
+			<td>[[${review.workerName}]]</td>
+		</tr>
+		<tr>
+			<th>공간형태</th>
+			<td>[[${review.cttPlace}]]</td>
+			<td>/</td>
+			<th>평수</th>
+			<td>[[${review.cttPlaceArea}]]</td>
+		</tr>
+		<tr>
+			<th>시공지역</th>
+			<td>[[${review.regionCode}]]</td>
+			<td>/</td>
+			<th>시공분야</th>
+			<td>[[${review.categoryCode}]]</td>
+		</tr>		
+		<tr>
+			<th>내용</th>
+			<td colspan="4"><textarea class="writerContent" name="content" th:text="${review.content}" readonly></textarea></td>
+		</tr>
+		</table>
+		<h4>작업자 한줄 평</h4>
+		<table class="table">
+			<th>내용</th>
+			<td><textarea readonly>ddddd</textarea></td>
+		</table>
+	</div>
+	<button type="button" class="btn btn-secondary upBtn update">수정</button>
+    <button type="button" class="btn btn-secondary delBtn" th:onclick="|location.href='@{/reviewDelete(reviewNo=${review.reviewNo})}'|">삭제</button>
+    <button type="button" class="btn btn-secondary delBtn"  onclick="history.back()">뒤로가기</button>
+</form>	
+
+<script> 
+//이미지 클릭 시 메인이미지로 이동
+  var photo = document.getElementById("mainPhoto");
+  var thumbnail = document.querySelectorAll("#gallery > li > img");
+  for ( var i = 0; i < thumbnail.length; i++ )
+    thumbnail[i].addEventListener("click", function () {
+ 
+      photo.setAttribute("src", this.getAttribute("src"));
+ 
+    });
+ //별점 출력
+	for(let i=0; i<$(".star").length; i++){
+		for(let j=0; j<parseInt($(".star:eq("+i+")").text()); j++){
+			$(".stars:eq("+i+")").append(`<div class="yellow">★</div>`);
+		}
+		for(let k=0; k<5-parseInt($(".star:eq("+i+")").text()); k++){
+			$(".stars:eq("+i+")").append(`<div class="yellow">☆</div>`);
+		}
+	
+	}
+</script>
+<script src="/js/rvw/smRvUpdate.js"></script>
+</body>
+</html>

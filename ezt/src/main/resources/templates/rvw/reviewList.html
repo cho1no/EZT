@@ -5,7 +5,7 @@
 		layout:fragment="Content">
 <style>
 .margin{
-	margin:10px 50px;
+	margin:30px 10px;
 }
 .search{
 	text-align:center;
@@ -18,6 +18,14 @@ img{
  	width:250px; 
  	height:200px; 
  } 
+ 
+.star-rating {
+  display: flex;
+}
+.yellow{
+	color:rgba(250, 208, 0, 0.99);
+	font-size:30px;
+}
 
 </style>
 <head>
@@ -33,22 +41,36 @@ img{
 			<input class="input" type="text">
 			<button class="btn btn-primary">검색</button>	
 		</div>
+		<div style="text-align:right" class="margin">
+			<select>
+				<option >소규모 인테리어</option>
+				<option >대규모 인테리어</option>
+				<option >대규모 인테리어</option>
+			</select>
+		</div>
 	</div>
       <div class="container">
         <div class="row mb-5">
         <th:block th:each=" rv : ${rvList}">
           <div class="col-md-6 col-lg-3 mb-5">
-            <a>
-             <img th:src="@{/images/interior.jpg}" alt="Image" class="rounded mb-4">
+            <a th:onclick="|location.href='@{/smallrvInfo(reviewNo=${rv.reviewNo})}'|" >
+             <th:block>
+             <img th:if ="${rv.fileId == 0}"  th:src="@{/images/interior.jpg}" alt="Image" class="rounded mb-4">
+    	     <img th:unless ="${rv.fileId == 0}"  th:src="@{'/images/rvw/' + ${rv.saveName} + '.' + ${rv.ext}}" alt="Image" class=" rounded mb-4">
+            </th:block>
             </a>
             <h3><a class="text-black"></a></h3>
-            <div>[[${rv.star}]]</span></div>
+            <div class="star-rating">
+            	<div>
+	            	<p th:text="${rv.star}" class="star" style="display:none" ></p>
+	            	<div class="stars star-rating"></div>
+            	</div>
+			 </div>
             <div>작업자명 : [[${rv.workerName}]] <span class="mx-2">|</span> [[${rv.regionCode}]] </div>
           </div>
          </th:block>
         </div>
         <div class="row pagination-wrap mt-5">
-          
           <div class="col-md-12 text-center ">
             <div class="custom-pagination ml-auto">
               <a href="#" class="prev">Prev</a>
@@ -66,6 +88,16 @@ img{
 
       </div>
     </section>
+<script>
+	for(let i=0; i<$(".star").length; i++){
+		for(let j=0; j<parseInt($(".star:eq("+i+")").text()); j++){
+			$(".stars:eq("+i+")").append(`<div class="yellow">★</div>`);
+		}
+		for(let k=0; k<5-parseInt($(".star:eq("+i+")").text()); k++){
+			$(".stars:eq("+i+")").append(`<div class="yellow">☆</div>`);
+		}
 	
+	}
+</script>
 </body>
 </html>

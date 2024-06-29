@@ -19,6 +19,12 @@ $(document).ready(function(){
 	        $(this).removeClass("upBtn").addClass("saveBtn");
 	        //우편번호 찾기 버튼 보이게!!
 	        $(".postcode").css("display","block");
+	        
+	        
+	        
+	        
+	        
+	        
 		}//수정완료 버튼 클릭시
 		else{
 			let info = getRequestInfo();
@@ -47,7 +53,6 @@ $(document).ready(function(){
 				
 				return objData;
 			};
-			console.log($("select"))
 			//readonly 추가
 			$("input, textarea").attr("readonly", true);
 	        // disabled 속성을 추가
