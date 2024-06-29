@@ -87,6 +87,12 @@
 		FROM dual
 	</insert>
 	
-	
+	<update id="updateUserInfo" parameterType="UserVO">
+		UPDATE users
+		SET users_nick = #{usersNick},
+			users_phone = #{usersPhone},
+			users_email = #{usersEmail}
+		WHERE users_id = #{usersId} 
+	</update>
 	
 </mapper>
