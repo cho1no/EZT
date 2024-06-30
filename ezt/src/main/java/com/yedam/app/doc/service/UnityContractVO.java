@@ -11,4 +11,7 @@ public class UnityContractVO {
 	private Date writeDt; // 작성 일
 	private String useTf; // 사용 여부
 	private String basicContractTf; // 기본 계약서 여부
+	
+	private String title;
+	private String changes;
 }

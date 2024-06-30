@@ -249,7 +249,7 @@
 								<div class="col-6">
 									<th:block th:if="${ppsInfo.proposalState != 'A03'}">
 										<button type="button" class="btn btn-block btn-light btn-md"
-											th:onClick="|location.href='@{/ppsUpdate(proposalNo=${ppsInfo.proposalNo},requestNo=${ppsInfo.requestNo})}'|">수정</button>
+											th:onClick="|location.href='@{/ppsUpdate(proposalNo=${ppsInfo.proposalNo})}'|">수정</button>
 									</th:block>
 								</div>
 								<th:block th:if="${ppsInfo.fileId != 0}">

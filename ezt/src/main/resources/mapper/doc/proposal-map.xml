@@ -8,6 +8,7 @@
 		, users_id
 		, users_phone
 		, users_name
+		, users_Rnn
 		FROM users
 		WHERE users_no = #{usersNo}
 	</select>
@@ -17,8 +18,11 @@
 		, requester
 		, FIND_COMMONCODE(category_code) as category_code
 		, FIND_COMMONCODE(ctt_place) as ctt_place
-		, FIND_COMMONCODE(ctt_place_area) as ctt_place_area
+		, ctt_place_area
 		, FIND_COMMONCODE(ctt_place_situation) as ctt_place_situation
+		, postcode
+		, address
+		, detail_address
 		, hope_ctt_budget
 		, hope_ctt_start_dt
 		, hope_ctt_end_dt
@@ -82,7 +86,9 @@
 		, worker_address
 		, worker_detail_address
 		, comments
+		<if test="fileId != null">
 		, file_id
+		</if>
 		, worker
 		, requester
 		, update_dt

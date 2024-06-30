@@ -17,10 +17,10 @@ public interface ProposalMapper {
 	public UserVO selectUserInfo(int userNo);
 	
 	// 견적서 의뢰정보조회
-	public RequestVO selectReqInfo(RequestVO requestVO);
+	public RequestVO selectReqInfo(int requestNo);
 	
 	// 견적서 단건조회
-	public ProposalVO selectPpsInfo(ProposalVO proposalVO);
+	public ProposalVO selectPpsInfo(@Param("proposalNo")int proposalNo);
 	
 	// 견적서 상세조회
 	public List<ProposalDetailVO> selectPpsDetailList(@Param("proposalNo")int proposalNo);
@@ -43,7 +43,7 @@ public interface ProposalMapper {
 	// 견적서 목록 조회(특정 의뢰와 관련해 본인이 작성한 견적서 목록)
 	public List<ProposalVO> selectPpsListInfo(ProposalVO proposalVO);
 	
-	// 견적서 단건 전송
+	// 견적서 단건 전송 : 프로시저
 	public int sendPpsInfo(ProposalVO proposalVO);
 	
 	// 견적서 파일 첨부

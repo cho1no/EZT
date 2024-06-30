@@ -47,9 +47,9 @@ public class ProposalController {
 	
 	// 견적서 단건조회
 	@GetMapping("ppsInfo")
-	public String ppsInfo(RequestVO requestVO, ProposalVO proposalVO, Model model) {
+	public String ppsInfo(ProposalVO proposalVO, Model model) {
 		// 견적서 정보 조회
-		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO);
+		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO.getProposalNo());
 		model.addAttribute("ppsInfo", findVO);
 
 		// 유저 정보 조회
@@ -57,7 +57,7 @@ public class ProposalController {
 		model.addAttribute("userInfo", usrVO);
 
 		// 견적서 의뢰정보조회
-		RequestVO reqVO = ppsSerivce.reqInfo(requestVO);
+		RequestVO reqVO = ppsSerivce.reqInfo(findVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
 
 		proposalVO.setWorker(findVO.getWorker());
@@ -72,7 +72,7 @@ public class ProposalController {
 			@AuthenticationPrincipal LoginUserVO user) {
 		model.addAttribute("proposalVO", new ProposalVO());
 		// 견적서 의뢰정보조회
-		RequestVO reqVO = ppsSerivce.reqInfo(requestVO);
+		RequestVO reqVO = ppsSerivce.reqInfo(requestVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
 
 		// 유저 정보 조회
@@ -88,10 +88,10 @@ public class ProposalController {
 		int no = ppsSerivce.ppsInsert(proposalVO);
 		String url = null;
 
-		RequestVO reqVO = ppsSerivce.reqInfo(requestVO);
+		RequestVO reqVO = ppsSerivce.reqInfo(requestVO.getRequestNo());
 
 		if (no > -1) {
-			url = "redirect:ppsInfo?proposalNo=" + no + "&requestNo=" + reqVO.getRequestNo();
+			url = "redirect:ppsInfo?proposalNo=" + no ;
 		} else {
 			url = "redirect:ppsInsert?requestNo=" + reqVO.getRequestNo();
 		}
@@ -104,7 +104,7 @@ public class ProposalController {
 	public String ppsUpdate(RequestVO requestVO, ProposalVO proposalVO, Model model,
 			@AuthenticationPrincipal LoginUserVO user) {
 		// 견적서 정보 조회
-		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO);
+		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO.getProposalNo());
 		model.addAttribute("ppsInfo", findVO);
 
 		// 유저 정보 조회
@@ -112,7 +112,7 @@ public class ProposalController {
 		model.addAttribute("userInfo", usrVO);
 
 		// 견적서 의뢰정보조회
-		RequestVO reqVO = ppsSerivce.reqInfo(requestVO);
+		RequestVO reqVO = ppsSerivce.reqInfo(findVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
 		return "doc/proposalUpdate";
 	}
@@ -121,7 +121,7 @@ public class ProposalController {
 	@PostMapping("ppsUpdate")
 	public String ppsUpdate(ProposalVO proposalVO) {
 		int no = ppsSerivce.ppsUpdate(proposalVO);
-		return "redirect:ppsInfo?proposalNo=" + no + "&requestNo=" + proposalVO.getRequestNo();
+		return "redirect:ppsInfo?proposalNo=" + no;
 	}
 
 	// 견적서 삭제
@@ -135,7 +135,7 @@ public class ProposalController {
 	@GetMapping("ppsSend")
 	public String ppsSend(ProposalVO proposalVO) {
 		ppsSerivce.ppsFileUpdate(proposalVO);
-		return "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo() + "&requestNo=" + proposalVO.getRequestNo();
+		return "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo();
 	}
 
 	// 폴더 저장 경로

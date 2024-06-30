@@ -10,7 +10,7 @@
 	href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 
-<title>계약서 작성</title>
+<title>계약서 상세</title>
 
 <style>
 .hr-sect {
@@ -59,31 +59,26 @@
   height:38px;
 
 }
+
 </style>
 </head>
 <body>
 	<section class="site-section">
 		<div class="container">
 			<div class="row mb-5">
-				<form class="p-4 p-md-5 border rounded" id="conInsertForm" th:action="@{/conInsert}" method="post" th:object="${contractVO}">
+				<form class="p-4 p-md-5 border rounded">
 					<div class="row form-group">
 						<div class="col">
 							<h3 class="text-black mb-5 border-bottom pb-2">
-								<b>계약서 작성</b>
+								<b>계약서 상세</b>
 							</h3>
-							<input type="hidden" class="form-control" name="requesterInfo" th:value="${ppsInfo.requester}">
-							<input type="hidden" class="form-control" name="requesterAddress">
-							<input type="hidden" class="form-control" name="workerInfo" th:value="${ppsInfo.worker}">
-							<input type="hidden" class="form-control" name="workerAddress">
-							<input type="hidden" class="form-control" name="proposalNo" th:value="${ppsInfo.proposalNo}">
-							<input type="hidden" class="form-control" name="unityContractNo" value=1>
 							<p class="hr-sect">
 								<b>공사개요</b>
 							</p>
 							<div class="row form-group">
 								<div class="col-6">
-									<label><b>공사명</b></label> <input type="text"
-										class="form-control" th:field="*{cttName}">
+									<label><b>공사명</b></label>
+									<p class="text-black">[[${conInfo.cttName}]]</p>
 								</div>
 							</div>
 
@@ -101,12 +96,14 @@
 							<!-- datepicker : id&type="text"-->
 							<div class="row form-group">
 								<div class="col-4">
-									<label for="startDt"><b>공사시작날짜</b></label> <input type="text"
-										class="form-control" id="startDt" th:field="*{cttStartDt}" readonly placeholder="날짜 선택">
+									<label><b>공사시작날짜</b></label> 
+									<p class="text-black">[[${#dates.format(conInfo.cttStartDt,
+											'yyyy-MM-dd')}]]</p>
 								</div>
 								<div class="col-4">
-									<label for="endDt"><b>공사마감날짜</b></label> <input type="text"
-										class="form-control" id="endDt" th:field="*{cttEndDt}" readonly placeholder="날짜 선택">
+									<label><b>공사마감날짜</b></label>
+									<p class="text-black">[[${#dates.format(conInfo.cttEndDt,
+											'yyyy-MM-dd')}]]</p>
 								</div>
 								<div class="col-4">
 									<label><b>하자보수기간</b></label> <input
@@ -126,12 +123,9 @@
 									</h5>
 								</div>
 								<div class="col-4">
-									<input type="text" class="form-control" th:field="*{cttPrice}">
+									<p class="text-black h5" style="margin-top:8px">[[${#numbers.formatInteger(conInfo.cttPrice,1,'COMMA')}]]<b> 원</b></p>
 								</div>
 								<div class="col-auto">
-									<h5 class="text-black" style="padding-top: 10px">
-										<b>원</b>
-									</h5>
 								</div>
 
 							</div>
@@ -144,14 +138,20 @@
 											<th scope="col" width="150px">금액</th>
 											<th scope="col" width="150px">일시</th>
 											<th scope="col">내역</th>
-											<th width="53px"><button type="button"
-													class="btn btn-primary"
-													style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">+</button></th>
 										</tr>
 									</thead>
 									<tbody class="content">
-
-									</tbody>
+								<th:block th:each=" list : ${conInfo.dList}">
+									<tr class="text-center">
+										<td th:text="${list.round}" />
+										<td th:text="${#numbers.formatInteger(list.price,1,'COMMA')} + 원" />
+										<td
+											th:text="${#dates.format(list.paymentDt,
+											'yyyy-MM-dd')}" />
+										<td th:text="${list.history}" />
+									</tr>
+								</th:block>
+							</tbody>
 								</table>
 							</div>
 
@@ -204,7 +204,7 @@
 													<strong class="text-black">성명</strong>
 												</div>
 												<div class="col-4">
-													
+													<p class="text-black" style="margin:5px 0">[[${requester.usersName}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">전화번호</strong>
@@ -237,7 +237,7 @@
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-												<input type="text" class="form-control" th:field="*{requesterAccount}">
+												<input type="text" class="form-control">
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
@@ -258,13 +258,13 @@
 													<strong class="text-black">성명</strong>
 												</div>
 												<div class="col-4">
-													<p class="text-black" style="margin:5px 0">[[${userName}]]</p>
+													<p class="text-black" style="margin:5px 0">[[${worker.usersName}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">전화번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin:5px 0">[[${userPhone}]]</p>
+													<p class="text-black" style="margin:5px 0">[[${worker.usersPhone}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">우편번호</strong>
@@ -273,8 +273,6 @@
 													<input type="text" class="form-control" id="input_postcode">
 												</div>
 												<div class="col">
-													<button type="button" class="btn btn-primary"
-														onclick="input_execDaumPostcode()">우편번호 찾기</button>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주소</strong>
@@ -293,13 +291,13 @@
 													<strong class="text-black">주민등록번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin:5px 0">[[${userRnn}]]</p>
+													<p class="text-black" style="margin:5px 0">[[${worker.usersRnn}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-													<input type="text" class="form-control" th:field="*{workerAccount}">
+													<p>[[${conInfo.workerAccount}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
@@ -339,7 +337,7 @@
 				<div class="col-lg-4 ml-auto" style="padding-top: 30px">
 					<div class="row">
 						<div class="col-6">
-							<button type="submit" class="btn btn-block btn-light btn-md" form="conInsertForm">저장</button>
+							<button type="submit" class="btn btn-block btn-light btn-md" >수정</button>
 						</div>
 						<div class="col-6">
 							<button type="button" class="btn btn-block btn-primary btn-md">서명</button>
@@ -353,16 +351,13 @@
 
 
 	<script>
-	
-	date = new Date();
-    year = date.getFullYear();
-    month = date.getMonth() + 1;
-    day = date.getDate();
-	
-    $('.cur_year').html(year + '년');
-    $('.cur_month').html(month + '월');
-    $('.cur_day').html(day + '일');
 
+	let Dt = [[${#dates.format(conInfo.writeDt,
+	'yyyy-MM-dd').replace('-', '')}]];
+	
+	console.log(Dt);
+	
+	
     
 	// + 버튼 : tbody tr 추가
 	$('table thead button').on('click', addForm);
@@ -455,8 +450,5 @@
 	<script type="text/javascript" th:src="@{/js/doc/postcode.js}"></script>
 	<script
 		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-		
-		<!-- uploadAjax -->
-	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
 </body>
 </html>
