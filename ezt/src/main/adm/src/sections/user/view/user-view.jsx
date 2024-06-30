@@ -3,15 +3,18 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
 import Modal from '@mui/material/Modal';
 import Table from '@mui/material/Table';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
+import CardContent from '@mui/material/CardContent';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { users } from 'src/_mock/user';
+import { fDateTime } from 'src/utils/format-time';
 
 import Scrollbar from 'src/components/scrollbar';
 
@@ -21,10 +24,11 @@ import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
-
 // ----------------------------------------------------------------------
 
 export default function UserPage() {
+  const [users, setUsers] = useState([]);
+
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -39,7 +43,28 @@ export default function UserPage() {
 
   const [userInfo, setUserInfo] = useState({});
   useEffect(() => {}, [userInfo]);
-
+  useEffect(() => {
+    getUsers();
+  }, []);
+  const getUsers = async () => {
+    await axios
+      .get('/adm/usersInfo')
+      .then((resp) => {
+        setUsers(
+          [...resp.data].map((_, index) => ({
+            usersNo: _.usersNo,
+            usersName: _.usersName ? _.usersName : '이름 없음',
+            usersEmail: _.usersEmail ? _.usersEmail : '이메일 없음',
+            usersId: _.usersId,
+            usersPhone: _.usersPhone ? _.usersPhone : '전화번호 없음',
+            usersJoinDt: _.usersJoinDt,
+            usersRole: _.usersRole,
+            usersState: _.usersState,
+          }))
+        );
+      })
+      .catch(() => {});
+  };
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -52,7 +77,6 @@ export default function UserPage() {
     setOpen(true);
     const resp = await axios.get(`/adm/userInfo/${userNo}`);
     setUserInfo(resp.data);
-    // console.log(userInfo);
   };
   // modal close
   const handleClose = () => {
@@ -61,18 +85,24 @@ export default function UserPage() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
+  const setUserPause = async (uno) => {
+    await axios
+      .get(`adm/userPause/${uno}`)
+      .then((resp) => {
+        setUserInfo({ ...userInfo, usersState: '활동 정지' });
+        getUsers();
+      })
+      .catch();
   };
-
+  const setUserActive = async (uno) => {
+    await axios
+      .get(`adm/userActive/${uno}`)
+      .then((resp) => {
+        setUserInfo({ ...userInfo, usersState: '활동 중' });
+        getUsers();
+      })
+      .catch();
+  };
   const handleChangeRowsPerPage = (event) => {
     setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -90,7 +120,49 @@ export default function UserPage() {
   });
 
   const notFound = !dataFiltered.length && !!filterName;
-
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '40%',
+    height: '80%',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 3,
+  };
+  const contentStyle = {
+    position: 'relative',
+    overflowY: 'auto',
+    height: '90%',
+    paddingRight: 1,
+    '&::-webkit-scrollbar': {
+      width: '5px',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background: '#888',
+      borderRadius: '10px',
+    },
+  };
+  const boxStyle = {
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    padding: '8px 12px',
+    marginTop: '3px',
+  };
+  const buttonStyle = {
+    position: 'relative',
+    display: userInfo.usersState === '회원 탈퇴' ? 'none' : '',
+  };
+  function getRole(role) {
+    if (role === 'ROLE_USER') {
+      return '일반 유저';
+    }
+    if (role === 'ROLE_WORKER') {
+      return '작업자';
+    }
+    return '관리자';
+  }
   return (
     <>
       <Container>
@@ -111,8 +183,8 @@ export default function UserPage() {
                     { id: 'usersId', label: '아이디' },
                     { id: 'usersPhone', label: '전화번호' },
                     { id: 'usersJoinDt', label: '가입일' },
-                    { id: 'role', label: '구분' },
-                    { id: 'state', label: '활동상태', align: 'center' },
+                    { id: 'usersRole', label: '구분' },
+                    { id: 'usersState', label: '활동상태', align: 'center' },
                   ]}
                 />
                 <TableBody>
@@ -162,12 +234,96 @@ export default function UserPage() {
         aria-describedby="modal-modal-description"
       >
         <Card sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
+          <Typography variant="h6" component="h2">
+            회원정보
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
+          <CardContent sx={contentStyle}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">이름</Typography>
+                <Typography style={boxStyle} variant="body1">
+                  {userInfo.usersName}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">닉네임</Typography>
+                <Typography style={boxStyle} variant="body1">
+                  {userInfo.usersNick ? userInfo.usersNick : '닉네임 없음'}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">이메일</Typography>
+                <Typography style={boxStyle} variant="body1">
+                  {userInfo.usersEmail}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">구분</Typography>
+                <Typography style={boxStyle} variant="body1">
+                  {getRole(userInfo.usersRole)}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">아이디</Typography>
+                <Typography style={boxStyle} variant="body1">
+                  {userInfo.usersId}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">생년월일</Typography>
+                <Typography style={boxStyle} variant="body1">
+                  {userInfo.usersBirth ? userInfo.usersBirth : '생년월일 없음'}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">성별</Typography>
+                <Typography style={boxStyle} variant="body1">
+                  {userInfo.usersGender ? userInfo.usersGender : '성별 없음'}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">전화번호</Typography>
+                <Typography style={boxStyle} variant="body1">
+                  {userInfo.usersPhone ? userInfo.usersPhone : '전화번호 없음'}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">가입일</Typography>
+                <Typography style={boxStyle} variant="body1">
+                  {userInfo.usersJoinDt
+                    ? fDateTime(userInfo.usersJoinDt, 'yy/MM/dd hh:mm')
+                    : '가입일 없음'}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">상태 변경일</Typography>
+                <Typography style={boxStyle} variant="body1">
+                  {userInfo.usersStateChangeDt
+                    ? fDateTime(userInfo.usersStateChangeDt, 'yy/MM/dd hh:mm')
+                    : '없음'}
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">상태</Typography>
+                <Typography style={boxStyle} variant="body1">
+                  {userInfo.usersState}
+                </Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+          <Button
+            variant="contained"
+            fullWidth
+            color={userInfo.usersState === '활동 중' ? 'error' : 'success'}
+            sx={buttonStyle}
+            onClick={() =>
+              userInfo.usersState === '활동 중'
+                ? setUserPause(userInfo.usersNo)
+                : setUserActive(userInfo.usersNo)
+            }
+          >
+            {userInfo.usersState === '활동 중' ? '정지하기' : '정지해제'}
+          </Button>
         </Card>
       </Modal>
     </>

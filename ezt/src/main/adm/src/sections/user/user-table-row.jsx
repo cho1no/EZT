@@ -31,12 +31,20 @@ export default function UserTableRow({
   onClick,
 }) {
   let color = '';
+  let koRole = '';
   if (state === '활동 중') {
     color = 'success';
   } else if (state === '활동 정지') {
     color = 'warning';
   } else {
     color = 'error';
+  }
+  if (role === 'ROLE_USER') {
+    koRole = '일반 유저';
+  } else if (role === 'ROLE_WORKER') {
+    koRole = '작업자';
+  } else {
+    koRole = '관리자';
   }
   return (
     <TableRow hover tabIndex={-1} onClick={onClick}>
@@ -54,7 +62,7 @@ export default function UserTableRow({
       <TableCell>{phone}</TableCell>
       <TableCell>{fDateTime(joinDt, 'yy/MM/dd hh:mm')}</TableCell>
 
-      <TableCell>{role}</TableCell>
+      <TableCell>{koRole}</TableCell>
 
       <TableCell align="center">
         <Label color={color}>{state}</Label>
@@ -64,7 +72,6 @@ export default function UserTableRow({
 }
 
 UserTableRow.propTypes = {
-  // status: PropTypes.string,
   uno: PropTypes.any,
   name: PropTypes.any,
   email: PropTypes.any,
@@ -75,8 +82,4 @@ UserTableRow.propTypes = {
   state: PropTypes.any,
   avatarUrl: PropTypes.any,
   onClick: PropTypes.func,
-  // selected: PropTypes.any,
-  // company: PropTypes.any,
-  // handleClick: PropTypes.func,
-  // isVerified: PropTypes.any,
 };

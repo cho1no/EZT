@@ -1,6 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.adm.mapper.AdminMapper">
+	<!-- 통계관련 -->
+	<select id="selectJoinStatistics" resultType="java.util.HashMap">
+		SELECT COUNT(1) num
+		        , TO_CHAR(users_join_dt, 'yyyy/MM/dd') dt
+		        , users_role role
+		FROM users
+		WHERE 
+<!--		    users_join_dt >= TO_CHAR(sysdate - 7) AND-->
+			<![CDATA[
+		    users_join_dt < TO_CHAR(sysdate, 'yyyy/MM/dd')
+		    ]]>
+		    AND users_role IN ('ROLE_USER', 'ROLE_WORKER')
+		GROUP BY TO_CHAR(users_join_dt,'yyyy/MM/dd'), users_role
+	</select>
+	
+	<select id="selectReqCategoryStatistics" resultType="java.util.HashMap">
+		SELECT COUNT(*) num
+		        , FIND_COMMONCODE(category_code) category
+		FROM request
+		GROUP BY category_code
+		ORDER BY category_code
+	</select>
+	<select id="selectReqRegionStatistics" resultType="java.util.HashMap">
+		SELECT COUNT(*) num
+        		, FIND_COMMONCODE(region_code) region
+		FROM request
+		GROUP BY region_code
+	</select>
+	
+	<!-- 유저관련 -->
 	<select id="selectUsers" resultType="UserVO">
 		SELECT users_no
 				, users_id
@@ -30,8 +60,45 @@
 				, users_nick
 				, users_role
 				, users_join_dt
+				, users_state_change_dt
 				, file_id
 		FROM users
 		WHERE users_no = #{uno}
+	</select>
+	
+	<update id="updateUsersStatePause" parameterType="int">
+		UPDATE users
+		SET users_state = 'pause'
+			, users_state_change_dt = sysdate
+		WHERE users_no = #{uno}
+	</update>
+	<update id="updateUsersStateActive" parameterType="int">
+		UPDATE users
+		SET users_state = 'active'
+			, users_state_change_dt = sysdate
+		WHERE users_no = #{uno}
+	</update>
+	
+	<!-- 통일 계약서 관련 -->
+	<select id="selectUnityContracts" resultType="UnityContractVO">
+		SELECT unity_contract_no
+				, contract_terms_content
+				, write_dt
+				, use_tf
+				, basic_contract_tf
+				, title
+				, changes
+		FROM unity_contract
+	</select>
+	<select id="selectUnityContract" parameterType="int" resultType="UnityContractVO">
+		SELECT unity_contract_no
+				, contract_terms_content
+				, write_dt
+				, use_tf
+				, basic_contract_tf
+				, title
+				, changes
+		FROM unity_contract
+		WHERE unity_contract_no = #{no}
 	</select>
 </mapper>

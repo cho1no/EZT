@@ -1,4 +1,6 @@
+import axios from 'axios';
 import { faker } from '@faker-js/faker';
+import { useState, useEffect } from 'react';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -13,25 +15,84 @@ import AppCurrentVisits from '../app-current-visits';
 import AppWebsiteVisits from '../app-website-visits';
 import AppWidgetSummary from '../app-widget-summary';
 import AppTrafficBySite from '../app-traffic-by-site';
-import AppCurrentSubject from '../app-current-subject';
+// import AppCurrentSubject from '../app-current-subject';
 import AppConversionRates from '../app-conversion-rates';
 
 // ----------------------------------------------------------------------
-
 export default function AppView() {
+  const [statistic, setStatistic] = useState([]);
+  const [joinData, setJoinData] = useState({ dates: [], group: { user: [], worker: [] } });
+  const [reqCategoryData, setReqCategoryData] = useState([{ label: [], value: [] }]);
+  const [reqRegionData, setReqRegionData] = useState([{ label: [], value: [] }]);
+  const getStatistic = async () => setStatistic((await axios.get('/adm/getStatistic')).data);
+  const formattingJoinData = (data) => {
+    const temp = {};
+    data.forEach((e, i) => {
+      if (!temp[e.DT]) {
+        temp[e.DT] = { user: 0, worker: 0 };
+      }
+      if (e.ROLE === 'ROLE_USER') {
+        temp[e.DT].user += e.NUM;
+      } else if (e.ROLE === 'ROLE_WORKER') {
+        temp[e.DT].worker += e.NUM;
+      }
+    });
+    // 새로운 배열 생성
+    const newDates = [];
+    const newUserGroup = [];
+    const newWorkerGroup = [];
+
+    Object.keys(temp).forEach((date) => {
+      if (!newDates.includes(date)) {
+        newDates.push(date);
+      }
+      newUserGroup.push(temp[date].user);
+      newWorkerGroup.push(temp[date].worker);
+    });
+    return {
+      dates: newDates,
+      group: {
+        user: newUserGroup,
+        worker: newWorkerGroup,
+      },
+    };
+  };
+  const formattingReqData = (data) =>
+    data.map((e) => ({
+      label: e.CATEGORY ? e.CATEGORY : e.REGION,
+      value: e.NUM,
+    }));
+  useEffect(() => {
+    getStatistic();
+  }, []);
+  useEffect(() => {
+    const { newJoin = [], reqCategory = [], reqRegion = [] } = statistic;
+    console.log(statistic);
+    setJoinData(formattingJoinData(newJoin));
+    setReqCategoryData(formattingReqData(reqCategory));
+    setReqRegionData(formattingReqData(reqRegion));
+  }, [statistic]);
+  console.log(reqRegionData);
   return (
     <Container maxWidth="xl">
       <Typography variant="h4" sx={{ mb: 5 }}>
-        Hi, Welcome back 👋
+        관리자님 환영합니다 👋
       </Typography>
 
       <Grid container spacing={3}>
-        <Grid xs={12} sm={6} md={3}>
+        {/* <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Weekly Sales"
             total={714000}
             color="success"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
+          />
+          <AppWidgetSummary
+            title="New Users"
+            total={1352831}
+            color="info"
+            sx={{ mt: 3 }}
+            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
           />
         </Grid>
 
@@ -58,88 +119,64 @@ export default function AppView() {
             title="Bug Reports"
             total={234}
             color="error"
+            sx={{ mb: 2 }}
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
           />
-        </Grid>
+          <AppWidgetSummary
+            title="New Users"
+            total={1352831}
+            color="info"
+            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+          />
+        </Grid> */}
 
         <Grid xs={12} md={6} lg={8}>
           <AppWebsiteVisits
-            title="Website Visits"
-            subheader="(+43%) than last year"
+            title="일별 신규 가입자"
+            // subheader="(+43%) than last year"
             chart={{
-              labels: [
-                '01/01/2003',
-                '02/01/2003',
-                '03/01/2003',
-                '04/01/2003',
-                '05/01/2003',
-                '06/01/2003',
-                '07/01/2003',
-                '08/01/2003',
-                '09/01/2003',
-                '10/01/2003',
-                '11/01/2003',
-              ],
+              labels: joinData.dates,
               series: [
                 {
-                  name: 'Team A',
-                  type: 'column',
-                  fill: 'solid',
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                },
-                {
-                  name: 'Team B',
+                  name: '작업자',
                   type: 'area',
                   fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                  data: joinData.group.worker,
                 },
                 {
-                  name: 'Team C',
-                  type: 'line',
-                  fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                  name: '일반 유저',
+                  type: 'area',
+                  fill: 'gradient',
+                  data: joinData.group.user,
                 },
               ],
             }}
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={4}>
-          <AppCurrentVisits
-            title="Current Visits"
-            chart={{
-              series: [
-                { label: 'America', value: 4344 },
-                { label: 'Asia', value: 5435 },
-                { label: 'Europe', value: 1443 },
-                { label: 'Africa', value: 4443 },
-              ],
-            }}
+        <Grid xs={12} sm={6} md={4}>
+          <AppWidgetSummary
+            title="New Users"
+            total={1352831}
+            color="info"
+            sx={{ mb: 2 }}
+            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
+          />
+          <AppWidgetSummary
+            title="Bug Reports"
+            total={234}
+            color="error"
+            sx={{ mb: 2 }}
+            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+          />
+          <AppWidgetSummary
+            title="Bug Reports"
+            total={234}
+            color="error"
+            icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
           />
         </Grid>
-
-        <Grid xs={12} md={6} lg={8}>
-          <AppConversionRates
-            title="Conversion Rates"
-            subheader="(+43%) than last year"
-            chart={{
-              series: [
-                { label: 'Italy', value: 400 },
-                { label: 'Japan', value: 430 },
-                { label: 'China', value: 448 },
-                { label: 'Canada', value: 470 },
-                { label: 'France', value: 540 },
-                { label: 'Germany', value: 580 },
-                { label: 'South Korea', value: 690 },
-                { label: 'Netherlands', value: 1100 },
-                { label: 'United States', value: 1200 },
-                { label: 'United Kingdom', value: 1380 },
-              ],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
+        {/* <Grid xs={12} md={6} lg={4}>
           <AppCurrentSubject
             title="Current Subject"
             chart={{
@@ -149,6 +186,24 @@ export default function AppView() {
                 { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
                 { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
               ],
+            }}
+          />
+        </Grid> */}
+        <Grid xs={12} md={6} lg={4}>
+          <AppCurrentVisits
+            title="지역별 의뢰 현황"
+            chart={{
+              series: reqRegionData,
+            }}
+          />
+        </Grid>
+
+        <Grid xs={12} md={6} lg={8}>
+          <AppConversionRates
+            title="분야별 의뢰 현황"
+            // subheader="(+43%) than last year"
+            chart={{
+              series: reqCategoryData,
             }}
           />
         </Grid>
