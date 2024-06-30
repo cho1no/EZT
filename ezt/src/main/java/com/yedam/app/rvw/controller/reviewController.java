@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.req.service.Criteria;
+import com.yedam.app.req.service.PageDTO;
 import com.yedam.app.rvw.service.ReviewService;
 import com.yedam.app.rvw.service.ReviewVO;
 
@@ -23,9 +25,13 @@ public class reviewController {
 	//리뷰 전체조회
 	
 	@GetMapping("reviewList")
-	public String reviewList(Model model) {
-		List<ReviewVO> list = reviewService.reviewList();
+	public String reviewList(Criteria cri, Model model) {
+		List<ReviewVO> list = reviewService.reviewList(cri);
 		model.addAttribute("rvList", list);
+		
+		//페이징
+		int total = reviewService.getTotal(cri);
+		model.addAttribute("page", new PageDTO(cri, total));
 		
 		return "rvw/reviewList";
 	}

@@ -22,15 +22,15 @@
 		 </div>
 		 <fieldset class="reStar" style="display:none">
 			<span class="text-bold" >평점 : </span>
-			<input type="radio" th:name="${review.star}" th:value="5" ><label
+			<input type="radio" th:field="*{star}" value="5" id="rate1"><label
 				for="rate1">★</label>
-			<input type="radio" th:name="${review.star}" th:value="4"><label
+			<input type="radio" th:field="*{star}" value="4" id="rate2"><label
 				for="rate2">★</label>
-			<input type="radio" th:name="${review.star}" th:value="3"><label
+			<input type="radio" th:field="*{star}" value="3" id="rate3"><label
 				for="rate3">★</label>
-			<input type="radio" th:name="${review.star}" th:value="2" ><label
+			<input type="radio" th:field="*{star}" value="2" id="rate4"><label
 				for="rate4">★</label>
-			<input type="radio" th:name="${review.star}" th:value="1"><label
+			<input type="radio" th:field="*{star}" value="1" id="rate5"><label
 				for="rate5">★</label>
 		</fieldset>
 	</div>

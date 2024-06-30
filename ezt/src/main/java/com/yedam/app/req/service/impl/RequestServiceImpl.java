@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.req.mapper.RequestMapper;
+import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.usr.service.UserVO;
@@ -25,9 +26,9 @@ public class RequestServiceImpl implements RequestService {
 	}
 	//의뢰 전체조회
 	@Override
-	public List<RequestVO> requestList() {
+	public List<RequestVO> requestList(Criteria cri) {
 		
-		return requestMapper.selectRequestAll();
+		return requestMapper.selectRequestAll(cri);
 	}
 	
 	//의뢰 단건조회
@@ -66,6 +67,10 @@ public class RequestServiceImpl implements RequestService {
 		List<ProposalVO> list = requestMapper.selectProposalAll(proposalVO);
 	
 		return list;
+	}
+	@Override
+	public int getTotal(Criteria cri) {
+		return requestMapper.getTotalCount(cri);
 	}
 
 	
