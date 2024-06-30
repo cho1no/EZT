@@ -26,16 +26,16 @@ public class ProposalServiceImpl implements ProposalService {
 
 	// 견적서 의뢰정보조회
 	@Override
-	public RequestVO reqInfo(RequestVO requestVO) {
-		return ppsMapper.selectReqInfo(requestVO);
+	public RequestVO reqInfo(int requestNo) {
+		return ppsMapper.selectReqInfo(requestNo);
 	}
 
 	// 견적서 단건조회 & 상세 동시 처리
 	@Override
-	public ProposalVO ppsInfo(ProposalVO proposalVO) {
-		List<ProposalDetailVO> list = ppsMapper.selectPpsDetailList(proposalVO.getProposalNo());
-		List<FileVO> fileList = ppsMapper.selectFileList(proposalVO.getProposalNo());
-		ProposalVO pps = ppsMapper.selectPpsInfo(proposalVO);
+	public ProposalVO ppsInfo(int proposalNo) {
+		List<ProposalDetailVO> list = ppsMapper.selectPpsDetailList(proposalNo);
+		List<FileVO> fileList = ppsMapper.selectFileList(proposalNo);
+		ProposalVO pps = ppsMapper.selectPpsInfo(proposalNo);
 		pps.setList(list);
 		pps.setFileList(fileList);
 		return pps;

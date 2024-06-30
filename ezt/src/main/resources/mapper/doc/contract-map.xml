@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.doc.mapper.ContractMapper">
+
+	<insert id="insertConInfo" parameterType="ContractVO">
+		<selectKey keyProperty="contractNo" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_CONTRACT.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO contract(
+		CONTRACT_NO
+		, CTT_NAME
+		, CTT_PRICE
+		, CTT_START_DT
+		, CTT_END_DT
+		, REQUESTER_INFO
+		, REQUESTER_ADDRESS
+		, REQUESTER_ACCOUNT
+		, WORKER_INFO
+		, WORKER_ADDRESS
+		, WORKER_ACCOUNT
+		, UNITY_CONTRACT_NO
+		, PROPOSAL_NO
+		)
+		VALUES (
+		#{contractNo}
+		, #{cttName}
+		, #{cttPrice}
+		, #{cttStartDt}
+		, #{cttEndDt}
+		, #{requesterInfo}
+		, #{requesterAddress}
+		, #{requesterAccount}
+		, #{workerInfo}
+		, #{workerAddress}
+		, #{workerAccount}
+		, #{unityContractNo}
+		, #{proposalNo}
+		)
+	</insert>
+
+	<insert id="insertConDetailInfo" parameterType="ContractDetailVO">
+		<selectKey keyProperty="contractDetailNo" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_CONTRACTDETAIL.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO contract_detail(
+		CONTRACT_DETAIL_NO
+		, CONTRACT_NO
+		, PRICE
+		, PAYMENT_DT
+		, HISTORY
+		, ROUND
+		)
+    	VALUES (#{contractDetailNo}
+    	, #{contractNo}
+    	, #{price}
+    	, #{paymentDt}
+    	, #{history}
+    	, #{round}
+    	)
+	</insert>
+
+	<select id="selectConInfo" resultType="ContractVO">
+		SELECT 
+		CONTRACT_NO
+		, CTT_NAME
+		, CTT_PRICE
+		, CTT_START_DT
+		, CTT_END_DT
+		, REQUESTER_INFO
+		, REQUESTER_ADDRESS
+		, REQUESTER_ACCOUNT
+		, WORKER_INFO
+		, WORKER_ADDRESS
+		, WORKER_ACCOUNT
+		, UNITY_CONTRACT_NO
+		, FILE_ID
+		, PROPOSAL_NO
+		, WRITE_DT
+		, UPDATE_DT
+		FROM contract
+		WHERE contract_no = #{contractNo}
+	</select>
+
+	
+	<select id="selectConDetailInfo" resultType="ContractDetailVO">
+		SELECT 
+		CONTRACT_DETAIL_NO
+		, CONTRACT_NO
+		, PRICE
+		, PAYMENT_DT
+		, HISTORY
+		, ROUND
+    	FROM contract_detail
+    	WHERE contract_no = #{contractNo}
+	</select>
+
+
+	<!-- 파일 정보 DB&견적서 삭제 -->
+	<delete id="deleteConFileInfo" statementType="CALLABLE">
+		{CALL
+			delete_contract_file(#{fileId})
+			}
+	</delete>
+
+
+
+</mapper>
