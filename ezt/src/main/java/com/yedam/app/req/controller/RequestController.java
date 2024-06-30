@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
-import com.yedam.app.doc.service.ProposalDetailVO;
-import com.yedam.app.doc.service.ProposalService;
 import com.yedam.app.doc.service.ProposalVO;
+import com.yedam.app.req.service.Criteria;
+import com.yedam.app.req.service.PageDTO;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.sgi.service.LoginUserVO;
@@ -29,10 +29,13 @@ public class RequestController {
 
 	// 전체조회
 	@GetMapping("requestList")
-	public String requestList(Model model) {
-		List<RequestVO> list = requestService.requestList();
+	public String requestList(Criteria cri , Model model) {
+		List<RequestVO> list = requestService.requestList(cri);
 		model.addAttribute("requestList", list);
-
+		
+		//페이징
+		int total = requestService.getTotal(cri);
+		model.addAttribute("page", new PageDTO(cri, total));
 		return "req/requestList";
 	}
 

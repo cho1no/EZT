@@ -14,6 +14,7 @@ $(document).ready(function(){
 			$(".writerContent").css("border", "1px solid");
 	        // 수정 완료로 변경
 	        $(this).text("수정 완료");
+
 	        // 클래스명 변경
 	        $(this).removeClass("upBtn").addClass("saveBtn");
 	        
@@ -61,7 +62,7 @@ $(document).ready(function(){
 	        $(this).text("수정");
 	        // 클래스명 변경
 	        $(this).removeClass("saveBtn").addClass("upBtn");
-			
+
 			//별점 다시 보이기 
 			$(".star-rating").css("display", "")
 			

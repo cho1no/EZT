@@ -25,6 +25,12 @@
 	    ON( r.file_id = f.file_id and f.boss_tf = 'Y')
 	  ORDER BY review_no desc
 </select>
+<select id="getTotalCount" resultType="int">
+	SELECT count(*)
+	FROM request
+	WHERE request_no > 0
+	
+</select>
 <resultMap id="imgMap" type="ReviewVO">
 	<collection property="fileVO" javaType="ArrayList" column="file_id" ofType="FileVO" select="selectImgALl" />
 </resultMap>

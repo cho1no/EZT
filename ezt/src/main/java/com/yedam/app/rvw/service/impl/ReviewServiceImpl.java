@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.req.service.Criteria;
 import com.yedam.app.rvw.mapper.ReviewMapper;
 import com.yedam.app.rvw.service.ReviewService;
 import com.yedam.app.rvw.service.ReviewVO;
@@ -16,9 +17,9 @@ public class ReviewServiceImpl implements ReviewService {
 	
 	//후기 전체조회
 	@Override
-	public List<ReviewVO> reviewList() {
+	public List<ReviewVO> reviewList(Criteria cri) {
 		
-		return reviewMapper.reviewList();
+		return reviewMapper.reviewList(cri);
 	}
 	//후기 단건조회
 	@Override
@@ -43,6 +44,12 @@ public class ReviewServiceImpl implements ReviewService {
 	public int deleteReview(int reviewNo) {
 		
 		return reviewMapper.deleteReview(reviewNo);
+	}
+	
+	//전체 페이지 수 
+	@Override
+	public int getTotal(Criteria cri) {
+		return reviewMapper.getTotalCount(cri);
 	}
 
 }
