@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>사용자 마이페이지</title>
+</head>
+<body>
+  <h1>후기 목록</h1>
+  <th:block th:each="review : ${reviewList}">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+	  <div class="col">
+	    <div class="card h-100">
+	      <img src="..." class="card-img-top" alt="...">
+	      <div class="card-body">
+			<h5 class="card-title">지역 : [[${review.regionCode}]]</h5>
+			<p class="card-text">상태 : [[${review.reviewDivision ? : 'N/A'}]]</p>
+			<p class="card-text">별점 : [[${review.star ? : 'N/A'}]]</p>
+			<p class="card-text">작업자 : [[${review.worker ? : 'N/A'}]]</p>
+		    <p class="card-text">내용 : [[${review.content}]]</p>
+		    <p class="card-text">분야 : [[${review.categoryCode}]]</p>
+	      </div>
+	    </div>
+	  </div>
+    </div>
+  </th:block>	
+</body>
+</html>

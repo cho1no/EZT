@@ -95,4 +95,31 @@
 		WHERE users_id = #{usersId} 
 	</update>
 	
+	<update id="pwUpdate">
+		UPDATE users
+		SET users_pw = #{usersNewPw}
+		WHERE users_id = #{usersId}
+	</update>
+	
+	<select id="selectUserReviewList" parameterType="ReviewVO">
+		SELECT re.star
+			   , re.content 
+			   , USERNAME(re.worker) as worker_name
+			   , re.review_division
+			   , FIND_COMMONCODE(rq.category_code) as category_code
+			   , FIND_COMMONCODE(rq.region_code) as region_code
+		FROM review re
+		    JOIN request rq
+		    ON re.request_no = rq.request_no
+		WHERE re.writer = #{writer}
+	</select>
+	
+	<select id="selectUserReqList" parameterType="RequestVO">
+		SELECT title
+			   , FIND_COMMONCODE(category_code) as category_code
+			   , FIND_COMMONCODE(request_state) as request_state
+			   , file_id
+		FROM request
+		WHERE requester = #{usersNo}
+	</select>
 </mapper>

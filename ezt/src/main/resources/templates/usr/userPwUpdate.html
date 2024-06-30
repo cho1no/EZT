@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>사용자 마이페이지</title>
+<style>
+form span.error{
+	color: red;
+	font-size: 10pt;
+}
+
+form span{
+	color: blue;
+	font-size: 10pt;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+	<hr>
+	<h1>비밀번호 변경</h1>
+	<form >
+		<div>
+			<label>현재 비밀번호</label>
+			<input class="form-control col-md-12" type="password"  id="usersPw">
+			<span id="pwErr"></span>
+		</div>
+			<label>새 비밀번호</label>
+			<input class="form-control" type="password" name="usersNewPw" id="usersNewPw">
+		</div>
+		<div>
+			<label>새 비밀번호 확인</label>
+			<input class="form-control" type="password"id="usersNewPwChk">
+			<span id="newPwErr"></span>
+		</div>
+		<button id="info-update-btn">변경하기</button>		
+	</form>
+<script th:inline="javascript">
+	$('#info-update-btn').click(() => {updateUserPw()});
+	function updateUserPw(){
+		var pw = $('usersPw');
+		var newPw = $('usersNewPw');
+		var newPwChk = $('usersNewPwChk');
+		
+		var erPw = $('#pwErr');
+		var erNewPw = $('#newPwErr');
+		
+		if(pw.val() == ''){
+			erPw.text('비밀번호를 입력해주세요')
+			erPw.addClass('error')
+			return;
+		} 
+		
+		$.ajax({
+			type: "get",
+			url : "/user/userInfo",
+			success : function(dt){
+				console.log(dt)
+				}
+			
+		})
+		
+		
+		
+		
+		if(!newPw.val() == newPwChk.val()){
+			erNewPw.text('비밀번호가 같지않습니다.')
+			erNewPw.addClass('error')
+			return;
+		}
+		
+	}
+</script>
+</body>
+</html>

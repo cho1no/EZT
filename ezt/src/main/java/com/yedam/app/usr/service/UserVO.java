@@ -31,6 +31,8 @@ public class UserVO {
 //          message = "비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다.")
 	private String usersPw;
 	private String usersPwCheck;
+	private String usersNewPw;
+	private String usersNewPwChk;
 	
 	@Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식이 올바르지 않습니다.")    
 	@NotBlank(message = "이메일은 필수 입력 값입니다.")
