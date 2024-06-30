@@ -11,7 +11,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableToolbar({
+export default function ContractTableToolbar({
   //  numSelected,
   filterName,
   onFilterName,
@@ -29,7 +29,7 @@ export default function UserTableToolbar({
         // }),
       }}
     >
-      <Typography variant="h4">유저 정보</Typography>
+      <Typography variant="h4">통일 계약서 관리</Typography>
       {/* {numSelected > 0 ? (
         <Typography component="div" variant="subtitle1">
           {numSelected} selected
@@ -38,7 +38,7 @@ export default function UserTableToolbar({
       <OutlinedInput
         value={filterName}
         onChange={onFilterName}
-        placeholder="검색할 이름 입력"
+        placeholder="계약서 명으로 검색"
         startAdornment={
           <InputAdornment position="start">
             <Iconify
@@ -67,7 +67,7 @@ export default function UserTableToolbar({
   );
 }
 
-UserTableToolbar.propTypes = {
+ContractTableToolbar.propTypes = {
   // numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,

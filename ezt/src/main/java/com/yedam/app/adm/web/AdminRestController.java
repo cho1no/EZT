@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yedam.app.adm.service.AdminService;
+import com.yedam.app.doc.service.UnityContractVO;
 import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.service.UserVO;
 
@@ -22,8 +23,17 @@ import com.yedam.app.usr.service.UserVO;
 public class AdminRestController {
 	@Autowired
 	AdminService admSvc;
-//	@Autowired
-//	UserService sguSvc;
+	
+	// 통계(메인페이지)
+	@GetMapping("/getStatistic")
+	public Map<String, Object> getStatistic(){
+		Map<String, Object> map = new HashMap<>();
+		map.put("newJoin", admSvc.getJoinStatistics()); // 일별 가입자 현황
+		map.put("reqCategory", admSvc.getReqCategoryStatistics()); // 의뢰 분야별 통계
+		map.put("reqRegion", admSvc.getReqRegionStatistics()); // 의뢰 지역별 통계
+		return map;
+	}
+
 	// 로그인 유저 반환
 	@GetMapping("logInfo")
 	public Map<String, Object> getLogInfo(@AuthenticationPrincipal LoginUserVO vo) {
@@ -44,5 +54,28 @@ public class AdminRestController {
 	@GetMapping("/userInfo/{usersNo}")
 	public UserVO getUserInfo(@PathVariable int usersNo) {
 		return admSvc.getUser(usersNo);
+	}
+	
+	// 회원 활동정지
+	@GetMapping("/userPause/{usersNo}")
+	public int setUserPause(@PathVariable int usersNo) {
+		return admSvc.setUserPause(usersNo);
+	}
+	// 회원 활동정지
+	@GetMapping("/userActive/{usersNo}")
+	public int setUserActive(@PathVariable int usersNo) {
+		return admSvc.setUserActive(usersNo);
+	}
+	
+	
+	// 통일 계약서 전체 조회
+	@GetMapping("/unityContractsInfo")
+	public List<UnityContractVO> getUnityContracts(){
+		return admSvc.getUnityContracts();
+	}
+	// 통일 계약서 단건 조회
+	@GetMapping("/unityContractInfo/{no}")
+	public UnityContractVO getUnityContract(@PathVariable int no) {
+		return admSvc.getUnityContract(no);
 	}
 }
