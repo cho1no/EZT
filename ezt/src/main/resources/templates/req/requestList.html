@@ -41,7 +41,7 @@ img{
 			<button class="btn btn-primary">검색</button>	
 		</div>
 		<div style="text-align:right" >
-			<button class="btn btn-primary insertBtn" th:onclick="|location.href='@{/requestInsert}'|">글쓰기</button>
+			<button class="btn btn-primary insertBtn" th:onclick="|location.href='@{/requestInsert}'|" type="button">글쓰기</button>
 		</div>
 	</div>
       <div class="container">
@@ -78,6 +78,11 @@ img{
        </div>
      </div>
 </section>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var login = /*[[${#authentication.principal}]]*/ false;
+    /*]]>*/
+</script>
 <script src="/js/req/requestSearch.js" ></script>
 </body>
 </html>

@@ -50,7 +50,10 @@ public class reviewController {
 	
 	
 	//등록
-	
+	@GetMapping("reviewInsert")
+	public String reviewInsert() {
+		return "rvw/reviewInsert";
+	}
 	
 	//수정
 	@PostMapping("reviewUpdate")
