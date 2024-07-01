@@ -207,11 +207,13 @@
 													<strong class="text-black">전화번호</strong>
 												</div>
 												<div class="col">
+												<p class="text-black" style="margin:5px 0">[[${requester.usersPhone}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">우편번호</strong>
 												</div>
 												<div class="col-3">
+												<p class="text-black" style="margin:5px 0" id="input_postcode"></p>
 												</div>
 												<div class="col">
 												</div></li>
@@ -219,22 +221,26 @@
 													<strong class="text-black">주소</strong>
 												</div>
 												<div class="col">
+												<p class="text-black" style="margin:5px 0" id="input_addr"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">상세주소</strong>
 												</div>
 												<div class="col">
+												<p class="text-black" style="margin:5px 0"
+														 id="input_detailAddr"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주민등록번호</strong>
 												</div>
 												<div class="col">
+												<p class="text-black" style="margin:5px 0">[[${requester.usersRnn}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-												<input type="text" class="form-control">
+												<p class="text-black" style="margin:5px 0">[[${con.requesterAccount}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
@@ -267,7 +273,7 @@
 													<strong class="text-black">우편번호</strong>
 												</div>
 												<div class="col-3">
-													<input type="text" class="form-control" id="input_postcode">
+													<p class="text-black" style="margin:5px 0" id="input_postcode"></p>
 												</div>
 												<div class="col">
 												</div></li>
@@ -275,14 +281,14 @@
 													<strong class="text-black">주소</strong>
 												</div>
 												<div class="col">
-													<input type="text" class="form-control" id="input_addr">
+													<p class="text-black" style="margin:5px 0" id="input_addr"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">상세주소</strong>
 												</div>
 												<div class="col">
-													<input type="text" class="form-control"
-														id="input_detailAddr">
+													<p class="text-black" style="margin:5px 0"
+														 id="input_detailAddr"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주민등록번호</strong>
@@ -294,7 +300,7 @@
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-													<p>[[${con.workerAccount}]]</p>
+													<p class="text-black" style="margin:5px 0">[[${con.workerAccount}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
