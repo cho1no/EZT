@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
+	layout:decorate="~{common/layouts/user_mypage_layout}"
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
@@ -28,7 +28,7 @@
 			<input class="form-control" type="email" 
 			id="usersEmail" th:value="${userId.usersEmail}" disabled readonly>
 		</div>
-		<button type="button" th:onclick="|location.href='@{/userUpdate}'|">수정하기</button>
+		<button type="button" th:onclick="|location.href='@{/user/update}'|">수정하기</button>
 	</div>
   </div>
 </body>

@@ -16,7 +16,7 @@ public class SgiController {
 	
 	@GetMapping("main")
 	public String all() {
-		return "sgi/loginTest";
+		return "gongtong/main";
 	}
 	 
 	@GetMapping("user")

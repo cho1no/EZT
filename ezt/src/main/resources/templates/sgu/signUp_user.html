@@ -64,11 +64,7 @@ form span {
 									</div>
 									<span id="erMsg"></span>
 								</div>
-								<!-- <div class="col-md-4">
 
-									<button type="button" style="float: right" id="checkBtn"
-										class="btn px-4 btn-primary text-white">중복확인</button>
-								</div> -->
 								<span th:errors="*{usersId}" class="error"></span>
 							</div>
 							<div class="row form-group">
@@ -98,7 +94,7 @@ form span {
 								</div>
 								<div class="col-md-6 mb-3 mb-md-0" >
 									<label class="text-block" for="issuDate">발급일자</label>
-									<input type="text" id="issuDate" name="issuDate" class="form-control">
+									<input type="text" id="issuDate" name="issuDate" class="form-control" placeholder="19001108">
 								</div>
 							</div>
 							<div class="row form-group">
@@ -110,13 +106,20 @@ form span {
 											name="usersBirth" placeholder="880101">
 									<label class="d-inline-flex">-</label>
 									<input  type="password" id="JUMIN2" maxlength="7" class="form-control col-md-4 d-inline-flex"
-										name="usersRnn" placeholder="1234567"><span></span>
-									<input type="button" style="float: right" id="rnnChkBtn" value="실명인증"
-										class="btn px-4 btn-primary text-white">
+										name="usersRnn" placeholder="1234567">
+									<input type="button" style="float: right; " id="rnnChkBtn" value="실명인증" 
+										class="btn px-4 btn-primary text-white" disabled>
+										
+										<input type="hidden" name="checked_jumin" value="">
+										<button class="btn btn-primary" id="loadChk" style="float: right; display:none;" type="button" disabled>
+										  <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+										  <span role="status">검증 중...</span>
+										</button>
 								</div>
+										<span id=juminChk></span>
 							</div>
 							<div>
-								<input type="text" name="usersGender" id="usersGender"> 
+								<input type="text" name="usersGender" id="usersGender" style="display:none;"> 
 							</div>
 							<div class="row form-group">
 								<div class="col-md-12 mb-3 mb-md-0">
@@ -147,6 +150,7 @@ form span {
 							</div>
 							<div class="row form-group">
 								<div class="col-md-12">
+									<a href="/signUp/joinWorker">작업자로 회원가입</a>
 									<input type="button" id="joinBtn" value="가입하기"
 										class="btn px-4 btn-primary text-white" style="float: right">
 								</div>
@@ -170,14 +174,37 @@ form span {
 		var rnn = jumin1 + jumin2; 
 		var issuDate = $('#issuDate').val();
 		//console.log(userName, rnn, issuDate);
+		if(userName == ''){
+			$('#juminChk').text('성명을 입력해주세요.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
+		if(issuDate == ''){
+			$('#juminChk').text('발급일자를 입력해주세요.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
+		if(jumin1 == ''){
+			$('#juminChk').text('생년월일을 입력해주세요.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
+		
+		if(jumin2 == ''){
+			$('#juminChk').text('주민번호를 입력해주세요.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
 		
 		var reqExp = /^[0-9]*$/;
-		if(!reqExp.test(jumin2)){
-			$('#JUMIN2').next().text('숫자를 입력해주세요.');
-			$('#JUMIN2').next().addClass('error');
-			return ;
+		if(!reqExp.test(jumin1) || !reqExp.test(jumin2)){
+			$('#juminChk').text('숫자를 입력해주세요.');
+			$('#juminChk').addClass('error');
+			return false;
 		}
-			
+		$('#rnnChkBtn').css('display', 'none');
+		$('#loadChk').css('display', 'block');
+//		실명인증api(횟수제한,실검증시 주석해제)		
 		$.ajax({
 				url : "/api/idCardCheck",
 				type : "POST",
@@ -190,13 +217,30 @@ form span {
 				success : function(re){
 					console.log(re);
 					if(re.data.AGREEMENTYNE == "Y"){
-						alert('실명인증 완료.');
+						$('input[name=checked_jumin]').val("y");
+						$('#rnnChkBtn').css('display', 'block');
+						$('#rnnChkBtn').attr('disabled', 'true');
+						$('#loadChk').css('display', 'none');
+						Swal.fire({
+							text: '실명인증 완료',
+							icon: 'success'
+						})
 					}else {
-						alert('입력오류');
+						Swal.fire({
+							text: '입력오류',
+							icon: 'error'
+						})
+						$('#rnnChkBtn').css('display', 'block');
+						$('#loadChk').css('display', 'none');
 					}
 				},
 				error : function(er){
-					alert('error');
+					Swal.fire({
+						text: 'error',
+						icon: 'error'
+					})
+					$('#rnnChkBtn').css('display', 'none');
+					$('#loadChk').css('display', 'block');
 				}
 			})
 	}
@@ -312,6 +356,15 @@ form span {
 			})
 			return false;
 		}
+		
+		if($('input[name=checked_jumin]').val() == ''){
+			Swal.fire({
+				 text:'실명인증이 완료되지않았습니다.',
+				 icon: 'warning'
+				})
+				return false;
+		}
+		
 		if($('#JUMIN2').val()[0] == 1 || $('#JUMIN2').val()[0] == 3){
 			$('#usersGender').val('남');
 		}else{

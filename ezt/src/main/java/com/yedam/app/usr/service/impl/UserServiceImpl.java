@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.req.service.RequestVO;
+import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.usr.mapper.UserMapper;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
@@ -38,18 +39,6 @@ public class UserServiceImpl implements UserService{
 		return map;
 	}
 
-	@Override
-	public Map<String, Object> deleteUser(UserVO userVO) {
-		Map<String, Object> map = new HashMap<>();
-		
-		int result = userMapper.deleteUserInfo(userVO.getUsersNo());
-			
-		if(result == 1) {
-			map.put("usersNo", userVO.getUsersNo());
-		}
-		return map;
-	}
-
 	//비밀번호 변경
 	@Override
 	public boolean updateUserPw(UserVO userVO) {
@@ -58,7 +47,7 @@ public class UserServiceImpl implements UserService{
 
 	//후기목록
 	@Override
-	public List<RequestVO> userReviewList(int writer) {
+	public List<ReviewVO> userReviewList(int writer) {
 		return userMapper.selectUserReviewList(writer);
 	}
 	
@@ -68,6 +57,15 @@ public class UserServiceImpl implements UserService{
 		return userMapper.selectUserReqList(usersNo);
 	}
 
+	//회원탈퇴(상태 수정)
+	@Override
+	public boolean userStateUpdate(UserVO userVO) {
+		return userMapper.updateUserState(userVO) == 1;
+	}
+
+	
+
+	
 
 
 	

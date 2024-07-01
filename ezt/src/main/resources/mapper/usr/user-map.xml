@@ -21,7 +21,7 @@
 		FROM users
 		WHERE users_id = #{id}
 	</select>
-	<!-- 중복체크 -->
+	<!-- 회원가입 시 DB중복체크 -->
 	<select id="idChk" resultType="int">
 		SELECT COUNT(*)
 		FROM users
@@ -95,13 +95,13 @@
 		WHERE users_id = #{usersId} 
 	</update>
 	
-	<update id="pwUpdate">
+	<update id="pwUpdate" parameterType="UserVO">
 		UPDATE users
 		SET users_pw = #{usersNewPw}
 		WHERE users_id = #{usersId}
 	</update>
 	
-	<select id="selectUserReviewList" parameterType="ReviewVO">
+	<select id="selectUserReviewList" resultType="ReviewVO">
 		SELECT re.star
 			   , re.content 
 			   , USERNAME(re.worker) as worker_name
@@ -114,7 +114,7 @@
 		WHERE re.writer = #{writer}
 	</select>
 	
-	<select id="selectUserReqList" parameterType="RequestVO">
+	<select id="selectUserReqList" resultType="RequestVO">
 		SELECT title
 			   , FIND_COMMONCODE(category_code) as category_code
 			   , FIND_COMMONCODE(request_state) as request_state
@@ -122,4 +122,10 @@
 		FROM request
 		WHERE requester = #{usersNo}
 	</select>
+	
+	<update id="updateUserState" parameterType="UserVO">
+		UPDATE users
+		SET users_state = quit
+		WHERE users_id = #{usersId}
+	</update>
 </mapper>
