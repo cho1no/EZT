@@ -29,4 +29,6 @@ public interface AdminMapper {
 	public List<UnityContractVO> selectUnityContracts();
 	// 통일 계약서 단건 조회
 	public UnityContractVO selectUnityContract(int no);
+	// 통일 계약서 등록 하기
+	public int insertUnityContract(UnityContractVO vo);
 }

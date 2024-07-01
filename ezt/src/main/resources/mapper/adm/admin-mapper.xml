@@ -4,16 +4,17 @@
 	<!-- 통계관련 -->
 	<select id="selectJoinStatistics" resultType="java.util.HashMap">
 		SELECT COUNT(1) num
-		        , TO_CHAR(users_join_dt, 'yyyy/MM/dd') dt
+		        , TO_CHAR(users_join_dt+1, 'yyyy/MM/dd') dt
 		        , users_role role
 		FROM users
 		WHERE 
 <!--		    users_join_dt >= TO_CHAR(sysdate - 7) AND-->
 			<![CDATA[
-		    users_join_dt < TO_CHAR(sysdate, 'yyyy/MM/dd')
+		    users_join_dt < TO_CHAR((SELECT MAX(users_join_dt)+1 FROM users), 'yyyy/MM/dd')
 		    ]]>
 		    AND users_role IN ('ROLE_USER', 'ROLE_WORKER')
-		GROUP BY TO_CHAR(users_join_dt,'yyyy/MM/dd'), users_role
+		GROUP BY TO_CHAR(users_join_dt+1,'yyyy/MM/dd'), users_role
+		ORDER BY TO_CHAR(users_join_dt+1,'yyyy/MM/dd')
 	</select>
 	
 	<select id="selectReqCategoryStatistics" resultType="java.util.HashMap">
@@ -46,6 +47,7 @@
 				, users_join_dt
 				, file_id
 		FROM users
+		ORDER BY users_join_dt DESC
 	</select>
 	<select id="selectUser" parameterType="int" resultType="UserVO">
 		SELECT users_no
@@ -89,6 +91,7 @@
 				, title
 				, changes
 		FROM unity_contract
+		ORDER BY unity_contract_no DESC
 	</select>
 	<select id="selectUnityContract" parameterType="int" resultType="UnityContractVO">
 		SELECT unity_contract_no
@@ -101,4 +104,23 @@
 		FROM unity_contract
 		WHERE unity_contract_no = #{no}
 	</select>
+	<insert id="insertUnityContract" parameterType="UnityContractVO">
+		<selectKey	keyProperty="unityContractNo"
+					resultType="Integer"
+					order="AFTER">
+			SELECT SEQ_UNITYCONTRACT.CURRVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO unity_contract (
+			unity_contract_no
+			, contract_terms_content
+			, title
+			, changes
+		) VALUES (
+			SEQ_UNITYCONTRACT.NEXTVAL
+			, #{contractTermsContent}
+			, #{title}
+			, #{changes}
+		)
+	</insert>
 </mapper>

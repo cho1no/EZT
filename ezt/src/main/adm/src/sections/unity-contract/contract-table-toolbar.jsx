@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 // import Tooltip from '@mui/material/Tooltip';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -15,6 +17,7 @@ export default function ContractTableToolbar({
   //  numSelected,
   filterName,
   onFilterName,
+  onNewContract,
 }) {
   return (
     <Toolbar
@@ -22,23 +25,27 @@ export default function ContractTableToolbar({
         height: 96,
         display: 'flex',
         justifyContent: 'space-between',
-        // p: (theme) => theme.spacing(0, 1, 0, 3),
-        // ...(numSelected > 0 && {
-        //   color: 'primary.main',
-        //   bgcolor: 'primary.lighter',
-        // }),
       }}
     >
-      <Typography variant="h4">통일 계약서 관리</Typography>
-      {/* {numSelected > 0 ? (
-        <Typography component="div" variant="subtitle1">
-          {numSelected} selected
-        </Typography>
-      ) : ( */}
+      <Grid container spacing={2}>
+        <Grid item>
+          <Typography variant="h4">통일 계약서 관리</Typography>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={onNewContract}
+            sx={{ marginTop: '5px' }}
+          >
+            새 계약서 등록
+          </Button>
+        </Grid>
+      </Grid>
       <OutlinedInput
         value={filterName}
         onChange={onFilterName}
-        placeholder="계약서 명으로 검색"
+        placeholder="제목으로 검색"
         startAdornment={
           <InputAdornment position="start">
             <Iconify
@@ -48,21 +55,6 @@ export default function ContractTableToolbar({
           </InputAdornment>
         }
       />
-      {/* )} */}
-
-      {/* {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Iconify icon="eva:trash-2-fill" />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Iconify icon="ic:round-filter-list" />
-          </IconButton>
-        </Tooltip>
-      )} */}
     </Toolbar>
   );
 }
@@ -71,4 +63,5 @@ ContractTableToolbar.propTypes = {
   // numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  onNewContract: PropTypes.func,
 };

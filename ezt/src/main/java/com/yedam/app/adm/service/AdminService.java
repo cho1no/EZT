@@ -29,4 +29,6 @@ public interface AdminService {
 	public List<UnityContractVO> getUnityContracts();
 	// 통일 계약서 단건 조회
 	public UnityContractVO getUnityContract(int no);
+	// 통일 계약서 등록
+	public int postUnityContract(UnityContractVO vo);
 }
