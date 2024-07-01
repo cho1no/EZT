@@ -16,22 +16,6 @@
 			<div class="col-md-12">
 				<div class="mb-5 text-center">
 
-					<p th:text="${#authentication.name}"></p>
-					<p th:text="${#authentication.authorities}"></p>
-					<p th:text="${#authentication.authenticated}"></p>
-
-					<div sec:authorize="isAuthenticated()">
-						<button type="button" id="logout">
-							로그아웃
-						</button>
-						<p>[[${#authentication.principal.username}]]님 안녕하세요</p>
-					<p>[[${#authentication.principal.userVO.usersName}]]님 안녕하세요</p>
-					</div>
-					<div sec:authorize="hasRole('ROLE_ANONYMOUS')">
-						<button type="button" id="login">
-							<a href="/login">로그인</a>
-						</button>
-					</div>
 					<h1 class="text-white font-weight-bold">The Easiest Way To Get
 						Your Dream Job</h1>
 					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.

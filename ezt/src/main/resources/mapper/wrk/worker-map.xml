@@ -1,3 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yedam.app.usr.mapper.UserMapper"></mapper>
+<mapper namespace="com.yedam.app.wkr.mapper.WorkerMapper">
+	<select id="selectCategoryInfo" resultType="java.util.HashMap">
+		SELECT FIND_COMMONCODE(category_code) as category_code
+		FROM active_category
+		WHERE users_no = #{usersNo}
+	</select>
+	
+	<select id="selectRegionInfo" resultType="java.util.HashMap">
+		SELECT FIND_COMMONCODE(region_code) as region_code
+		FROM active_region
+		WHERE users_no = #{usersNo}
+	</select>
+	
+	
+
+	<update id="updateWorkerInfo" parameterType="UserVO">
+		UPDATE users
+		SET users_nick = #{usersNick}
+			, users_phone = #{usersPhone}
+			, users_email = #{usersEmail}
+			, FIND_COMMONCODE(category_code) as category_code
+			, FIND_COMMONCODE(region_code) as region_code 
+		WHERE users_id = #{usersId}
+	</update>
+
+	<update id="updateWorkerPw" parameterType="UserVO">
+		UPDATE users
+		SER users_pw = #{usersNewPw}
+		WHERE users_id = #{usersId}
+	</update>
+
+	
+	<update id="updateWorkerState" parameterType="UserVO">
+		UPDATE users
+		SET users_state = quit
+		WHERE users_id = #{usersId}
+	</update>
+</mapper>

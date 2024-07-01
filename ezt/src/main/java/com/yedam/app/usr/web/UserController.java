@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.req.service.RequestVO;
+import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
@@ -27,40 +28,35 @@ public class UserController {
 	CommonCodeService commonCodeService;
 	
 	//정보조회
-	@GetMapping("userInfo")
+	@GetMapping("user/info")
 	public String userInfo(@AuthenticationPrincipal LoginUserVO vo, Model model) {
 		model.addAttribute("userId", vo.getUserVO());
 		return "usr/userInfo";
 	}
 	
 	//정보수정 -페이지
-	@GetMapping("userUpdate")
+	@GetMapping("user/update")
 	public String userUpdateForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
 		model.addAttribute("userId", vo.getUserVO());
 		return "usr/userUpdate";
 	}
 	
 	//정보수정 기능 
-	@PostMapping("userUpdate")
+	@PostMapping("user/update")
 	@ResponseBody
 	public Map<String, Object> userUpdate(@RequestBody UserVO userVO){
 		return userService.updateUser(userVO);
 	}
-	
-	//삭제
-	@GetMapping("userDelete")
-	public String userDelete(UserVO userVO) {
-		userService.deleteUser(userVO);
-		return "redirect:login";
-	}
+
 	//비밀번호 변경 -페이지
-	@GetMapping("user/PwUpdate")
+	@GetMapping("user/pwUpdate")
 	public String userPwchangeForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
 		model.addAttribute("userId", vo.getUserVO());
 		return "usr/userPwUpdate";
 	}
+	
 	//비밀번호 변경 기능
-	@PostMapping("user/PwUpdate")
+	@PostMapping("user/pwUpdate")
 	@ResponseBody
 	public boolean userPwUpdate(@RequestBody UserVO userVO) {
 		return userService.updateUserPw(userVO);
@@ -69,7 +65,7 @@ public class UserController {
 	//후기목록 조회
 	@GetMapping("user/revList")
 	public String userReviewList(Model model, @AuthenticationPrincipal LoginUserVO user) {
-		List<RequestVO> list = userService.userReviewList(user.getUserNo());
+		List<ReviewVO> list = userService.userReviewList(user.getUserNo());
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
 		model.addAttribute("regionCode", commonCodeService.selectCommonCodeAll("0B"));		
 		model.addAttribute("reviewList", list);
@@ -87,4 +83,18 @@ public class UserController {
 	}
 	
 	
+	//사용자 탈퇴 (상태 수정) 페이지
+	@GetMapping("user/quit")
+	public String userStateUpdateForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+		model.addAttribute("userId", vo.getUserVO());
+		return "usr/userStateUpdate";
+	}
+	
+	//사용자 탈퇴 기능 (상태 수정)
+	@PostMapping("user/quit")
+	@ResponseBody
+	public boolean userStateUpdate(@RequestBody UserVO userVO) {
+		userService.userStateUpdate(userVO);
+		return userService.userStateUpdate(userVO);
+	}
 }

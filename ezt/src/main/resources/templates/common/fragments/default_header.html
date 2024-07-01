@@ -3,7 +3,7 @@
 
       <div class="container-fluid">
         <div class="row align-items-center">
-          <div class="site-logo col-6"><a href="index.html">JobBoard</a></div>
+          <div class="site-logo col-6"><a href="/main">JobBoard</a></div>
 
           <nav class="col-5 site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
@@ -29,20 +29,57 @@
                   <li><a href="gallery.html">Gallery</a></li>
                 </ul>
               </li>
-              <li class="d-lg-none"><a href="post-job.html">회원가입</a></li>
-              <li class="d-lg-none"><a href="login.html">로그인</a></li>
+              <li class="d-lg-none"><a href="/signUp/joinUser">회원가입</a></li>
+              <li class="d-lg-none"><a href="/signUp/joinWorker">작업자가입</a></li>
+              <li class="d-lg-none"><a href="/login">로그인</a></li>
             </ul>
           </nav>
 
           <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
             <div class="ml-auto">
-              <a href="post-job.html" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block">회원가입</a>
-              <a href="login.html" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span class="mr-2 icon-lock_outline"></span>로그인</a>
+              
+              
+              <div sec:authorize="hasRole('ROLE_ANONYMOUS')">
+               <a href="/signUp/joinUser" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block">회원가입</a>
+              <a href="/signUp/joinWorker" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block">작업자가입</a>
+              <a id="login" href="/login" class="btn btn-primary border-width-2 d-none d-lg-inline-block">
+              <span class="mr-2 icon-lock_outline"></span>로그인</a>
+             
+              </div>
+              
+              <div sec:authorize="hasRole('ROLE_USER')" style="color:write;">
+              <p>[[${#authentication.principal.username}]]님 안녕하세요</p>
+              <a id="logout" class="btn btn-primary border-width-2 d-none d-lg-inline-block">로그아웃</a>
+              <a id="mypage" href="/user/info" class="btn btn-primary border-width-2 d-none d-lg-inline-block">마이페이지</a>
+              </div>
+              
+              <div sec:authorize="hasRole('ROLE_WORKER')" style="color:write;">
+              <p>[[${#authentication.principal.username}]]님 안녕하세요</p>
+              <a id="logout" class="btn btn-primary border-width-2 d-none d-lg-inline-block">로그아웃</a>
+              <a id="mypage" href="/worker/info" class="btn btn-primary border-width-2 d-none d-lg-inline-block">마이페이지</a>
+              </div>
+              
+              <div sec:authorize="hasRole('ROLE_ADMIN')" style="color:write;">
+              <p>[[${#authentication.principal.username}]]님 안녕하세요</p>
+              <a id="logout" class="btn btn-primary border-width-2 d-none d-lg-inline-block">로그아웃</a>
+              <a id="mypage" href="#" class="btn btn-primary border-width-2 d-none d-lg-inline-block">관리자 페이지</a>
+              </div>
+              
             </div>
             <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span class="icon-menu h3 m-0 p-0 mt-2"></span></a>
           </div>
 
         </div>
       </div>
-
+<script>
+	$('div > #logout').on('click', function(e) {
+		Swal.fire({
+			text : '로그아웃 되었습니다.',
+			icon : 'success',
+			showConfirmButton : false
+		})
+			setTimeout(() => location.href='/logout', 800);
+			
+	})
+</script>
 </html>

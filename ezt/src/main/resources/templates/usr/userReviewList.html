@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
+	layout:decorate="~{common/layouts/user_mypage_layout}"
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
@@ -10,21 +10,30 @@
 <body>
   <h1>후기 목록</h1>
   <th:block th:each="review : ${reviewList}">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-	  <div class="col">
-	    <div class="card h-100">
-	      <img src="..." class="card-img-top" alt="...">
-	      <div class="card-body">
-			<h5 class="card-title">지역 : [[${review.regionCode}]]</h5>
-			<p class="card-text">상태 : [[${review.reviewDivision ? : 'N/A'}]]</p>
-			<p class="card-text">별점 : [[${review.star ? : 'N/A'}]]</p>
-			<p class="card-text">작업자 : [[${review.worker ? : 'N/A'}]]</p>
-		    <p class="card-text">내용 : [[${review.content}]]</p>
-		    <p class="card-text">분야 : [[${review.categoryCode}]]</p>
-	      </div>
-	    </div>
-	  </div>
-    </div>
-  </th:block>	
+	<div class="list-group">
+	  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+	    <div class="d-flex w-100 justify-content-between">
+		  <h5 class="mb-1">지역 : [[${review.regionCode}]]
+		  	, 분야 : [[${review.categoryCode}]]</h5>
+		  <small>상태 : [[${review.reviewDivision}]]</small>
+		  <small>작업자 : [[${review.worker}]]</small>
+		</div>
+		<p class="mb-1">내용 : [[${review.content}]]</p> 
+		<small>별점 : [[${review.star}]]</small>
+	  </a>
+	</div>
+  </th:block>
+	<div class="row pagination-wrap mt-5">
+		<div class="col-md-12 text-center ">
+			<div class="custom-pagination ml-auto">
+				<a href="#" class="prev">Prev</a>
+				<div class="d-inline-block">
+					<a href="#" class="active">1</a> <a href="#">2</a> <a href="#">3</a>
+					<a href="#">4</a>
+				</div>
+				<a href="#" class="next">Next</a>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

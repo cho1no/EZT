@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
+	layout:decorate="~{common/layouts/user_mypage_layout}"
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
@@ -9,11 +9,11 @@
 </head>
 <body>
   <h1>의뢰 목록</h1>
-  <th:block th:each="request : ${requestList}">
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-	  <div class="col">
+    <div class="row row-cols-3 row-cols-md-2 g-4">
+	   <th:block th:each="request : ${requestList}">
+	  <div class="col-lg-3 col-md-6 col-sm-12">
 	    <div class="card">
-	      <img src="..." class="card-img-top" alt="...">
+<!-- 	      <img src="..." class="card-img-top" alt="..."> -->
 	      <div class="card-body">
 	        <h5 class="card-title">제목 : [[${request.title}]]</h5>
 	        <p class="card-text">분야 : [[${request.categoryCode}]]</p>
@@ -21,46 +21,19 @@
 	      </div>
 	    </div>
 	  </div>
-    </div>
   </th:block>	
-	
-<!--	<div class="row row-cols-1 row-cols-md-3 g-4">-->
-<!--	  <div class="col">-->
-<!--	    <div class="card h-100">-->
-<!--	      <img src="..." class="card-img-top" alt="...">-->
-<!--	      <div class="card-body">-->
-<!--	        <h5 class="card-title">Card title</h5>-->
-<!--	        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
-<!--	      </div>-->
-<!--	      <div class="card-footer">-->
-<!--	        <small class="text-body-secondary">Last updated 3 mins ago</small>-->
-<!--	      </div>-->
-<!--	    </div>-->
-<!--	  </div>-->
-<!--	  <div class="col">-->
-<!--	    <div class="card h-100">-->
-<!--	      <img src="..." class="card-img-top" alt="...">-->
-<!--	      <div class="card-body">-->
-<!--	        <h5 class="card-title">Card title</h5>-->
-<!--	        <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>-->
-<!--	      </div>-->
-<!--	      <div class="card-footer">-->
-<!--	        <small class="text-body-secondary">Last updated 3 mins ago</small>-->
-<!--	      </div>-->
-<!--	    </div>-->
-<!--	  </div>-->
-<!--	  <div class="col">-->
-<!--	    <div class="card h-100">-->
-<!--	      <img src="..." class="card-img-top" alt="...">-->
-<!--	      <div class="card-body">-->
-<!--	        <h5 class="card-title">Card title</h5>-->
-<!--	        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>-->
-<!--	      </div>-->
-<!--	      <div class="card-footer">-->
-<!--	        <small class="text-body-secondary">Last updated 3 mins ago</small>-->
-<!--	      </div>-->
-<!--	    </div>-->
-<!--	  </div>-->
-<!--	</div>-->
+    </div>
+   <div class="row pagination-wrap mt-5">
+		<div class="col-md-12 text-center ">
+			<div class="custom-pagination ml-auto">
+				<a href="#" class="prev">Prev</a>
+				<div class="d-inline-block">
+					<a href="#" class="active">1</a> <a href="#">2</a> <a href="#">3</a>
+					<a href="#">4</a>
+				</div>
+				<a href="#" class="next">Next</a>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

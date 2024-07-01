@@ -58,14 +58,13 @@ public class SignUpController {
         //  주석풀어야 회원가입됨
          signUpService.joinUser(userVO);
         model.addAttribute("msg", "회원가입 완료!");
-        model.addAttribute("url", "/sgi/login");
+        model.addAttribute("url", "/login");
         return "gongtong/message";
     }
     
     // == 작업자 회원가입 ==
     @GetMapping("signUp/joinWorker")
-    public String signUpWorkerForm(Model model) {
-    	model.addAttribute("userVO", new UserVO());
+    public String signUpWorkerForm(Model model, UserVO userVO) {
     	model.addAttribute("categories", commonCodeService.selectCommonCodeAll("0C"));
     	model.addAttribute("regions", commonCodeService.selectCommonCodeAll("0B"));
     	return "sgu/signUp_worker";
@@ -82,10 +81,12 @@ public class SignUpController {
     	if (errors.hasErrors()) {
     		// 회원가입 실패시 입력 데이터값을 유지
     		model.addAttribute("userVO", userVO);
+    		model.addAttribute("categories", commonCodeService.selectCommonCodeAll("0C"));
+        	model.addAttribute("regions", commonCodeService.selectCommonCodeAll("0B"));
     		return "sgu/signUp_worker";
     	}
     	//  주석풀어야 회원가입됨
-    	//signUpService.joinWorker(userVO);
+    	signUpService.joinWorker(userVO);
     	
     	model.addAttribute("msg", "회원가입 완료!");
     	model.addAttribute("url", "/sgi/login");
