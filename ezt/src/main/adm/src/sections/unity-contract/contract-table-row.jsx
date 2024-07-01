@@ -19,13 +19,13 @@ import { fDateTime } from 'src/utils/format-time';
 
 export default function ContractTableRow({
   // selected,
-  no,
+  unityContractNo,
   title,
   changes,
-  terms,
+  contractTermsContent,
   writeDt,
   useTf,
-  basicTf,
+  basicContractTf,
   // name,
   // email,
   // id,
@@ -54,15 +54,15 @@ export default function ContractTableRow({
   // }
   return (
     <TableRow hover tabIndex={-1} onClick={onClick}>
-      <TableCell component="th" scope="row" pl={5} style={{ fontWeight: 'bold' }}>
-        {no}
+      <TableCell component="th" style={{ fontWeight: 'bold' }} align="center">
+        {unityContractNo}
       </TableCell>
 
       <TableCell>{title}</TableCell>
       <TableCell>{changes}</TableCell>
       <TableCell>{fDateTime(writeDt, 'yy/MM/dd hh:mm')}</TableCell>
       <TableCell>{useTf}</TableCell>
-      <TableCell>{basicTf}</TableCell>
+      <TableCell>{basicContractTf}</TableCell>
 
       {/* <TableCell align="center">
         <Label color={color}>{state}</Label>
@@ -72,13 +72,13 @@ export default function ContractTableRow({
 }
 
 ContractTableRow.propTypes = {
-  no: PropTypes.any,
+  unityContractNo: PropTypes.any,
   title: PropTypes.any,
   changes: PropTypes.any,
-  terms: PropTypes.any,
+  contractTermsContent: PropTypes.any,
   writeDt: PropTypes.any,
   useTf: PropTypes.any,
-  basicTf: PropTypes.any,
+  basicContractTf: PropTypes.any,
   // name: PropTypes.any,
   // email: PropTypes.any,
   // id: PropTypes.any,

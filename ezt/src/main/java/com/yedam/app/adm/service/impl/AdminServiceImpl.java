@@ -65,5 +65,8 @@ public class AdminServiceImpl implements AdminService{
 	public UnityContractVO getUnityContract(int no) {
 		return admMapper.selectUnityContract(no);
 	}
-
+	@Override
+	public int postUnityContract(UnityContractVO vo) {
+		return admMapper.insertUnityContract(vo);
+	}
 }

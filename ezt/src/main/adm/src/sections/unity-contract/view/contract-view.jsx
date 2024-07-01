@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
-// import { fDateTime } from 'src/utils/format-time';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 import { fDateTime } from 'src/utils/format-time';
 
@@ -43,27 +43,31 @@ export default function ContractPage() {
 
   const [open, setOpen] = useState(false);
 
+  const [isEdit, setIsEdit] = useState(false);
+
   const [contractInfo, setContractInfo] = useState({});
+
   useEffect(() => {}, [contractInfo]);
+
   useEffect(() => {
     getContracts();
   }, []);
+
   const getContracts = async () => {
     await axios
       .get('/adm/unityContractsInfo')
       .then((resp) => {
         setContracts(
           [...resp.data].map((_, index) => ({
-            no: _.unityContractNo,
+            unityContractNo: _.unityContractNo,
             title: _.title,
             changes: _.changes,
-            terms: _.contractTermsContent,
+            contractTermsContent: _.contractTermsContent,
             writeDt: _.writeDt,
             useTf: _.useTf,
-            basicTf: _.basicContractTf,
+            basicContractTf: _.basicContractTf,
           }))
         );
-        console.log(resp);
       })
       .catch(() => {});
   };
@@ -83,27 +87,33 @@ export default function ContractPage() {
   // modal close
   const handleClose = () => {
     setOpen(false);
+    setIsEdit(false);
   };
+  // 작성 상태 변경 (readOnly)
+  const setEdit = () => {
+    setIsEdit(true);
+  };
+  // 입력 받은 내용 useState반영
+  const setInputValue = (event) => {
+    const { id, value } = event.target;
+    if (isEdit) setContractInfo({ ...contractInfo, [id]: value });
+  };
+
+  // 새 계약서 모달 func
+  const openNewConstract = () => {
+    setOpen(true);
+    setIsEdit(true);
+    setContractInfo({});
+  };
+
+  // 계약서 등록
+  const postConstract = async () => {
+    const postData = await axios.post('/adm/postUnityContract', contractInfo);
+    setContracts([postData.data, ...contracts]);
+  };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-  };
-  const setUserPause = async (uno) => {
-    await axios
-      .get(`adm/userPause/${uno}`)
-      .then((resp) => {
-        setContractInfo({ ...contractInfo, contractsState: '활동 정지' });
-        getContracts();
-      })
-      .catch();
-  };
-  const setUserActive = async (uno) => {
-    await axios
-      .get(`adm/userActive/${uno}`)
-      .then((resp) => {
-        setContractInfo({ ...contractInfo, contractsState: '활동 중' });
-        getContracts();
-      })
-      .catch();
   };
   const handleChangeRowsPerPage = (event) => {
     setPage(0);
@@ -122,12 +132,14 @@ export default function ContractPage() {
   });
 
   const notFound = !dataFiltered.length && !!filterName;
+
+  // styles
   const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '60%',
+    width: '50%',
     height: '80%',
     bgcolor: 'background.paper',
     boxShadow: 24,
@@ -150,12 +162,24 @@ export default function ContractPage() {
     position: 'relative',
     display: contractInfo.contractsState === '회원 탈퇴' ? 'none' : '',
   };
-
+  const textareaStyle = {
+    width: '100%',
+    resize: 'none',
+    outline: 'none',
+    border: '1px solid rgba(0, 0, 0, 0.1)',
+    borderRadius: '8px',
+    padding: '16.5px 14px',
+    // overflow: 'auto',
+  };
   return (
     <>
       <Container>
         <Card>
-          <ContractTableToolbar filterName={filterName} onFilterName={handleFilterByName} />
+          <ContractTableToolbar
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+            onNewContract={openNewConstract}
+          />
 
           <Scrollbar>
             <TableContainer sx={{ overflow: 'unset' }}>
@@ -166,18 +190,12 @@ export default function ContractPage() {
                   rowCount={contracts.length}
                   onRequestSort={handleSort}
                   headLabel={[
-                    { id: 'no', label: '번호' },
+                    { id: 'no', label: '번호', align: 'center' },
                     { id: 'title', label: '제목' },
                     { id: 'changes', label: '변경사항' },
                     { id: 'writeDt', label: '작성일' },
-                    { id: 'useTf', label: '사용여부' },
-                    { id: 'basicTf', label: '기본 계약서 여부' },
-                    // { id: 'contractsEmail', label: '이메일' },
-                    // { id: 'contractsId', label: '아이디' },
-                    // { id: 'contractsPhone', label: '전화번호' },
-                    // { id: 'contractsJoinDt', label: '가입일' },
-                    // { id: 'contractsRole', label: '구분' },
-                    // { id: 'contractsState', label: '활동상태', align: 'center' },
+                    { id: 'useTf', label: '사용여부', width: '12%' },
+                    { id: 'basicContractTf', label: '기본 계약서 여부', width: '12%' },
                   ]}
                 />
                 <TableBody>
@@ -185,23 +203,15 @@ export default function ContractPage() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => (
                       <ContractTableRow
-                        key={row.no}
-                        no={row.no}
+                        key={row.unityContractNo}
+                        unityContractNo={row.unityContractNo}
                         title={row.title}
                         changes={row.changes}
-                        terms={row.terms}
+                        contractTermsContent={row.contractTermsContent}
                         writeDt={row.writeDt}
                         useTf={row.useTf}
-                        basicTf={row.basicTf}
-                        // uno={row.contractsNo}
-                        // name={row.contractsName}
-                        // email={row.contractsEmail}
-                        // id={row.contractsId}
-                        // phone={row.contractsPhone}
-                        // joinDt={row.contractsJoinDt}
-                        // role={row.contractsRole}
-                        // state={row.contractsState}
-                        onClick={() => handleOpen(row.no)}
+                        basicContractTf={row.basicContractTf}
+                        onClick={() => handleOpen(row.unityContractNo)}
                       />
                     ))}
 
@@ -239,47 +249,34 @@ export default function ContractPage() {
           <CardContent sx={contentStyle}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Typography variant="subtitle1">번호</Typography>
-                <TextField
-                  variant="outlined"
-                  value={contractInfo.unityContractNo}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
                 <Typography variant="subtitle1">제목</Typography>
                 <TextField
                   variant="outlined"
-                  value={contractInfo.title}
-                  InputProps={{
-                    readOnly: true,
-                  }}
+                  id="title"
+                  value={contractInfo.title || ''}
+                  onChange={setInputValue}
                   fullWidth
+                  required
                 />
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="subtitle1">내용</Typography>
-                <TextField
-                  variant="outlined"
-                  value={contractInfo.contractTermsContent}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  fullWidth
+                <TextareaAutosize
+                  id="contractTermsContent"
+                  style={textareaStyle}
+                  value={contractInfo.contractTermsContent || ''}
+                  onChange={setInputValue}
+                  required
                 />
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="subtitle1">변경사항</Typography>
-                <TextField
-                  variant="outlined"
-                  value={contractInfo.changes}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  fullWidth
+                <TextareaAutosize
+                  id="changes"
+                  style={textareaStyle}
+                  value={contractInfo.changes || ''}
+                  onChange={setInputValue}
+                  required
                 />
               </Grid>
               <Grid item xs={12}>
@@ -287,26 +284,40 @@ export default function ContractPage() {
                 <TextField
                   variant="outlined"
                   value={fDateTime(contractInfo.writeDt, 'yyyy/MM/dd hh:mm')}
-                  InputProps={{
-                    readOnly: true,
-                  }}
                   fullWidth
                 />
+              </Grid>
+              <Grid item container spacing={2} xs={12}>
+                <Grid item xs={6}>
+                  <Typography variant="subtitle1">기본 계약서 여부</Typography>
+                  <TextField
+                    variant="outlined"
+                    value={contractInfo.basicContractTf || ''}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="subtitle1">사용 여부</Typography>
+                  <TextField variant="outlined" value={contractInfo.useTf || ''} fullWidth />
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>
           <Button
             variant="contained"
             fullWidth
-            color={contractInfo.contractsState === '활동 중' ? 'error' : 'success'}
+            color={isEdit ? 'success' : 'warning'}
             sx={buttonStyle}
-            onClick={() =>
-              contractInfo.contractsState === '활동 중'
-                ? setUserPause(contractInfo.contractsNo)
-                : setUserActive(contractInfo.contractsNo)
-            }
+            onClick={async () => {
+              if (isEdit) {
+                postConstract();
+                handleClose();
+              } else {
+                setEdit();
+              }
+            }}
           >
-            {contractInfo.contractsState === '활동 중' ? '정지하기' : '정지해제'}
+            {isEdit ? '새 계약서로 저장하기' : '다시 쓰기'}
           </Button>
         </Card>
       </Modal>
