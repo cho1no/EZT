@@ -10,7 +10,7 @@
 	href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 
-<title>계약서 작성</title>
+<title>계약서 수정</title>
 
 <style>
 .hr-sect {
@@ -51,13 +51,12 @@
 	border: 0;
 }
 
-.con_ul li div:nth-child(1){
-  margin-top:6px;
-
+.con_ul li div:nth-child(1) {
+	margin-top: 6px;
 }
-.con_ul li div:nth-child(2){
-  height:38px;
 
+.con_ul li div:nth-child(2) {
+	height: 38px;
 }
 </style>
 </head>
@@ -65,36 +64,45 @@
 	<section class="site-section">
 		<div class="container">
 			<div class="row mb-5">
-				<form class="p-4 p-md-5 border rounded" name="conInsertForm" id="conInsertForm" th:action="@{/conInsert}" method="post" th:object="${contractVO}">
+				<form class="p-4 p-md-5 border rounded" name="conUpdateForm"
+					id="conUpdateForm" th:action="@{/conUpdate}" method="post"
+					th:object="${contractVO}">
 					<div class="row form-group">
 						<div class="col">
 							<h3 class="text-black mb-5 border-bottom pb-2">
-								<b>계약서 작성</b>
+								<b>계약서 수정</b>
 							</h3>
-							<input type="hidden" class="form-control" name="requesterInfo" th:value="${ppsInfo.requester}">
-							<input type="hidden" class="form-control" name="requesterAddress">
-							<input type="hidden" class="form-control" name="workerInfo" th:value="${ppsInfo.worker}">
-							<input type="hidden" class="form-control" name="workerAddress">
-							<input type="hidden" class="form-control" name="proposalNo" th:value="${ppsInfo.proposalNo}">
-							<input type="hidden" class="form-control" name="unityContractNo" value=1>
+							<input type="hidden" class="form-control" name="contractNo"
+								th:value="${con.contractNo}"> <input type="hidden"
+								class="form-control" name="fileId" th:value="${con.fileId}">
+							<input type="hidden" class="form-control" name="requesterInfo"
+								th:value="${con.requesterInfo}"> <input type="hidden"
+								class="form-control" name="requesterAddress"> <input
+								type="hidden" class="form-control" name="workerInfo"
+								th:value="${con.workerInfo}"> <input type="hidden"
+								class="form-control" name="workerAddress"> <input
+								type="hidden" class="form-control" name="proposalNo"
+								th:value="${con.proposalNo}"> <input type="hidden"
+								class="form-control" name="unityContractNo" value=1>
 							<p class="hr-sect">
 								<b>공사개요</b>
 							</p>
 							<div class="row form-group">
 								<div class="col-6">
 									<label><b>공사명</b></label> <input type="text"
-										class="form-control" th:field="*{cttName}">
+										class="form-control" name="cttName" th:value="${con.cttName}">
 								</div>
 							</div>
 
 							<div class="row form-group">
 								<div class="col-10">
 									<label><b>공사주소</b></label>
-										<p class="text-black">[[${'(' + reqInfo.postcode + ') ' +reqInfo.address + ' ' + reqInfo.detailAddress}]]</p>
+									<p class="text-black">[[${'(' + reqInfo.postcode + ') '
+										+reqInfo.address + ' ' + reqInfo.detailAddress}]]</p>
 								</div>
 								<div class="col-2">
 									<label><b>공사면적</b></label>
-										<p class="text-black"> [[${reqInfo.cttPlaceArea}]] </p>
+									<p class="text-black">[[${reqInfo.cttPlaceArea}]]</p>
 								</div>
 							</div>
 
@@ -102,15 +110,21 @@
 							<div class="row form-group">
 								<div class="col-4">
 									<label for="startDt"><b>공사시작날짜</b></label> <input type="text"
-										class="form-control" id="startDt" th:field="*{cttStartDt}" readonly placeholder="날짜 선택">
+										class="form-control" id="startDt"
+										th:value="${#dates.format(con.cttStartDt,
+											'yyyy-MM-dd')}"
+										name="cttStartDt" readonly placeholder="날짜 선택">
 								</div>
 								<div class="col-4">
 									<label for="endDt"><b>공사마감날짜</b></label> <input type="text"
-										class="form-control" id="endDt" th:field="*{cttEndDt}" readonly placeholder="날짜 선택">
+										class="form-control" id="endDt"
+										th:value="${#dates.format(con.cttEndDt,
+											'yyyy-MM-dd')}"
+										name="cttEndDt" readonly placeholder="날짜 선택">
 								</div>
 								<div class="col-4">
-									<label><b>하자보수기간</b></label> <input
-										type="text" class="form-control">
+									<label><b>하자보수기간</b></label> <input type="text"
+										class="form-control">
 								</div>
 							</div>
 							<!-- datepicker -->
@@ -126,7 +140,8 @@
 									</h5>
 								</div>
 								<div class="col-4">
-									<input type="text" class="form-control" th:field="*{cttPrice}">
+									<input type="text" class="form-control" name="cttPrice"
+										th:value="${#numbers.formatInteger(con.cttPrice,1)}">
 								</div>
 								<div class="col-auto">
 									<h5 class="text-black" style="padding-top: 10px">
@@ -135,7 +150,9 @@
 								</div>
 
 							</div>
-							<p class="text-black"><b>대금 지급 시기</b></p>
+							<p class="text-black">
+								<b>대금 지급 시기</b>
+							</p>
 							<div class="p-4 mb-3 bg-white border p-4 rounded">
 								<table class="table table-hover">
 									<thead>
@@ -150,7 +167,24 @@
 										</tr>
 									</thead>
 									<tbody class="content">
-
+										<th:block th:each=" list : ${con.dList}">
+											<tr>
+												<td><input type="text" style="border: 0; width: 100%;"
+													th:value="${list.round}" /></td>
+												<td><input type="text" style="border: 0; width: 100%;"
+													onKeyup="this.value=this.value.replace(/[^-0-9]/g,'').replace('-','').replace(/^0+/, ''); GetSum(${num});"
+													th:value="${#numbers.formatInteger(list.price,1)}"
+													maxlength="12" class="price_${num}" /></td>
+												<td><input type="text" style="border: 0; width: 100%;"
+													th:value="${#dates.format(list.paymentDt,
+											'yyyy-MM-dd')}" /></td>
+												<td><input type="text" style="border: 0; width: 100%;"
+													th:value="${list.history}" /></td>
+												<td><button type="button" class="btn btn-outline-dark"
+														name="deleteBtn"
+														style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">-</button></td>
+											</tr>
+										</th:block>
 									</tbody>
 								</table>
 							</div>
@@ -195,7 +229,7 @@
 
 							<div class="row form-group">
 
-								<div class="col-6" style="padding-top: 60px">
+								<div class="col-6 info_requester" style="padding-top: 60px">
 									<div class="p-4 mb-3 bg-white border p-4 rounded">
 										<h3 class="mt-3 h5 pl-3 mb-3 ">발주자(시행자) "갑"</h3>
 										<ul class="list-unstyled pl-3 mb-0 con_ul">
@@ -203,53 +237,45 @@
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">성명</strong>
 												</div>
-												<div class="col-4">
-													
-												</div></li>
+												<div class="col-4"></div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">전화번호</strong>
 												</div>
-												<div class="col">
-												</div></li>
+												<div class="col"></div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">우편번호</strong>
 												</div>
-												<div class="col-3">
-												</div>
-												<div class="col">
-												</div></li>
+												<div class="col-3"></div>
+												<div class="col"></div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주소</strong>
 												</div>
-												<div class="col">
-												</div></li>
+												<div class="col"></div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">상세주소</strong>
 												</div>
-												<div class="col">
-												</div></li>
+												<div class="col"></div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주민등록번호</strong>
 												</div>
-												<div class="col">
-												</div></li>
+												<div class="col"></div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-												<input type="text" class="form-control" th:field="*{requesterAccount}">
+													<input type="text" class="form-control"
+														name="requesterAccount">
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
 												</div>
-												<div class="col" style="height: 70px;">
-												</div></li>
+												<div class="col" style="height: 70px;"></div></li>
 										</ul>
 									</div>
 								</div>
 
 
-								<div class="col-6" style="padding-top: 60px">
+								<div class="col-6 info_worker" style="padding-top: 60px">
 									<div class="p-4 mb-3 bg-white border p-4 rounded">
 										<h3 class="mt-3 h5 pl-3 mb-3 ">수급자(시공자) "을"</h3>
 										<ul class="list-unstyled pl-3 mb-0 con_ul">
@@ -258,13 +284,13 @@
 													<strong class="text-black">성명</strong>
 												</div>
 												<div class="col-4">
-													<p class="text-black" style="margin:5px 0">[[${userName}]]</p>
+													<p class="text-black" style="margin: 5px 0">[[${worker.usersName}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">전화번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin:5px 0">[[${userPhone}]]</p>
+													<p class="text-black" style="margin: 5px 0">[[${worker.usersPhone}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">우편번호</strong>
@@ -293,13 +319,14 @@
 													<strong class="text-black">주민등록번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin:5px 0">[[${userRnn}]]</p>
+													<p class="text-black" style="margin: 5px 0">[[${worker.usersRnn}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-													<input type="text" class="form-control" th:field="*{workerAccount}">
+													<input type="text" class="form-control"
+														name="workerAccount" th:value="${con.workerAccount}">
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
@@ -317,8 +344,8 @@
 										작성하여 각각 1부씩 보관한다.</b>
 								</p>
 								<p class="text-center" style="letter-spacing: 3px">
-									<b><span class="me-5 cur_year">2024년</span><span class="me-5 cur_month">06월</span><span
-										class="me-5 cur_day">28일</span></b>
+									<b><span class="me-5 cur_year">2024년</span><span
+										class="me-5 cur_month">06월</span><span class="me-5 cur_day">28일</span></b>
 								</p>
 								<p class="uploadTitle mt-5">첨부 파일 업로드</p>
 								<div class="uploadDiv">
@@ -327,7 +354,11 @@
 										onChange="nameList()">
 								</div>
 								<div class="uploadResult">
-									<ul>
+									<ul style="padding: 0">
+										<th:block th:each=" list : ${con.fileList}">
+											<li style='list-style: none'>[['- ' +
+												${list.originalFileName + '.' + list.ext}]]</li>
+										</th:block>
 									</ul>
 								</div>
 							</div>
@@ -339,10 +370,11 @@
 				<div class="col-lg-4 ml-auto" style="padding-top: 30px">
 					<div class="row">
 						<div class="col-6">
-							<button type="button" class="btn btn-block btn-light btn-md" id="insertBtn">저장</button>
+							<button type="button" class="btn btn-block btn-light btn-md"
+								id="updateBtn">저장</button>
 						</div>
 						<div class="col-6">
-							<button type="button" class="btn btn-block btn-primary btn-md">서명</button>
+							<button class="btn btn-block btn-primary btn-md">서명</button>
 						</div>
 					</div>
 				</div>
@@ -363,6 +395,13 @@
     $('.cur_month').html(month + '월');
     $('.cur_day').html(day + '일');
 
+    var work_addr = [[${con.workerAddress}]]
+	var work_num1=  work_addr.indexOf('_');
+	var work_num2 = work_addr.indexOf('_', work_num1 + 1)
+	$('.info_worker #input_postcode').val(work_addr.substring(0, work_num1));
+    $('.info_worker #input_addr').val(work_addr.substring(work_num1 + 1, work_num2));
+    $('.info_worker #input_detailAddr').val(work_addr.substring(work_num2 + 1,));
+    
     
 	// + 버튼 : tbody tr 추가
 	$('table thead button').on('click', addForm);
@@ -446,13 +485,13 @@
 		$('.total').val(comTotal);
 	}
 	
-	var proposalNo = [[${ppsInfo.proposalNo}]];
+	var proposalNo = [[${con.proposalNo}]];
 	
-	$('#insertBtn').on('click', insertAjax );
+	$('#updateBtn').on('click', insertAjax );
 	
 	function insertAjax(e){
 		
-		var formData = new FormData(document.conInsertForm);
+		var formData = new FormData(document.conUpdateForm);
 		
 		var inputFile = $("input[name='uploadFile']");
 		
@@ -473,6 +512,7 @@
 			}
 		}
 		
+	
 		
 		
 		for (const pair of formData.entries()) {
@@ -481,7 +521,7 @@
 		
 		
 		$.ajax({
-			url: '/conInsert',
+			url: '/conUpdate',
 			processData : false,
 			contentType : false,
 			data : formData,
@@ -489,20 +529,10 @@
 			async : false
 			
 		})
-			location.href='/conInfo?proposalNo='+proposalNo;
+			
+		//location.href='/conInfo?proposalNo='+proposalNo;
 	}
-	
 
-	function getEmpObj(){
-		let formAry = $('form').serializeArray();
-		
-		
-		let formObj = {};
-		formAry.forEach(inputTag => {
-			formObj[inputTag.name] = inputTag.value;
-		})
-		return formObj;
-	}
 	
 	
 	</script>
@@ -513,8 +543,8 @@
 	<script type="text/javascript" th:src="@{/js/doc/postcode.js}"></script>
 	<script
 		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-		
-		<!-- uploadAjax -->
+
+	<!-- uploadAjax -->
 	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
 </body>
 </html>

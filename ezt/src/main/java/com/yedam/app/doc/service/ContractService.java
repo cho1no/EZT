@@ -7,4 +7,8 @@ public interface ContractService {
 	
 	// 계약서 단건조회
 	public ContractVO conInfo(ContractVO contracVO);
+	
+	// 계약서 수정
+	public int conUpdate(ContractVO contractVO);
+	
 }

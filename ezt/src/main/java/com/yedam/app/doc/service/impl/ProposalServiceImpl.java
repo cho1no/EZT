@@ -91,7 +91,7 @@ public class ProposalServiceImpl implements ProposalService {
 	// 견적서 파일 첨부
 	@Override
 	public int ppsFileUpdate(ProposalVO proposalVO) {
-		System.out.println(proposalVO);
+		//System.out.println(proposalVO);
 		if (proposalVO.getFileList() != null) {
 			ppsMapper.insertFileAttrInfo(proposalVO);
 			

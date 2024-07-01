@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class FileServiceImpl implements FileService{
+public class FileServiceImpl implements FileService {
 	// 폴더 저장 경로
 	private String getForder() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -28,6 +28,7 @@ public class FileServiceImpl implements FileService{
 		String str = sdf.format(date);
 		return str.replace("-", File.separator);
 	}
+
 	// 이미지 체크
 	private boolean checkImageType(File file) {
 		try {
@@ -39,60 +40,61 @@ public class FileServiceImpl implements FileService{
 		}
 		return false;
 	}
+
 	@Override
 	public List<FileVO> uploadFiles(MultipartFile[] uploadFile) {
 		// 폴더 경로
-				String uploadFolder = "C:\\temp";
-				List<FileVO> list = new ArrayList<>();
+		String uploadFolder = "C:\\temp";
+		List<FileVO> list = new ArrayList<>();
 
-				String uploadFolderPath = getForder();
-				// 폴더 만들기
-				File uploadPath = new File(uploadFolder, uploadFolderPath);
-				log.info("upload path: " + uploadPath);
+		String uploadFolderPath = getForder();
+		// 폴더 만들기
+		File uploadPath = new File(uploadFolder, uploadFolderPath);
+		log.info("upload path: " + uploadPath);
 
-				if (uploadPath.exists() == false) {
-					uploadPath.mkdirs();
-				}
+		if (uploadPath.exists() == false) {
+			uploadPath.mkdirs();
+		}
 
-				for (MultipartFile multipartFile : uploadFile) {
+		for (MultipartFile multipartFile : uploadFile) {
+			if (!multipartFile.isEmpty()) {
+				FileVO fileVO = new FileVO();
+				// 콘솔 출력
+				log.info("Upload File Name : " + multipartFile.getOriginalFilename());
+				log.info("Upload File Size : " + multipartFile.getSize());
+				log.info("Upload reName : " + multipartFile.getName());
+				log.info("Upload ContentType : " + multipartFile.getContentType());
+				// filVO에 값 넣기
+				String uploadFileName = multipartFile.getOriginalFilename();
+				int nameindex = uploadFileName.indexOf('.');
+				fileVO.setOriginalFileName(uploadFileName.substring(0, nameindex));
 
-					FileVO fileVO = new FileVO();
-					// 콘솔 출력
-					log.info("Upload File Name : " + multipartFile.getOriginalFilename());
-					log.info("Upload File Size : " + multipartFile.getSize());
-					log.info("Upload reName : " + multipartFile.getName());
-					log.info("Upload ContentType : " + multipartFile.getContentType());
-					// filVO에 값 넣기
-					String uploadFileName = multipartFile.getOriginalFilename();
-					int nameindex = uploadFileName.indexOf('.');
-					fileVO.setOriginalFileName(uploadFileName.substring(0, nameindex));
+				UUID uuid = UUID.randomUUID();
+				uploadFileName = uuid.toString() + "_" + uploadFileName;
 
-					UUID uuid = UUID.randomUUID();
-					uploadFileName = uuid.toString() + "_" + uploadFileName;
+				int nameidx = uploadFileName.indexOf("_");
+				fileVO.setSaveName(uploadFileName.substring(0, nameidx));
 
-					int nameidx = uploadFileName.indexOf("_");
-					fileVO.setSaveName(uploadFileName.substring(0, nameidx));
+				fileVO.setSavePath(uploadFolderPath);
+				fileVO.setFileSize((int) multipartFile.getSize());
 
-					fileVO.setSavePath(uploadFolderPath);
-					fileVO.setFileSize((int) multipartFile.getSize());
+				int index = uploadFileName.indexOf(".");
+				fileVO.setExt(uploadFileName.substring(index + 1));
 
-					int index = uploadFileName.indexOf(".");
-					fileVO.setExt(uploadFileName.substring(index + 1));
+				try {
+					File saveFile = new File(uploadPath, uploadFileName);
 
-					try {
-						File saveFile = new File(uploadPath, uploadFileName);
-
-						if (!checkImageType(saveFile)) {
-							// 파일 저장
-							multipartFile.transferTo(saveFile);
-							list.add(fileVO);
-						}
-
-					} catch (Exception e) {
-						e.printStackTrace();
+					if (!checkImageType(saveFile)) {
+						// 파일 저장
+						multipartFile.transferTo(saveFile);
+						list.add(fileVO);
 					}
-				}
 
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return list;
 	}
 
