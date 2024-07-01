@@ -16,15 +16,19 @@ form span{
 	color: blue;
 	font-size: 10pt;
 }
+
 </style>
 </head>
 <body>
   <div class="container">
-	<h3>[[${userId.usersName}]]님 안녕하세요.</h3>
+	<h3>[[${userVO.usersName}]]님 안녕하세요.</h3>
 	<hr>
 	<h1>회원정보 수정</h1>
-	<form th:action="workerUpdate" th:object="${userId}">
+	<form th:action="workerUpdate" th:object="${userVO}">
 	  <div>
+	    <div>
+	    	<input type="hidden" th:field="*{usersId}">
+	    </div>
 		<div>
 			<label for="usersNick">닉네임</label>
 			<input class="form-control" type="text" 
@@ -40,21 +44,61 @@ form span{
 			<input class="form-control" type="email" 
 			id="usersEmail"  th:field="*{usersEmail}"><span></span>
 		</div>
-		<div>
-			<label for="usersEmail">주 활동지역</label>
-			<input class="form-control" type="text" 
-			id="regionCode" th:value="${regionCode}">
+		<div class="row form-group">
+			<label class="text-black" for="regions">주 활동지역</label>
+			<div class="col-md-12 mb-3 mb-md-0" id="region0">
+				
+			</div>
 		</div>
-		<div>
-			<label for="usersEmail">작업 분야</label>
-			<input class="form-control" type="text" 
-			id="categoryCode" th:value="${categoryCode}">
+		<div class="row form-group">
+			<label class="text-black" for="categories">작업 분야</label>
+			<div class="col-md-12 mb-3 mb-md-0" id="categories0">
+
+			</div>
+		</div>
+	
+		<div class="row form-group">
+				<label class="text-black" for="regi">주 활동지역</label>
+			<div class="col-md-12 mb-3 mb-md-0">
+				<th:block th:each="region : ${regi}">
+					<input type="checkbox" name="regionCode" th:value="${region.codeNo}">
+					<label th:for="${region.codeNo}">[[${region.codeName}]]</label>
+				</th:block>
+			</div>
+		</div>
+		<div class="row form-group">
+				<label class="text-black" for="cate">작업 분야</label>
+			<div class="col-md-12 mb-3 mb-md-0">
+					<th:block th:each="category : ${cate}">
+						<input type="checkbox" name="categoryCode" th:value="${category.codeNo}">
+						<label th:for="${category.codeNo}">[[${category.codeName}]]</label>
+					</th:block>
+			</div>
 		</div>
 		<button type="button" id="updateBtn">수정하기</button>
 	  </div>
 	</form>
   </div>
+</body>
 <script th:inline="javascript">
+	let categories = /*[[${categories}]]*/"";
+	let regions = /*[[${regions}]]*/"";
+	
+	
+	regions.forEach((ele, idx)=>{
+		console.log(ele.REGION_CODE);
+		$('#region0').append(`<span class="regionTag">${ele.REGION_CODE}</span>`)
+	})
+	
+	
+	
+	categories.forEach((e, i) => {
+		console.log(e.CATEGORY_CODE);
+		$('#categories0').append(`<span class="regionTag">${e.CATEGORY_CODE}</span>`)
+	})
+
+
+
 	$('#updateBtn').on('click', updateWorker);
 	
 	function updateWorker(e){
@@ -62,13 +106,17 @@ form span{
 		let dataObj = getUsrObj();
 		console.log(dataObj);
 		
-		$.ajax('worker/update', {
+		$.ajax('/worker/update', {
 			type : 'post',
 			contentType : 'application/json',
 			data : JSON.stringify(dataObj)
 		})
 		.done(re => {
 			console.log(re);
+			Swal.fire({
+				text:'변경완료!',
+				icon: 'success'
+			})
 		})
 		.fail(err => console.log(err));
 	};
@@ -169,5 +217,4 @@ form span{
 		})
 	}
 </script>
-</body>
 </html>

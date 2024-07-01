@@ -42,10 +42,10 @@ public class LoginUserVO implements UserDetails{
 		return userVO.getUsersNo();
 	}
 	
-	public UserVO getUserVO() {
-		return userVO;
-	}
-
+	public void setUserVO(UserVO userVO) {
+		this.userVO = userVO;
+	} 
+	
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
@@ -65,6 +65,8 @@ public class LoginUserVO implements UserDetails{
 	public boolean isEnabled() {
 		return true;
 	}
+
+	
 
 	
 }
