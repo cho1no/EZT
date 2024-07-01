@@ -1,35 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.rvw.mapper.ReviewMapper">
+<!-- criteria -->
+<sql id="criteria">
+	<trim prefixOverrides="OR">
+    	<foreach item='type' collection="typeArr">
+    		<trim prefix="OR">
+    			<choose>
+    				<when test="type == 'C'.toString()">
+    					a.category_code like '%'||#{keyword}||'%'
+    				</when>
+    				<when test="type == 'R'.toString()">
+    					a.region_code like '%'||#{keyword}||'%'
+    				</when>
+    			</choose>
+    		</trim>
+    	</foreach>
+    </trim>
+</sql>
 <!-- 후기 전체 조회 -->
 <select id="reviewList" resultType="ReviewVO">
-
-	 SELECT	r.review_no
-			,r.request_no
-			,FIND_COMMONCODE(q.region_code) as region_code
-			,r.writer
-			,r.worker
-			,USERNAME(r.writer) as writer_name
-            ,USERNAME(r.worker) as worker_name
-			,r.star
-			,r.content
-			,r.write_dt
-			,r.review_division
-			,r.file_id
-            ,f.save_name
-            ,f.ext
-	  FROM review r
-	  	JOIN request q
-	  	ON r.request_no = q.request_no
-        LEFT OUTER JOIN file_detail_info f
-	    ON( r.file_id = f.file_id and f.boss_tf = 'Y')
-	  ORDER BY review_no desc
+	SELECT c.*
+FROM (
+    SELECT ROWNUM as rn
+        , a.*
+    FROM (SELECT	
+	     		r.review_no
+				,r.request_no
+				,FIND_COMMONCODE(q.region_code) as region_code
+				,FIND_COMMONCODE(q.category_code) as category_code
+				,r.writer
+				,r.worker
+				,USERNAME(r.writer) as writer_name
+	            ,USERNAME(r.worker) as worker_name
+				,r.star
+				,r.content
+				,r.write_dt
+				,r.review_division
+				,r.file_id
+	            ,f.save_name
+	            ,f.ext
+	            
+		  FROM review r
+		  	JOIN request q 	ON r.request_no = q.request_no
+	        LEFT OUTER JOIN file_detail_info f ON( r.file_id = f.file_id and f.boss_tf = 'Y')
+		  	ORDER BY review_no desc) a
+   	<where><include refid="criteria"></include></where>) c
+<![CDATA[
+WHERE c.rn <= #{pageNum} * #{amount} AND
+    c.rn > (#{pageNum} - 1) * #{amount}
+]]>
 </select>
+<!-- 전체 게시물 수 -->
 <select id="getTotalCount" resultType="int">
-	SELECT count(*)
-	FROM request
-	WHERE request_no > 0
-	
+	SELECT COUNT(*)
+	FROM (SELECT	
+	     		r.review_no
+				,r.request_no
+				,FIND_COMMONCODE(q.region_code) as region_code
+				,FIND_COMMONCODE(q.category_code) as category_code
+				,r.writer
+				,r.worker
+				,USERNAME(r.writer) as writer_name
+	            ,USERNAME(r.worker) as worker_name
+				,r.star
+				,r.content
+				,r.write_dt
+				,r.review_division
+				,r.file_id
+	            ,f.save_name
+	            ,f.ext
+	            
+		  FROM review r
+		  	JOIN request q 	ON r.request_no = q.request_no
+	        LEFT OUTER JOIN file_detail_info f ON( r.file_id = f.file_id and f.boss_tf = 'Y')
+		  	ORDER BY review_no desc) a
+   	<where>
+		<include refid="criteria"></include>	
+		AND review_no > 0
+	</where>
 </select>
 <resultMap id="imgMap" type="ReviewVO">
 	<collection property="fileVO" javaType="ArrayList" column="file_id" ofType="FileVO" select="selectImgALl" />

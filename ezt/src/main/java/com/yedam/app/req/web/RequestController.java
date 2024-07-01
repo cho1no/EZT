@@ -1,4 +1,4 @@
-package com.yedam.app.req.controller;
+package com.yedam.app.req.web;
 
 import java.util.List;
 
@@ -20,7 +20,10 @@ import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.service.UserVO;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class RequestController {
 	@Autowired
 	RequestService requestService;	
@@ -30,6 +33,7 @@ public class RequestController {
 	// 전체조회
 	@GetMapping("requestList")
 	public String requestList(Criteria cri , Model model) {
+		log.info(cri.toString());
 		List<RequestVO> list = requestService.requestList(cri);
 		model.addAttribute("requestList", list);
 		

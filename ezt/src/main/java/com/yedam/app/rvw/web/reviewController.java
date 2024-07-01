@@ -1,4 +1,4 @@
-package com.yedam.app.rvw.controller;
+package com.yedam.app.rvw.web;
 
 import java.util.List;
 

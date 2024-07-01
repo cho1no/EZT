@@ -15,18 +15,29 @@ public class ReqTest {
 	RequestMapper mapper;
 	
 	
+//	@Test
+//	public void testPaging() {
+//		
+//		Criteria cri = new Criteria();
+//		
+//		cri.setPageNum(3);
+//		cri.setAmount(10);
+//		
+//		List<RequestVO> list = mapper.selectRequestAll(cri);
+//		
+//		list.forEach(request -> System.out.print(request.getRequestNo()));
+//		
+//	}
+	
 	@Test
-	public void testPaging() {
-		
+	public void testSearch() {
 		Criteria cri = new Criteria();
-		
-		cri.setPageNum(3);
-		cri.setAmount(10);
+		cri.setKeyword("14");
+		cri.setType("R");
 		
 		List<RequestVO> list = mapper.selectRequestAll(cri);
 		
-		list.forEach(request -> System.out.print(request.getRequestNo()));
-		
+		list.forEach(request -> System.out.print(request));
 	}
 	
 }
