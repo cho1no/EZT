@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.sgi.service.LoginUserVO;
+import com.yedam.app.usr.mapper.UserMapper;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.WorkerService;
 
@@ -27,6 +28,9 @@ public class WorkerController {
 	@Autowired
 	CommonCodeService commonCodeService;
 	
+	@Autowired
+	UserMapper userMapper;
+	
 	//정보조회
 	@GetMapping("worker/info")
 	public String workerInfo(@AuthenticationPrincipal LoginUserVO vo, Model model) {
@@ -40,15 +44,22 @@ public class WorkerController {
 	//정보수정 -페이지
 	@GetMapping("worker/update")
 	public String workerUpdateForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
-		model.addAttribute("userId", vo.getUserVO());
+		model.addAttribute("cate", commonCodeService.selectCommonCodeAll("0C"));
+    	model.addAttribute("regi", commonCodeService.selectCommonCodeAll("0B"));
+		model.addAttribute("userVO", vo.getUserVO());
+		model.addAttribute("categories", workerService.selectCategoryInfo(vo.getUserNo()));
+		model.addAttribute("regions", workerService.selectRegionInfo(vo.getUserNo()));
 		return "wkr/workerUpdate";
 	}
 	
 	//정보수정 기능
 	@PostMapping("worker/update")
 	@ResponseBody
-	public Map<String, Object> workerUpdate(@RequestBody UserVO userVO){
-		return workerService.updateWorker(userVO);
+	public Map<String, Object> workerUpdate(@RequestBody UserVO userVO, @AuthenticationPrincipal LoginUserVO vo){
+		Map<String, Object> result = workerService.updateWorker(userVO);
+		UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
+		vo.setUserVO(uvo);
+		return result;
 	}
 	
 	//비밀번호 변경 -페이지

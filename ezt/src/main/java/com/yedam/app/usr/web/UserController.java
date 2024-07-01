@@ -16,6 +16,7 @@ import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.sgi.service.LoginUserVO;
+import com.yedam.app.usr.mapper.UserMapper;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
 
@@ -27,6 +28,9 @@ public class UserController {
 	@Autowired
 	CommonCodeService commonCodeService;
 	
+	@Autowired
+	UserMapper userMapper;
+	
 	//정보조회
 	@GetMapping("user/info")
 	public String userInfo(@AuthenticationPrincipal LoginUserVO vo, Model model) {
@@ -37,15 +41,18 @@ public class UserController {
 	//정보수정 -페이지
 	@GetMapping("user/update")
 	public String userUpdateForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
-		model.addAttribute("userId", vo.getUserVO());
+		model.addAttribute("userVO", vo.getUserVO());
 		return "usr/userUpdate";
 	}
 	
 	//정보수정 기능 
 	@PostMapping("user/update")
 	@ResponseBody
-	public Map<String, Object> userUpdate(@RequestBody UserVO userVO){
-		return userService.updateUser(userVO);
+	public Map<String, Object> userUpdate(@RequestBody UserVO userVO, @AuthenticationPrincipal LoginUserVO vo){
+		Map<String, Object> result = userService.updateUser(userVO);
+		UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
+		vo.setUserVO(uvo);
+		return result;
 	}
 
 	//비밀번호 변경 -페이지
