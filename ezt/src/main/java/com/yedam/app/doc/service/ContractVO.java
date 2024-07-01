@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.yedam.app.common.service.FileVO;
+
 import lombok.Data;
 
 @Data
@@ -32,4 +34,6 @@ public class ContractVO {
 	private Date cttEndDt;	// 공사 마감 일
 	
 	private List<ContractDetailVO> dList;
+	
+	private List<FileVO> fileList;
 }

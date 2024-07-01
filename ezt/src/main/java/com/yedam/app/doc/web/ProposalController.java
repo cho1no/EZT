@@ -161,7 +161,7 @@ public class ProposalController {
 	// 파일 업로드
 	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> uploadAjaxPost(MultipartFile[] uploadFile, ProposalVO proposalVO) {
-
+		
 		List<FileVO> list = fileService.uploadFiles(uploadFile);
 		// proposalVO에 값 넣기
 		proposalVO.setFileList(list);
