@@ -99,7 +99,7 @@
 	</select>
 
 	<!-- 파일 정보 DB 등록 attr -->
-	<insert id="insertFileAttrConInfo" parameterType="ContractVO">
+	<insert id="insertFileAttrConInfo" statementType="CALLABLE" parameterType="ContractVO">
 		<selectKey keyProperty="fileId" resultType="Integer"
 			order="BEFORE">
 			SELECT SEQ_FILEID.NEXTVAL
