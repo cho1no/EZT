@@ -1,246 +1,259 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/worker_mypage_layout}"
-	layout:fragment="Content">
-<head>
-<meta charset="utf-8">
-<title>작업자 마이페이지</title>
-<style>
-form span.error{
-	color: red;
-	font-size: 10pt;
-}
+<html
+  xmlns:th="https://www.thymeleaf.org/"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{common/layouts/worker_mypage_layout}"
+  layout:fragment="Content"
+>
+  <head>
+    <meta charset="utf-8" />
+    <title>작업자 마이페이지</title>
+    <style>
+      form span.error {
+        color: red;
+        font-size: 10pt;
+      }
 
-form span{
-	color: blue;
-	font-size: 10pt;
-}
+      form span {
+        color: blue;
+        font-size: 10pt;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h3>[[${userVO.usersName}]]님 안녕하세요.</h3>
+      <hr />
+      <h1>회원정보 수정</h1>
+      <form
+        th:action="@{/worker/update}"
+        th:object="${userVO}"
+        method="post"
+        name="workerUpdate"
+      >
+        <div>
+          <div>
+            <input type="hidden" th:field="*{usersNo}" />
+            <input type="hidden" th:field="*{usersId}" />
+          </div>
+          <div>
+            <label for="usersNick">닉네임</label>
+            <input
+              class="form-control"
+              type="text"
+              id="usersNick"
+              th:field="*{usersNick}"
+            /><span></span>
+          </div>
+          <div>
+            <label for="usersPhone">전화번호</label>
+            <input
+              class="form-control"
+              type="text"
+              id="usersPhone"
+              th:field="*{usersPhone}"
+            /><span></span>
+          </div>
+          <div>
+            <label for="usersEmail">이메일</label>
+            <input
+              class="form-control"
+              type="email"
+              id="usersEmail"
+              th:field="*{usersEmail}"
+            /><span></span>
+          </div>
+          <div class="row form-group">
+            <label class="text-black" for="regions">주 활동지역</label>
+            <div class="col-md-12 mb-3 mb-md-0" id="region"></div>
+          </div>
+          <div class="row form-group">
+            <label class="text-black" for="categories">작업 분야</label>
+            <div class="col-md-12 mb-3 mb-md-0" id="category"></div>
+          </div>
 
-</style>
-</head>
-<body>
-  <div class="container">
-	<h3>[[${userVO.usersName}]]님 안녕하세요.</h3>
-	<hr>
-	<h1>회원정보 수정</h1>
-	<form th:action="@{/worker/update}" th:object="${userVO}" method="post" name="workerUpdate">
-	  <div>
-	    <div>
-	    	<input type="hidden" th:field="*{usersId}">
-	    </div>
-		<div>
-			<label for="usersNick">닉네임</label>
-			<input class="form-control" type="text" 
-			id="usersNick"  th:field="*{usersNick}"><span></span>
-		</div>
-		<div>
-			<label for="usersPhone">전화번호</label>
-			<input class="form-control" type="text" 
-			id="usersPhone" th:field="*{usersPhone}"><span></span>
-		</div>
-		<div>
-			<label for="usersEmail">이메일</label>
-			<input class="form-control" type="email" 
-			id="usersEmail"  th:field="*{usersEmail}"><span></span>
-		</div>
-		<div class="row form-group">
-			<label class="text-black" for="regions">주 활동지역</label>
-			<div class="col-md-12 mb-3 mb-md-0" id="region">
-				
-			</div>
-		</div>
-		<div class="row form-group">
-			<label class="text-black" for="categories">작업 분야</label>
-			<div class="col-md-12 mb-3 mb-md-0" id="category">
+          <button type="button" id="updateBtn">수정하기</button>
+        </div>
+      </form>
+    </div>
+  </body>
+  <script th:inline="javascript">
+    let regions = /*[[${regions}]]*/ "";
+    regions = regions.map((e) => e.REGION_CODE);
+    let regi = /*[[${regi}]]*/ "";
 
-			</div>
-		</div>
-	
-		
-		<button type="button" id="updateBtn">수정하기</button>
-		<button type="button" id="updateBtn2">수정하기1</button>
-	  </div>
-	</form>
-  </div>
-</body>
-<script th:inline="javascript">
-		
-	let regions = /*[[${regions}]]*/"";
-	regions = regions.map((e) => (e.REGION_CODE));
-	let regi = /*[[${regi}]]*/"";
+    let categories = /*[[${categories}]]*/ "";
+    categories = categories.map((e) => e.CATEGORY_CODE);
+    let cate = /*[[${cate}]]*/ "";
+		regi.forEach((e, idx) => {
+        let input = $(
+          `<input type="checkbox" name="regionCode" value="${e.codeNo}">`
+        );
+        let label = $(`<label for="${e.codeNo}">${e.codeName}</label>`);
+        if (regions.includes(e.codeName)) {
+          input.prop("checked", true);
+        }
+        $("#region").append(input).append(label);
+      });
 
-	regi.forEach((e, idx)=> {
-		let input = $(`<input type="checkbox" name="regionCode" th:value="${e.codeName}">`);
-		let label = $(`<label th:for="${e.codeName}">${e.codeName}</label>`);
-		if(regions.includes(e.codeName)){
-			input.prop('checked', true);
-		}
-		$('#region').append(input).append(label);
-	})
-	
-
-	let categories = /*[[${categories}]]*/"";
-	categories = categories.map((e)=>(e.CATEGORY_CODE));
-	let cate = /*[[${cate}]]*/"";
+      cate.forEach((e, idx) => {
+        // [ asdf, 1234, qwer] - ele.codeName 있냐?
+        let input = $(
+          `<input type="checkbox" name="categoryCode" value="${e.codeNo}">`
+        );
+        let label = $(`<label for="${e.codeNo}">${e.codeName}</label>`);
+        if (categories.includes(e.codeName)) {
+          input.prop("checked", true);
+        }
+        $("#category").append(input).append(label);
+      });
+    $(document).ready(function () {
+      $("#updateBtn").click(() => {
+        $(workerUpdate).submit();
+      });
+    });
 
 	
-	cate.forEach((e, idx)=>{
-		// [ asdf, 1234, qwer] <- ele.codeName 있냐?
-		let input = $(`<input type="checkbox" name="categoryCode" th:value="${e.codeName}">`);
-		let label = $(`<label th:for="${e.codeName}">${e.codeName}</label>`);
-		if (categories.includes(e.codeName)){
-			input.prop('checked', true);
-		}
-		$('#category').append(input).append(label);
-// 		console.log(ele.codeName);
-	})
 	
-// 	regions.forEach((ele, idx)=>{
-// 		console.log(ele.REGION_CODE);
-		
-		
-// 		$('#region0').append(`
-// 				<input type="checkbox" name="regionCode" th:value="${ele.REGION_CODE}" checked>
-// 				<label th:for="${ele.REGION_CODE}">${ele.REGION_CODE}</label>
-			
-// 				`)
-// 	})
-// 				//<span class="regionTag">${ele.REGION_CODE}</span>
-	
-	
-	
-// 	categories.forEach((e, i) => {
-// 		console.log(e.CATEGORY_CODE);
-// 		$('#categories0').append(`
-// 				<input type="checkbox" name="categoryCode" th:value="${e.CATEGORY_CODE}" checked>
-// 				<label th:for="$${e.CATEGORY_CODE}">${e.CATEGORY_CODE}</label>
-// 				`)
-// 	})
+    //    regions.forEach((ele, idx)=>{
+    //       console.log(ele.REGION_CODE);
 
-				//<span class="regionTag">${e.CATEGORY_CODE}</span>
-	$('#updateBtn2').on('click', updateWk);
-	function updateWk(e){
-		$(workerUpdate).submit();
-	}
-	
+    //       $('#region0').append(`
+    //             <input type="checkbox" name="regionCode" th:value="${ele.REGION_CODE}" checked>
+    //             <label th:for="${ele.REGION_CODE}">${ele.REGION_CODE}</label>
 
-	$('#updateBtn').on('click', updateWorker);
-	
-	function updateWorker(e){
-		
-		let dataObj = getUsrObj();
-		console.log(dataObj);
-		
-		$.ajax('/worker/update', {
-			type : 'post',
-			contentType : 'application/json',
-			data : JSON.stringify(dataObj)
-		})
-		.done(re => {
-			console.log(re);
-			Swal.fire({
-				text:'변경완료!',
-				icon: 'success'
-			})
-		})
-		.fail(err => console.log(err));
-	};
+    //             `)
+    //    })
+    //             //<span class="regionTag">${ele.REGION_CODE}</span>
 
-	function getUsrObj(){
-		let formAry = $('form').serializeArray();
-		
-		let formObj = {};
-		formAry.forEach(inputTag => {
-			formObj[inputTag.name] = inputTag.value;
-		});
-		
-		return formObj;
-	};
-	
-	//닉네임 중복체크
-	var nick = $('#usersNick');
-	var basicNick = $('#usersNick').val();
-	checkNick();
-	function checkNick() {
-		nick.on("change", function() { 
-			var reqExp = /^[ㄱ-ㅎ가-힣A-Za-z0-9-_]{2,10}$/;
-				
-				if(nick.val() == ''){
-					nick.next().text('닉네임을 입력해주세요')
-					nick.next().addClass('error')
-					nick.focus();
-					return ;
-				}
-				
-				if(!reqExp.test(nick.val())){
-					nick.next().text('닉네임은 특수문자를 제외한 2~10자리여야 합니다.')
-					nick.next().addClass('error')
-					return ;		
-				}
-				
-				if(basicNick == nick.val()){
-					nick.next().text('');
-					nick.next().removeClass('error');
-				}
-			
-				$.ajax({
-					type : "get",
-					url : "/signUp/checkNick/"+nick.val(),
-					success : function(dt) {
-						if(basicNick == nick.val()){
-							nick.next().text('');
-							nick.next().removeClass('error');
-						}else if (dt == '중복') {
-							nick.next().text('이미 사용중인 닉네임입니다.')
-							nick.next().addClass('error')
-						} else {
-							nick.next().text('사용가능한 닉네임입니다.')
-							nick.next().removeClass('error')
-						}
-					}
-				})
-		})
-	}
-	//이메일 중복체크
-	var email = $('#usersEmail');
-	var basicEmail = $('#usersEmail').val();
-	checkEmail();
-	
-	function checkEmail() {
-		email.on("change", function() { 
-			var reqExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
-			
-			if(email.val() == ''){
-				email.next().text('이메일을 입력해주세요')
-				email.next().addClass('error')
-				nick.focus();
-				return ;
-			}
-			
-			if (!reqExp.test(email.val())) {
-				email.next().text('이메일 형식이 올바르지 않습니다.')
-				email.next().addClass('error')
-				nick.focus();
-				return ;
-			}
-			
-			
-			
-			$.ajax({
-				type : "get",
-				url : "/signUp/checkEmail?email="+email.val(),
-				success : function(dt) {
-					if (dt == '중복') { 
-						email.next().text('이미 사용중인 이메일입니다.')
-						email.next().addClass('error')
-					} else {
-						email.next().text('사용가능한 이메일입니다.')
-						email.next().removeClass('error')
-					}
-				}
-			})
-		})
-	}
-</script>
+    //    categories.forEach((e, i) => {
+    //       console.log(e.CATEGORY_CODE);
+    //       $('#categories0').append(`
+    //             <input type="checkbox" name="categoryCode" th:value="${e.CATEGORY_CODE}" checked>
+    //             <label th:for="$${e.CATEGORY_CODE}">${e.CATEGORY_CODE}</label>
+    //             `)
+    //    })
+
+    //<span class="regionTag">${e.CATEGORY_CODE}</span>
+  /*  $("#updateBtn2").on("click", updateWk);
+    function updateWk(e) {
+      $(workerUpdate).submit();
+    }
+
+    $("#updateBtn").on("click", updateWorker);
+
+    function updateWorker(e) {
+      let dataObj = getUsrObj();
+      console.log(dataObj);
+
+      $.ajax("/worker/update", {
+        type: "post",
+        contentType: "application/json",
+        data: JSON.stringify(dataObj),
+      })
+        .done((re) => {
+          console.log(re);
+          Swal.fire({
+            text: "변경완료!",
+            icon: "success",
+          });
+        })
+        .fail((err) => console.log(err));
+    }*/
+
+    function getUsrObj() {
+      let formAry = $("form").serializeArray();
+
+      let formObj = {};
+      formAry.forEach((inputTag) => {
+        formObj[inputTag.name] = inputTag.value;
+      });
+
+      return formObj;
+    }
+
+    //닉네임 중복체크
+    var nick = $("#usersNick");
+    var basicNick = $("#usersNick").val();
+    checkNick();
+    function checkNick() {
+      nick.on("change", function () {
+        var reqExp = /^[ㄱ-ㅎ가-힣A-Za-z0-9-_]{2,10}$/;
+
+        if (nick.val() == "") {
+          nick.next().text("닉네임을 입력해주세요");
+          nick.next().addClass("error");
+          nick.focus();
+          return;
+        }
+
+        if (!reqExp.test(nick.val())) {
+          nick.next().text("닉네임은 특수문자를 제외한 2~10자리여야 합니다.");
+          nick.next().addClass("error");
+          return;
+        }
+
+        if (basicNick == nick.val()) {
+          nick.next().text("");
+          nick.next().removeClass("error");
+        }
+
+        $.ajax({
+          type: "get",
+          url: "/signUp/checkNick/" + nick.val(),
+          success: function (dt) {
+            if (basicNick == nick.val()) {
+              nick.next().text("");
+              nick.next().removeClass("error");
+            } else if (dt == "중복") {
+              nick.next().text("이미 사용중인 닉네임입니다.");
+              nick.next().addClass("error");
+            } else {
+              nick.next().text("사용가능한 닉네임입니다.");
+              nick.next().removeClass("error");
+            }
+          },
+        });
+      });
+    }
+    //이메일 중복체크
+    var email = $("#usersEmail");
+    var basicEmail = $("#usersEmail").val();
+    checkEmail();
+
+    function checkEmail() {
+      email.on("change", function () {
+        var reqExp =
+          /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+
+        if (email.val() == "") {
+          email.next().text("이메일을 입력해주세요");
+          email.next().addClass("error");
+          nick.focus();
+          return;
+        }
+
+        if (!reqExp.test(email.val())) {
+          email.next().text("이메일 형식이 올바르지 않습니다.");
+          email.next().addClass("error");
+          nick.focus();
+          return;
+        }
+
+        $.ajax({
+          type: "get",
+          url: "/signUp/checkEmail?email=" + email.val(),
+          success: function (dt) {
+            if (dt == "중복") {
+              email.next().text("이미 사용중인 이메일입니다.");
+              email.next().addClass("error");
+            } else {
+              email.next().text("사용가능한 이메일입니다.");
+              email.next().removeClass("error");
+            }
+          },
+        });
+      });
+    }
+  </script>
 </html>

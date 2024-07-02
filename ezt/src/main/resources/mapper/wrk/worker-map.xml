@@ -13,15 +13,67 @@
 		WHERE users_no = #{usersNo}
 	</select>
 	
+	<select id="selectCareerList" resultType="CareerVO">
+		SELECT *
+		FROM career
+		WHERE users_no = #{usersNo}
+	</select>
 	
+	<delete id="deleteWorkerRegion" parameterType="UserVO">
+		DELETE FROM active_region
+		WHERE users_no = #{usersNo}
+	</delete>
+	
+	<delete id="deleteWorkerCategory" parameterType="UserVO">
+		DELETE FROM active_category
+		WHERE users_no = #{usersNo}
+	</delete>
+
+	<insert id="insertWorkerCode" parameterType="UserVO">
+		INSERT ALL
+		
+		<foreach item="region" collection="regionCode" separator="">
+		INTO active_region( users_no, region_code ) 
+		VALUES ( #{usersNo}, #{region} )
+		</foreach>
+
+	
+		<foreach item="category" collection="categoryCode" separator="">
+		INTO active_category( users_no, category_code )
+		VALUES (#{usersNo}, #{category} )
+		</foreach>
+		
+		SELECT *
+		FROM dual
+	</insert>
+
+	<insert id="insertCareer" parameterType="CareerVO">
+		INSERT INTO career( career_no
+							, users_no
+							, career_info
+							, career_start_dt
+							, career_end_dt
+							, file_id
+							, career_access_tf
+							, write_dt
+							) VALUES (
+							 SEQ_CAREER_NEXTVAL
+							 , #{usersNo}
+							 , #{careerInfo}
+							 . #{careerStartDt}
+							 , #{careerEndDt}
+							 , #{fileId}
+							 , 'A01'
+							 , sysdate
+							)
+	</insert>
+
 
 	<update id="updateWorkerInfo" parameterType="UserVO">
 		UPDATE users
 		SET users_nick = #{usersNick}
 			, users_phone = #{usersPhone}
 			, users_email = #{usersEmail}
-			, FIND_COMMONCODE(category_code) as category_code
-			, FIND_COMMONCODE(region_code) as region_code 
 		WHERE users_id = #{usersId}
 	</update>
 

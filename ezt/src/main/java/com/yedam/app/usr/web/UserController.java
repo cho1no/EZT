@@ -109,7 +109,7 @@ public class UserController {
 	@PostMapping("user/quit")
 	@ResponseBody
 	public boolean userStateUpdate(@RequestBody UserVO userVO) {
-		userService.userStateUpdate(userVO);
+		//userService.userStateUpdate(userVO);
 		return userService.userStateUpdate(userVO);
 	}
 }
