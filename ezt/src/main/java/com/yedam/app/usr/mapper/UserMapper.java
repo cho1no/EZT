@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
+import com.yedam.app.usr.service.UserCriteria;
 import com.yedam.app.usr.service.UserVO;
 
 @Mapper
@@ -40,4 +41,8 @@ public interface UserMapper {
 	
 	//사용자 탈퇴(상태 수정)
 	public int updateUserState(UserVO userVO);
+
+	
+	//전체 게시물 갯수
+	public int getTotalCount(UserCriteria cri);
 }

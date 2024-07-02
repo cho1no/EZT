@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,17 +71,23 @@ public class UserController {
 		return userService.updateUserPw(userVO);
 	}
 	
-	//후기목록 조회
+	//사용자 후기목록 조회
 	@GetMapping("user/revList")
-	public String userReviewList(Model model, @AuthenticationPrincipal LoginUserVO user) {
+	public String userReviewList(Model model, @AuthenticationPrincipal LoginUserVO user, @PageableDefault(size = 5) Pageable pageable) {
 		List<ReviewVO> list = userService.userReviewList(user.getUserNo());
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
 		model.addAttribute("regionCode", commonCodeService.selectCommonCodeAll("0B"));		
 		model.addAttribute("reviewList", list);
+		
+//		Page<ReviewVO> reviews = 
+		
+		//페이징
+//		int total = userService.getTotal(cri);
+//		model.addAttribute("page", new UserPageDTO(cri, total));
 		return "usr/userReviewList";
 	}
 	
-	//의뢰 목록 조회
+	//사용자 의뢰 목록 조회
 	@GetMapping("user/reqList")
 	public String userReqList(Model model, @AuthenticationPrincipal LoginUserVO user) {
 		List<RequestVO> list = userService.userReqList(user.getUserNo());

@@ -4,7 +4,7 @@
 	layout:decorate="~{common/layouts/worker_mypage_layout}"
 	layout:fragment="Content">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <title>작업자 마이페이지</title>
 <style>
 form span.error{
@@ -24,7 +24,7 @@ form span{
 	<h3>[[${userVO.usersName}]]님 안녕하세요.</h3>
 	<hr>
 	<h1>회원정보 수정</h1>
-	<form th:action="workerUpdate" th:object="${userVO}">
+	<form th:action="@{/worker/update}" th:object="${userVO}" method="post" name="workerUpdate">
 	  <div>
 	    <div>
 	    	<input type="hidden" th:field="*{usersId}">
@@ -46,58 +46,84 @@ form span{
 		</div>
 		<div class="row form-group">
 			<label class="text-black" for="regions">주 활동지역</label>
-			<div class="col-md-12 mb-3 mb-md-0" id="region0">
+			<div class="col-md-12 mb-3 mb-md-0" id="region">
 				
 			</div>
 		</div>
 		<div class="row form-group">
 			<label class="text-black" for="categories">작업 분야</label>
-			<div class="col-md-12 mb-3 mb-md-0" id="categories0">
+			<div class="col-md-12 mb-3 mb-md-0" id="category">
 
 			</div>
 		</div>
 	
-		<div class="row form-group">
-				<label class="text-black" for="regi">주 활동지역</label>
-			<div class="col-md-12 mb-3 mb-md-0">
-				<th:block th:each="region : ${regi}">
-					<input type="checkbox" name="regionCode" th:value="${region.codeNo}">
-					<label th:for="${region.codeNo}">[[${region.codeName}]]</label>
-				</th:block>
-			</div>
-		</div>
-		<div class="row form-group">
-				<label class="text-black" for="cate">작업 분야</label>
-			<div class="col-md-12 mb-3 mb-md-0">
-					<th:block th:each="category : ${cate}">
-						<input type="checkbox" name="categoryCode" th:value="${category.codeNo}">
-						<label th:for="${category.codeNo}">[[${category.codeName}]]</label>
-					</th:block>
-			</div>
-		</div>
+		
 		<button type="button" id="updateBtn">수정하기</button>
+		<button type="button" id="updateBtn2">수정하기1</button>
 	  </div>
 	</form>
   </div>
 </body>
 <script th:inline="javascript">
-	let categories = /*[[${categories}]]*/"";
+		
 	let regions = /*[[${regions}]]*/"";
-	
-	
-	regions.forEach((ele, idx)=>{
-		console.log(ele.REGION_CODE);
-		$('#region0').append(`<span class="regionTag">${ele.REGION_CODE}</span>`)
+	regions = regions.map((e) => (e.REGION_CODE));
+	let regi = /*[[${regi}]]*/"";
+
+	regi.forEach((e, idx)=> {
+		let input = $(`<input type="checkbox" name="regionCode" th:value="${e.codeName}">`);
+		let label = $(`<label th:for="${e.codeName}">${e.codeName}</label>`);
+		if(regions.includes(e.codeName)){
+			input.prop('checked', true);
+		}
+		$('#region').append(input).append(label);
 	})
 	
+
+	let categories = /*[[${categories}]]*/"";
+	categories = categories.map((e)=>(e.CATEGORY_CODE));
+	let cate = /*[[${cate}]]*/"";
+
 	
-	
-	categories.forEach((e, i) => {
-		console.log(e.CATEGORY_CODE);
-		$('#categories0').append(`<span class="regionTag">${e.CATEGORY_CODE}</span>`)
+	cate.forEach((e, idx)=>{
+		// [ asdf, 1234, qwer] <- ele.codeName 있냐?
+		let input = $(`<input type="checkbox" name="categoryCode" th:value="${e.codeName}">`);
+		let label = $(`<label th:for="${e.codeName}">${e.codeName}</label>`);
+		if (categories.includes(e.codeName)){
+			input.prop('checked', true);
+		}
+		$('#category').append(input).append(label);
+// 		console.log(ele.codeName);
 	})
+	
+// 	regions.forEach((ele, idx)=>{
+// 		console.log(ele.REGION_CODE);
+		
+		
+// 		$('#region0').append(`
+// 				<input type="checkbox" name="regionCode" th:value="${ele.REGION_CODE}" checked>
+// 				<label th:for="${ele.REGION_CODE}">${ele.REGION_CODE}</label>
+			
+// 				`)
+// 	})
+// 				//<span class="regionTag">${ele.REGION_CODE}</span>
+	
+	
+	
+// 	categories.forEach((e, i) => {
+// 		console.log(e.CATEGORY_CODE);
+// 		$('#categories0').append(`
+// 				<input type="checkbox" name="categoryCode" th:value="${e.CATEGORY_CODE}" checked>
+// 				<label th:for="$${e.CATEGORY_CODE}">${e.CATEGORY_CODE}</label>
+// 				`)
+// 	})
 
-
+				//<span class="regionTag">${e.CATEGORY_CODE}</span>
+	$('#updateBtn2').on('click', updateWk);
+	function updateWk(e){
+		$(workerUpdate).submit();
+	}
+	
 
 	$('#updateBtn').on('click', updateWorker);
 	
