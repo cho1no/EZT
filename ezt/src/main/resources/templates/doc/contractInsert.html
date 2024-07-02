@@ -368,7 +368,7 @@ canvas {
 								id="insertBtn">저장</button>
 						</div>
 						<div class="col-6">
-							<button type="button" class="btn btn-block btn-primary btn-md">서명</button>
+							<button type="button" class="btn btn-block btn-primary btn-md">전송</button>
 						</div>
 					</div>
 				</div>
@@ -415,9 +415,10 @@ canvas {
 
 
 
-	<script src="js/doc/jquery.signaturepad.js"></script>
+	<script src="/js/doc/jquery.signaturepad.js"></script>
 	<script th:inline="javascript">
 	
+	// 현재 년월일 표시
 	date = new Date();
     year = date.getFullYear();
     month = date.getMonth() + 1;
@@ -445,7 +446,7 @@ canvas {
 		num += 1;
 		addRound();
 	}
-	
+	// 회차 표기
 	function addRound(){
 		for(i=0; i < $('tbody tr').length; i++){
 	    	$('tbody tr:eq('+i+') td:eq(0) input').val(i + 1);
@@ -459,7 +460,7 @@ canvas {
 	    addRound();
 	});
 	
-	
+	// 폼 데이터 전송 이전에 데이터 처리
 	$('button[type="button"]').on('click', function(e) {
 		
 			$('input[name="workerAddress"]').val($('#input_postcode').val() + '_' 
@@ -510,6 +511,7 @@ canvas {
 		$('.total').val(comTotal);
 	}
 	
+	// 폼 데이터 전송
 	var proposalNo = [[${ppsInfo.proposalNo}]];
 	
 	$('#insertBtn').on('click', insertAjax );
@@ -537,12 +539,11 @@ canvas {
 			}
 		}
 		
-		
+		formData.append("worSign.signsContent", compressedData);
 		
 		for (const pair of formData.entries()) {
 			  console.log(pair[0], pair[1]);
 			}
-		
 		
 		$.ajax({
 			url: '/conInsert',
@@ -556,7 +557,6 @@ canvas {
 			location.href='/conInfo?proposalNo='+proposalNo;
 	}
 	
-
 	function getEmpObj(){
 		let formAry = $('form').serializeArray();
 		
@@ -567,8 +567,9 @@ canvas {
 		})
 		return formObj;
 	}
+	// 폼 데이터 전송
 	
-
+		// 서명
 		var compressedData;
     	
         $('.sigPad').signaturePad({drawOnly:true});
@@ -589,8 +590,8 @@ canvas {
 	        $('input.output').val(compressedData);
 	
 	        // 압축된 데이터 출력 (선택 사항)
-	        console.log(compressedData);
-	        
+	        //console.log(compressedData);
+	       
 	        signView(compressedData);
         });
       
@@ -613,7 +614,7 @@ canvas {
 		    }
 	 
 		    function signView(compressedSignatureData) {
-		        console.log("compressedSignatureData = " + compressedSignatureData);
+		        //console.log("compressedSignatureData = " + compressedSignatureData);
 		        
 		        // 압축된 데이터 복원
 		        const decompressedSignatureData 
@@ -625,7 +626,7 @@ canvas {
 		        // 서명 그리기
 		        drawSignature(signatureData);
 		    }
-
+		 	// 서명
 
 
 	</script>
@@ -641,7 +642,7 @@ canvas {
 	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
 
 	<!-- 서명 -->
-	<script src="/js/doc/assets/json2.min.js"></script>
+	<script src="/js/doc/json2.min.js"></script>
 
 </body>
 </html>

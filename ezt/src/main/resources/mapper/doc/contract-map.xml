@@ -206,6 +206,22 @@
 	</select>
 
 
-
+	<!-- 서명 등록 -->
+	<insert id="insertSignInfo" parameterType="SignsVO"
+		statementType="CALLABLE">
+		<selectKey keyProperty="signsNo" resultType="int"
+			order="BEFORE">
+			SELECT SEQ_SIGNS.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO signs
+		VALUES(
+		#{signsNo}
+		, #{contractNo}
+		, #{usersNo}
+		, #{signsContent}
+		, sysdate
+		)
+	</insert>
 
 </mapper>

@@ -44,4 +44,7 @@ public interface ContractMapper {
 	// 서명 조회
 	public SignsVO selectSignInfo(@Param("contractNo")int contractNo, @Param("usersNo")int usersNo);
 	
+	// 서명 등록
+	public int insertSignInfo(SignsVO signsVO);
+	
 }
