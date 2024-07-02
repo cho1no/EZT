@@ -48,18 +48,23 @@ public class WorkerController {
     	model.addAttribute("regi", commonCodeService.selectCommonCodeAll("0B"));
 		model.addAttribute("userVO", vo.getUserVO());
 		model.addAttribute("categories", workerService.selectCategoryInfo(vo.getUserNo()));
+		log.info(workerService.selectCategoryInfo(vo.getUserNo()).toString());
 		model.addAttribute("regions", workerService.selectRegionInfo(vo.getUserNo()));
+		log.info(workerService.selectRegionInfo(vo.getUserNo()).toString());
 		return "wkr/workerUpdate";
 	}
 	
 	//정보수정 기능
 	@PostMapping("worker/update")
-	@ResponseBody
-	public Map<String, Object> workerUpdate(@RequestBody UserVO userVO, @AuthenticationPrincipal LoginUserVO vo){
-		Map<String, Object> result = workerService.updateWorker(userVO);
-		UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
-		vo.setUserVO(uvo);
-		return result;
+	public String workerUpdate(UserVO userVO, Model model){
+		//Map<String, Object> result = 
+		workerService.updateWorker(userVO);
+		//userMapper.selectUserInfo(userVO.getUsersId());
+		workerService.deleteWorkerCategory(userVO);
+		workerService.deleteWorkerRegion(userVO);
+		workerService.insertWorkerCode(userVO);
+		model.addAttribute("result", "정보수정완료");
+		return "wkr/workerInfo";
 	}
 	
 	//비밀번호 변경 -페이지

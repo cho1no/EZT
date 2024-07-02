@@ -16,6 +16,12 @@ public interface WorkerService {
 	
 	//작업자 정보수정
 	public Map<String, Object> updateWorker(UserVO userVO);
+	//지역,카테고리 삭제 
+	public int deleteWorkerRegion(UserVO userVO);
+	public int deleteWorkerCategory(UserVO userVO);
+	//지역,카테고리 추가
+	public int insertWorkerCode(UserVO userVO);
+	
 	
 	//비밀번호 변경
 	public boolean updateWorkerPw(UserVO userVO);

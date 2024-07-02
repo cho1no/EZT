@@ -54,6 +54,23 @@ public class WorkerServiceImpl implements WorkerService{
 	public boolean workerStateUpdate(UserVO userVO) {
 		return workerMapper.updateWorkerState(userVO) == 1;
 	}
+	
+	//지역,카테고리 삭제
+	@Override
+	public int deleteWorkerRegion(UserVO userVO) {
+		return workerMapper.deleteWorkerRegion(userVO);
+	}
+
+	@Override
+	public int deleteWorkerCategory(UserVO userVO) {
+		return workerMapper.deleteWorkerCategory(userVO);
+	}
+
+	//지역,카테고리 추가
+	@Override
+	public int insertWorkerCode(UserVO userVO) {
+		return workerMapper.insertWorkerCode(userVO);
+	}
 
 	
 

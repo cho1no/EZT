@@ -15,7 +15,14 @@ public interface WorkerMapper {
 	public List<Map<String, Object>> selectRegionInfo(int id);
 	
 	//작업자 정보수정
+	//닉네임,전화번호,이메일 수정
 	public int updateWorkerInfo(UserVO userVO);
+	//지역,카테고리 삭제 
+	public int deleteWorkerRegion(UserVO userVO);
+	public int deleteWorkerCategory(UserVO userVO);
+	//지역,카테고리 추가
+	public int insertWorkerCode(UserVO userVO);
+	
 	
 	//비밀번호 변경
 	public int updateWorkerPw(UserVO userVO);
