@@ -40,6 +40,18 @@ public class ContractServiceImpl implements ContractService {
 				ppsMapper.insertFileInfo(e);
 			});
 		}
+		if(contractVO.getReqSign() != null) {
+			contractVO.getReqSign().setContractNo(contractVO.getContractNo());
+			contractVO.getReqSign().setUsersNo(contractVO.getRequesterInfo());
+			conMapper.insertSignInfo(contractVO.getReqSign());
+		}
+		if(contractVO.getWorSign() != null) {
+			contractVO.getReqSign().setContractNo(contractVO.getContractNo());
+			contractVO.getReqSign().setUsersNo(contractVO.getWorkerInfo());
+			conMapper.insertSignInfo(contractVO.getWorSign());
+		}
+		System.out.println(contractVO);
+		
 		return result ==1 ? contractVO.getContractNo() : -1;
 	}
 	
