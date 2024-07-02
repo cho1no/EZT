@@ -31,6 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public int insertReview(ReviewVO reviewVO) {
 		int result = reviewMapper.insertReview(reviewVO);
+		System.out.println(reviewVO);
 		return result == 1 ? reviewVO.getReviewNo() : -1;
 	}
 	//후기 수정
