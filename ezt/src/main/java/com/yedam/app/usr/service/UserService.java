@@ -3,6 +3,7 @@ package com.yedam.app.usr.service;
 import java.util.List;
 import java.util.Map;
 
+import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 
@@ -24,4 +25,10 @@ public interface UserService {
 
 	//회원탈퇴 (상태 수정)
 	public boolean userStateUpdate(UserVO userVO);
+	
+	
+	//전체 데이터 갯수
+	public int getTotal(UserCriteria cri);
+
+	
 }

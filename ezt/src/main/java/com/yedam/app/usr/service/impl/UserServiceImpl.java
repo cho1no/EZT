@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.usr.mapper.UserMapper;
+import com.yedam.app.usr.service.UserCriteria;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
 
@@ -62,6 +63,13 @@ public class UserServiceImpl implements UserService{
 	public boolean userStateUpdate(UserVO userVO) {
 		return userMapper.updateUserState(userVO) == 1;
 	}
+
+	@Override
+	public int getTotal(UserCriteria cri) {
+		return userMapper.getTotalCount(cri);
+	}
+
+
 
 	
 

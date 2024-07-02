@@ -128,4 +128,19 @@
 		SET users_state = quit
 		WHERE users_id = #{usersId}
 	</update>
+	
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM (SELECT re.star
+			   , re.content 
+			   , USERNAME(re.worker) as worker_name
+			   , re.review_division
+			   , FIND_COMMONCODE(rq.category_code) as category_code
+			   , FIND_COMMONCODE(rq.region_code) as region_code
+			  FROM review re
+		    	  JOIN request rq
+		    	  ON re.request_no = rq.request_no
+			  WHERE re.writer = #{writer})
+	</select>
+	
 </mapper>
