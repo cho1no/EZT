@@ -39,7 +39,7 @@ public class NhDevHeaderDto {
 		this.iscd = "002527";
 		this.fintechApsno = "001";
 		this.apiSvcCd = APISvcCd;
-		this.istuno = generateIstuno(this.tsymd+this.trtm);
+		this.istuno = generateIstuno(this.tsymd + this.trtm); // param "yyyyMMddHHmmss"
 		this.accessToken = "01215f6721182d337795517ae4a80b21a652dc30d9dd6c7ebce415eee5c259e9";
 		
 	}

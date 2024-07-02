@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.common.mapper.SimpleFileMapper">
+	<!-- 파일 정보 DB 등록 attr -->
+	<insert id="insertFileAttrInfo" parameterType="FileVO">
+		<selectKey keyProperty="fileId" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_FILEID.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO file_attr
+		VALUES(
+		#{fileId}
+		, sysdate
+		, 'Y'
+		)
+	</insert>
+	<!--파일 정보 DB 등록 -->
+	<insert id="insertFileInfo" parameterType="FileVO">
+		<selectKey keyProperty="fileNo" resultType="int"
+			order="BEFORE">
+			SELECT SEQ_FILENO.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO file_detail_info
+		VALUES(
+		#{fileId}
+		, #{fileNo}
+		, #{savePath}
+		, #{saveName}
+		, #{originalFileName}
+		, #{ext}
+		, #{fileSize}
+		, 'N'
+		)
+	</insert>
+	<!-- 파일 정보 조회 -->
+	<select id="selectFileList" resultType="FileVO">
+		SELECT 
+				f.FILE_ID
+				, f.FILE_NO
+				, f.SAVE_PATH
+				, f.SAVE_NAME
+				, f.ORIGINAL_FILE_NAME
+				, f.EXT
+				, f.FILE_SIZE
+				, f.BOSS_TF
+		FROM file_detail_info f 
+		join proposal p 
+		on p.file_id = f.file_id
+		WHERE p.proposal_no = #{proposalNo}
+	</select>
+</mapper>
