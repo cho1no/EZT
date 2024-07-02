@@ -30,8 +30,8 @@ public class ReviewServiceImpl implements ReviewService {
 	//후기 등록
 	@Override
 	public int insertReview(ReviewVO reviewVO) {
-		
-		return 0;
+		int result = reviewMapper.insertReview(reviewVO);
+		return result == 1 ? reviewVO.getReviewNo() : -1;
 	}
 	//후기 수정
 	@Override
