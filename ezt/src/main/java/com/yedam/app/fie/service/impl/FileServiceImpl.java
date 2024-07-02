@@ -2,6 +2,8 @@ package com.yedam.app.fie.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,6 +11,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.aspectj.weaver.tools.UnsupportedPointcutPrimitiveException;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -97,5 +104,52 @@ public class FileServiceImpl implements FileService {
 		}
 		return list;
 	}
+	
+	
+	@Override
+	public int deleteFile(List<FileVO> fileVO) throws UnsupportedEncodingException {
+		
+		for (FileVO list : fileVO) {
 
+			// 콘솔 출력
+			log.info("Upload File Name : " + list.getOriginalFileName());
+			log.info("Upload File Size : " + list.getFileSize());
+			log.info("Upload reName : " + list.getSaveName());
+			log.info("Upload Path : " + list.getSavePath());
+			
+			String fileName = list.getSavePath().replace("\\", "/") + '/' + list.getSaveName() + "_" 
+						+ list.getOriginalFileName() + "." + list.getExt();
+			try {
+				File file = new File("C:\\temp\\" + URLDecoder.decode(fileName, "UTF-8"));
+
+				file.delete();
+
+			} catch (UnsupportedPointcutPrimitiveException e) {
+				e.printStackTrace();
+				return -1;
+			}
+		}
+		return 1;
+	}
+	
+	@Override
+	public ResponseEntity<Resource> downlodeFile(String fileName) {
+		log.info("download file: " + fileName);
+
+		FileSystemResource resource = new FileSystemResource("C:\\temp\\" + fileName);
+
+		log.info("resource : " + resource);
+
+		String resourceName = resource.getFilename();
+
+		org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+		try {
+			headers.add("Content-Disposition",
+					"attachment; filename=" + new String(resourceName.getBytes("UTF-8"), "ISO-8859-1"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+	}
+	
 }

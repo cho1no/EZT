@@ -13,9 +13,13 @@ public class docController {
 
 	@GetMapping("test")
 	public String test(Model model, @AuthenticationPrincipal LoginUserVO user) {
-		model.addAttribute("userId", user.getUserVO().getUsersNo());
+		model.addAttribute("userId", user.getUserVO());
 		return "doc/index";
 	}
 	
-	
+	@GetMapping("pay")
+	public String pay(Model model, @AuthenticationPrincipal LoginUserVO user) {
+		model.addAttribute("userId", user.getUserVO());
+		return "doc/payInsert";
+	}
 }

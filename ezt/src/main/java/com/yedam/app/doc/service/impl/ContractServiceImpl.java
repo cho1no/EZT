@@ -70,7 +70,7 @@ public class ContractServiceImpl implements ContractService {
 			conMapper.deleteConFileInfo(contractVO);
 			conMapper.insertFileAttrConInfo(contractVO);
 			contractVO.getFileList().forEach(e -> {
-				e.setFileId(contractVO.getFileId());
+				e.setContractNo(contractVO.getContractNo());
 				ppsMapper.insertFileInfo(e);
 			});
 		}

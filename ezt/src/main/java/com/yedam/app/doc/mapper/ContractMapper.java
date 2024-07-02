@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.service.ContractDetailVO;
 import com.yedam.app.doc.service.ContractVO;
+import com.yedam.app.doc.service.SignsVO;
 
 public interface ContractMapper {
 	
@@ -36,5 +37,11 @@ public interface ContractMapper {
 	
 	// 계약서 상세 삭제
 	public int deleteConDetailInfo(@Param("contractNo")int contractNo);
+	
+	// 파일 정보 DB 등록
+	public int insertConFileInfo(FileVO fileVO);
+	
+	// 서명 조회
+	public List<SignsVO> selectSignInfo(SignsVO signsVO);
 	
 }

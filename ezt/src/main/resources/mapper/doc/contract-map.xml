@@ -13,25 +13,30 @@
 		, CTT_NAME
 		, CTT_PRICE
 		, CTT_START_DT
-		, CTT_END_DT
+		,
+		CTT_END_DT
 		, REQUESTER_INFO
 		, REQUESTER_ADDRESS
 		, REQUESTER_ACCOUNT
-		, WORKER_INFO
+		,
+		WORKER_INFO
 		, WORKER_ADDRESS
 		, WORKER_ACCOUNT
 		, UNITY_CONTRACT_NO
-		, PROPOSAL_NO
+		,
+		PROPOSAL_NO
 		)
 		VALUES (
 		#{contractNo}
 		, #{cttName}
 		, #{cttPrice}
-		, #{cttStartDt}
+		,
+		#{cttStartDt}
 		, #{cttEndDt}
 		, #{requesterInfo}
 		, #{requesterAddress}
-		, #{requesterAccount}
+		,
+		#{requesterAccount}
 		, #{workerInfo}
 		, #{workerAddress}
 		, #{workerAccount}
@@ -40,9 +45,10 @@
 		)
 	</insert>
 
-	<insert id="insertConDetailInfo" parameterType="ContractDetailVO">
-		<selectKey keyProperty="contractDetailNo" resultType="Integer"
-			order="BEFORE">
+	<insert id="insertConDetailInfo"
+		parameterType="ContractDetailVO">
+		<selectKey keyProperty="contractDetailNo"
+			resultType="Integer" order="BEFORE">
 			SELECT SEQ_CONTRACTDETAIL.NEXTVAL
 			FROM dual
 		</selectKey>
@@ -50,113 +56,156 @@
 		CONTRACT_DETAIL_NO
 		, CONTRACT_NO
 		, PRICE
-		, PAYMENT_DT
+		,
+		PAYMENT_DT
 		, HISTORY
 		, ROUND
 		)
-    	VALUES (#{contractDetailNo}
-    	, #{contractNo}
-    	, #{price}
-    	, #{paymentDt}
-    	, #{history}
-    	, #{round}
-    	)
+		VALUES (#{contractDetailNo}
+		, #{contractNo}
+		, #{price}
+		, #{paymentDt}
+		, #{history}
+		, #{round}
+		)
 	</insert>
 
 	<select id="selectConInfo" resultType="ContractVO">
-		SELECT 
+		SELECT
 		CONTRACT_NO
 		, CTT_NAME
 		, CTT_PRICE
 		, CTT_START_DT
 		, CTT_END_DT
 		, REQUESTER_INFO
-		, REQUESTER_ADDRESS
+		,
+		REQUESTER_ADDRESS
 		, REQUESTER_ACCOUNT
 		, WORKER_INFO
 		, WORKER_ADDRESS
-		, WORKER_ACCOUNT
+		,
+		WORKER_ACCOUNT
 		, UNITY_CONTRACT_NO
 		, FILE_ID
 		, PROPOSAL_NO
 		, WRITE_DT
-		, UPDATE_DT
+		,
+		UPDATE_DT
 		FROM contract
 		WHERE proposal_no = #{proposalNo}
 	</select>
 
-	
+
 	<select id="selectConDetailInfo" resultType="ContractDetailVO">
-		SELECT 
+		SELECT
 		CONTRACT_DETAIL_NO
 		, CONTRACT_NO
 		, PRICE
 		, PAYMENT_DT
 		, HISTORY
 		, ROUND
-    	FROM contract_detail
-    	WHERE contract_no = #{contractNo}
+		FROM contract_detail
+		WHERE contract_no = #{contractNo}
 	</select>
 
 	<!-- 파일 정보 DB 등록 attr -->
-	<insert id="insertFileAttrConInfo" statementType="CALLABLE" parameterType="ContractVO">
+	<insert id="insertFileAttrConInfo" statementType="CALLABLE"
+		parameterType="ContractVO">
 		<selectKey keyProperty="fileId" resultType="Integer"
 			order="BEFORE">
 			SELECT SEQ_FILEID.NEXTVAL
 			FROM dual
 		</selectKey>
-		{CALL 
-			insert_contract_file(#{fileId}, #{contractNo})
-			}
+		{CALL
+		insert_contract_file(#{fileId}, #{contractNo})
+		}
 	</insert>
 
 
 	<!-- 파일 정보 조회 -->
 	<select id="selectConFileList" resultType="FileVO">
-		SELECT 
-				f.FILE_ID
-				, f.FILE_NO
-				, f.SAVE_PATH
-				, f.SAVE_NAME
-				, f.ORIGINAL_FILE_NAME
-				, f.EXT
-				, f.FILE_SIZE
-				, f.BOSS_TF
-		FROM file_detail_info f 
-		join contract c 
+		SELECT
+		f.FILE_ID
+		, f.FILE_NO
+		, f.SAVE_PATH
+		, f.SAVE_NAME
+		, f.ORIGINAL_FILE_NAME
+		, f.EXT
+		, f.FILE_SIZE
+		, f.BOSS_TF
+		FROM file_detail_info f
+		join contract c
 		on c.file_id = f.file_id
 		WHERE c.contract_no = #{contractNo}
 	</select>
 
 
 	<!-- 파일 정보 DB&견적서 삭제 -->
-	<delete id="deleteConFileInfo" statementType="CALLABLE" parameterType="ContractVO">
+	<delete id="deleteConFileInfo" statementType="CALLABLE"
+		parameterType="ContractVO">
 		{CALL
-			delete_contract_file(#{fileId})
-			}
+		delete_contract_file(#{fileId})
+		}
 	</delete>
 
-	<!-- 계약서 상세 삭제-->
+	<!-- 계약서 상세 삭제 -->
 	<delete id="deleteConDetailInfo" parameterType="int">
-		DELETE FROM contract_detail
-    WHERE contract_no = #{contractNo}
+		DELETE FROM
+		contract_detail
+		WHERE contract_no = #{contractNo}
 	</delete>
-    
+
 
 	<update id="updateConInfo" parameterType="ContractVO">
 		UPDATE contract
 		SET
 		CTT_NAME = #{cttName}
 		, CTT_PRICE = #{cttPrice}
-		, CTT_START_DT = #{cttStartDt}
+		, CTT_START_DT =
+		#{cttStartDt}
 		, CTT_END_DT = #{cttEndDt}
-		, REQUESTER_ADDRESS = #{requesterAddress}
+		, REQUESTER_ADDRESS =
+		#{requesterAddress}
 		, REQUESTER_ACCOUNT = #{requesterAccount}
-		, WORKER_ADDRESS = #{workerAddress}
+		,
+		WORKER_ADDRESS = #{workerAddress}
 		, WORKER_ACCOUNT = #{workerAccount}
 		WHERE contract_no = #{contractNo}
-		
+
 	</update>
+
+	<!--파일 정보 DB 등록 -->
+	<insert id="insertConFileInfo" parameterType="FileVO"
+		statementType="CALLABLE">
+		<selectKey keyProperty="fileNo" resultType="int"
+			order="BEFORE">
+			SELECT SEQ_FILENO.NEXTVAL
+			FROM dual
+		</selectKey>
+		{CALL
+		insert_contract_detail_file(
+		#{fileNo}
+		, #{savePath}
+		, #{saveName}
+		, #{originalFileName}
+		, #{ext}
+		, #{fileSize}
+		}
+	</insert>
+
+	<!-- 파일 정보 조회 -->
+	<select id="selectSignInfo" resultType="SignsVO">
+		SELECT
+			SIGNS_NO
+			CONTRACT_NO
+			USERS_NO
+			SIGNS_CONTENT
+			SIGNS_DT
+		FROM signs
+		WHERE contract_no = #{contractNo} and users_no = #{usersNo}
+	</select>
+
+
 
 
 </mapper>
