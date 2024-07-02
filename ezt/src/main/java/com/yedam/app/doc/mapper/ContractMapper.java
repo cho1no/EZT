@@ -42,6 +42,6 @@ public interface ContractMapper {
 	public int insertConFileInfo(FileVO fileVO);
 	
 	// 서명 조회
-	public List<SignsVO> selectSignInfo(SignsVO signsVO);
+	public SignsVO selectSignInfo(@Param("contractNo")int contractNo, @Param("usersNo")int usersNo);
 	
 }
