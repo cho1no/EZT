@@ -193,14 +193,14 @@
 		}
 	</insert>
 
-	<!-- 파일 정보 조회 -->
+	<!-- 서명 정보 조회 -->
 	<select id="selectSignInfo" resultType="SignsVO">
 		SELECT
 			SIGNS_NO
-			CONTRACT_NO
-			USERS_NO
-			SIGNS_CONTENT
-			SIGNS_DT
+			,CONTRACT_NO
+			,USERS_NO
+			,SIGNS_CONTENT
+			,SIGNS_DT
 		FROM signs
 		WHERE contract_no = #{contractNo} and users_no = #{usersNo}
 	</select>

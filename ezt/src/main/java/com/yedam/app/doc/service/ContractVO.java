@@ -36,4 +36,7 @@ public class ContractVO {
 	private List<ContractDetailVO> dList;
 	
 	private List<FileVO> fileList;
+	
+	private SignsVO reqSign;
+	private SignsVO worSign;
 }

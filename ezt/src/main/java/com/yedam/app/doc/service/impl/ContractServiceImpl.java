@@ -11,6 +11,7 @@ import com.yedam.app.doc.mapper.ProposalMapper;
 import com.yedam.app.doc.service.ContractDetailVO;
 import com.yedam.app.doc.service.ContractService;
 import com.yedam.app.doc.service.ContractVO;
+import com.yedam.app.doc.service.SignsVO;
 
 @Service
 public class ContractServiceImpl implements ContractService {
@@ -50,6 +51,10 @@ public class ContractServiceImpl implements ContractService {
 		con.setDList(list);
 		List<FileVO> fileList = conMapper.selectConFileList(con.getContractNo());
 		con.setFileList(fileList);
+		SignsVO reqSign = conMapper.selectSignInfo(con.getContractNo(), con.getRequesterInfo());
+		con.setReqSign(reqSign);
+		SignsVO worSign = conMapper.selectSignInfo(con.getContractNo(), con.getWorkerInfo());
+		con.setWorSign(worSign);
 		return con;
 	}
 	
