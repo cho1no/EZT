@@ -63,11 +63,10 @@ public class DatahubServiceImpl implements DatahubService {
 		        .bodyValue(map)     // set body value
 		        .retrieve()                 // client message 전송
 		        .bodyToMono(Map.class);  // body type
-//		return null;
 	}
 
 	// String Encoding
-	public String getEncStr(String str) {
+	private String getEncStr(String str) {
 		String encData = null;
 		try {
 			// 암호화 키와 IV를 생성
