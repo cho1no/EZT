@@ -116,7 +116,41 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	WHERE file_id = #{fileId}
 	ORDER BY file_no
 </select>
+<!-- 후기 등록 -->
+<insert id="insertReview" parameterType="ReviewVO">
+	<selectKey keyProperty="reviewNo"
+				resultType="Integer"
+				order="BEFORE">
+		SELECT seq_review.NEXTVAL
+		FROM dual			
+	</selectKey>
+	INSERT INTO review
+		(
+			review_no
+			,request_no
+			,writer
+			,worker
+			,star
+			,content
+			,write_dt
+			,review_division
 
+		)
+	VALUES
+		(
+			#{review_no}
+			,#{request_no}
+			,#{writer}
+			,10002
+			,#{star}
+			,#{content}
+			,sysdate
+			,#{review_division}
+
+		)
+		
+	
+</insert>
 <!-- 후기 수정(별점 및 내용)  -->
 <update id="updateReview" parameterType="ReviewVO">
 	UPDATE review

@@ -4,153 +4,71 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>후기 작성</title>
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-
-      .modal {
-        /* 스타일 - customize */
-        background-color: rgba(0, 0, 0, 0.7);
-        pointer-events: none;
-        padding: 20px;
-
-        /* 트랜지션 효과 */
-        transition: opacity 0.3s ease-in-out;
-        opacity: 0;
-
-        /* 화면 전체를 덮게하는 코드 */
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-
-        /* 중앙에 오게하는 코드 */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .modal-content {
-        /* 스타일 - customize */
-        max-width: 600px;
-        width: 100%;
-        height: 800px;
-        background-color: white;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-
-        /* 트랜지션 효과 */
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-
-        transform: scale(0.8);
-      }
-
-      .modal.show {
-        /* 모달이 열렸을 때 보여지게 하는 코드 */
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      .modal.show .modal-content {
-        /* 모달이 열렸을 때 보여지게 하는 코드 */
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-      }
-
-      .close:hover {
-        color: black;
-      }
-	  
-	  fieldset{
-	      display: inline-block;
-	      direction: rtl;
-	      border:0;
-	  }
-	  fieldset legend{
-	      text-align: right;
-	  }
-	  .reStar input[type=radio]{
-	      display: none;
-	  }
-	  .reStar label{
-	      font-size: 50px;
-	      color: transparent;
-	      text-shadow: 0 0 0 #f0f0f0;
-	  }
-	  .reStar label:hover{
-	      text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
-	  }
-	  .reStar label:hover ~ label{
-	      text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
-	  }
-	  .reStar input[type=radio]:checked ~ label{
-	      text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
-	  }
-    </style>
+    <link rel="stylesheet" href="/css/rvw/reviewInsert.css">
   </head>
   <body>
     <!-- 모달 버튼 -->
-    <button id="modalBtn">모달 열기</button>
+    <button id="modalBtn">후기 쓰기</button>
 
     <!-- 모달 창 -->
     <div id="myModal" class="modal">
-      <div class="modal-content">
+     <div class="modal-content">
         <span class="close" id="closeBtn">&times;</span>
+        <form name="rvInsertForm" th:object="${review}">
 		<div class="row">
-			<div class="col">
-				<img src="/images/rvw/interior.jpg">
-			</div>
-			<div class="col">
-		       	<table class="table">
-					<tr>
-						<th>작업자명</th>
-						<td>ㅇㅇㅇㅇ</td>
-					</tr>
-					<tr>
-						<th>작업 카테고리</th>
-						<td>ㅇㅇㅇㅇ</td>
-					</tr>
-					<tr>
-						<th>면적</th>
-						<td>ㅇㅇㅇㅇ</td>
-					</tr>
-					<tr>
-						<th>작업내용</th>
-						<td>ㅇㅇㅇㅇ</td>
-					</tr>
-				</table>
-			</div>
-				<fieldset class="reStar" >
-					<span class="text-bold" >평점 : </span>
-					<input type="radio"  value="5" id="rate1"><label
-						for="rate1">★</label>
-					<input type="radio"  value="4" id="rate2"><label
-						for="rate2">★</label>
-					<input type="radio" value="3" id="rate3"><label
-						for="rate3">★</label>
-					<input type="radio" value="2" id="rate4"><label
-						for="rate4">★</label>
-					<input type="radio" value="1" id="rate5"><label
-						for="rate5">★</label>
-				</fieldset>
-				<textarea></textarea>
-				
-				<button>등록</button>
-			
-		</div>
-      </div>
+			<img class="workerProfile" src="/images/rvw/worker_common_profile.jpg">
+
+	       	<table class="table">
+	       		<td style="display:none"><input th:field="*{requestNo}"></td>
+	       		<td style="display:none"><input sec:authentication="principal.userNo" th:field="*{writer}"></td>
+				<tr>
+					<th>작업자명</th>
+					<td>ddd</td>
+				</tr>
+				<tr>
+					<th>지역</th>
+					<td>[[${request.RegionCode}]]</td>
+				</tr>
+				<tr>
+					<th>작업 카테고리</th>
+					<td>[[${request.categoryCode}]]</td>
+				</tr>
+				<tr>
+					<th>면적</th>
+					<td>[[${request.cttPlaceArea}]]</td>
+				</tr>
+				<tr>
+					<th>작업내용</th>
+					<td>[[${request.content}]]</td>
+				</tr>
+				<tr>
+					<th>평점</th>
+					<td>
+						<fieldset class="reStar">
+							<input type="radio" th:field="*{star}" value="5" id="rate1"><label
+								for="rate1">★</label>
+							<input type="radio" th:field="*{star}"  value="4" id="rate2"><label
+								for="rate2">★</label>
+							<input type="radio" th:field="*{star}" value="3" id="rate3"><label
+								for="rate3">★</label>
+							<input type="radio" th:field="*{star}" value="2" id="rate4"><label
+								for="rate4">★</label>
+							<input type="radio" th:field="*{star}" value="1" id="rate5"><label
+								for="rate5">★</label>
+						</fieldset>
+					<td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td>
+						<textarea th:text="${review.content}" name="content" placeholder="후기 내용을 입력하세요"></textarea>
+					</td>
+				</tr>
+			</table>
+				<input style="display:none" th:field="${review.reviewDivision}" value="F" >
+				<button style="text-align:center">등록</button>
+        </form>
+	 </div>
     </div>
 
     <script>

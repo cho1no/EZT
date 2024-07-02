@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.PageDTO;
+import com.yedam.app.req.service.RequestService;
+import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewService;
 import com.yedam.app.rvw.service.ReviewVO;
 
@@ -22,8 +24,9 @@ public class reviewController {
 	ReviewService reviewService;
 	@Autowired
 	CommonCodeService commonCodeService;
+	@Autowired
+	RequestService requestService;
 	//리뷰 전체조회
-	
 	@GetMapping("reviewList")
 	public String reviewList(Criteria cri, Model model) {
 		List<ReviewVO> list = reviewService.reviewList(cri);
@@ -37,7 +40,7 @@ public class reviewController {
 	}
 	
 	//소규모 리뷰 상세조회
-	@GetMapping("smallrvInfo")
+	@GetMapping("reviewInfo")
 	public String smRvInfo(ReviewVO reviewVO, Model model) {
 		ReviewVO findVO = reviewService.reviewInfo(reviewVO);
 		
@@ -45,24 +48,37 @@ public class reviewController {
 		model.addAttribute("cttPlace", commonCodeService.selectCommonCodeAll("0P"));
 		model.addAttribute("regionCode", commonCodeService.selectCommonCodeAll("0B"));
 		model.addAttribute("review",findVO);
-		return "rvw/smallrvInfo";
+		return "rvw/reviewInfo";
 	}
 	
 	
-	//등록
+	//후기 등록
 	@GetMapping("reviewInsert")
-	public String reviewInsert() {
+	public String reviewInsert( RequestVO requestVO, Model model) {
+		//의뢰 단건조회
+		RequestVO findVO = requestService.requestInfo(requestVO);
+		model.addAttribute("request",findVO);
+		
+		//후기 등록
+		model.addAttribute("review", new ReviewVO());
+		
 		return "rvw/reviewInsert";
 	}
 	
-	//수정
+	@PostMapping("reviewInsert")
+	public String reviewInsert(ReviewVO reviewVO) {
+		reviewService.insertReview(reviewVO);
+		return "redirect:reviewList";
+	}
+	
+	//후기 수정
 	@PostMapping("reviewUpdate")
 	@ResponseBody
 	public boolean reviewUpdate(@RequestBody ReviewVO reviewVO) {
 		return reviewService.updateReview(reviewVO);
 	}
 	
-	//삭제
+	//후기 삭제
 	@GetMapping("reviewDelete")
 	public String reviewDelete(Integer reviewNo) {
 		reviewService.deleteReview(reviewNo);

@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>소규모 후기 상세</title>
-<link rel="stylesheet" href="/css/rvw/smallrvInfo.css">
+<link rel="stylesheet" href="/css/rvw/rvInfo.css">
 </head>
 <body>
 	
@@ -21,7 +21,6 @@
 	          	</div>
 		 </div>
 		 <fieldset class="reStar" style="display:none">
-			<span class="text-bold" >평점 : </span>
 			<input type="radio" th:field="*{star}" value="5" id="rate1"><label
 				for="rate1">★</label>
 			<input type="radio" th:field="*{star}" value="4" id="rate2"><label
@@ -32,6 +31,7 @@
 				for="rate4">★</label>
 			<input type="radio" th:field="*{star}" value="1" id="rate5"><label
 				for="rate5">★</label>
+			<span class="text-bold" >평점 : </span>
 		</fieldset>
 	</div>
 	<div class="col">
@@ -101,11 +101,11 @@
 			$(".stars:eq("+i+")").append(`<div class="yellow">★</div>`);
 		}
 		for(let k=0; k<5-parseInt($(".star:eq("+i+")").text()); k++){
-			$(".stars:eq("+i+")").append(`<div class="yellow">☆</div>`);
+			$(".stars:eq("+i+")").append(`<div class="gray">★</div>`);
 		}
 	
 	}
 </script>
-<script src="/js/rvw/smRvUpdate.js"></script>
+<script src="/js/rvw/reviewUpdate.js"></script>
 </body>
 </html>

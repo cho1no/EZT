@@ -26,7 +26,11 @@ img{
 	color:rgba(250, 208, 0, 0.99);
 	font-size:30px;
 }
-
+.gray{
+	text-align:center;
+	color:#ebebeb;
+	font-size:30px;
+}
 </style>
 <head>
 <meta charset="UTF-8">
@@ -97,7 +101,7 @@ img{
 			$(".stars:eq("+i+")").append(`<div class="yellow">★</div>`);
 		}
 		for(let k=0; k<5-parseInt($(".star:eq("+i+")").text()); k++){
-			$(".stars:eq("+i+")").append(`<div class="yellow">☆</div>`);
+			$(".stars:eq("+i+")").append(`<div class="gray">★</div>`);
 		}
 	
 	}

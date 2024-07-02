@@ -68,6 +68,7 @@ public class RequestServiceImpl implements RequestService {
 	
 		return list;
 	}
+	//전체 페이지 수
 	@Override
 	public int getTotal(Criteria cri) {
 		return requestMapper.getTotalCount(cri);

@@ -59,7 +59,7 @@ FROM (
         JOIN users u 
         ON r.requester = u.users_no
         LEFT OUTER JOIN file_detail_info f ON r.file_id = f.file_id AND f.boss_tf = 'Y'
-        ORDER BY r.request_no) a
+        ORDER BY r.write_dt DESC) a
    	<where><include refid="criteria"></include></where>) c
 <![CDATA[
 WHERE c.rn <= #{pageNum} * #{amount} AND
