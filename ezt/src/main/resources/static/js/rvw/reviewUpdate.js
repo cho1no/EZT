@@ -67,6 +67,8 @@ $(document).ready(function(){
 			$(".star-rating").css("display", "")
 			
 			$(".reStar").css("display", "none");
+			
+			location.reload();
 		}
 	})
 	

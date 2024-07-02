@@ -3,6 +3,7 @@ package com.yedam.app.rvw.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewService;
 import com.yedam.app.rvw.service.ReviewVO;
+import com.yedam.app.sgi.service.LoginUserVO;
 
 @Controller
 public class reviewController {
@@ -54,7 +56,7 @@ public class reviewController {
 	
 	//후기 등록
 	@GetMapping("reviewInsert")
-	public String reviewInsert( RequestVO requestVO, Model model) {
+	public String reviewInsert( RequestVO requestVO, Model model,@AuthenticationPrincipal LoginUserVO user) {
 		//의뢰 단건조회
 		RequestVO findVO = requestService.requestInfo(requestVO);
 		model.addAttribute("request",findVO);
@@ -62,6 +64,8 @@ public class reviewController {
 		//후기 등록
 		model.addAttribute("review", new ReviewVO());
 		
+		//유저 정보보내기
+		model.addAttribute("writer", user.getUserNo());
 		return "rvw/reviewInsert";
 	}
 	

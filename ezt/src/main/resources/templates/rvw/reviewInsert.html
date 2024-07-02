@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="Content">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,62 +17,71 @@
     <div id="myModal" class="modal">
      <div class="modal-content">
         <span class="close" id="closeBtn">&times;</span>
-        <form name="rvInsertForm" th:object="${review}">
+        
 		<div class="row">
-			<img class="workerProfile" src="/images/rvw/worker_common_profile.jpg">
-
-	       	<table class="table">
-	       		<td style="display:none"><input th:field="*{requestNo}"></td>
-	       		<td style="display:none"><input sec:authentication="principal.userNo" th:field="*{writer}"></td>
-				<tr>
-					<th>작업자명</th>
-					<td>ddd</td>
-				</tr>
-				<!--/*  <tr>
-					<th>지역</th>
-					<td>[[${request.RegionCode}]]</td>
-				</tr>
-				<tr>
-					<th>작업 카테고리</th>
-					<td>[[${request.categoryCode}]]</td>
-				</tr>
-				<tr>
-					<th>면적</th>
-					<td>[[${request.cttPlaceArea}]]</td>
-				</tr>
-				<tr>
-					<th>작업내용</th>
-					<td>[[${request.content}]]</td>
-				</tr>*/-->
-				<tr>
-					<th>평점</th>
-					<td>
-						<fieldset class="reStar">
-							<input type="radio" th:field="*{star}" value="5" id="rate1"><label
-								for="rate1">★</label>
-							<input type="radio" th:field="*{star}"  value="4" id="rate2"><label
-								for="rate2">★</label>
-							<input type="radio" th:field="*{star}" value="3" id="rate3"><label
-								for="rate3">★</label>
-							<input type="radio" th:field="*{star}" value="2" id="rate4"><label
-								for="rate4">★</label>
-							<input type="radio" th:field="*{star}" value="1" id="rate5"><label
-								for="rate5">★</label>
-						</fieldset>
-					<td>
-				</tr>
-				<tr>
-					<th>내용</th>
-					<td>
-						<textarea th:text="${review.content}" name="content" placeholder="후기 내용을 입력하세요"></textarea>
-					</td>
-				</tr>
-			</table>
-				<input style="display:none" th:field="${review.reviewDivision}" value="F" >
-				<button style="text-align:center">등록</button>
+			<div class="col">
+				<img class="workerProfile" src="/images/rvw/worker_common_profile.jpg">
+			</div>
+			<div class="col">
+		       	<table class="table">
+		       		
+					<tr>
+						<th>작업자명</th>
+						<td>ddd</td>
+					</tr>
+					<tr>
+						<th>지역</th>
+						<td th:text="${request.regionCode}"></td>
+					</tr>
+					<tr>
+						<th>작업 카테고리</th>
+						<td th:text="${request.categoryCode}"></td>
+					</tr>
+					<tr>
+						<th>면적</th>
+						<td th:text="${request.cttPlaceArea}"></td>
+					</tr>
+					<tr>
+						<th>작업내용</th>
+						<td th:text="${request.content}"></td>
+					</tr>
+				</table>
+			</div>
+		 </div>
+			<form name="rvInsertForm" th:action="@{/reviewInsert}" th:object="${review}" method="post">
+				<table class="table">
+					<td style="display:none"><input th:value="${request.requestNo}" name="requestNo"></td>
+		       		<td style="display:none"><input th:value="${writer}" name="writer"></td>
+					<tr>
+						<th>평점</th>
+						<td>
+							<fieldset class="reStar">
+								<input type="radio" th:field="*{star}" value="5" id="rate1"><label
+									for="rate1">★</label>
+								<input type="radio" th:field="*{star}"  value="4" id="rate2"><label
+									for="rate2">★</label>
+								<input type="radio" th:field="*{star}" value="3" id="rate3"><label
+									for="rate3">★</label>
+								<input type="radio" th:field="*{star}" value="2" id="rate4"><label
+									for="rate4">★</label>
+								<input type="radio" th:field="*{star}" value="1" id="rate5"><label
+									for="rate5">★</label>
+							</fieldset>
+						<td>
+					</tr>
+					<tr>
+						<th>내용</th>
+						<td>
+							<textarea th:text="${review.content}" name="content" placeholder="후기 내용을 입력하세요"></textarea>
+						</td>
+					</tr>
+				</table>
+					<input style="display:none" th:field="${review.reviewDivision}" value="F" >
+					<button style="text-align:center">등록</button>
         </form>
-	 </div>
+     </div>
     </div>
+    
 
     <script>
       // HTML 문서의 로딩이 완료되었을 때, 해당 함수를 실행

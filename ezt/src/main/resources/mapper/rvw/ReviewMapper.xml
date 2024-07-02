@@ -138,14 +138,14 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		)
 	VALUES
 		(
-			#{review_no}
-			,#{request_no}
+			#{reviewNo}
+			,#{requestNo}
 			,#{writer}
 			,10002
 			,#{star}
 			,#{content}
 			,sysdate
-			,#{review_division}
+			,#{reviewDivision}
 
 		)
 		
