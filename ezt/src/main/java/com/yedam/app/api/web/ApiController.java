@@ -66,8 +66,9 @@ public class ApiController {
 	}
 	/**
 	 *  NH 가상계좌 입금 조회
-	 * @param vran - 계좌번호, 미입력시 전체 조회
-	 * @return Map - key: "REC", value: 리스트안의 Object
+	 *  미입력시 전체조회
+	 * @param vran : 조회할 계좌번호(미입력시 전체 조회)
+	 * @return 입금 내역 리스트
 	 */
 	@GetMapping("/getVirtualAcRcvList")
 	public List<Object> getVirtualAcRcvList(String vran){
@@ -76,10 +77,5 @@ public class ApiController {
 		
 		return list;
 	}
-//	@GetMapping("/getVirtualAcRcvList")
-//	public Mono<Map<String, Object>> getVirtualAcRcvList(String vran){
-//		if (vran == null) vran="";
-//		return nhDevSvc.getVirtualAcRecieveList(vran);
-//	}
 	
 }

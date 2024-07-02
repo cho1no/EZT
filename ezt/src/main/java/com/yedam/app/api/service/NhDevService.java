@@ -9,7 +9,6 @@ public interface NhDevService {
 	// 가상계좌 발급
 	public Mono<String> getVirtualAc();
 	// 계좌 입금내역 조회
-//	public Mono<Map<String, Object>> getVirtualAcRecieveList(String Vran);
 	public List<Object> getVirtualAcRecieveList(String Vran);
 	// NH 계좌간 송금
 	public Mono<Map> receivedTransferAccountNumber(Map<String, String> input);
