@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.yedam.app.usr.service.UserVO;
+import com.yedam.app.wkr.service.CareerVO;
 
 @Mapper
 public interface WorkerMapper {
@@ -23,10 +24,14 @@ public interface WorkerMapper {
 	//지역,카테고리 추가
 	public int insertWorkerCode(UserVO userVO);
 	
-	
 	//비밀번호 변경
 	public int updateWorkerPw(UserVO userVO);
 	
+	//경력증명서 목록 조회
+	public CareerVO selectCareerList(UserVO userVO);
+	
+	//경력증명서 등록
+	public int insertCareer(CareerVO careerVO);
 	
 	//작업자 탈퇴(상태수정)
 	public int updateWorkerState(UserVO userVO);

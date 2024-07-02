@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.mapper.WorkerMapper;
+import com.yedam.app.wkr.service.CareerVO;
 import com.yedam.app.wkr.service.WorkerService;
 
 @Service
@@ -70,6 +71,16 @@ public class WorkerServiceImpl implements WorkerService{
 	@Override
 	public int insertWorkerCode(UserVO userVO) {
 		return workerMapper.insertWorkerCode(userVO);
+	}
+
+	@Override
+	public CareerVO selectCareerList(UserVO userVO) {
+		return workerMapper.selectCareerList(userVO);
+	}
+
+	@Override
+	public int insertCareer(CareerVO careerVO) {
+		return workerMapper.insertCareer(careerVO);
 	}
 
 	

@@ -14,7 +14,10 @@ import com.yedam.app.usr.service.UserCriteria;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
 	@Autowired

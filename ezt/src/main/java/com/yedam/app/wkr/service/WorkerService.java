@@ -22,10 +22,14 @@ public interface WorkerService {
 	//지역,카테고리 추가
 	public int insertWorkerCode(UserVO userVO);
 	
-	
 	//비밀번호 변경
 	public boolean updateWorkerPw(UserVO userVO);
+
+	//경력증명서 목록조회
+	public CareerVO selectCareerList(UserVO userVO);
 	
+	//경력증명서 등록
+	public int insertCareer(CareerVO careerVO);
 	
 	//회원탈퇴 (상태수정)
 	public boolean workerStateUpdate(UserVO userVO);

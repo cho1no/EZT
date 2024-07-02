@@ -13,6 +13,12 @@
 		WHERE users_no = #{usersNo}
 	</select>
 	
+	<select id="selectCareerList" resultType="CareerVO">
+		SELECT *
+		FROM career
+		WHERE users_no = #{usersNo}
+	</select>
+	
 	<delete id="deleteWorkerRegion" parameterType="UserVO">
 		DELETE FROM active_region
 		WHERE users_no = #{usersNo}
@@ -39,6 +45,27 @@
 		
 		SELECT *
 		FROM dual
+	</insert>
+
+	<insert id="insertCareer" parameterType="CareerVO">
+		INSERT INTO career( career_no
+							, users_no
+							, career_info
+							, career_start_dt
+							, career_end_dt
+							, file_id
+							, career_access_tf
+							, write_dt
+							) VALUES (
+							 SEQ_CAREER_NEXTVAL
+							 , #{usersNo}
+							 , #{careerInfo}
+							 . #{careerStartDt}
+							 , #{careerEndDt}
+							 , #{fileId}
+							 , 'A01'
+							 , sysdate
+							)
 	</insert>
 
 
