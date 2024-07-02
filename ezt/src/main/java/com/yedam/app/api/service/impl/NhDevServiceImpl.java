@@ -1,6 +1,7 @@
 package com.yedam.app.api.service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class NhDevServiceImpl implements NhDevService{
 	WebClient webClient;
 	
 	@Override
-	public Mono<Map> getVirtualAc() {
+	public Mono<String> getVirtualAc() {
 		String ApiNm = "OpenVirtualAccount";
 		String APISvcCd = "TEST_API_G";
 		Map<String, Object> map = new HashMap<>();
@@ -38,11 +39,36 @@ public class NhDevServiceImpl implements NhDevService{
 				.contentType(MediaType.APPLICATION_JSON)
 				.bodyValue(map)
 				.retrieve()
-				.bodyToMono(Map.class);
+				.bodyToMono(Map.class)
+				.map(resp -> (String) resp.get("Vran"));
 	}
 
+//	@Override
+//	public Mono<Map<String, Object>> getVirtualAcRecieveList(String Vran) {
+//		String ApiNm = "VirtualAccountReceivedListInquiry";
+//		String APISvcCd = "10B_001_00";
+//		Map<String, Object> map = new HashMap<>();
+//		NhDevHeaderDto dto = new NhDevHeaderDto(ApiNm, APISvcCd);
+//		map.put("Header", dto);
+//		map.put("Insymd", "20240601");
+//		map.put("Ineymd", "20240702");
+//		map.put("Vran", Vran);
+//		map.put("Lnsq", "");
+//		map.put("PageNo", "1");
+//		return webClient.post()
+//				.uri(URL + ApiNm + TLD)
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.bodyValue(map)
+//				.retrieve()
+//				.bodyToMono(Map.class)
+//				.map(resp -> {
+//					Map<String, Object> result = new HashMap<>();
+//					result.put("REC", resp.get("REC"));
+//					return result;
+//				});
+//	}
 	@Override
-	public Mono<Map> getVirtualAcRecieveList(String Vran) {
+	public List<Object> getVirtualAcRecieveList(String Vran) {
 		String ApiNm = "VirtualAccountReceivedListInquiry";
 		String APISvcCd = "10B_001_00";
 		Map<String, Object> map = new HashMap<>();
@@ -53,12 +79,19 @@ public class NhDevServiceImpl implements NhDevService{
 		map.put("Vran", Vran);
 		map.put("Lnsq", "");
 		map.put("PageNo", "1");
-		return webClient.post()
-				.uri(URL + ApiNm + TLD)
-				.contentType(MediaType.APPLICATION_JSON)
-				.bodyValue(map)
-				.retrieve()
-				.bodyToMono(Map.class);
+		Mono<Map> mono =  webClient.post()
+								.uri(URL + ApiNm + TLD)
+								.contentType(MediaType.APPLICATION_JSON)
+								.bodyValue(map)
+								.retrieve()
+								.bodyToMono(Map.class);
+		Map<String, Object> respMap = mono.block();
+		// "REC" 키의 값을 추출하여 List<Object>로 변환
+        if (respMap != null && respMap.get("REC") instanceof List) {
+            return (List<Object>) respMap.get("REC");
+        } else {
+            throw new RuntimeException("REC key is missing or not a list in the response.");
+        }
 	}
 	
 	@Override

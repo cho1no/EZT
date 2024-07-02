@@ -1,14 +1,16 @@
 package com.yedam.app.api.service;
 
+import java.util.List;
 import java.util.Map;
 
 import reactor.core.publisher.Mono;
 
 public interface NhDevService {
 	// 가상계좌 발급
-	public Mono<Map> getVirtualAc();
+	public Mono<String> getVirtualAc();
 	// 계좌 입금내역 조회
-	public Mono<Map> getVirtualAcRecieveList(String Vran);
+//	public Mono<Map<String, Object>> getVirtualAcRecieveList(String Vran);
+	public List<Object> getVirtualAcRecieveList(String Vran);
 	// NH 계좌간 송금
 	public Mono<Map> receivedTransferAccountNumber(Map<String, String> input);
 	// 타행 계좌 송금

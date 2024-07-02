@@ -1,5 +1,6 @@
 package com.yedam.app.api.web;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,21 +58,28 @@ public class ApiController {
 	
 	/**
 	 *  NH 가상계좌 발급
-	 * @return
+	 * @return 계좌번호
 	 */
 	@GetMapping("/getVirtualAc")
-	public Mono<Map> getVirtualAc(){
+	public Mono<String> getVirtualAc(){
 		return nhDevSvc.getVirtualAc();
 	}
 	/**
 	 *  NH 가상계좌 입금 조회
 	 * @param vran - 계좌번호, 미입력시 전체 조회
-	 * @return
+	 * @return Map - key: "REC", value: 리스트안의 Object
 	 */
 	@GetMapping("/getVirtualAcRcvList")
-	public Mono<Map> getVirtualAcRcvList(String vran){
+	public List<Object> getVirtualAcRcvList(String vran){
 		if (vran == null) vran="";
-		return nhDevSvc.getVirtualAcRecieveList(vran);
+		List<Object> list = nhDevSvc.getVirtualAcRecieveList(vran);
+		
+		return list;
 	}
+//	@GetMapping("/getVirtualAcRcvList")
+//	public Mono<Map<String, Object>> getVirtualAcRcvList(String vran){
+//		if (vran == null) vran="";
+//		return nhDevSvc.getVirtualAcRecieveList(vran);
+//	}
 	
 }
