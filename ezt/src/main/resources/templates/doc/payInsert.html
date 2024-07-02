@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>결제 작성</title>
+<style>
+.hr-sect {
+	display: flex;
+	flex-basis: 100%;
+	align-items: center;
+	color: gray;
+	font-size: 20px;
+	margin: 15px 0px 30px 0px;
+	padding: 0;
+}
+
+.hr-sect::before, .hr-sect::after {
+	content: "";
+	flex-grow: 1;
+	background: rgba(0, 0, 0, 0.35);
+	height: 1px;
+	font-size: 0px;
+	line-height: 0px;
+	margin: 0px 16px;
+}
+</style>
+</head>
+<body>
+	<section class="site-section">
+
+		<div class="container">
+
+			<div class="row mb-5 mt-5">
+
+				<div class="col-lg-8">
+					<form class="p-4 p-md-5 border rounded">
+						<div class="row form-group">
+							<h3 class="text-black mb-3 border-bottom pb-2">
+								<b>결제 상세</b>
+							</h3>
+
+							<p class="hr-sect">
+								<b>결제자 정보</b>
+							</p>
+
+
+
+							<div class="row form-group">
+								<label class="col-2 col-form-label"><b>성명</b></label>
+								<div class="col-3">
+									<input type="text" readonly class="form-control-plaintext" value="성명">
+								</div>
+								<label class="col-3 col-form-label"><b>전화번호</b></label>
+								<div class="col">
+									<input type="text" readonly class="form-control-plaintext" value="전화번호">
+								</div>
+							</div>
+
+
+							<p class="hr-sect">
+								<b>계약서 정보</b>
+							</p>
+							<div class="row form-group">
+								<label class="col-2 col-form-label"><b>공사명</b></label>
+								<div class="col">
+									<input type="text" readonly class="form-control-plaintext" value="공사명">
+								</div>
+							</div>
+
+
+							<div class="row form-group">
+								<label class="col-2 col-form-label"><b>공사주소</b></label>
+								<div class="col">
+									<input type="text" readonly class="form-control-plaintext" value="공사주소">
+								</div>
+							</div>
+
+
+							<div class="row form-group">
+								<label class="col-3 col-form-label"><b>공사시작날짜</b></label>
+								<div class="col-3">
+									<input type="text" readonly class="form-control-plaintext" value="공사시작날짜">
+								</div>
+								<label class="col-3 col-form-label"><b>공사마감날짜</b></label>
+								<div class="col-3">
+									<input type="text" readonly class="form-control-plaintext" value="공사마감날짜">
+								</div>
+							</div>
+
+							
+
+							<div class="row form-group">
+								<label class="col-3 col-form-label"><b>시공자 성명</b></label>
+								<div class="col-3">
+									<input type="text" readonly class="form-control-plaintext" value="시공자 성명">
+								</div>
+								<label class="col-3 col-form-label"><b>시공자 전화번호</b></label>
+								<div class="col-3">
+									<input type="text" readonly class="form-control-plaintext" value="시공자 전화번호">
+								</div>
+							</div>
+							<div class="row form-group">
+								<label class="col-3 col-form-label"><b>시공자 주소</b></label>
+								<div class="col">
+									<input type="text" readonly class="form-control-plaintext" value="시공자 주소">
+								</div>
+							</div>
+
+
+						</div>
+						<p class="text-black">
+							<b>대금 지급 시기</b>
+						</p>
+						<div class="p-4 mb-3 bg-white border p-4 rounded">
+							<table class="table table-hover">
+								<thead>
+									<tr class="text-center">
+										<th scope="col" width="60px">횟수</th>
+										<th scope="col" width="150px">금액</th>
+										<th scope="col" width="150px">일시</th>
+										<th scope="col">내역</th>
+									</tr>
+								</thead>
+								<tbody class="content">
+								</tbody>
+							</table>
+						</div>
+					</form>
+				</div>
+				<div class="col-lg-4 ml-auto h-100 jm-sticky-top">
+
+					<div class="block__87154 mb-0">
+
+						<blockquote>
+							<h5 class="text-black mb-5 border-bottom pb-2">
+								<b>결제 정보</b>
+							</h5>
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th>품목</th>
+										<th>금액</th>
+									</tr>
+								</thead>
+							</table>
+						</blockquote>
+						<div class="block__91147 d-flex align-items-center">
+
+							<h5 class="text-right text-black" style="padding-top: 10px">
+								<b> 총 예상금액 : </b><b></b>
+							</h5>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</section>
+</body>
+</html>

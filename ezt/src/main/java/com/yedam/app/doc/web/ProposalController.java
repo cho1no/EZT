@@ -174,22 +174,7 @@ public class ProposalController {
 	@ResponseBody
 	public ResponseEntity<Resource> downloadFile(String fileName) {
 
-		log.info("download file: " + fileName);
-
-		FileSystemResource resource = new FileSystemResource("C:\\temp\\" + fileName);
-
-		log.info("resource : " + resource);
-
-		String resourceName = resource.getFilename();
-
-		org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
-		try {
-			headers.add("Content-Disposition",
-					"attachment; filename=" + new String(resourceName.getBytes("UTF-8"), "ISO-8859-1"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+		return fileService.downlodeFile(fileName);
 	}
 	// 파일 삭제
 	@PostMapping("/deleteFile")
@@ -197,30 +182,11 @@ public class ProposalController {
 	public ResponseEntity<String> deleteFile(@RequestBody List<FileVO> fileVO, ProposalVO proposalVO)
 			throws UnsupportedEncodingException {
 
-		int num = 0;
-		
-		for (FileVO list : fileVO) {
+		int no = fileService.deleteFile(fileVO);
 
-			// 콘솔 출력
-			log.info("Upload File Name : " + list.getOriginalFileName());
-			log.info("Upload File Size : " + list.getFileSize());
-			log.info("Upload reName : " + list.getSaveName());
-			log.info("Upload Path : " + list.getSavePath());
-			
-			String fileName = list.getSavePath().replace("\\", "/") + '/' + list.getSaveName() + "_" 
-						+ list.getOriginalFileName() + "." + list.getExt();
-			num = list.getFileId();
-			try {
-				File file = new File("C:\\temp\\" + URLDecoder.decode(fileName, "UTF-8"));
-
-				file.delete();
-
-			} catch (UnsupportedPointcutPrimitiveException e) {
-				e.printStackTrace();
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		if(no > 0) {
+			ppsSerivce.ppsFileDelete(fileVO.get(0).getFileId());
 			}
-		}
-		ppsSerivce.ppsFileDelete(num);
 		return new ResponseEntity<String>("deleted", HttpStatus.OK);
 
 	}
