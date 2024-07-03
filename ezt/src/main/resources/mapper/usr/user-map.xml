@@ -119,8 +119,10 @@
 			   , FIND_COMMONCODE(category_code) as category_code
 			   , FIND_COMMONCODE(request_state) as request_state
 			   , file_id
+			   , request_no
 		FROM request
 		WHERE requester = #{usersNo}
+		ORDER BY write_dt 	desc
 	</select>
 	
 	<update id="updateUserState" parameterType="UserVO">
