@@ -6,15 +6,6 @@
 <head>
 <meta charset="UTF-8">
 <title>작업자 마이페이지</title>
-<style>
-span.regionTag{
-	border-radius: 10px; 
-	margin-right: 10px;
-	padding: 5px 10px;
-	color: white;
-	background-color: #1263CE;
-}
-</style>
 </head>
 <body>
  <div class="container">
@@ -22,36 +13,45 @@ span.regionTag{
 	<hr>
 	<h1>회원 정보</h1>
 	<div>
-		<div>
-			<label for="usersNick">닉네임</label>
-			<input class="form-control" type="text" 
-			id="usersNick" th:value="${userVO.usersNick}" disabled readonly>
+		<div class="row mb-3">
+			<div class="col-md-2">
+				<label for="usersNick">닉네임</label>
+			</div>
+			<div class="col">
+				<input class="form-control" type="text" 
+				id="usersNick" th:value="${userVO.usersNick}" disabled readonly>
+			</div>
 		</div>
-		<div>
-			<label for="usersPhone">전화번호</label>
-			<input class="form-control" type="text" 
-			id="usersPhone" th:value="${userVO.usersPhone}" disabled readonly>
+		<div class="row mb-3">
+			<div class="col-md-2">
+				<label for="usersPhone">전화번호</label>
+			</div>
+			<div class="col">
+				<input class="form-control" type="text" 
+				id="usersPhone" th:value="${userVO.usersPhone}" disabled readonly>
+			</div>
 		</div>
-		<div>
-			<label for="usersEmail">이메일</label>
-			<input class="form-control" type="email" 
-			id="usersEmail" th:value="${userVO.usersEmail}" disabled readonly>
+		<div class="row mb-3">
+			<div class="col-md-2">
+				<label for="usersEmail">이메일</label>
+			</div>
+			<div class="col">
+				<input class="form-control" type="email" 
+				id="usersEmail" th:value="${userVO.usersEmail}" disabled readonly>
+			</div>
 		</div>
-		<div class="row form-group">
+		<div class="row mb-3">
 			<label class="text-black" for="regions">주 활동지역</label>
-			<div class="col-md-12 mb-3 mb-md-0" id="region0">
+			<div class="d-flex flex-wrap" id="region0">
 				
 			</div>
 		</div>
-		<div class="row form-group">
+		<div class="row mb-3">
 			<label class="text-black" for="categories">작업 분야</label>
-			<div class="col-md-12 mb-3 mb-md-0" id="categories0">
-
+			<div class="d-flex flex-wrap" id="categories0">
+				
 			</div>
 		</div>
-
-		
-<!-- 		<button type="button" th:onclick="|location.href='@{/worker/update}'|">수정하기</button> -->
 	</div>
   </div>
 </body>
@@ -59,13 +59,11 @@ span.regionTag{
 	let categories = /*[[${categories}]]*/"";
 	let regions = /*[[${regions}]]*/"";
 	regions.forEach((ele, idx)=>{
-		console.log(ele.REGION_CODE);
-		$('#region0').append(`<span class="regionTag">${ele.REGION_CODE}</span>`)
+		$('#region0').append(`<span class="border rounded-4 pt-1 pb-1 pl-2 pr-2 m-1 bg-success text-light">${ele.REGION_CODE}</span>`)
 	})
 	
 	categories.forEach((e, i) => {
-		console.log(e.CATEGORY_CODE);
-		$('#categories0').append(`<span class="regionTag">${e.CATEGORY_CODE}</span>`)
+		$('#categories0').append(`<span class="border rounded-4 pt-1 pb-1 pl-2 pr-2 m-1 bg-success text-light">${e.CATEGORY_CODE}</span>`)
 	})
 	
 	

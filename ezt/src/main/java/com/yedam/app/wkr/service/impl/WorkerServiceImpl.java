@@ -74,7 +74,7 @@ public class WorkerServiceImpl implements WorkerService{
 	}
 
 	@Override
-	public CareerVO selectCareerList(UserVO userVO) {
+	public List<CareerVO> selectCareerList(UserVO userVO) {
 		return workerMapper.selectCareerList(userVO);
 	}
 

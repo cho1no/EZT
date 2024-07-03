@@ -26,7 +26,7 @@ public interface WorkerService {
 	public boolean updateWorkerPw(UserVO userVO);
 
 	//경력증명서 목록조회
-	public CareerVO selectCareerList(UserVO userVO);
+	public List<CareerVO> selectCareerList(UserVO userVO);
 	
 	//경력증명서 등록
 	public int insertCareer(CareerVO careerVO);
