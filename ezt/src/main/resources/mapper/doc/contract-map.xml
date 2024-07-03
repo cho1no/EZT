@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.doc.mapper.ContractMapper">
 
+
+	<!-- 계약서 등록 -->
 	<insert id="insertConInfo" parameterType="ContractVO">
 		<selectKey keyProperty="contractNo" resultType="Integer"
 			order="BEFORE">
@@ -44,7 +46,9 @@
 		, #{proposalNo}
 		)
 	</insert>
+	<!-- 계약서 등록 -->
 
+	<!-- 계약서 상세 등록 -->
 	<insert id="insertConDetailInfo"
 		parameterType="ContractDetailVO">
 		<selectKey keyProperty="contractDetailNo"
@@ -69,7 +73,35 @@
 		, #{round}
 		)
 	</insert>
-
+	<!-- 계약서 상세 등록 -->
+	
+	<!-- 서명 등록 -->
+	<insert id="insertSignInfo" parameterType="SignsVO">
+		<selectKey keyProperty="signsNo" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_SIGNS.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO signs
+		(
+		SIGNS_NO
+		, CONTRACT_NO
+		, USERS_NO
+		, SIGNS_CONTENT
+		, SIGNS_DT
+		)
+		VALUES(
+		#{signsNo}
+		, #{contractNo}
+		, #{usersNo}
+		, #{signsContent}
+		, sysdate
+		)
+	</insert>
+	<!-- 서명 등록 -->
+	
+	
+	<!-- 계약서 조회 -->
 	<select id="selectConInfo" resultType="ContractVO">
 		SELECT
 		CONTRACT_NO
@@ -94,8 +126,9 @@
 		FROM contract
 		WHERE proposal_no = #{proposalNo}
 	</select>
+	<!-- 계약서 조회 -->
 
-
+	<!-- 계약서 상세 조회 -->
 	<select id="selectConDetailInfo" resultType="ContractDetailVO">
 		SELECT
 		CONTRACT_DETAIL_NO
@@ -106,56 +139,24 @@
 		, ROUND
 		FROM contract_detail
 		WHERE contract_no = #{contractNo}
+		ORDER BY ROUND
 	</select>
-
-	<!-- 파일 정보 DB 등록 attr -->
-	<insert id="insertFileAttrConInfo" statementType="CALLABLE"
-		parameterType="ContractVO">
-		<selectKey keyProperty="fileId" resultType="Integer"
-			order="BEFORE">
-			SELECT SEQ_FILEID.NEXTVAL
-			FROM dual
-		</selectKey>
-		{CALL
-		insert_contract_file(#{fileId}, #{contractNo})
-		}
-	</insert>
-
-
-	<!-- 파일 정보 조회 -->
-	<select id="selectConFileList" resultType="FileVO">
+	<!-- 계약서 상세 조회 -->
+	
+	<!-- 서명 정보 조회 -->
+	<select id="selectSignInfo" resultType="SignsVO">
 		SELECT
-		f.FILE_ID
-		, f.FILE_NO
-		, f.SAVE_PATH
-		, f.SAVE_NAME
-		, f.ORIGINAL_FILE_NAME
-		, f.EXT
-		, f.FILE_SIZE
-		, f.BOSS_TF
-		FROM file_detail_info f
-		join contract c
-		on c.file_id = f.file_id
-		WHERE c.contract_no = #{contractNo}
+			SIGNS_NO
+			,CONTRACT_NO
+			,USERS_NO
+			,SIGNS_CONTENT
+			,SIGNS_DT
+		FROM signs
+		WHERE contract_no = #{contractNo} and users_no = #{usersNo}
 	</select>
+	<!-- 서명 정보 조회 -->
 
-
-	<!-- 파일 정보 DB&견적서 삭제 -->
-	<delete id="deleteConFileInfo" statementType="CALLABLE"
-		parameterType="ContractVO">
-		{CALL
-		delete_contract_file(#{fileId})
-		}
-	</delete>
-
-	<!-- 계약서 상세 삭제 -->
-	<delete id="deleteConDetailInfo" parameterType="int">
-		DELETE FROM
-		contract_detail
-		WHERE contract_no = #{contractNo}
-	</delete>
-
-
+	<!-- 계약서 수정 -->
 	<update id="updateConInfo" parameterType="ContractVO">
 		UPDATE contract
 		SET
@@ -171,57 +172,25 @@
 		WORKER_ADDRESS = #{workerAddress}
 		, WORKER_ACCOUNT = #{workerAccount}
 		WHERE contract_no = #{contractNo}
-
 	</update>
+	<!-- 계약서 수정 -->
 
-	<!--파일 정보 DB 등록 -->
-	<insert id="insertConFileInfo" parameterType="FileVO"
-		statementType="CALLABLE">
-		<selectKey keyProperty="fileNo" resultType="int"
-			order="BEFORE">
-			SELECT SEQ_FILENO.NEXTVAL
-			FROM dual
-		</selectKey>
-		{CALL
-		insert_contract_detail_file(
-		#{fileNo}
-		, #{savePath}
-		, #{saveName}
-		, #{originalFileName}
-		, #{ext}
-		, #{fileSize}
-		}
-	</insert>
+	<!-- 계약서 상세 삭제 -->
+	<delete id="deleteConDetailInfo" parameterType="int">
+		DELETE FROM
+		contract_detail
+		WHERE contract_no = #{contractNo}
+	</delete>
+	<!-- 계약서 상세 삭제 -->
 
-	<!-- 서명 정보 조회 -->
-	<select id="selectSignInfo" resultType="SignsVO">
-		SELECT
-			SIGNS_NO
-			,CONTRACT_NO
-			,USERS_NO
-			,SIGNS_CONTENT
-			,SIGNS_DT
-		FROM signs
+	<!-- 서명 삭제 -->
+	<delete id="delelteSignInfo" parameterType="int">
+		DELETE FROM
+		signs
 		WHERE contract_no = #{contractNo} and users_no = #{usersNo}
-	</select>
+	</delete>
+	<!-- 서명 삭제 -->
 
 
-	<!-- 서명 등록 -->
-	<insert id="insertSignInfo" parameterType="SignsVO"
-		statementType="CALLABLE">
-		<selectKey keyProperty="signsNo" resultType="int"
-			order="BEFORE">
-			SELECT SEQ_SIGNS.NEXTVAL
-			FROM dual
-		</selectKey>
-		INSERT INTO signs
-		VALUES(
-		#{signsNo}
-		, #{contractNo}
-		, #{usersNo}
-		, #{signsContent}
-		, sysdate
-		)
-	</insert>
 
 </mapper>

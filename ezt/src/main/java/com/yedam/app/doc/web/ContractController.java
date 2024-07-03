@@ -18,6 +18,7 @@ import com.yedam.app.doc.service.ContractService;
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalService;
 import com.yedam.app.doc.service.ProposalVO;
+import com.yedam.app.doc.service.SignsVO;
 import com.yedam.app.fie.service.FileService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.sgi.service.LoginUserVO;
@@ -107,6 +108,8 @@ public class ContractController {
 			model.addAttribute("worker", worker);
 			UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
 			model.addAttribute("requester", requester);
+			model.addAttribute("user", user.getUserNo());
+			
 			
 			ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
 			

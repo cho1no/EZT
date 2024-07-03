@@ -9,6 +9,11 @@
 <link rel="stylesheet"
 	href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+<!-- 서명 -->
+<link href="/css/doc/jquery.signaturepad.css" rel="stylesheet">
+<script src="/js/doc/jquery.signaturepad.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
 
 <title>계약서 수정</title>
 
@@ -57,6 +62,17 @@
 
 .con_ul li div:nth-child(2) {
 	height: 38px;
+}
+
+canvas {
+	border: 1px solid black;
+	width: 260px;
+	height: 100px;
+}
+
+.modal-backdrop {
+	/* bug fix - no overlay */
+	display: none;
 }
 </style>
 </head>
@@ -269,7 +285,16 @@
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
 												</div>
-												<div class="col" style="height: 70px;"></div></li>
+												<div class="col">
+													<button type="button"
+														class="btn btn-outline-success sendBtn"
+														data-bs-toggle="modal" data-bs-target="#sendModal">서명
+														하기</button>
+												</div>
+												<div class="h-75">
+												<div id="input_sign_req" class="text-center mt-2">
+												<canvas id="signatureCanvas_req"></canvas></div>
+												</div></li>
 										</ul>
 									</div>
 								</div>
@@ -331,10 +356,16 @@
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
 												</div>
-												<div class="col-3" style="height: 70px;">
-													<input type="text" class="form-control"
-														style="height: 70px; width: 70px">
-												</div></li>
+												<div class="col">
+													<button type="button"
+														class="btn btn-outline-success sendBtn"
+														data-bs-toggle="modal" data-bs-target="#sendModal">서명
+														하기</button>
+												</div>
+												<div class="h-75">
+												<div id="input_sign_work" class="text-center mt-2">
+														<canvas id="signatureCanvas_work"></canvas>
+													</div></div></li>
 										</ul>
 									</div>
 								</div>
@@ -383,9 +414,43 @@
 	</section>
 
 
+<!-- Modal -->
+	<div class="modal fade" id="sendModal" tabindex="-1"
+		aria-labelledby="sendModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered  modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="sendModalLabel">서명 하기</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body" style="height:180px">
+					<form method="post" action="" class="sigPad">
+						<ul class="sigNav">
+							<li class="drawIt"><a href="#draw-it">그리기</a></li>
+							<li class="clearButton"><a href="#clear">지우기</a></li>
+						</ul>
+						<div class="sig sigWrapper">
+							<div class="typed"></div>
+							<canvas class="pad" width="260" height="100"></canvas>
+							<input type="hidden" name="output" class="output">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">닫기</button>
+					<button type="button" id="saveModal" class="btn btn-primary">서명</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
 
 	<script th:inline="javascript">
-	
+	// 조회 데이터 표기
 	date = new Date();
     year = date.getFullYear();
     month = date.getMonth() + 1;
@@ -434,7 +499,7 @@
 	    addRound();
 	});
 	
-	
+	// 업데이트 전 데이터 추가
 	$('button[type="button"]').on('click', function(e) {
 		
 			$('input[name="workerAddress"]').val($('#input_postcode').val() + '_' 
@@ -487,6 +552,8 @@
 	
 	var proposalNo = [[${con.proposalNo}]];
 	
+	
+	// 업데이트
 	$('#updateBtn').on('click', insertAjax );
 	
 	function insertAjax(e){
@@ -512,13 +579,11 @@
 			}
 		}
 		
-	
-		
+		formData.append("worSign.signsContent", workNewSign);
 		
 		for (const pair of formData.entries()) {
 			  console.log(pair[0], pair[1]);
 			}
-		
 		
 		$.ajax({
 			url: '/conUpdate',
@@ -534,6 +599,81 @@
 	}
 
 	
+	// 서명 표기
+	var workSign = [[${con.worSign.signsContent}]];
+	var workNewSign = '';
+	console.log([[${con.worSign.usersNo}]])
+	
+	if(workSign != null){
+	 signView(workSign, 0);
+	}
+	
+function signView(compressedSignatureData, num) {
+    //console.log("compressedSignatureData = " + compressedSignatureData);
+    console.log(num);
+    // 압축된 데이터 복원
+    let decompressedSignatureData 
+              = LZString.decompressFromBase64(compressedSignatureData);
+
+    // 복원된 서명을 JSON화
+    let signatureData = JSON.parse(decompressedSignatureData);
+
+    // 서명 그리기
+    drawSignature(signatureData, 0);
+}
+
+function drawSignature(data, num) {
+    // Canvas / 컨텍스트
+    let canvas;
+    
+    if(num == 0){
+    	canvas = document.getElementById('signatureCanvas_work');
+    }else{
+    	canvas = document.getElementById('signatureCanvas_req');
+    }
+    
+    let ctx = canvas.getContext('2d');
+    
+ 	// 캔버스 초기화
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    for (let i = 0; i < data.length; i++) {
+        let point = data[i];
+        ctx.moveTo(point.mx, point.my);
+        ctx.lineTo(point.lx, point.ly);
+    }
+    ctx.stroke();
+    $('#sendModal').modal('hide');
+    
+}
+	
+$('.sigPad').signaturePad({drawOnly:true});
+
+$('#saveModal').click(function(e) {
+	event.preventDefault(); // 폼의 기본 제출 동작을 방지
+
+	$('#input_sign canvas').remove();
+		
+    // 서명 데이터를 JSON 형식으로 가져오기
+    var signatureData = $('.sigPad').signaturePad().getSignatureString();
+    
+    // 서명 데이터를 압축
+    compressedData = LZString.compressToBase64(signatureData);
+
+    // 압축된 데이터를 숨겨진 input에 저장
+    $('input.output').val(compressedData);
+
+    // 압축된 데이터 출력 (선택 사항)
+    //console.log(compressedData);
+   
+    if([[${user}]] == [[${con.workerInfo}]]){
+    	workNewSign = compressedData;
+    	signView(compressedData, 0);
+    }else{
+    	signView(compressedData, 1);
+    }
+});
+
 	
 	</script>
 	<!-- datepicker -->
@@ -546,5 +686,8 @@
 
 	<!-- uploadAjax -->
 	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
+	
+	<!-- 서명 -->
+	<script src="/js/doc/json2.min.js"></script>
 </body>
 </html>

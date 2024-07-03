@@ -415,7 +415,6 @@ canvas {
 
 
 
-	<script src="/js/doc/jquery.signaturepad.js"></script>
 	<script th:inline="javascript">
 	
 	// 현재 년월일 표시
@@ -598,14 +597,14 @@ canvas {
 
 	  		function drawSignature(data) {
 		        // Canvas / 컨텍스트
-		        const canvas = document.getElementById('signatureCanvas');
-		        const ctx = canvas.getContext('2d');
+		        let canvas = document.getElementById('signatureCanvas');
+		        let ctx = canvas.getContext('2d');
 		        
 		     	// 캔버스 초기화
 		        ctx.clearRect(0, 0, canvas.width, canvas.height);
 		        ctx.beginPath();
 		        for (let i = 0; i < data.length; i++) {
-		            const point = data[i];
+		        	let point = data[i];
 		            ctx.moveTo(point.mx, point.my);
 		            ctx.lineTo(point.lx, point.ly);
 		        }
@@ -617,11 +616,11 @@ canvas {
 		        //console.log("compressedSignatureData = " + compressedSignatureData);
 		        
 		        // 압축된 데이터 복원
-		        const decompressedSignatureData 
+		        let decompressedSignatureData 
 	                      = LZString.decompressFromBase64(compressedSignatureData);
 	 
 		        // 복원된 서명을 JSON화
-		        const signatureData = JSON.parse(decompressedSignatureData);
+		        let signatureData = JSON.parse(decompressedSignatureData);
 	 
 		        // 서명 그리기
 		        drawSignature(signatureData);

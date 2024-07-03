@@ -17,9 +17,4 @@ public class docController {
 		return "doc/index";
 	}
 	
-	@GetMapping("pay")
-	public String pay(Model model, @AuthenticationPrincipal LoginUserVO user) {
-		model.addAttribute("userId", user.getUserVO());
-		return "doc/payInsert";
-	}
 }

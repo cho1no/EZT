@@ -63,6 +63,7 @@ canvas {
 	height: 100px;
 }
 
+
 </style>
 </head>
 <body>
@@ -258,7 +259,10 @@ canvas {
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
 												</div>
-												<div id="input_sign_req" class="text-center mt-2"></div></li>
+												<div class="col h-75">
+												<div id="input_sign_req" class="text-center mt-2">
+												<canvas id="signatureCanvas_req"></canvas></div>
+												</div></li>
 										</ul>
 									</div>
 								</div>
@@ -317,10 +321,11 @@ canvas {
 											<li class="mb-2 row form-group"><div class="col-3">
 													<strong class="text-black">서명</strong>
 												</div>
-												<div class="col h-75" >
-												<div id="input_sign_work" class="text-center mt-2">
-													<canvas id="signatureCanvas_work"></canvas>
-												</div></div></li>
+												<div class="col h-75">
+													<div id="input_sign_work" class="text-center mt-2">
+														<canvas id="signatureCanvas_work"></canvas>
+													</div>
+												</div></li>
 										</ul>
 									</div>
 								</div>
@@ -357,7 +362,7 @@ canvas {
 	</section>
 
 
-	<script src="js/doc/jquery.signaturepad.js"></script>
+
 	<script th:inline="javascript">
 	
 	var date = [[${#dates.format(con.updateDt,'yyyy-MM-dd')}]]
@@ -384,23 +389,23 @@ canvas {
 		$('#fileDownload').append(`<p><a href="download?fileName=${path}/${name}_${orgname}.${ext}">${orgname}.${ext}</a></p> `)
 	}
 	
-	
-	
+		// 서명 표기
 		var workSign = [[${con.worSign.signsContent}]];
+
 		
-		if(workSign.length != 0){
-		signView(workSign);
+		if(workSign != null){
+		 signView(workSign);
 		}
 		
     function signView(compressedSignatureData) {
         //console.log("compressedSignatureData = " + compressedSignatureData);
         
         // 압축된 데이터 복원
-        const decompressedSignatureData 
+        let decompressedSignatureData 
                   = LZString.decompressFromBase64(compressedSignatureData);
 
         // 복원된 서명을 JSON화
-        const signatureData = JSON.parse(decompressedSignatureData);
+        let signatureData = JSON.parse(decompressedSignatureData);
 
         // 서명 그리기
         drawSignature(signatureData);
@@ -408,18 +413,19 @@ canvas {
 	
     function drawSignature(data) {
         // Canvas / 컨텍스트
-        const canvas = document.getElementById('signatureCanvas_work');
-        const ctx = canvas.getContext('2d');
+        let canvas = document.getElementById('signatureCanvas_work');
+        let ctx = canvas.getContext('2d');
         
      	// 캔버스 초기화
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.beginPath();
         for (let i = 0; i < data.length; i++) {
-            const point = data[i];
+        	let point = data[i];
             ctx.moveTo(point.mx, point.my);
             ctx.lineTo(point.lx, point.ly);
         }
         ctx.stroke();
+        
         
     }
 	

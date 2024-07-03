@@ -46,16 +46,16 @@
 								<b>결제자 정보</b>
 							</p>
 
-
-
 							<div class="row form-group">
 								<label class="col-2 col-form-label"><b>성명</b></label>
 								<div class="col-3">
-									<input type="text" readonly class="form-control-plaintext" value="성명">
+									<input type="text" readonly class="form-control-plaintext"
+										th:value="${requester.usersName}">
 								</div>
 								<label class="col-3 col-form-label"><b>전화번호</b></label>
 								<div class="col">
-									<input type="text" readonly class="form-control-plaintext" value="전화번호">
+									<input type="text" readonly class="form-control-plaintext"
+										th:value="${requester.usersPhone}">
 								</div>
 							</div>
 
@@ -66,7 +66,8 @@
 							<div class="row form-group">
 								<label class="col-2 col-form-label"><b>공사명</b></label>
 								<div class="col">
-									<input type="text" readonly class="form-control-plaintext" value="공사명">
+									<input type="text" readonly class="form-control-plaintext"
+										th:value="${con.cttName}">
 								</div>
 							</div>
 
@@ -74,7 +75,9 @@
 							<div class="row form-group">
 								<label class="col-2 col-form-label"><b>공사주소</b></label>
 								<div class="col">
-									<input type="text" readonly class="form-control-plaintext" value="공사주소">
+									<input type="text" readonly class="form-control-plaintext"
+										th:value="${'(' + reqInfo.postcode + ') '
+										+reqInfo.address + ' ' + reqInfo.detailAddress}">
 								</div>
 							</div>
 
@@ -82,30 +85,37 @@
 							<div class="row form-group">
 								<label class="col-3 col-form-label"><b>공사시작날짜</b></label>
 								<div class="col-3">
-									<input type="text" readonly class="form-control-plaintext" value="공사시작날짜">
+									<input type="text" readonly class="form-control-plaintext"
+										th:value="${#dates.format(con.cttStartDt,
+										'yyyy-MM-dd')}">
 								</div>
 								<label class="col-3 col-form-label"><b>공사마감날짜</b></label>
 								<div class="col-3">
-									<input type="text" readonly class="form-control-plaintext" value="공사마감날짜">
+									<input type="text" readonly class="form-control-plaintext"
+										th:value="${#dates.format(con.cttEndDt,
+										'yyyy-MM-dd')}">
 								</div>
 							</div>
 
-							
+
 
 							<div class="row form-group">
 								<label class="col-3 col-form-label"><b>시공자 성명</b></label>
 								<div class="col-3">
-									<input type="text" readonly class="form-control-plaintext" value="시공자 성명">
+									<input type="text" readonly class="form-control-plaintext"
+										th:value="${worker.usersName}">
 								</div>
 								<label class="col-3 col-form-label"><b>시공자 전화번호</b></label>
 								<div class="col-3">
-									<input type="text" readonly class="form-control-plaintext" value="시공자 전화번호">
+									<input type="text" readonly class="form-control-plaintext"
+										th:value="${worker.usersPhone}">
 								</div>
 							</div>
 							<div class="row form-group">
 								<label class="col-3 col-form-label"><b>시공자 주소</b></label>
 								<div class="col">
-									<input type="text" readonly class="form-control-plaintext" value="시공자 주소">
+									<input type="text" readonly class="form-control-plaintext"
+									th:value="${'(' + con.workerAddress.replace('_', ' ').substring(0,5) + ') ' +con.workerAddress.replace('_', ' ').substring(6)}">
 								</div>
 							</div>
 
@@ -125,6 +135,17 @@
 									</tr>
 								</thead>
 								<tbody class="content">
+									<th:block th:each=" list : ${con.dList}">
+											<tr class="text-center">
+												<td th:text="${list.round}" />
+												<td
+													th:text="${#numbers.formatInteger(list.price,1,'COMMA')} + 원" />
+												<td
+													th:text="${#dates.format(list.paymentDt,
+											'yyyy-MM-dd')}" />
+												<td th:text="${list.history}" />
+											</tr>
+										</th:block>
 								</tbody>
 							</table>
 						</div>
@@ -160,5 +181,10 @@
 
 		</div>
 	</section>
+	
+	<script th:inline="javascript">
+	
+
+	</script>
 </body>
 </html>

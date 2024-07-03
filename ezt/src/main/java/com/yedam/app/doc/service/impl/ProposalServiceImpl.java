@@ -3,9 +3,11 @@ package com.yedam.app.doc.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.common.service.FileVO;
+import com.yedam.app.doc.mapper.FileMapper;
 import com.yedam.app.doc.mapper.ProposalMapper;
 import com.yedam.app.doc.service.ProposalDetailVO;
 import com.yedam.app.doc.service.ProposalService;
@@ -18,6 +20,9 @@ public class ProposalServiceImpl implements ProposalService {
 
 	@Autowired
 	ProposalMapper ppsMapper;
+
+	@Autowired
+	FileMapper fileMapper;
 
 	@Override
 	public UserVO userInfo(int userNo) {
@@ -34,7 +39,7 @@ public class ProposalServiceImpl implements ProposalService {
 	@Override
 	public ProposalVO ppsInfo(int proposalNo) {
 		List<ProposalDetailVO> list = ppsMapper.selectPpsDetailList(proposalNo);
-		List<FileVO> fileList = ppsMapper.selectFileList(proposalNo);
+		List<FileVO> fileList = fileMapper.selectProFileList(proposalNo);
 		ProposalVO pps = ppsMapper.selectPpsInfo(proposalNo);
 		pps.setList(list);
 		pps.setFileList(fileList);
@@ -54,6 +59,7 @@ public class ProposalServiceImpl implements ProposalService {
 		}
 		return result == 1 ? proposalVO.getProposalNo() : -1;
 	}
+
 	// 견적서 수정
 	@Override
 	public int ppsUpdate(ProposalVO proposalVO) {
@@ -67,6 +73,7 @@ public class ProposalServiceImpl implements ProposalService {
 		}
 		return result == 1 ? proposalVO.getProposalNo() : -1;
 	}
+
 	// 견적서 삭제
 	@Override
 	public int ppsDelete(int proposalNo) {
@@ -82,30 +89,28 @@ public class ProposalServiceImpl implements ProposalService {
 			return -1;
 		}
 	}
+
 	// 견적서 목록 조회(특정 의뢰와 관련해 본인이 작성한 견적서 목록)
 	@Override
 	public List<ProposalVO> ppsListInfo(ProposalVO proposalVO) {
 		return ppsMapper.selectPpsListInfo(proposalVO);
 	}
-	
+
 	// 견적서 파일 첨부
 	@Override
 	public int ppsFileUpdate(ProposalVO proposalVO) {
-		//System.out.println(proposalVO);
+		
 		if (proposalVO.getFileList() != null) {
-			ppsMapper.insertFileAttrInfo(proposalVO);
-			
+				fileMapper.insertFileAttrProInfo(proposalVO);
 			proposalVO.getFileList().forEach(e -> {
 				e.setFileId(proposalVO.getFileId());
-				ppsMapper.insertFileInfo(e);
+				fileMapper.insertFileInfo(e);
 			});
-			System.out.println(proposalVO);
-			ppsMapper.updatePpsFileInfo(proposalVO);
 		}
 		ppsMapper.sendPpsInfo(proposalVO);
-		
 		return proposalVO.getProposalNo();
 	}
+
 	// 파일&견적서 삭제
 	@Override
 	public int ppsFileDelete(int fileId) {
@@ -114,8 +119,7 @@ public class ProposalServiceImpl implements ProposalService {
 			result = true;
 		}
 
-		return result == true ? 1 : -1 ;
+		return result == true ? 1 : -1;
 	}
-	
 
 }

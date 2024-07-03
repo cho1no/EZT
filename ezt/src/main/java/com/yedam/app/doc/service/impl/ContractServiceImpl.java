@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.mapper.ContractMapper;
+import com.yedam.app.doc.mapper.FileMapper;
 import com.yedam.app.doc.mapper.ProposalMapper;
 import com.yedam.app.doc.service.ContractDetailVO;
 import com.yedam.app.doc.service.ContractService;
@@ -18,80 +19,144 @@ public class ContractServiceImpl implements ContractService {
 
 	@Autowired
 	ContractMapper conMapper;
-	
+
 	@Autowired
 	ProposalMapper ppsMapper;
-	
+
+	@Autowired
+	FileMapper fileMapper;
+
 	// 계약서 등록
 	@Override
 	public int conInsert(ContractVO contractVO) {
-		
+		// 계약서 등록
 		int result = conMapper.insertConInfo(contractVO);
-		if(contractVO.getDList() != null) {
+		if (contractVO.getDList() != null) {
 			contractVO.getDList().forEach(e -> {
 				e.setContractNo(contractVO.getContractNo());
 				conMapper.insertConDetailInfo(e);
 			});
 		}
-		if(contractVO.getFileList() != null) {
-			conMapper.insertFileAttrConInfo(contractVO);
+
+		// 파일 등록
+		if (contractVO.getFileList() != null) {
+			fileMapper.insertFileAttrConInfo(contractVO);
 			contractVO.getFileList().forEach(e -> {
 				e.setFileId(contractVO.getFileId());
-				ppsMapper.insertFileInfo(e);
+				fileMapper.insertFileInfo(e);
 			});
 		}
-		if(contractVO.getReqSign() != null) {
-			contractVO.getReqSign().setContractNo(contractVO.getContractNo());
-			contractVO.getReqSign().setUsersNo(contractVO.getRequesterInfo());
-			conMapper.insertSignInfo(contractVO.getReqSign());
+
+		// 서명 등록
+		if (contractVO.getWorSign() != null) {
+			if (contractVO.getWorSign().getSignsContent().length() > 10) {
+				SignsVO sign = contractVO.getWorSign();
+				sign.setContractNo(contractVO.getContractNo());
+				sign.setUsersNo(contractVO.getWorkerInfo());
+				conMapper.insertSignInfo(sign);
+			}
 		}
-		if(contractVO.getWorSign() != null) {
-			contractVO.getReqSign().setContractNo(contractVO.getContractNo());
-			contractVO.getReqSign().setUsersNo(contractVO.getWorkerInfo());
-			conMapper.insertSignInfo(contractVO.getWorSign());
+		if (contractVO.getReqSign() != null) {
+			if (contractVO.getReqSign().getSignsContent().length() > 10) {
+				SignsVO sign = contractVO.getWorSign();
+				sign.setContractNo(contractVO.getContractNo());
+				sign.setUsersNo(contractVO.getRequesterInfo());
+				conMapper.insertSignInfo(sign);
+			}
 		}
-		System.out.println(contractVO);
-		
-		return result ==1 ? contractVO.getContractNo() : -1;
+
+		return result == 1 ? contractVO.getContractNo() : -1;
 	}
-	
+
 	// 계약서 조회
 	@Override
 	public ContractVO conInfo(ContractVO contracVO) {
+		// 단건 조회
 		ContractVO con = conMapper.selectConInfo(contracVO.getProposalNo());
+
+		// 상세 조회
 		List<ContractDetailVO> list = conMapper.selectConDetailInfo(con.getContractNo());
 		con.setDList(list);
-		List<FileVO> fileList = conMapper.selectConFileList(con.getContractNo());
+
+		// 파일 조회
+		List<FileVO> fileList = fileMapper.selectConFileList(con.getContractNo());
 		con.setFileList(fileList);
-		SignsVO reqSign = conMapper.selectSignInfo(con.getContractNo(), con.getRequesterInfo());
-		con.setReqSign(reqSign);
+
+		// 서명 조회
 		SignsVO worSign = conMapper.selectSignInfo(con.getContractNo(), con.getWorkerInfo());
-		con.setWorSign(worSign);
+		if (worSign == null) {
+			SignsVO falseworSign = new SignsVO();
+			falseworSign.setContractNo(-1);
+			con.setWorSign(falseworSign);
+
+		} else {
+			con.setWorSign(worSign);
+		}
+
+		SignsVO reqSign = conMapper.selectSignInfo(con.getContractNo(), con.getRequesterInfo());
+		if (reqSign == null) {
+			SignsVO falseReqSign = new SignsVO();
+			falseReqSign.setContractNo(-1);
+			con.setReqSign(falseReqSign);
+
+		} else {
+			con.setReqSign(reqSign);
+		}
+
 		return con;
 	}
-	
+
 	// 계약서 수정
 	@Override
 	public int conUpdate(ContractVO contractVO) {
-		
-		int result = conMapper.updateConInfo(contractVO);
 
-		if(contractVO.getDList() != null) {
+		// 계약서 수정
+		int result = conMapper.updateConInfo(contractVO);
+		// 계약서 상세 삭제 후 등록
+		if (contractVO.getDList() != null) {
 			conMapper.deleteConDetailInfo(contractVO.getContractNo());
 			contractVO.getDList().forEach(e -> {
 				e.setContractNo(contractVO.getContractNo());
 				conMapper.insertConDetailInfo(e);
 			});
 		}
-		if(contractVO.getFileList() != null) {
-			conMapper.deleteConFileInfo(contractVO);
-			conMapper.insertFileAttrConInfo(contractVO);
+
+		// 파일 상세 삭제 후 등록 or 등록된 파일 없으면 새로 등록
+		if (contractVO.getFileList() != null) {
+
+			if (contractVO.getFileId() != 0) {
+				fileMapper.deleteFileInfo(contractVO.getFileId());
+			} else {
+				fileMapper.insertFileAttrConInfo(contractVO);
+			}
 			contractVO.getFileList().forEach(e -> {
-				ppsMapper.insertFileInfo(e);
+				e.setFileId(contractVO.getFileId());
+				fileMapper.insertFileInfo(e);
 			});
 		}
-		
-		return result ==1 ? contractVO.getContractNo() : -1;
+
+		// 서명 등록
+		if (contractVO.getWorSign() != null) {
+			conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getWorkerInfo());
+			if (contractVO.getWorSign().getSignsContent().length() > 10) {
+				SignsVO sign = contractVO.getWorSign();
+				sign.setContractNo(contractVO.getContractNo());
+				sign.setUsersNo(contractVO.getWorkerInfo());
+				conMapper.insertSignInfo(sign);
+			}
+		}
+		if (contractVO.getReqSign() != null) {
+			conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getRequesterInfo());
+			if (contractVO.getReqSign().getSignsContent().length() > 10) {
+				SignsVO sign = contractVO.getWorSign();
+				sign.setContractNo(contractVO.getContractNo());
+				sign.setUsersNo(contractVO.getRequesterInfo());
+				conMapper.insertSignInfo(sign);
+			}
+		}
+
+		System.out.println("------------------" + contractVO);
+		return result == 1 ? contractVO.getContractNo() : -1;
 	}
-	
+
 }
