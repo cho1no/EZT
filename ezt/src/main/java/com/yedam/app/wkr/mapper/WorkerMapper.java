@@ -28,7 +28,7 @@ public interface WorkerMapper {
 	public int updateWorkerPw(UserVO userVO);
 	
 	//경력증명서 목록 조회
-	public List<CareerVO> selectCareerList(UserVO userVO);
+	public CareerVO selectCareerList(UserVO userVO);
 	
 	//경력증명서 등록
 	public int insertCareer(CareerVO careerVO);
