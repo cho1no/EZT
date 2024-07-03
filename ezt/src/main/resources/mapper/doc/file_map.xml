@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.doc.mapper.FileMapper">
+
+	<!--파일 정보 DB 등록 -->
+	<insert id="insertFileInfo" parameterType="FileVO">
+		<selectKey keyProperty="fileNo" resultType="int"
+			order="BEFORE">
+			SELECT SEQ_FILENO.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO file_detail_info
+		VALUES(
+		#{fileId}
+		, #{fileNo}
+		, #{savePath}
+		, #{saveName}
+		, #{originalFileName}
+		, #{ext}
+		, #{fileSize}
+		, 'N'
+		)
+	</insert>
+	<!--파일 정보 DB 등록 -->
+	
+	<!-- 파일 상세 삭제 -->
+	<delete id="deleteFileInfo" parameterType="int">
+		DELETE FROM file_detail_info
+    	WHERE file_id = #{fileId}
+	</delete>
+	<!-- 파일 상세 삭제 -->
+	
+	
+	<!-- 파일 정보 DB 등록 attr : 견적서 -->
+	<insert id="insertFileAttrProInfo" statementType="CALLABLE"
+		parameterType="ProposalVO">
+		<selectKey keyProperty="fileId" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_FILEID.NEXTVAL
+			FROM dual
+		</selectKey>
+		{CALL
+		insert_proposal_file(#{fileId}, #{proposalNo})
+		}
+	</insert>
+	<!-- 파일 정보 DB 등록 attr -->
+	
+	<!-- 파일 정보 조회 : 계약서 -->
+	<select id="selectProFileList" resultType="FileVO">
+		SELECT 
+				f.FILE_ID
+				, f.FILE_NO
+				, f.SAVE_PATH
+				, f.SAVE_NAME
+				, f.ORIGINAL_FILE_NAME
+				, f.EXT
+				, f.FILE_SIZE
+				, f.BOSS_TF
+		FROM file_detail_info f 
+		join proposal p 
+		on p.file_id = f.file_id
+		WHERE p.proposal_no = #{proposalNo}
+	</select>
+	
+	
+	
+	
+	<!-- 파일 정보 DB 등록 attr : 견적서 -->
+	<insert id="insertFileAttrConInfo" statementType="CALLABLE"
+		parameterType="ContractVO">
+		<selectKey keyProperty="fileId" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_FILEID.NEXTVAL
+			FROM dual
+		</selectKey>
+		{CALL
+		insert_contract_file(#{fileId}, #{contractNo})
+		}
+	</insert>
+	<!-- 파일 정보 DB 등록 attr -->
+	
+	
+	
+	<!-- 파일 정보 조회 : 견적서 -->
+	<select id="selectConFileList" resultType="FileVO">
+		SELECT
+		f.FILE_ID
+		, f.FILE_NO
+		, f.SAVE_PATH
+		, f.SAVE_NAME
+		, f.ORIGINAL_FILE_NAME
+		, f.EXT
+		, f.FILE_SIZE
+		, f.BOSS_TF
+		FROM file_detail_info f
+		join contract c
+		on c.file_id = f.file_id
+		WHERE c.contract_no = #{contractNo}
+	</select>
+	<!-- 파일 정보 조회 -->
+	
+	
+	
+	
+	
+</mapper>
