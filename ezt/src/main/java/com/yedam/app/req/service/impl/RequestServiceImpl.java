@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.req.mapper.RequestMapper;
 import com.yedam.app.req.service.Criteria;
@@ -46,8 +47,6 @@ public class RequestServiceImpl implements RequestService {
 		return result == 1 ? requestVO.getRequestNo() : -1;
 		
 	}
-	
-	
 	//의뢰 수정
 	@Override
 	public boolean updateRequest(RequestVO requestVO) {
@@ -67,6 +66,12 @@ public class RequestServiceImpl implements RequestService {
 		List<ProposalVO> list = requestMapper.selectProposalAll(proposalVO);
 	
 		return list;
+	}
+	//계약서 조회
+	@Override
+	public ContractVO contractInfo(ContractVO contractVO) {
+		
+		return requestMapper.selectContract(contractVO);
 	}
 	//전체 페이지 수
 	@Override

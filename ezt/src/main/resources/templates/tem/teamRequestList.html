@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>팀 모집 목록</title>
+<style>
+.search{
+	text-align:center;
+	margin:50px;
+}
+.input{
+	width:500px;
+}
+img{ 
+ 	width:250px; 
+ 	height:200px; 
+ } 
+</style>
+</head>
+<body>
+<section class="site-section">
+<h2>팀 모집 목록</h2>
+<form id="searchForm" >
+	<div>
+		<div class="search">
+			<select name="type">
+				<option >--</option>
+				<option>작업분야</option>
+				<option>지역</option>
+				<option>작업분야 OR 지역</option>
+			</select>
+			<input class="input" type="text" name="keyword">
+			<input type="hidden" >
+			<input type="hidden">
+			<button class="btn btn-primary">검색</button>	
+		</div>
+		<div style="text-align:right" >
+			<button class="btn btn-primary insertBtn">글쓰기</button>
+		</div>
+	</div>
+      <div class="container">
+        <div class="row mb-5">
+         <th:block th:each="team : ${teamList}">
+          <div class="col-md-6 col-lg-3 mb-5">
+            <a>
+             <img th:src="@{/images/interior.jpg}">
+            </a>
+            <h3><a class="text-black"></a></h3>
+            <div>작성자 : [[${team.writerName}]]<span class="mx-2">|</span>지역 : [[${team.regionCode}]]</div>
+            <div class="text-truncate">
+            	모집 분야 : 
+            	<th:block th:each="twc : ${team.workCategoryVO}">
+            	<span >[[${twc.workCode}]]</span>
+            	</th:block> 
+            </div>
+            <div>총 모집 인원 : n명 <span class="mx-2">|</span> 모집중 </div>            
+          </div>
+         </th:block>
+        </div>
+      </div>
+</form>
+  <!-- 페이징 -->
+     <div class="row pagination-wrap mt-5">
+       <div class="col-md-12 text-center ">
+         <div class="custom-pagination ml-auto">
+           <a class="prev">Prev</a>
+           <div class="d-inline-block">
+           </div>
+           <a class="next">Next</a>
+         </div>
+       </div>
+     </div>
+</section>
+</body>
+</html>

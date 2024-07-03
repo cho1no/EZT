@@ -2,6 +2,7 @@ package com.yedam.app.req.mapper;
 
 import java.util.List;
 
+import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestVO;
@@ -22,10 +23,12 @@ public interface RequestMapper {
 	public int deleteRequest(int requestNo);
 	//견적서 조회
 	public List<ProposalVO> selectProposalAll(ProposalVO proposalVO);
+	
 	//견적서 상세 조회
 	//public List<ProposalDetailVO> selectPpDetailAll(int proposalNo);
-	//계약서 조회
 	
+	//계약서 조회
+	public ContractVO selectContract(ContractVO contractVO);
 	
 	
 	
