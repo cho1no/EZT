@@ -278,4 +278,30 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	WHERE proposal_no =#{proposalNo}
 	ORDER BY proposal_detail_no
 </select>
+<!-- 계약서 단건 조회 -->
+<select id="selectContract" resultType="ContractVO">
+	SELECT   c.contract_no
+			,c.ctt_name
+			,c.ctt_price
+			,c.requester_info
+			,c.requester_address
+			,c.requester_account
+			,USERNAME(c.worker_info) as users_name
+			,c.worker_address
+			,c.worker_account
+			,c.contract_division
+			,c.unity_contract_no
+			,c.file_id
+			,c.proposal_no
+			,c.write_dt
+			,c.update_dt
+			,c.contract_state
+			,c.ctt_start_dt
+			,c.ctt_end_dt
+			,p.request_no
+	FROM contract c
+		JOIN proposal p
+		ON p.proposal_no = c.proposal_no
+	WHERE p.request_no = #{requestNo}
+</select>
 </mapper>
