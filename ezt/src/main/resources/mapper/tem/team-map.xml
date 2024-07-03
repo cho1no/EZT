@@ -30,4 +30,10 @@
 	FROM team_work_category
 	WHERE team_no = #{teamNo}
 </select>
+<!-- 총인원수 -->
+<select id="totalHeadCount" resultType="TeamWorkCategoryVO" >
+	SELECT  SUM(headcount)
+	FROM team_work_category
+	WHERE team_no = #{teamNo}
+</select>
 </mapper>

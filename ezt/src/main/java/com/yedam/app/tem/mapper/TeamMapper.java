@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.tem.service.TeamVO;
+import com.yedam.app.tem.service.TeamWorkCategoryVO;
 
 public interface TeamMapper {
 
@@ -24,4 +25,7 @@ public interface TeamMapper {
 	
 	//전체 게시물 갯수
 	public int getTotalCount(Criteria cri);
+	
+	//총 모집 인원 수
+	public int totalHeadCount(TeamWorkCategoryVO twcVO);
 }

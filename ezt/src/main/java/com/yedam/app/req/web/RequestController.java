@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.PageDTO;
@@ -46,7 +47,7 @@ public class RequestController {
 //단건조회
 	// 의뢰
 	@GetMapping("requestInfo")
-	public String requestInfo(RequestVO requestVO,ProposalVO proposalVO, Model model) {
+	public String requestInfo(RequestVO requestVO,ContractVO contractVO, ProposalVO proposalVO, Model model) {
 
 		//의뢰 단건조회
 		RequestVO findVO = requestService.requestInfo(requestVO);
@@ -63,6 +64,8 @@ public class RequestController {
 		model.addAttribute("proposalList", list);
 
 		//계약서 조회
+		ContractVO findContractVO = requestService.contractInfo(contractVO);
+		model.addAttribute("contract",findContractVO);
 		
 		return "req/requestInfo";
 	}
