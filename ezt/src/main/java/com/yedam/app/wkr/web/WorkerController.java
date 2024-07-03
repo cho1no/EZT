@@ -1,5 +1,7 @@
 package com.yedam.app.wkr.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -9,8 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.common.service.SimpleFileService;
 import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.mapper.UserMapper;
 import com.yedam.app.usr.service.UserVO;
@@ -28,6 +32,9 @@ public class WorkerController {
    
    @Autowired
    CommonCodeService commonCodeService;
+   
+   @Autowired
+   SimpleFileService simpleFileService;
    
    @Autowired
    UserMapper userMapper;
@@ -89,25 +96,26 @@ public class WorkerController {
    @GetMapping("/careerList")
    public String workerCareerList (@AuthenticationPrincipal LoginUserVO vo, Model model) {
 	   model.addAttribute("userVO", vo.getUserVO());
-	   model.addAttribute("career", workerService.selectCareerList(vo.getUserVO()));
+	   List<CareerVO> list = workerService.selectCareerList(vo.getUserVO());
+	   model.addAttribute("careerList", list); 
 	   return "wkr/workerCareerList";
    } 
    
    //경력증명서 등록 페이지
    @GetMapping("/careerInsert")
-   public String workerCareerInsertForm(UserVO userVO, Model model, @AuthenticationPrincipal LoginUserVO vo) {
+   public String workerCareerInsertForm(Model model, @AuthenticationPrincipal LoginUserVO vo) {
 	   model.addAttribute("userVO", vo.getUserVO());
-	   CareerVO findVO = workerService.selectCareerList(userVO);
-	   model.addAttribute("career", findVO);
-	   
-	   //model.addAttribute("car", new CareerVO());
+	   model.addAttribute("car", new CareerVO());
 	   return "wkr/workerCareerInsert";
    }
    
    //경력증명서 등록 기능
    @PostMapping("/careerInsert")
-   public String workerCareerInsert(CareerVO careerVO, Model model) {
-	   workerService.insertCareer(careerVO);
+   public String workerCareerInsert(MultipartFile[] uploadFile, CareerVO careerVO, Model model) {
+//	   log.info(uploadFile.toString());
+	   int result = simpleFileService.uploadFiles(uploadFile);
+	   careerVO.setFileId(result);
+	   model.addAttribute("car", workerService.insertCareer(careerVO));
 	   return "redirect:/worker/careerList";
    }
    

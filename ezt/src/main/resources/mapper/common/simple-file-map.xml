@@ -8,12 +8,8 @@
 			SELECT SEQ_FILEID.NEXTVAL
 			FROM dual
 		</selectKey>
-		INSERT INTO file_attr
-		VALUES(
-		#{fileId}
-		, sysdate
-		, 'Y'
-		)
+		INSERT INTO file_attr (file_id, create_dt, use_tf)
+		VALUES(#{fileId}, sysdate, 'Y')
 	</insert>
 	<!--파일 정보 DB 등록 -->
 	<insert id="insertFileInfo" parameterType="FileVO">
@@ -31,7 +27,7 @@
 		, #{originalFileName}
 		, #{ext}
 		, #{fileSize}
-		, 'N'
+		, 'Y'
 		)
 	</insert>
 	<!-- 파일 정보 조회 -->

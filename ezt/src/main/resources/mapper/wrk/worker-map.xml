@@ -14,7 +14,12 @@
 	</select>
 	
 	<select id="selectCareerList" resultType="CareerVO">
-		SELECT *
+		SELECT career_start_dt
+			   , career_end_dt
+			   , write_dt
+			   , career_info
+			   , FIND_COMMONCODE(career_access_tf) as career_access_tf
+			   , file_id
 		FROM career
 		WHERE users_no = #{usersNo}
 	</select>
@@ -57,10 +62,10 @@
 							, career_access_tf
 							, write_dt
 							) VALUES (
-							 SEQ_CAREER_NEXTVAL
+							 SEQ_CAREER.NEXTVAL
 							 , #{usersNo}
 							 , #{careerInfo}
-							 . #{careerStartDt}
+							 , #{careerStartDt}
 							 , #{careerEndDt}
 							 , #{fileId}
 							 , 'A01'

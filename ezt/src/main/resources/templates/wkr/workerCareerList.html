@@ -7,15 +7,63 @@
 <meta charset="UTF-8">
 <title>작업자 마이페이지</title>
 <style>
-
+div.careerList {
+	margin-top: 20px;
+}
 </style>
 </head>
 <body>
- <div class="container">
-	<h3>[[${userVO.usersName}]]님 안녕하세요.</h3>
-	<hr>
-	<h4>경력인증서 목록</h4>
-
+<h3>[[${userVO.usersName}]]님 의</h3>
+<hr>
+<h4>경력인증서 목록</h4>
+<div>
+	<label for="usersName">성명</label>
+	<input class="form-control d-inline-flex col-2"
+	  type="text" id="usersName" th:value="${userVO.usersName}" disabled readonly>
+</div>
+<div class="row row-cols-1 row-cols-md-3">
+	<th:block th:each="career : ${careerList}">
+			<div class="card col-4" style="width: 18rem;">
+				<div class="card-body">
+					
+					<h5 class="card-title">
+						<label for="careerInfo">경력내용</label>
+					</h5>
+					<p class="card-text">
+					  <input class="form-control d-inline-flex col-4" type="text"
+					    id="careerInfo" th:value="${career.careerInfo}" disabled>
+					</p>
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+					  <label for="writeDt">신청일</label>
+					  <input class="form-control d-inline-flex col-7" type="text" id="writeDt"
+						 th:value="${#dates.format(career.writeDt,'yyyy-MM-dd')}" disabled readonly>
+					  <label for="careerAccessTf">승인여부</label>
+					  <input class="form-control d-inline-flex col-6" type="text"
+						 id="careerAccessTf" th:value="${career.careerAccessTf}" disabled>
+					</li>
+					<li class="list-group-item">
+					  <label for="careerStartDt">근무 기간</label>
+					</li>
+					<li class="list-group-item">
+					<input class="form-control  d-inline-flex" type="text"
+					  id="careerStartDt"
+					  th:value="${#dates.format(career.careerStartDt,'yyyy-MM-dd')}"
+					  disabled readonly>
+					<span>~</span>
+					<input class="form-control d-inline-flex" type="text"
+					  id="careerEndDt"
+					  th:value="${#dates.format(career.careerEndDt,'yyyy-MM-dd')}"
+					  disabled readonly>
+					</li>
+				</ul>
+				<div class="card-body">
+					<a href="#" class="card-link">File link</a>
+				</div>
+			</div>
+		</div>
+	</th:block>
 </body>
 <script th:inline="javascript">
 	

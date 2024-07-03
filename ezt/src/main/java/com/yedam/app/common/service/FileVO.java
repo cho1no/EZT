@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class FileVO {
-	private Integer fileId;
+	private int fileId;
 	private int fileNo;
 	private String savePath;
 	private String saveName;
