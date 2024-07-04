@@ -39,4 +39,6 @@ public class ProposalVO {
 	private String usersName;  //유저이름
 	private String usersPhone; //유저 휴대폰번호
 	private int total;  //총금액
+	private int contractNo;
+	
 }

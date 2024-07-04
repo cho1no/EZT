@@ -15,10 +15,10 @@
 	<div class="col">
 		<img src="/images/rvw/interior1.jpg" alt="photo" id="mainPhoto">
 		<div class="star-rating">
-	          	<div>
-	           	<p th:text="${review.star}" class="star" style="display:none" ></p>
-	           	<div class="stars star-rating">평점 : </div>
-	          	</div>
+          	<div>
+           	<p th:text="${review.star}" class="star" style="display:none" ></p>
+           	<div class="stars star-rating">평점 : </div>
+          	</div>
 		 </div>
 		 <fieldset class="reStar" style="display:none">
 			<input type="radio" th:field="*{star}" value="5" id="rate1"><label
@@ -81,7 +81,7 @@
 		</table>
 	</div>
 	<button type="button" class="btn btn-secondary upBtn update">수정</button>
-    <button type="button" class="btn btn-secondary delBtn" th:onclick="|location.href='@{/reviewDelete(reviewNo=${review.reviewNo})}'|">삭제</button>
+    <button type="button" class="btn btn-secondary delBtn" th:onclick="|location.href='@{/review/delete(reviewNo=${review.reviewNo})}'|">삭제</button>
     <button type="button" class="btn btn-secondary delBtn"  onclick="history.back()">뒤로가기</button>
 </form>	
 

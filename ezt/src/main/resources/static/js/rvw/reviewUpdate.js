@@ -28,7 +28,7 @@ $(document).ready(function(){
 			
 			let info = getReviewInfo();
 			
-			$.ajax('reviewUpdate',{
+			$.ajax('/review/update',{
 				type:"post",
 				contentType:"application/json",
 				data : JSON.stringify(info)
@@ -49,7 +49,7 @@ $(document).ready(function(){
 				$.each(formData, (idx, input)=>{
 					objData[input.name] = input.value;
 				});
-				
+				console.log(objData);
 				return objData;
 			};
 			
@@ -68,7 +68,7 @@ $(document).ready(function(){
 			
 			$(".reStar").css("display", "none");
 			
-			location.reload();
+			//location.reload();
 		}
 	})
 	

@@ -67,7 +67,7 @@
                 <tr>
                     <td><h4>의뢰 내용</h4></td>
                     <td><button type="button" class="btn btn-secondary upBtn update">수정</button></td>
-                    <td><button type="button" class="btn btn-secondary delBtn" th:onclick="|location.href='@{/requestDelete(requestNo=${request.requestNo})}'|">삭제</button></td>
+                    <td><button type="button" class="btn btn-secondary delBtn" th:onclick="|location.href='@{delete(requestNo=${request.requestNo})}'|">삭제</button></td>
                 </tr>
                 <tr>
                     <th>의뢰자명</th>
@@ -159,7 +159,7 @@
             
         </tr>
         <th:block th:each="proposal : ${proposalList}">
-        <tr>
+        <tr th:class="${proposal.contractNo>0}? 'active' : ''">
         	<td style="display:none" th:text="${proposal.requestNo}"/> 
         	<td th:text="${proposal.usersName}"/>
             <td colspan="2" th:text="|${#dates.format(proposal.cttStartDt, 'yyyy/MM/dd')} ~ ${#dates.format(proposal.cttEndDt, 'yyyy/MM/dd')}|"/>
@@ -199,7 +199,10 @@
     </table>
 </div>
 <div>
-    <div class="row">
+	<div class="row" th:if="${contract ==null}">
+	 <p>체결 된 계약건이 아직 없습니다.</p>
+	</div>
+    <div class="row" th:unless="${contract ==null}">
         <table class="table col" >
             <tr>
             <td><h4>계약서</h4><td>
@@ -208,36 +211,32 @@
             <tr>
             	<td style="display:hidden"></td>
                 <th>시공자 성명</th>
-                <td></td>
+                <td>[[${contract.usersName}]]</td>
                 <th>결제상태</th>
-                <td><input type="text" readonly /></td>
+                <td></td>
             </tr>
             <tr>
-                <th>공사기간</th>
-                <td><input type="text" readonly /></td>
+                <th colspan="2">공사기간</th>
+                <td colspan="2" th:text="|${#dates.format(contract.cttStartDt, 'yyyy/MM/dd')} ~ ${#dates.format(contract.cttEndDt, 'yyyy/MM/dd')}|"/>
             </tr>
             <tr>
-                <th>공사금액</th>
-                <td><input type="text" readonly /></td>
+                <th colspan="2">공사금액</th>
+                <td colspan="2">[[${contract.cttPrice}]]</td>
             </tr>
             <tr>
-                <th>공사상태</th>
-                <td><input type="text" readonly /></td>
+                <th colspan="2">공사상태</th>
+                <td colspan="2">[[${contract.contractState}]]</td>
             </tr>
             </table>
             <table class="table col">
 
                 <tr>
                     <th>전화번호</th>
-                    <td><input type="text" readonly /></td>
+                    <td>[[${contract.usersPhone}]]</td>
                 </tr>
                 <tr>
                     <th>주소</th>
-                    <td><input type="text" readonly /></td>
-                </tr>
-                <tr>
-                    <th>상세주소</th>
-                    <td><input type="text" readonly /></td>
+                    <td>[[${contract.workerAddress}]]</td>
                 </tr>
                 <tr>
                     <th>하자보수기간</th>
