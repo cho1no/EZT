@@ -9,6 +9,7 @@ import com.yedam.app.req.service.Criteria;
 import com.yedam.app.tem.mapper.TeamMapper;
 import com.yedam.app.tem.service.TeamService;
 import com.yedam.app.tem.service.TeamVO;
+import com.yedam.app.tem.service.TeamWorkCategoryVO;
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -56,6 +57,13 @@ public class TeamServiceImpl implements TeamService {
 	public int getTotal(Criteria cri) {
 
 		return teamMapper.getTotalCount(cri);
+	}
+
+	//전체 팀원 신청 인원수 
+	@Override
+	public int totalHeadCount(TeamWorkCategoryVO twcVO) {
+		
+		return teamMapper.totalHeadCount(twcVO);
 	}
 	
 	

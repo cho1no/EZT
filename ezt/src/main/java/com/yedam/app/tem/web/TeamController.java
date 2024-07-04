@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.yedam.app.tem.service.TeamService;
 import com.yedam.app.tem.service.TeamVO;
+import com.yedam.app.tem.service.TeamWorkCategoryVO;
 
 import lombok.extern.slf4j.Slf4j;
 @Slf4j
@@ -35,4 +36,5 @@ public class TeamController {
 		
 		return "tem/teamRequestInfo";
 	}
+
 }
