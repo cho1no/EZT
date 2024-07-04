@@ -121,8 +121,8 @@
 		, FILE_ID
 		, PROPOSAL_NO
 		, WRITE_DT
-		,
-		UPDATE_DT
+		, UPDATE_DT
+		, CONTRACT_STATE
 		FROM contract
 		WHERE proposal_no = #{proposalNo}
 	</select>
@@ -160,17 +160,20 @@
 	<update id="updateConInfo" parameterType="ContractVO">
 		UPDATE contract
 		SET
+		UPDATE_DT = sysdate
+		<if test="type == 0">
 		CTT_NAME = #{cttName}
 		, CTT_PRICE = #{cttPrice}
 		, CTT_START_DT =
 		#{cttStartDt}
 		, CTT_END_DT = #{cttEndDt}
-		, REQUESTER_ADDRESS =
-		#{requesterAddress}
-		, REQUESTER_ACCOUNT = #{requesterAccount}
-		,
-		WORKER_ADDRESS = #{workerAddress}
+		, WORKER_ADDRESS = #{workerAddress}
 		, WORKER_ACCOUNT = #{workerAccount}
+		</if>
+		<if test="type == 1">
+		, REQUESTER_ADDRESS = #{requesterAddress}
+		, REQUESTER_ACCOUNT = #{requesterAccount}
+		</if>
 		WHERE contract_no = #{contractNo}
 	</update>
 	<!-- 계약서 수정 -->
@@ -191,6 +194,22 @@
 	</delete>
 	<!-- 서명 삭제 -->
 
+	<update id="sendConInfo" parameterType="ContractVO">
+		UPDATE contract
+    	SET
+    	<choose>
+    		<when test="type == 0">
+    			contract_state = 'G01'
+    		</when>
+    		<when test="type == 1">
+    			contract_state = 'G02'
+    		</when>
+    		<otherwise>
+    			contract_state = null
+    		</otherwise>
+    	</choose>
+    	WHERE proposal_no = #{proposalNo}
+	</update>
 
 
 </mapper>

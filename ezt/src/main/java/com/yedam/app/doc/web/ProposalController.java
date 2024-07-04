@@ -190,5 +190,11 @@ public class ProposalController {
 		return new ResponseEntity<String>("deleted", HttpStatus.OK);
 
 	}
+	// 견적서 승인
+	@GetMapping("ppsApprove")
+	public String ppsApprove(ProposalVO proposalVO) {
+		ppsSerivce.ppsApprove(proposalVO);
+		return "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo();
+	}
 
 }

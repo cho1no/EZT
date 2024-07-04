@@ -88,18 +88,13 @@ canvas {
 							<h3 class="text-black mb-5 border-bottom pb-2">
 								<b>계약서 수정</b>
 							</h3>
-							<input type="hidden" class="form-control" name="contractNo"
+							<input type="hidden" name="contractNo"
 								th:value="${con.contractNo}"> <input type="hidden"
-								class="form-control" name="fileId" th:value="${con.fileId}">
-							<input type="hidden" class="form-control" name="requesterInfo"
-								th:value="${con.requesterInfo}"> <input type="hidden"
-								class="form-control" name="requesterAddress"> <input
-								type="hidden" class="form-control" name="workerInfo"
-								th:value="${con.workerInfo}"> <input type="hidden"
-								class="form-control" name="workerAddress"> <input
-								type="hidden" class="form-control" name="proposalNo"
-								th:value="${con.proposalNo}"> <input type="hidden"
-								class="form-control" name="unityContractNo" value=1>
+								name="fileId" th:value="${con.fileId}"> <input
+								type="hidden" name="workerInfo" th:value="${con.workerInfo}">
+							<input type="hidden" name="workerAddress"> <input
+								type="hidden" name="type" value=0>
+
 							<p class="hr-sect">
 								<b>공사개요</b>
 							</p>
@@ -188,7 +183,7 @@ canvas {
 												<td><input type="text" style="border: 0; width: 100%;"
 													th:value="${list.round}" /></td>
 												<td><input type="text" style="border: 0; width: 100%;"
-													onKeyup="this.value=this.value.replace(/[^-0-9]/g,'').replace('-','').replace(/^0+/, ''); GetSum(${num});"
+													onKeyup="this.value=this.value.replace(/[^-0-9]/g,'').replace('-','').replace(/^0+/, '');"
 													th:value="${#numbers.formatInteger(list.price,1)}"
 													maxlength="12" class="price_${num}" /></td>
 												<td><input type="text" style="border: 0; width: 100%;"
@@ -253,47 +248,57 @@ canvas {
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">성명</strong>
 												</div>
-												<div class="col-4"></div></li>
+												<div class="col-4">
+													<p class="text-black" style="margin: 5px 0">[[${requester.usersName}]]</p>
+												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">전화번호</strong>
 												</div>
-												<div class="col"></div></li>
+												<div class="col">
+													<p class="text-black" style="margin: 5px 0">[[${requester.usersPhone}]]</p>
+												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">우편번호</strong>
 												</div>
-												<div class="col-3"></div>
+												<div class="col-3">
+													<p class="text-black" style="margin: 5px 0"
+														id="input_postcode_req"></p>
+												</div>
 												<div class="col"></div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주소</strong>
 												</div>
-												<div class="col"></div></li>
+												<div class="col">
+													<p class="text-black" style="margin: 5px 0"
+														id="input_addr_req"></p>
+												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">상세주소</strong>
 												</div>
-												<div class="col"></div></li>
+												<div class="col">
+													<p class="text-black" style="margin: 5px 0"
+														id="input_detailAddr_req"></p>
+												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주민등록번호</strong>
 												</div>
-												<div class="col"></div></li>
+												<div class="col">
+													<p class="text-black" style="margin: 5px 0">[[${requester.usersRnn}]]</p>
+												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-													<input type="text" class="form-control"
-														name="requesterAccount">
+													<p class="text-black" style="margin: 5px 0">[[${con.requesterAccount}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
 												</div>
-												<div class="col">
-													<button type="button"
-														class="btn btn-outline-success sendBtn"
-														data-bs-toggle="modal" data-bs-target="#sendModal">서명
-														하기</button>
-												</div>
+												<div class="col"></div>
 												<div class="h-75">
-												<div id="input_sign_req" class="text-center mt-2">
-												<canvas id="signatureCanvas_req"></canvas></div>
+													<div id="input_sign_req" class="text-center mt-2">
+														<canvas id="signatureCanvas_req"></canvas>
+													</div>
 												</div></li>
 										</ul>
 									</div>
@@ -363,9 +368,10 @@ canvas {
 														하기</button>
 												</div>
 												<div class="h-75">
-												<div id="input_sign_work" class="text-center mt-2">
+													<div id="input_sign_work" class="text-center mt-2">
 														<canvas id="signatureCanvas_work"></canvas>
-													</div></div></li>
+													</div>
+												</div></li>
 										</ul>
 									</div>
 								</div>
@@ -402,10 +408,11 @@ canvas {
 					<div class="row">
 						<div class="col-6">
 							<button type="button" class="btn btn-block btn-light btn-md"
-								id="updateBtn">저장</button>
+								id="updateBtn">수정 완료</button>
 						</div>
 						<div class="col-6">
-							<button class="btn btn-block btn-primary btn-md">서명</button>
+							<button class="btn btn-block btn-primary btn-md"
+								onClick="history.back();">뒤로가기</button>
 						</div>
 					</div>
 				</div>
@@ -414,7 +421,7 @@ canvas {
 	</section>
 
 
-<!-- Modal -->
+	<!-- Modal -->
 	<div class="modal fade" id="sendModal" tabindex="-1"
 		aria-labelledby="sendModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered  modal-sm">
@@ -424,7 +431,7 @@ canvas {
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
-				<div class="modal-body" style="height:180px">
+				<div class="modal-body" style="height: 180px">
 					<form method="post" action="" class="sigPad">
 						<ul class="sigNav">
 							<li class="drawIt"><a href="#draw-it">그리기</a></li>
@@ -460,12 +467,24 @@ canvas {
     $('.cur_month').html(month + '월');
     $('.cur_day').html(day + '일');
 
+    // 주소 표기
+     if([[${con.workerAddress}]] != null){
     var work_addr = [[${con.workerAddress}]]
 	var work_num1=  work_addr.indexOf('_');
 	var work_num2 = work_addr.indexOf('_', work_num1 + 1)
-	$('.info_worker #input_postcode').val(work_addr.substring(0, work_num1));
-    $('.info_worker #input_addr').val(work_addr.substring(work_num1 + 1, work_num2));
-    $('.info_worker #input_detailAddr').val(work_addr.substring(work_num2 + 1,));
+	$('#input_postcode').val(work_addr.substring(0, work_num1));
+    $('#input_addr').val(work_addr.substring(work_num1 + 1, work_num2));
+    $('#input_detailAddr').val(work_addr.substring(work_num2 + 1,));
+     }
+    
+    if([[${con.requesterAddress}]] != null){
+    var req_addr = [[${con.requesterAddress}]]
+	var req_num1=  req_addr.indexOf('_');
+	var req_num2 = req_addr.indexOf('_', req_num1 + 1)
+	$('#input_postcode_req').html(req_addr.substring(0, req_num1));
+    $('#input_addr_req').html(req_addr.substring(req_num1 + 1, req_num2));
+    $('#input_detailAddr_req').html(req_addr.substring(req_num2 + 1,));
+    }
     
     
 	// + 버튼 : tbody tr 추가
@@ -475,7 +494,7 @@ canvas {
 		$('.content').append(`<tr>
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" 
-						onKeyup="this.value=this.value.replace(/[^-0-9]/g,'').replace('-','').replace(/^0+/, ''); GetSum(${num});" 
+						onKeyup="this.value=this.value.replace(/[^-0-9]/g,'').replace('-','').replace(/^0+/, '');" 
 						value="0" maxlength="12" class="price_${num}" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" value='1900-01-01' /></td>
 				<td><input type="text" style="border: 0; width: 100%;" /></td>
@@ -526,29 +545,8 @@ canvas {
 
 	});
 
-	function GetSum(e){
-		var result = 0;
-		var firstNum = 0;
-		var secondNum = 0;
-		
-		firstNum = Number($('.qty_'+e).val());
-		secondNum = Number($('.price_'+e).val());
-		result = (firstNum * secondNum).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-		$('.result_'+e).val(result);
-		
-		GetTotal();
-	}
 	
-	function GetTotal(){
-		var total = 0;
-		
-		for(i=0; i < $('tbody tr').length; i++){
-			total += Number($('tbody tr:eq('+i+') td:eq(5) input').val().replaceAll(',',''));
-		}
-		
-		var comTotal = total.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-		$('.total').val(comTotal);
-	}
+	
 	
 	var proposalNo = [[${con.proposalNo}]];
 	
@@ -602,15 +600,22 @@ canvas {
 	// 서명 표기
 	var workSign = [[${con.worSign.signsContent}]];
 	var workNewSign = '';
-	console.log([[${con.worSign.usersNo}]])
+
 	
 	if(workSign != null){
 	 signView(workSign, 0);
 	}
 	
+	var reqSign = [[${con.reqSign.signsContent}]];
+
+	
+	if(reqSign != null){
+	 signView(reqSign, 1);
+	}
+	
 function signView(compressedSignatureData, num) {
     //console.log("compressedSignatureData = " + compressedSignatureData);
-    console.log(num);
+
     // 압축된 데이터 복원
     let decompressedSignatureData 
               = LZString.decompressFromBase64(compressedSignatureData);
@@ -619,7 +624,7 @@ function signView(compressedSignatureData, num) {
     let signatureData = JSON.parse(decompressedSignatureData);
 
     // 서명 그리기
-    drawSignature(signatureData, 0);
+    drawSignature(signatureData, num);
 }
 
 function drawSignature(data, num) {
@@ -666,12 +671,10 @@ $('#saveModal').click(function(e) {
     // 압축된 데이터 출력 (선택 사항)
     //console.log(compressedData);
    
-    if([[${user}]] == [[${con.workerInfo}]]){
-    	workNewSign = compressedData;
-    	signView(compressedData, 0);
-    }else{
-    	signView(compressedData, 1);
-    }
+
+    workNewSign = compressedData;
+    signView(compressedData, 0);
+    
 });
 
 	
@@ -686,7 +689,7 @@ $('#saveModal').click(function(e) {
 
 	<!-- uploadAjax -->
 	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
-	
+
 	<!-- 서명 -->
 	<script src="/js/doc/json2.min.js"></script>
 </body>

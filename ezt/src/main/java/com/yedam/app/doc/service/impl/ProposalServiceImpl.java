@@ -96,7 +96,7 @@ public class ProposalServiceImpl implements ProposalService {
 		return ppsMapper.selectPpsListInfo(proposalVO);
 	}
 
-	// 견적서 파일 첨부
+	// 견적서 파일 첨부 & 전송
 	@Override
 	public int ppsFileUpdate(ProposalVO proposalVO) {
 		
@@ -120,6 +120,13 @@ public class ProposalServiceImpl implements ProposalService {
 		}
 
 		return result == true ? 1 : -1;
+	}
+	
+	// 견적서 승인
+	@Override
+	public int ppsApprove(ProposalVO proposalVO) {
+		int result = ppsMapper.approvePpsInfo(proposalVO);
+		return result == 1 ? proposalVO.getProposalNo() : -1;
 	}
 
 }

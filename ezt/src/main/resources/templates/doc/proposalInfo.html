@@ -71,7 +71,8 @@
 										<span class="fs-6 fw-light text-success">[ 승인 대기 ]</span>
 									</th:block>
 									<th:block
-										th:if="${#authentication.principal.userNo == userInfo.usersNo} and ${ppsInfo.proposalState == 'A02'}">
+										th:if="(${#authentication.principal.userNo == userInfo.usersNo} and ${ppsInfo.proposalState == 'A02'}) 
+											OR (${#authentication.principal.userNo == ppsInfo.requester} and ${ppsInfo.proposalState == 'A02'}) ">
 										<span class="fs-6 fw-light text-success">[ 승인 ]</span>
 									</th:block>
 									<th:block
@@ -267,10 +268,11 @@
 							</th:block>
 						</th:block>
 						<th:block
-							th:if="${#authentication.principal.userNo == ppsInfo.requester}">
+							th:if="${#authentication.principal.userNo == ppsInfo.requester} and ${ppsInfo.proposalState == 'A01'}">
 							<div class="col-6"></div>
 							<div class="col-6">							
-								<button type="button" class="btn btn-block btn-primary btn-md">승인</button>
+								<button type="button" class="btn btn-block btn-primary btn-md" 
+									th:onClick="|location.href='@{/ppsApprove(proposalNo=${ppsInfo.proposalNo}, requestNo=${ppsInfo.requestNo})}'|">승인</button>
 							</div>
 						</th:block>
 

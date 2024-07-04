@@ -11,4 +11,7 @@ public interface ContractService {
 	// 계약서 수정
 	public int conUpdate(ContractVO contractVO);
 	
+	// 계약서 전송
+	public int conSend(ContractVO contractVO);
+	
 }

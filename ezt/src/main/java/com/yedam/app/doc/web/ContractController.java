@@ -32,7 +32,7 @@ public class ContractController {
 
 	@Autowired
 	ProposalService ppsSerivce;
-	
+
 	@Autowired
 	FileService fileService;
 
@@ -58,80 +58,111 @@ public class ContractController {
 		return "doc/contractInsert";
 	}
 
-	@PostMapping(value = "/conInsert" , produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/conInsert", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> uploadAjaxPost(MultipartFile[] uploadFile, ContractVO contractVO) {
 
 		List<FileVO> list = fileService.uploadFiles(uploadFile);
-		if(!list.isEmpty()) {
-		contractVO.setFileList(list);
+		if (!list.isEmpty()) {
+			contractVO.setFileList(list);
 		}
 		conService.conInsert(contractVO);
 
 		return new ResponseEntity<>("String", HttpStatus.OK);
 	}
-	
 
 	// 계약서 상세
 	@GetMapping("conInfo")
 	public String conInfo(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
-		
+
 		// 계약서 정보 조회
 		ContractVO findVO = conService.conInfo(contractVO);
 		model.addAttribute("con", findVO);
-		
+
 		// 유저 정보
 		UserVO worker = ppsSerivce.userInfo(findVO.getWorkerInfo());
 		model.addAttribute("worker", worker);
 		UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
 		model.addAttribute("requester", requester);
-		
+
 		ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
-		
+
 		// 의뢰 정보 조회
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
-		
+
 		return "doc/contractInfo";
 
 	}
-	
-	// 계약서 수정
-		@GetMapping("conUpdate")
-		public String conUpdate(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
-			
-			// 계약서 정보 조회
-			ContractVO findVO = conService.conInfo(contractVO);
-			model.addAttribute("con", findVO);
-			
-			// 유저 정보
-			UserVO worker = ppsSerivce.userInfo(findVO.getWorkerInfo());
-			model.addAttribute("worker", worker);
-			UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
-			model.addAttribute("requester", requester);
-			model.addAttribute("user", user.getUserNo());
-			
-			
-			ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
-			
-			// 의뢰 정보 조회
-			RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
-			model.addAttribute("reqInfo", reqVO);
-			
-			return "doc/contractUpdate";
 
-		}
-		
-		@PostMapping(value = "/conUpdate" , produces = MediaType.APPLICATION_JSON_VALUE)
-		public ResponseEntity<String> uploadAjaxPostUpdate(MultipartFile[] uploadFile, ContractVO contractVO) {
+	// 계약서 수정
+	@GetMapping("conUpdate")
+	public String conUpdate(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
+
+		// 계약서 정보 조회
+		ContractVO findVO = conService.conInfo(contractVO);
+		model.addAttribute("con", findVO);
+
+		// 유저 정보
+		UserVO worker = ppsSerivce.userInfo(findVO.getWorkerInfo());
+		model.addAttribute("worker", worker);
+		UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
+		model.addAttribute("requester", requester);
+		model.addAttribute("user", user.getUserNo());
+
+		ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
+
+		// 의뢰 정보 조회
+		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
+		model.addAttribute("reqInfo", reqVO);
+
+		return "doc/contractUpdate";
+
+	}
+
+	@PostMapping(value = "/conUpdate", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> uploadAjaxPostUpdate(MultipartFile[] uploadFile, ContractVO contractVO) {
+
+		if (uploadFile != null) {
 
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
-			if(!list.isEmpty()) {
-			contractVO.setFileList(list);
+			if (!list.isEmpty()) {
+				contractVO.setFileList(list);
 			}
-			conService.conUpdate(contractVO);
-
-			return new ResponseEntity<>("String", HttpStatus.OK);
 		}
-	
+		conService.conUpdate(contractVO);
 
+		return new ResponseEntity<>("String", HttpStatus.OK);
+	}
+
+	// 계약서 수정
+	@GetMapping("conWrite")
+	public String conWrite(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
+
+		// 계약서 정보 조회
+		ContractVO findVO = conService.conInfo(contractVO);
+		model.addAttribute("con", findVO);
+
+		// 유저 정보
+		UserVO worker = ppsSerivce.userInfo(findVO.getWorkerInfo());
+		model.addAttribute("worker", worker);
+		UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
+		model.addAttribute("requester", requester);
+		model.addAttribute("user", user.getUserNo());
+
+		ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
+
+		// 의뢰 정보 조회
+		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
+		model.addAttribute("reqInfo", reqVO);
+
+		return "doc/contractWrite";
+
+	}
+
+	// 계약서 전송
+	@GetMapping("sendCon")
+	public String conSend(ContractVO contractVO) {
+		int no = conService.conSend(contractVO);
+		return "redirect:conInfo?proposalNo=" + no;
+	}
 }

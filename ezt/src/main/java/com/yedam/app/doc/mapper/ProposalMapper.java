@@ -37,6 +37,8 @@ public interface ProposalMapper {
 	// -- 견적서 전송 --
 	// 견적서 단건 전송 : 프로시저
 	public int sendPpsInfo(ProposalVO proposalVO);
+	// 견적서 승인 : 프로시저
+	public int approvePpsInfo(ProposalVO proposalVO);
 
 	// -- 견적서 삭제 --
 	// 견적서 삭제
