@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.pay.mapper.PayMapper">
+
+	<insert id="insertPayInfo" parameterType="PayVO">
+		<selectKey keyProperty="payNo" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_PAY.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO pay(
+		PAY_NO
+		, REQUESTER
+		, PRICE
+		, PAY_DT
+		, CONTRACT_NO
+		, VIRTUAL_ACCOUNT
+		)
+		VALUES(
+		#{payNo}
+        , #{requester}
+        , #{price}
+		, sysdate
+		, #{contractNo}
+        , #{virtualAccount}
+		)
+	</insert>
+	
+	<select id="selectPayInfo" resultType="PayVO">
+		SELECT
+			p.PAY_NO
+			, p.REQUESTER
+			, p.PRICE
+			, p.PAY_DT
+			, p.CONTRACT_NO
+			, c.PROPOSAL_NO
+		FROM pay p
+		JOIN contract c
+		ON c.CONTRACT_NO = p.CONTRACT_NO
+		WHERE PAY_NO = #{payNo}
+	</select>
+
+</mapper>

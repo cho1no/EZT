@@ -36,4 +36,7 @@ public interface ContractMapper {
 	public int deleteConDetailInfo(@Param("contractNo")int contractNo);
 	// 서명 삭제
 	public int delelteSignInfo(@Param("contractNo")int contractNo, @Param("usersNo")int usersNo);
+	
+	// -- 계약서 전송
+	public int sendConInfo(ContractVO contractVO);
 }

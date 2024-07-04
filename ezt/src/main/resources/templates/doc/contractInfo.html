@@ -73,8 +73,6 @@ canvas {
 				<form class="p-4 p-md-5 border rounded">
 					<div class="row form-group">
 						<div class="col">
-							<a href="pdf"><button style="width: 50px; padding: 0"
-									type="button" class="btn btn-outline-success sendBtn">출력</button></a>
 							<h3 class="text-black mb-5 border-bottom pb-2">
 								<b>계약서 상세</b>
 							</h3>
@@ -134,7 +132,6 @@ canvas {
 										[[${#numbers.formatInteger(con.cttPrice,1,'COMMA')}]]<b> 원</b>
 									</p>
 								</div>
-								<div class="col-auto"></div>
 
 							</div>
 							<p class="text-black">
@@ -206,7 +203,7 @@ canvas {
 
 							<div class="row form-group">
 
-								<div class="col-6" style="padding-top: 60px">
+								<div class="col-6 info_req" style="padding-top: 60px">
 									<div class="p-4 mb-3 bg-white border p-4 rounded">
 										<h3 class="mt-3 h5 pl-3 mb-3 ">발주자(시행자) "갑"</h3>
 										<ul class="list-unstyled pl-3 mb-0 con_ul">
@@ -292,7 +289,6 @@ canvas {
 													<p class="text-black" style="margin: 5px 0"
 														id="input_postcode"></p>
 												</div>
-												<div class="col"></div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주소</strong>
 												</div>
@@ -348,13 +344,31 @@ canvas {
 			<div class="row align-items-center mb-5">
 				<div class="col-lg-4 ml-auto" style="padding-top: 30px">
 					<div class="row">
+					
+					
+						<th:block th:if="${#authentication.principal.userNo == con.workerInfo} and ${con.contractState == null}">
 						<div class="col-6">
-							<button type="submit" class="btn btn-block btn-light btn-md"
+									
+									<button type="submit" class="btn btn-block btn-light btn-md"
 								th:onClick="|location.href='@{/conUpdate(proposalNo=${con.proposalNo})}'|">수정</button>
 						</div>
 						<div class="col-6">
-							<button type="button" class="btn btn-block btn-primary btn-md">서명</button>
+							<button type="button" class="btn btn-block btn-primary btn-md"
+								th:onClick="|location.href='@{/sendCon(proposalNo=${con.proposalNo}, type=0)}'|">보내기</button>
 						</div>
+						</th:block>
+					
+						<th:block th:if="${#authentication.principal.userNo == con.requesterInfo} and ${con.contractState == 'G01'}">
+						<div class="col-6">
+							<button type="submit" class="btn btn-block btn-light btn-md"
+								th:onClick="|location.href='@{/conWrite(proposalNo=${con.proposalNo})}'|">수정</button>
+						</div>
+						
+						<div class="col-6">
+									<button type="button" class="btn btn-block btn-primary btn-md"
+								th:onClick="|location.href='@{/sendCon(proposalNo=${con.proposalNo}, type=1)}'|">서명 완료</button>
+						</div>
+						</th:block>
 					</div>
 				</div>
 			</div>
@@ -365,6 +379,10 @@ canvas {
 
 	<script th:inline="javascript">
 	
+	// 년원일 표기
+	console.log([[${#authentication.principal.userNo}]]);
+	console.log([[${con.workerInfo}]]);
+	
 	var date = [[${#dates.format(con.updateDt,'yyyy-MM-dd')}]]
 	var date_num1 =  date.indexOf('-');
 	var date_num2 = date.indexOf('-', date_num1 + 1)
@@ -372,12 +390,26 @@ canvas {
     $('.cur_month').html(date.substring(date_num1 + 1, date_num2) + '월');
     $('.cur_day').html(date.substring(date_num2 + 1,) + '일');
     
+    
+    // 주소 표기
+    if([[${con.workerAddress}]] != null){
     var work_addr = [[${con.workerAddress}]]
 	var work_num1=  work_addr.indexOf('_');
 	var work_num2 = work_addr.indexOf('_', work_num1 + 1)
-	$('.info_worker #input_postcode').val(work_addr.substring(0, work_num1));
-    $('.info_worker #input_addr').val(work_addr.substring(work_num1 + 1, work_num2));
-    $('.info_worker #input_detailAddr').val(work_addr.substring(work_num2 + 1,));
+	$('.info_worker #input_postcode').html(work_addr.substring(0, work_num1));
+    $('.info_worker #input_addr').html(work_addr.substring(work_num1 + 1, work_num2));
+    $('.info_worker #input_detailAddr').html(work_addr.substring(work_num2 + 1,));
+    }
+    
+ // 주소 표기
+ 	if([[${con.requesterAddress}]] != null){
+    var req_addr = [[${con.requesterAddress}]]
+	var req_num1=  req_addr.indexOf('_');
+	var req_num2 = req_addr.indexOf('_', req_num1 + 1)
+	$('.info_req #input_postcode').html(req_addr.substring(0, req_num1));
+    $('.info_req #input_addr').html(req_addr.substring(req_num1 + 1, req_num2));
+    $('.info_req #input_detailAddr').html(req_addr.substring(req_num2 + 1,));
+    }
 	
 	// 첨부 파일 다운로드 
 	for(i = 0; i < [[${con.fileList}]].length; i++){
@@ -394,10 +426,17 @@ canvas {
 
 		
 		if(workSign != null){
-		 signView(workSign);
+		 signView(workSign, 0);
 		}
 		
-    function signView(compressedSignatureData) {
+		var reqSign = [[${con.reqSign.signsContent}]];
+
+		
+		if(reqSign != null){
+		 signView(reqSign, 1);
+		}
+		
+    function signView(compressedSignatureData, num) {
         //console.log("compressedSignatureData = " + compressedSignatureData);
         
         // 압축된 데이터 복원
@@ -408,12 +447,18 @@ canvas {
         let signatureData = JSON.parse(decompressedSignatureData);
 
         // 서명 그리기
-        drawSignature(signatureData);
+        drawSignature(signatureData, num);
     }
 	
-    function drawSignature(data) {
+    function drawSignature(data, num) {
         // Canvas / 컨텍스트
-        let canvas = document.getElementById('signatureCanvas_work');
+        let canvas;
+        if(num == 0){
+        canvas = document.getElementById('signatureCanvas_work');
+        }else{
+        	canvas = document.getElementById('signatureCanvas_req');
+        }
+        
         let ctx = canvas.getContext('2d');
         
      	// 캔버스 초기화
@@ -428,8 +473,7 @@ canvas {
         
         
     }
-	
-	
+
 	</script>
 
 </body>

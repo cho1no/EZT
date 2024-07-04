@@ -109,7 +109,7 @@ public class ContractServiceImpl implements ContractService {
 	// 계약서 수정
 	@Override
 	public int conUpdate(ContractVO contractVO) {
-
+		System.out.println("++++++++++++++++++++++" + contractVO);
 		// 계약서 수정
 		int result = conMapper.updateConInfo(contractVO);
 		// 계약서 상세 삭제 후 등록
@@ -137,8 +137,8 @@ public class ContractServiceImpl implements ContractService {
 
 		// 서명 등록
 		if (contractVO.getWorSign() != null) {
-			conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getWorkerInfo());
 			if (contractVO.getWorSign().getSignsContent().length() > 10) {
+				conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getWorkerInfo());
 				SignsVO sign = contractVO.getWorSign();
 				sign.setContractNo(contractVO.getContractNo());
 				sign.setUsersNo(contractVO.getWorkerInfo());
@@ -146,17 +146,23 @@ public class ContractServiceImpl implements ContractService {
 			}
 		}
 		if (contractVO.getReqSign() != null) {
-			conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getRequesterInfo());
 			if (contractVO.getReqSign().getSignsContent().length() > 10) {
-				SignsVO sign = contractVO.getWorSign();
+				conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getRequesterInfo());
+				SignsVO sign = contractVO.getReqSign();
 				sign.setContractNo(contractVO.getContractNo());
 				sign.setUsersNo(contractVO.getRequesterInfo());
 				conMapper.insertSignInfo(sign);
 			}
 		}
-
-		System.out.println("------------------" + contractVO);
+		
 		return result == 1 ? contractVO.getContractNo() : -1;
+	}
+	
+	// 계약서 전송
+	@Override
+	public int conSend(ContractVO contractVO) {
+		int result = conMapper.sendConInfo(contractVO);
+		return result == 1 ? contractVO.getProposalNo() : -1;
 	}
 
 }
