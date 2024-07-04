@@ -18,6 +18,7 @@ import com.yedam.app.adm.service.AdminService;
 import com.yedam.app.doc.service.UnityContractVO;
 import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.service.UserVO;
+import com.yedam.app.wkr.service.CareerVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -89,5 +90,27 @@ public class AdminRestController {
 	public UnityContractVO postUnityContract(@RequestBody UnityContractVO vo) {
 		admSvc.postUnityContract(vo);
 		return vo;
+	}
+	
+	
+	// 경력 인증 전체 조회
+	@GetMapping("/careersInfo")
+	public List<CareerVO> getCareers(){
+		return admSvc.getCareers();
+	}
+	// 경력 인증 단건 조회
+	@GetMapping("/careerInfo/{careerNo}")
+	public CareerVO getCareer(@PathVariable int careerNo) {
+		return admSvc.getCareer(careerNo);
+	}
+	// 경력 인증 승인
+	@GetMapping("/careerAccept/{careerNo}")
+	public int setCareerAccept(@PathVariable int careerNo) {
+		return admSvc.setCareerAccept(careerNo);
+	}
+	// 경력 인증 반려
+	@GetMapping("/careerDeny/{careerNo}")
+	public int setCareerDeny(@PathVariable int careerNo) {
+		return admSvc.setCareerDeny(careerNo);
 	}
 }

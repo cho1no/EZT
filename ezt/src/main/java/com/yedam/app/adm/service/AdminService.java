@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.yedam.app.doc.service.UnityContractVO;
 import com.yedam.app.usr.service.UserVO;
+import com.yedam.app.wkr.service.CareerVO;
 
 public interface AdminService {
 	// 일별 가입자 통계
@@ -31,4 +32,15 @@ public interface AdminService {
 	public UnityContractVO getUnityContract(int no);
 	// 통일 계약서 등록
 	public int postUnityContract(UnityContractVO vo);
+	
+	
+	// 경력 인증 전체 조회
+	public List<CareerVO> getCareers();
+	// 경력 인증 단건 조회
+	public CareerVO getCareer(int no);
+	// 경력 인증 승인
+	public int setCareerAccept(int no);
+	// 경력 인증 승인
+	public int setCareerDeny(int no);
+	
 }

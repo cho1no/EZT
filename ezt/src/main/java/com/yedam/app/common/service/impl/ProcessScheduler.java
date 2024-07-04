@@ -30,7 +30,7 @@ public class ProcessScheduler {
 		}
 	}
 	
-	// 매일 오후 18시에 실행
+	// 매일 오후 14시에 실행
 //	@Scheduled(cron = "0 0 14 * * *")
 	public void doAt14() {
 		log.info("its 2 o'clock");
