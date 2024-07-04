@@ -39,4 +39,10 @@ public class ContractVO {
 	
 	private SignsVO reqSign;
 	private SignsVO worSign;
+	
+	private int requestNo;
+	private String usersName;
+	private String usersPhone;
+	
+	private int type;
 }

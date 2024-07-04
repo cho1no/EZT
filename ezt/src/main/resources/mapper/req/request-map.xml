@@ -59,7 +59,8 @@ FROM (
         JOIN users u 
         ON r.requester = u.users_no
         LEFT OUTER JOIN file_detail_info f ON r.file_id = f.file_id AND f.boss_tf = 'Y'
-        ORDER BY r.write_dt DESC) a
+ 		WHERE r.request_state !='S07'
+        ORDER BY r.request_no DESC) a
    	<where><include refid="criteria"></include></where>) c
 <![CDATA[
 WHERE c.rn <= #{pageNum} * #{amount} AND
@@ -70,37 +71,18 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 <select id="getTotalCount" resultType="int">
 	
 	SELECT COUNT(*)
-	FROM (SELECT r.request_no
-              ,r.requester
-              ,FIND_COMMONCODE(r.ctt_place) as ctt_place
-              ,r.ctt_place_area
-              ,FIND_COMMONCODE(r.ctt_place_situation) as ctt_place_situation
-              ,r.hope_ctt_budget
-              ,r.hope_ctt_start_dt
-              ,r.hope_ctt_end_dt
-              ,r.postcode
-              ,r.address
-              ,r.detail_address
-              ,r.title
-              ,r.content
-              ,r.write_dt
-              ,FIND_COMMONCODE(r.request_state) as request_state
-              ,r.file_id
-              ,f.save_name
-              ,f.ext
-              ,FIND_COMMONCODE(r.category_code) as category_code
-              ,FIND_COMMONCODE(r.region_code) as region_code
-              ,u.users_name
+	FROM (SELECT *
         FROM request r
         JOIN users u 
-        ON r.requester = u.users_no
-        LEFT OUTER JOIN file_detail_info f ON r.file_id = f.file_id AND f.boss_tf = 'Y'
-        ORDER BY r.request_no) a
+          ON r.requester = u.users_no
+        LEFT OUTER JOIN file_detail_info f 
+          ON r.file_id = f.file_id AND f.boss_tf = 'Y' ) a
    	<where>
 		<include refid="criteria"></include>	
 		AND request_no > 0
 	</where>
 </select>
+
 <resultMap id="requestMap" type="RequestVO">
 	<result property="fileId" column="file_id"></result>
 	<result property="requestNo" column="request_no"></result>
@@ -133,6 +115,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		<id property="ext" column="ext"></id>
 	</collection>
 </resultMap>
+
 <!-- 의뢰 단건조회 -->
 <select id="selectRequestInfo" resultMap="requestMap">
 	SELECT r.request_no
@@ -160,14 +143,17 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		  ,r.category_code
 		  ,FIND_COMMONCODE(r.category_code) as category_code_nm
           ,u.users_name
+          ,FIND_COMMONCODE(r.region_code) as region_code_nm
 	FROM request r
         JOIN users u
         ON r.requester = u.users_no
         LEFT OUTER JOIN file_detail_info f
         ON r.file_id = f.file_id
         
-	WHERE r.request_no = #{requestNo}
+	WHERE r.request_no = #{requestNo} 
+
 </select>
+
 <!-- 등록 -->
 <insert id="insertRequest" parameterType="RequestVO">
 	<selectKey keyProperty="requestNo"
@@ -213,8 +199,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 			,#{title}
 			,#{content}
 			,'S01'
-			,(SELECT REGION(#{postcode})
-			  FROM dual)
+			,REGION(#{postcode})
 			,#{categoryCode}		
 		)
 		
@@ -224,18 +209,18 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 <update id="updateRequestInfo" parameterType="RequestVO">
 	UPDATE request
 	SET
-		category_code=#{categoryCode}
-		,hope_ctt_start_dt=#{hopeCttStartDt}
-		,hope_ctt_end_dt=#{hopeCttEndDt}
-		,hope_ctt_budget=#{hopeCttBudget}
-		,ctt_place=#{cttPlace}
-		,ctt_place_situation=#{cttPlaceSituation}
-		,ctt_place_area=#{cttPlaceArea}
-		,content=#{content}
-		,(SELECT REGION(#{postcode})
-		  FROM dual)
-	WHERE request_no=#{requestNo}
+		category_code = #{categoryCode}
+		,hope_ctt_start_dt = #{hopeCttStartDt}
+		,hope_ctt_end_dt = #{hopeCttEndDt}
+		,hope_ctt_budget = #{hopeCttBudget}
+		,ctt_place = #{cttPlace}
+		,ctt_place_situation = #{cttPlaceSituation}
+		,ctt_place_area = #{cttPlaceArea}
+		,content = #{content}
+		,postcode = REGION(#{postcode})
+	WHERE request_no = #{requestNo}
 </update>
+
 <!-- 삭제 -->
 <delete id="deleteRequest" parameterType="int">
 	DELETE FROM request
@@ -245,9 +230,10 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 <resultMap id="ppMap" type="ProposalVO">
   <id column="proposal_no" property="proposalNo"></id>
   <collection property="list" javaType="ArrayList" column="proposal_no" ofType="ProposalDetailVO" select="selectPpDetailAll" />
+  
 </resultMap>
 
-<!-- 견적서 단건조회 -->
+<!-- 견적서 전체조회 -->
 <select id="selectProposalAll" parameterType="ProposalVO" resultMap="ppMap">
 	SELECT p.worker
 		  ,u.users_name
@@ -257,14 +243,21 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		  ,p.comments
 		  ,r.request_no
 		  ,p.proposal_no
+		  ,NVL(( SELECT contract_no 
+		 		 FROM contract
+		 		 WHERE proposal_no = p.proposal_no ),0) as contract_no
+		 	
 	FROM proposal p
 		JOIN users u
 		ON u.users_no = p.worker
 		LEFT OUTER JOIN request r
 		ON r.request_no = p.request_no
+		
 	WHERE r.request_no =#{requestNo}
-	ORDER BY p.proposal_no desc
+	
+	ORDER BY contract_no desc, p.proposal_no desc
 </select>
+
 <!-- 견적서 상세조회 -->
 <select id="selectPpDetailAll" resultType="ProposalDetailVO">
 	SELECT proposal_detail_no
@@ -299,9 +292,13 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 			,c.ctt_start_dt
 			,c.ctt_end_dt
 			,p.request_no
+			,u.users_phone
 	FROM contract c
 		JOIN proposal p
-		ON p.proposal_no = c.proposal_no
+		  ON p.proposal_no = c.proposal_no
+		JOIN users u
+		  ON u.users_no = c.worker_info
 	WHERE p.request_no = #{requestNo}
+		and rownum =1
 </select>
 </mapper>

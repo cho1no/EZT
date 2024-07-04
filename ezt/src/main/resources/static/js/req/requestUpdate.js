@@ -29,7 +29,7 @@ $(document).ready(function(){
 		else{
 			let info = getRequestInfo();
 			
-			$.ajax('requestUpdate',{
+			$.ajax('request/update',{
 				type:"post",
 				contentType:"application/json",
 				data : JSON.stringify(info)

@@ -46,6 +46,7 @@ public class RequestVO {
 	private String usersName;			  //유저이름
 	private String saveName;
 	private String ext;
+	
 
 	private String usersPhone;
 	private String comments;

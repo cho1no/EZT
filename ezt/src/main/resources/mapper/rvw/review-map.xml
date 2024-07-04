@@ -73,8 +73,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	            
 		  FROM review r
 		  	JOIN request q 	ON r.request_no = q.request_no
-	        LEFT OUTER JOIN file_detail_info f ON( r.file_id = f.file_id and f.boss_tf = 'Y')
-		  	ORDER BY review_no desc) a
+	        LEFT OUTER JOIN file_detail_info f ON( r.file_id = f.file_id and f.boss_tf = 'Y')) a
    	<where>
 		<include refid="criteria"></include>	
 		AND review_no > 0

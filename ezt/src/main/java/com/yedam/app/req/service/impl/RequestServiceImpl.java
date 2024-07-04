@@ -56,8 +56,12 @@ public class RequestServiceImpl implements RequestService {
 	//의뢰 삭제
 	@Override
 	public int deleteRequest(int requestNo) {
-		
+		//견적서 여부 판단
+		//견적서가 있는 경우
+		//update 이용해서 개인정보 비식별화. 상태값을 -> 삭제로 
+		//견적서가 없는경우
 		return requestMapper.deleteRequest(requestNo);
+		
 	}
 
 	//견적서 조회
@@ -73,6 +77,7 @@ public class RequestServiceImpl implements RequestService {
 		
 		return requestMapper.selectContract(contractVO);
 	}
+	
 	//전체 페이지 수
 	@Override
 	public int getTotal(Criteria cri) {

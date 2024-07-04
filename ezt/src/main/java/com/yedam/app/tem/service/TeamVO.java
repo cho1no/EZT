@@ -20,6 +20,7 @@ public class TeamVO {
 	private String regionCode;
 	private String categoryCode;
 	private int headCount;
+	private int requestNo;
 	
 	
 	

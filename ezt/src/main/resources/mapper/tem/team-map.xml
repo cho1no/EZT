@@ -13,6 +13,8 @@
 			,t.write_dt
 			,t.contract_no
 			,FIND_COMMONCODE(r.region_code) as region_code
+			,r.request_no
+			
 	FROM team t
 		JOIN contract c
 		ON c.contract_no = t.contract_no
@@ -20,14 +22,47 @@
 		ON p.proposal_no = c.proposal_no
 		JOIN request r
 		ON r.request_no = p.request_no
+		
 	ORDER BY write_dt DESC
 </select>
+
+<!-- 팀신청 단건조회 -->
+<select id="teamInfo" resultMap="twcMap">
+	SELECT   t.team_no
+			,t.work_title
+			,t.work_content
+			,USERNAME(t.writer) as writer_name
+			,t.write_dt
+			,t.contract_no
+			,FIND_COMMONCODE(r.region_code) as region_code
+			,r.request_no
+			
+	FROM team t
+		JOIN contract c
+		ON c.contract_no = t.contract_no
+		JOIN proposal p
+		ON p.proposal_no = c.proposal_no
+		JOIN request r
+		ON r.request_no = p.request_no
+		
+	WHERE t.team_no = #{teamNo}
+	
+	ORDER BY team_no DESC
+</select>
+
+<!-- 팀신청 카테고리 별 인원 -->
 <select id="countMember" resultType="TeamWorkCategoryVO">
 	SELECT   FIND_COMMONCODE(work_code) as work_code
 			,team_no
 			,headcount
 			,hire_complete_tf
+			
 	FROM team_work_category
+	
 	WHERE team_no = #{teamNo}
+</select>
+<select id="">
+	SELECT SUM(headcount)
+	FROM team_work_category
 </select>
 </mapper>
