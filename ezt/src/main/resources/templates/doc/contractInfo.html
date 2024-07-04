@@ -380,10 +380,8 @@ canvas {
 	<script th:inline="javascript">
 	
 	// 년원일 표기
-	console.log([[${#authentication.principal.userNo}]]);
-	console.log([[${con.workerInfo}]]);
 	
-	var date = [[${#dates.format(con.updateDt,'yyyy-MM-dd')}]]
+	var date = /*[[${#dates.format(con.updateDt,'yyyy-MM-dd')}]]*/""
 	var date_num1 =  date.indexOf('-');
 	var date_num2 = date.indexOf('-', date_num1 + 1)
 	$('.cur_year').html(date.substring(0, date_num1) + '년');
@@ -392,8 +390,8 @@ canvas {
     
     
     // 주소 표기
-    if([[${con.workerAddress}]] != null){
-    var work_addr = [[${con.workerAddress}]]
+    if(/*[[${con.workerAddress}]]*/"" != null){
+    var work_addr = /*[[${con.workerAddress}]]*/""
 	var work_num1=  work_addr.indexOf('_');
 	var work_num2 = work_addr.indexOf('_', work_num1 + 1)
 	$('.info_worker #input_postcode').html(work_addr.substring(0, work_num1));
@@ -402,8 +400,8 @@ canvas {
     }
     
  // 주소 표기
- 	if([[${con.requesterAddress}]] != null){
-    var req_addr = [[${con.requesterAddress}]]
+ 	if(/*[[${con.requesterAddress}]]*/"" != null){
+    var req_addr = /*[[${con.requesterAddress}]]*/""
 	var req_num1=  req_addr.indexOf('_');
 	var req_num2 = req_addr.indexOf('_', req_num1 + 1)
 	$('.info_req #input_postcode').html(req_addr.substring(0, req_num1));
@@ -411,25 +409,27 @@ canvas {
     $('.info_req #input_detailAddr').html(req_addr.substring(req_num2 + 1,));
     }
 	
+ 	let fileList = /*[[${con.fileList}]]*/""
+ 
 	// 첨부 파일 다운로드 
-	for(i = 0; i < [[${con.fileList}]].length; i++){
-		var path = [[${con.fileList}]][i].savePath.replaceAll('\\', '/');
-		var orgname = [[${con.fileList}]][i].originalFileName;
-		var name = [[${con.fileList}]][i].saveName;
-		var ext = [[${con.fileList}]][i].ext;
+	for(i = 0; i < fileList.length; i++){
+		var path = fileList[i].savePath.replaceAll('\\', '/');
+		var orgname = fileList[i].originalFileName;
+		var name = fileList[i].saveName;
+		var ext = fileList[i].ext;
 		//console.log(path+'/'+name);
 		$('#fileDownload').append(`<p><a href="download?fileName=${path}/${name}_${orgname}.${ext}">${orgname}.${ext}</a></p> `)
 	}
 	
 		// 서명 표기
-		var workSign = [[${con.worSign.signsContent}]];
+		var workSign = /*[[${con.worSign.signsContent}]]*/"";
 
 		
 		if(workSign != null){
 		 signView(workSign, 0);
 		}
 		
-		var reqSign = [[${con.reqSign.signsContent}]];
+		var reqSign = /*[[${con.reqSign.signsContent}]]*/"";
 
 		
 		if(reqSign != null){
