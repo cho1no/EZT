@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.mapper.WorkerMapper;
@@ -29,6 +30,7 @@ public class WorkerServiceImpl implements WorkerService{
 	}
 
 	//작업자 정보 수정
+	@Transactional
 	@Override
 	public Map<String, Object> updateWorker(UserVO userVO) {
 		Map<String, Object> map = new HashMap<>();
@@ -38,6 +40,11 @@ public class WorkerServiceImpl implements WorkerService{
 		if(result == 1) {
 			isSuccessed = true;
 		}
+		
+		workerMapper.deleteWorkerCategory(userVO);
+		workerMapper.deleteWorkerRegion(userVO);
+		workerMapper.insertWorkerCode(userVO);
+		
 		map.put("result", isSuccessed);
 		map.put("target", userVO);
 		
@@ -56,22 +63,6 @@ public class WorkerServiceImpl implements WorkerService{
 		return workerMapper.updateWorkerState(userVO) == 1;
 	}
 	
-	//지역,카테고리 삭제
-	@Override
-	public int deleteWorkerRegion(UserVO userVO) {
-		return workerMapper.deleteWorkerRegion(userVO);
-	}
-
-	@Override
-	public int deleteWorkerCategory(UserVO userVO) {
-		return workerMapper.deleteWorkerCategory(userVO);
-	}
-
-	//지역,카테고리 추가
-	@Override
-	public int insertWorkerCode(UserVO userVO) {
-		return workerMapper.insertWorkerCode(userVO);
-	}
 
 	@Override
 	public List<CareerVO> selectCareerList(UserVO userVO) {

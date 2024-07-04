@@ -114,12 +114,26 @@ form span {
       }
       $("#category").append(input).append(label);
     });
+  
+
     
   $(document).ready(function () {
     $("#updateBtn").click(() => {
-      if (input[name=$('categoryCode')].val() == ''){
-    	  return false;
-      }
+    	 if(!$('input[name=regionCode]').is(':checked')) {
+			  Swal.fire({
+				text: '1개이상의 지역은 필수입니다.',
+				icon: 'warning'
+			  })
+			  return false;
+		  }
+		  
+		  if(!$('input[name=categoryCode]').is(':checked')) {
+			  Swal.fire({
+					text: '1개이상의 분야는 필수입니다.',
+					icon: 'warning'
+			  })
+			  return false;
+		  }
       
       $(workerUpdate).submit();
     });

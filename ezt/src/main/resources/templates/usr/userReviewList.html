@@ -23,5 +23,20 @@
 	  </a>
 	</div>
   </th:block>
+  <div class="row pagination-wrap mt-5">
+   <div class="col-md-12 text-center ">
+     <div class="custom-pagination ml-auto">
+       <a th:if="${page.prev}" th:href="@{/user/revList(pageNum=${page.startPage - 1})}" class="prev">Prev</a>
+       <div class="d-inline-block">
+       <th:block th:each="num : ${#numbers.sequence(page.startPage, page.endPage)}">
+       	<a th:class="${page.cri.pageNum == num ? 'active' : ''}" th:href="|@{/user/revList(pageNum=${num})}|" >
+			[[${num}]]</a>
+	  </th:block> 
+          
+        </div>
+        <a th:if="${page.next}" th:href="@{/user/revList(pageNum=${page.endPage + 1})}" class="next">Next</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

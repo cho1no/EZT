@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
-import com.yedam.app.usr.service.UserCriteria;
+import com.yedam.app.usr.service.UserReqCriteria;
+import com.yedam.app.usr.service.UserRevCriteria;
 import com.yedam.app.usr.service.UserVO;
 
 @Mapper
@@ -34,15 +36,18 @@ public interface UserMapper {
 	public int updateUserPw(UserVO userVO);
 	
 	//사용자 후기목록
-	public List<ReviewVO> selectUserReviewList(int writer);
-	
+	public List<ReviewVO> selectUserRvwList(UserRevCriteria cri);
+
 	//사용자 의뢰목록
-	public List<RequestVO> selectUserReqList(int userNo);
+	public List<RequestVO> selectUserReqList(UserReqCriteria cri);
 	
 	//사용자 탈퇴(상태 수정)
 	public int updateUserState(UserVO userVO);
 
 	
-	//전체 게시물 갯수
-	public int getTotalCount(UserCriteria cri);
+	//사용자 리뷰 갯수
+	public int getTotalReviewCount(UserRevCriteria cri);
+	
+	//사용자 의뢰 갯수
+	public int getTotalRequestCount(UserReqCriteria cri);
 }

@@ -42,7 +42,6 @@ public class WorkerController {
    //정보조회
    @GetMapping("/info")
    public String workerInfo(@AuthenticationPrincipal LoginUserVO vo, Model model) {
-//      log.info(workerService.selectCategoryInfo(vo.getUserNo()).toString());
 	  model.addAttribute("userVO", vo.getUserVO());
       model.addAttribute("categories", workerService.selectCategoryInfo(vo.getUserNo()));
       model.addAttribute("regions", workerService.selectRegionInfo(vo.getUserNo()));
@@ -63,16 +62,13 @@ public class WorkerController {
    //정보수정 기능
    @PostMapping("/update")
    public String workerUpdate(UserVO userVO, Model model, @AuthenticationPrincipal LoginUserVO vo){
-      //Map<String, Object> result = 
       workerService.updateWorker(userVO);
-      //userMapper.selectUserInfo(userVO.getUsersId());
-      workerService.deleteWorkerCategory(userVO);
-      workerService.deleteWorkerRegion(userVO);
-      workerService.insertWorkerCode(userVO);
-      log.info(userVO.toString());
-//      model.addAttribute("result", "정보수정완료");
+
+
+      //시큐리티 정보 업데이트
       UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
       vo.setUserVO(uvo);
+      
       model.addAttribute("msg", "정보수정 완료!");
       model.addAttribute("url", "/worker/update");
       return "gongtong/message";
@@ -109,17 +105,14 @@ public class WorkerController {
 	   return "wkr/workerCareerInsert";
    }
    
-   //경력증명서 등록 기능
+   //경력증명서 등록 기능(처리)
    @PostMapping("/careerInsert")
    public String workerCareerInsert(MultipartFile[] uploadFile, CareerVO careerVO, Model model) {
-//	   log.info(uploadFile.toString());
 	   int result = simpleFileService.uploadFiles(uploadFile);
 	   careerVO.setFileId(result);
 	   model.addAttribute("car", workerService.insertCareer(careerVO));
 	   return "redirect:/worker/careerList";
    }
-   
-   
    
    //작업자 탈퇴 (상태 수정) 페이지
    @GetMapping("/quit")
