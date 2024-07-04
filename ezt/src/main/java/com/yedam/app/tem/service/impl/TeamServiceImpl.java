@@ -47,9 +47,9 @@ public class TeamServiceImpl implements TeamService {
 
 	//팀신청 삭제
 	@Override
-	public int deleteTeam(int teamNO) {
+	public int deleteTeam(int teamNo) {
 
-		return teamMapper.deleteTeam(teamNO);
+		return teamMapper.deleteTeam(teamNo);
 	}
 
 	//전체 페이지 수
@@ -59,12 +59,5 @@ public class TeamServiceImpl implements TeamService {
 		return teamMapper.getTotalCount(cri);
 	}
 
-	//전체 팀원 신청 인원수 
-	@Override
-	public int totalHeadCount(TeamWorkCategoryVO twcVO) {
-		
-		return teamMapper.totalHeadCount(twcVO);
-	}
-	
-	
+
 }

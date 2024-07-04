@@ -23,7 +23,5 @@ public interface TeamService {
 	
 	//전체 데이터 갯수
 	public int getTotal(Criteria cri);
-	
-	//전체 신청 팀원 수
-	public int totalHeadCount(TeamWorkCategoryVO twcVO);
+
 }

@@ -23,13 +23,11 @@ public class TeamController {
 	
 	//팀 신청 전체조회
 	@GetMapping("/requestList")
-	public String teamRequestList(Model model, TeamWorkCategoryVO twcVO) {
+	public String teamRequestList(Model model) {
 		List<TeamVO> teamList = teamService.teamList();
 		model.addAttribute("teamList",teamList);
 		log.info(teamList.toString());
-		
-//		int findVO = teamService.totalHeadCount(twcVO);
-//		model.addAttribute(findVO)
+
 		return "tem/teamRequestList";
 	}
 	//팀 신청 단건조회

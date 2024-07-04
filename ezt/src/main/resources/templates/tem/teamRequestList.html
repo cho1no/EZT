@@ -51,7 +51,7 @@ img{
             
             <h5  class="text-truncate">
             <p>[[${team.teamNo}]] sdf</p>
-            <a class="text-black" th:onclick="|location.href='@{/team/requestInfo(teamNo=${team.temNo})}'|">[[${team.workTitle}]]</a>
+            <a class="text-black" th:onclick="|location.href='@{/team/requestInfo(teamNo=${team.teamNo})}'|">[[${team.workTitle}]]</a>
             </h5>
             <div>작성자 : [[${team.writerName}]]<span class="mx-2">|</span>지역 : [[${team.regionCode}]]</div>
             <div class="text-truncate">
@@ -60,7 +60,8 @@ img{
             	<span >[[${twc.workCode}]]</span>
             	</th:block> 
             </div>
-            <div>총 모집 인원 : 명 <span class="mx-2">|</span> 모집중 </div>            
+
+            <div>총 모집 인원 : [[${team.headCount}]] 명 <span class="mx-2">|</span> 모집중 </div>            
           </div>
          </th:block>
          </a>
