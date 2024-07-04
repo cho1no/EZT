@@ -35,7 +35,9 @@ public class PayController {
 		UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
 		model.addAttribute("requester", requester);
 
+		// 견적서 정보 조회
 		ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
+		model.addAttribute("ppsInfo", ppsVO);
 
 		// 의뢰 정보 조회
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());

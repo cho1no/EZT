@@ -17,7 +17,9 @@
 	      <div class="card-body">
 	        <h5 class="card-title">제목 : [[${request.title}]]</h5>
 	        <p class="card-text">분야 : [[${request.categoryCode}]]</p>
-	        <p class="card-text">진행상태 : [[${request.requestState}]]</p>
+	        <p class="card-text reqState">진행상태 : <span>[[${request.requestState}]]</span></p>
+	        <a th:href="@{/requestInfo(requestNo=${request.requestNo})}"> < 상세</a> 
+	        <a th:href="@{/requestInfo(requestNo=${request.requestNo})}"> 후기작성 ></a>
 	      </div>
 	    </div>
 	  </div>
@@ -35,5 +37,29 @@
 			</div>
 		</div>
 	</div>
+  
 </body>
+<script th:inline="javascript">
+	$(document).ready(function () {
+		$('.reqState span').each((i, e) => {
+			console.log($(e).text());
+			if ($(e).text() == '의뢰중'){
+				$(e).css('color','blue');
+			}
+			if ($(e).text() == '계약완료'){
+				$(e).css('color','black');
+			}
+			if ($(e).text() == '공사중'){
+				$(e).css('color','red');
+			}
+			if ($(e).text() == '보수기간'){
+				$(e).css('color','green');
+				$('a').css('display', 'block');
+			}
+			if ($(e).text() == '계약만료'){
+				$(e).css('color','#aaa');
+			}	
+		})
+	});
+</script>
 </html>
