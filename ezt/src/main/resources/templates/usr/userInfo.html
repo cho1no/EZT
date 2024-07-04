@@ -9,24 +9,24 @@
 </head>
 <body>
 	 <div class="container">
-	<h3>[[${userId.usersName}]]님 안녕하세요.</h3>
+	<h3>[[${userVO.usersName}]]님 안녕하세요.</h3>
 	<hr>
 	<h1>회원 정보</h1>
 	<div>
 		<div>
 			<label for="usersNick">닉네임</label>
 			<input class="form-control" type="text" 
-			id="usersNick" th:value="${userId.usersNick}" disabled readonly>
+			id="usersNick" th:value="${userVO.usersNick}" disabled readonly>
 		</div>
 		<div>
 			<label for="usersPhone">전화번호</label>
 			<input class="form-control" type="text" 
-			id="usersPhone" th:value="${userId.usersPhone}" disabled readonly>
+			id="usersPhone" th:value="${userVO.usersPhone}" disabled readonly>
 		</div>
 		<div>
 			<label for="usersEmail">이메일</label>
 			<input class="form-control" type="email" 
-			id="usersEmail" th:value="${userId.usersEmail}" disabled readonly>
+			id="usersEmail" th:value="${userVO.usersEmail}" disabled readonly>
 		</div>
 <!-- 		<button type="button" th:onclick="|location.href='@{/user/update}'|">수정하기</button> -->
 	</div>

@@ -1,18 +1,20 @@
 package com.yedam.app.usr.service;
 
+import com.yedam.app.req.service.Criteria;
+
 import lombok.Data;
 
 @Data
-public class UserPageDTO {
+public class UserReqPageDTO {
 	
 	private int startPage; //시작 페이지
 	private int endPage;  //끝 페이지
 	private boolean prev, next;
 	
 	private int total; //전체 게시물 수 
-	private UserCriteria cri; // 페이지에서 보여주는 게시물 수 (amount), 현재 페이지 번호(pageNum)
+	private UserReqCriteria cri; // 페이지에서 보여주는 게시물 수 (amount), 현재 페이지 번호(pageNum)
 	
-	public UserPageDTO(UserCriteria cri, int total) {
+	public UserReqPageDTO(UserReqCriteria cri, int total) {
 		this.cri = cri;
 		this.total = total;
 		
@@ -27,5 +29,10 @@ public class UserPageDTO {
 		this.prev = this.startPage > 1;
 		this.next = this.endPage < realEnd;
 	}
+	
+	public UserReqPageDTO(int pageNum, int amount, int total) {
+		this(new UserReqCriteria(pageNum, amount), total);
+	}
+	
 	
 }

@@ -6,43 +6,60 @@
 <head>
 <meta charset="UTF-8">
 <title>사용자 마이페이지</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <link rel="stylesheet" href="/css/rvw/reviewInsert.css">
 </head>
 <body>
   <h1>의뢰 목록</h1>
-    <div class="row row-cols-3 row-cols-md-2 g-4">
-	   <th:block th:each="request : ${requestList}">
-	  <div class="col-lg-3 col-md-6 col-sm-12">
+<div class="row row-cols-3 row-cols-md-2 g-2">
+  <th:block th:each="req : ${requestList}">
+	  <div class="col-lg-4 col-md-6 col-sm-12">
 	    <div class="card">
 <!-- 	      <img src="..." class="card-img-top" alt="..."> -->
 	      <div class="card-body">
-	        <h5 class="card-title">제목 : [[${request.title}]]</h5>
-	        <p class="card-text">분야 : [[${request.categoryCode}]]</p>
-	        <p class="card-text reqState">진행상태 : <span>[[${request.requestState}]]</span></p>
-	        <a th:href="@{/requestInfo(requestNo=${request.requestNo})}"> < 상세</a> 
-	        <a th:href="@{/requestInfo(requestNo=${request.requestNo})}"> 후기작성 ></a>
+	        <h5 class="card-title">제목 : [[${req.title}]]</h5>
+	        <p class="card-text">[[${req.categoryCodeNm}]]</p>
+	        <p class="card-text">[[${#dates.format(req.writeDt, 'yyyy-MM-dd')}]]</p>
+	        <p class="card-text reqState">진행상태 : <span>[[${req.requestStateNm}]]</span></p>
+	        <div class="row">
+	        	<div class="col-md-6" style="text-align:center;">
+			        <button type="button" th:href="@{/request/Info(requestNo=${req.requestNo})}"
+			         class="btn btn-primary border-width-2 d-none d-lg-inline-block">상세</button>
+		        </div>
+		        <div class="col-md-6">
+			        <button id="modalBtn" th:onclick="reqModal([[${req.requestNo}]])" 
+			        th:if="${req.requestState} == 'S05' or ${req.requestState} == 'S06'" 
+			        class="btn btn-primary border-width-2 d-none d-lg-inline-block">후기작성</button>
+		        </div>
+	        </div>
 	      </div>
 	    </div>
 	  </div>
   </th:block>	
-    </div>
+</div>
+<!--  후기작성끝나면 후기작성버튼 없어져야됨-->
+    
    <div class="row pagination-wrap mt-5">
-		<div class="col-md-12 text-center ">
-			<div class="custom-pagination ml-auto">
-				<a href="#" class="prev">Prev</a>
-				<div class="d-inline-block">
-					<a href="#" class="active">1</a> <a href="#">2</a> <a href="#">3</a>
-					<a href="#">4</a>
-				</div>
-				<a href="#" class="next">Next</a>
-			</div>
-		</div>
-	</div>
-  
+   <div class="col-md-12 text-center ">
+     <div class="custom-pagination ml-auto">
+       <a th:if="${page.prev}" th:href="@{/user/reqList(pageNum=${page.startPage - 1})}" class="prev">Prev</a>
+       <div class="d-inline-block">
+       <th:block th:each="num : ${#numbers.sequence(page.startPage, page.endPage)}">
+       	<a th:class="${page.cri.pageNum == num ? 'active' : ''}" th:href="|@{/user/reqList(pageNum=${num})}|" >
+			[[${num}]]</a>
+	  </th:block> 
+          
+        </div>
+        <a th:if="${page.next}" th:href="@{/user/reqList(pageNum=${page.endPage + 1})}" class="next">Next</a>
+      </div>
+    </div>
+  </div>
+	<!-- 모달 -->
+	<div id="modalHtml"></div>     
 </body>
 <script th:inline="javascript">
 	$(document).ready(function () {
 		$('.reqState span').each((i, e) => {
-			console.log($(e).text());
 			if ($(e).text() == '의뢰중'){
 				$(e).css('color','blue');
 			}
@@ -54,12 +71,31 @@
 			}
 			if ($(e).text() == '보수기간'){
 				$(e).css('color','green');
-				$('a').css('display', 'block');
 			}
 			if ($(e).text() == '계약만료'){
 				$(e).css('color','#aaa');
-			}	
+				
+			}
 		})
 	});
+    window.addEventListener("click", function (event) {
+    	var modal = document.getElementById("myModal");
+        // 모달의 검은색 배경 부분이 클릭된 경우 닫히도록 하는 코드
+        if (event.target === modal) {
+          toggleModal();
+        }
+      });
+
+
+    // functions
+    function toggleModal() {
+    	document.getElementById("myModal").classList.toggle("show");
+    }
+	
+   	function reqModal(requestNo){
+   		$('#modalHtml').load('/reviewInsert?requestNo='+requestNo, function(){
+   			toggleModal();
+   		});
+   	}
 </script>
 </html>

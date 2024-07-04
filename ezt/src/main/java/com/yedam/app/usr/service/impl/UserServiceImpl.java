@@ -7,10 +7,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.usr.mapper.UserMapper;
-import com.yedam.app.usr.service.UserCriteria;
+import com.yedam.app.usr.service.UserReqCriteria;
+import com.yedam.app.usr.service.UserRevCriteria;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
 
@@ -51,14 +53,14 @@ public class UserServiceImpl implements UserService{
 
 	//후기목록
 	@Override
-	public List<ReviewVO> userReviewList(int writer) {
-		return userMapper.selectUserReviewList(writer);
+	public List<ReviewVO> userReviewList(UserRevCriteria cri) {
+		return userMapper.selectUserRvwList(cri);
 	}
 	
 	//의뢰목록
 	@Override
-	public List<RequestVO> userReqList(int usersNo) {
-		return userMapper.selectUserReqList(usersNo);
+	public List<RequestVO> userReqList(UserReqCriteria cri) {
+		return userMapper.selectUserReqList(cri);
 	}
 
 	//회원탈퇴(상태 수정)
@@ -66,10 +68,17 @@ public class UserServiceImpl implements UserService{
 	public boolean userStateUpdate(UserVO userVO) {
 		return userMapper.updateUserState(userVO) == 1;
 	}
-
+	
+	//후기 목록 페이징()
 	@Override
-	public int getTotal(UserCriteria cri) {
-		return userMapper.getTotalCount(cri);
+	public int reviewGetTotal(UserRevCriteria cri) {
+		return userMapper.getTotalReviewCount(cri);
+	}
+	
+	//의뢰 목록 페이징()
+	@Override
+	public int requestGetTotal(UserReqCriteria cri) {
+		return userMapper.getTotalRequestCount(cri);
 	}
 
 

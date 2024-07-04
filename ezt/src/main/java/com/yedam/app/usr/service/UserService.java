@@ -18,17 +18,20 @@ public interface UserService {
 	public boolean updateUserPw(UserVO userVO);
 
 	//후기목록 조회
-	public List<ReviewVO> userReviewList(int writer);
+	public List<ReviewVO> userReviewList(UserRevCriteria cri);
 	
 	//의뢰목록 조회
-	public List<RequestVO> userReqList(int usersNo);
+	public List<RequestVO> userReqList(UserReqCriteria cri);
 
 	//회원탈퇴 (상태 수정)
 	public boolean userStateUpdate(UserVO userVO);
 	
 	
-	//전체 데이터 갯수
-	public int getTotal(UserCriteria cri);
+	//전체 리뷰 데이터 갯수
+	public int reviewGetTotal(UserRevCriteria cri);
+	
+	//전체 의뢰 데이터 갯수
+	public int requestGetTotal(UserReqCriteria cri);
 
 	
 }

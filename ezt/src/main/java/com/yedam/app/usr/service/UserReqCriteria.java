@@ -3,20 +3,20 @@ package com.yedam.app.usr.service;
 import lombok.Data;
 
 @Data
-public class UserCriteria {
+public class UserReqCriteria {
 	//페이징
 	private int pageNum;
 	private int amount;
-	private int writer;
+	private int usersNo;
 	
 	//검색
 	private String type;
 	private String keyword;
 	
-	public UserCriteria() {
-		this(1,16);
+	public UserReqCriteria() {
+		this(1,9);
 	}
-	public UserCriteria(int pageNum, int amount) {
+	public UserReqCriteria(int pageNum, int amount) {
 		this.pageNum = pageNum;
 		this.amount = amount;
 	}
@@ -25,12 +25,6 @@ public class UserCriteria {
 		return type == null? new String[] {} : type.split("");
 	}
 	
-	public int getWriter() {
-        return writer;
-    }
-
-    public void setWriter(int writer) {
-        this.writer = writer;
-    }
+	
 	
 }
