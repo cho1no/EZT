@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.yedam.app.rvw.service.ReviewVO;
+import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
 
@@ -33,6 +35,14 @@ public interface WorkerMapper {
 	//경력증명서 등록
 	public int insertCareer(CareerVO careerVO);
 	
+	//작업자 후기 목록
+	public List<ReviewVO> selectWorkerReviewList(UserVO userVO);
+	
+	//작업자 팀 후기 목록
+	public List<MemberVO> selectWorkerTeamReviewList(UserVO userVO);
+	
 	//작업자 탈퇴(상태수정)
 	public int updateWorkerState(UserVO userVO);
+	
+	
 }

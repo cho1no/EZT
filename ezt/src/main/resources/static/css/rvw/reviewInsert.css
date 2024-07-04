@@ -16,7 +16,7 @@ th{
   background-color: rgba(0, 0, 0, 0.7);
   pointer-events: none;
   padding: 20px;
-
+  z-index:-1;
   /* 트랜지션 효과 */
   transition: opacity 0.3s ease-in-out;
   opacity: 0;
@@ -43,7 +43,7 @@ th{
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-
+  
   /* 트랜지션 효과 */
   opacity: 0;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
@@ -55,6 +55,7 @@ th{
   /* 모달이 열렸을 때 보여지게 하는 코드 */
   opacity: 1;
   pointer-events: auto;
+  z-index:2000;
 }
 
 .modal.show .modal-content {

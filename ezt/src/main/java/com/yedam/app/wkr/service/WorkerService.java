@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.rvw.service.ReviewVO;
+import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.usr.service.UserVO;
 
 @Service
@@ -26,6 +28,13 @@ public interface WorkerService {
 	
 	//경력증명서 등록
 	public int insertCareer(CareerVO careerVO);
+	
+	//작업자 후기 목록
+	public List<ReviewVO> selectWorkerReviewList(UserVO userVO);
+	
+	//작업자 팀 후기 목록
+	public List<MemberVO> selectWorkerTeamReviewList(UserVO userVO);
+	
 	
 	//회원탈퇴 (상태수정)
 	public boolean workerStateUpdate(UserVO userVO);
