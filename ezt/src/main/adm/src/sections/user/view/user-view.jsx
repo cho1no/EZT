@@ -24,6 +24,7 @@ import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
+import { style, boxStyle, contentStyle } from '../../../theme/css';
 // ----------------------------------------------------------------------
 
 export default function UserPage() {
@@ -120,36 +121,7 @@ export default function UserPage() {
   });
 
   const notFound = !dataFiltered.length && !!filterName;
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '40%',
-    height: '80%',
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 3,
-  };
-  const contentStyle = {
-    position: 'relative',
-    overflowY: 'auto',
-    height: '90%',
-    paddingRight: 1,
-    '&::-webkit-scrollbar': {
-      width: '5px',
-    },
-    '&::-webkit-scrollbar-thumb': {
-      background: '#888',
-      borderRadius: '10px',
-    },
-  };
-  const boxStyle = {
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    padding: '8px 12px',
-    marginTop: '3px',
-  };
+
   const buttonStyle = {
     position: 'relative',
     display: userInfo.usersState === '회원 탈퇴' ? 'none' : '',

@@ -23,6 +23,11 @@ const navConfig = [
     icon: icon('ic_cart'),
   },
   {
+    title: '경력 인증 관리',
+    path: '/career',
+    icon: icon('ic_cart'),
+  },
+  {
     title: 'product',
     path: '/products',
     icon: icon('ic_cart'),

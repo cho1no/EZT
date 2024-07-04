@@ -123,4 +123,49 @@
 			, #{changes}
 		)
 	</insert>
+	
+	<!-- 경력 인증 관련 -->
+	<select id="selectCareers" resultType="CareerVO">
+		SELECT c.career_no
+				, c.users_no
+				, (	SELECT users_name
+					FROM users
+					WHERE users_no = c.users_no) users_name
+				, c.career_info
+				, c.career_start_dt
+				, c.career_end_dt
+				, c.file_id
+				, c.career_access_tf
+				, FIND_COMMONCODE(c.career_access_tf) career_access_tf_Nm
+				, c.write_dt
+		FROM career c
+		ORDER BY write_dt DESC
+	</select>
+	<select id="selectCareer" parameterType="int" resultType="CareerVO">
+		SELECT c.career_no
+				, c.users_no
+				, (	SELECT users_name
+					FROM users
+					WHERE users_no = c.users_no) users_name
+				, c.career_info
+				, c.career_start_dt
+				, c.career_end_dt
+				, c.file_id
+				, c.career_access_tf
+				, FIND_COMMONCODE(c.career_access_tf) career_access_tf_Nm
+				, c.write_dt
+		FROM career c
+		WHERE career_no = #{no}
+		ORDER BY write_dt DESC
+	</select>
+	<update id="updateCareerAccept" parameterType="int">
+		UPDATE career
+		SET career_access_tf = 'A02'
+		WHERE career_no = #{no}
+	</update>
+	<update id="updateCareerDeny" parameterType="int">
+		UPDATE career
+		SET career_access_tf = 'A03'
+		WHERE career_no = #{no}
+	</update>
 </mapper>

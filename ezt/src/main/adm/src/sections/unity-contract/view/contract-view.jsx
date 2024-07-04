@@ -26,6 +26,7 @@ import ContractTableHead from '../contract-table-head';
 import TableEmptyRows from '../../user/table-empty-rows';
 import ContractTableToolbar from '../contract-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
+import { style, contentStyle, textareaStyle } from '../../../theme/css';
 // ----------------------------------------------------------------------
 
 export default function ContractPage() {
@@ -133,44 +134,11 @@ export default function ContractPage() {
 
   const notFound = !dataFiltered.length && !!filterName;
 
-  // styles
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: '50%',
-    height: '80%',
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 3,
-  };
-  const contentStyle = {
-    position: 'relative',
-    overflowY: 'auto',
-    height: '90%',
-    paddingRight: 1,
-    '&::-webkit-scrollbar': {
-      width: '5px',
-    },
-    '&::-webkit-scrollbar-thumb': {
-      background: '#888',
-      borderRadius: '10px',
-    },
-  };
   const buttonStyle = {
     position: 'relative',
     display: contractInfo.contractsState === '회원 탈퇴' ? 'none' : '',
   };
-  const textareaStyle = {
-    width: '100%',
-    resize: 'none',
-    outline: 'none',
-    border: '1px solid rgba(0, 0, 0, 0.1)',
-    borderRadius: '8px',
-    padding: '16.5px 14px',
-    // overflow: 'auto',
-  };
+
   return (
     <>
       <Container>
@@ -190,7 +158,7 @@ export default function ContractPage() {
                   rowCount={contracts.length}
                   onRequestSort={handleSort}
                   headLabel={[
-                    { id: 'no', label: '번호', align: 'center' },
+                    { id: 'unityContractNo', label: '번호', align: 'center' },
                     { id: 'title', label: '제목' },
                     { id: 'changes', label: '변경사항' },
                     { id: 'writeDt', label: '작성일' },
@@ -242,7 +210,7 @@ export default function ContractPage() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Card sx={style}>
+        <Card sx={{ ...style, width: '50%' }}>
           <Typography variant="h6" component="h2">
             통일 계약서 정보
           </Typography>
@@ -263,7 +231,7 @@ export default function ContractPage() {
                 <Typography variant="subtitle1">내용</Typography>
                 <TextareaAutosize
                   id="contractTermsContent"
-                  style={textareaStyle}
+                  style={{ ...textareaStyle, overflow: 'hidden' }}
                   value={contractInfo.contractTermsContent || ''}
                   onChange={setInputValue}
                   required
@@ -273,7 +241,7 @@ export default function ContractPage() {
                 <Typography variant="subtitle1">변경사항</Typography>
                 <TextareaAutosize
                   id="changes"
-                  style={textareaStyle}
+                  style={{ ...textareaStyle, overflow: 'hidden' }}
                   value={contractInfo.changes || ''}
                   onChange={setInputValue}
                   required

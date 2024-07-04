@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { ContractView } from 'src/sections/unity-contract/view/';
+import { CareerView } from 'src/sections/career/view/';
 
 // ----------------------------------------------------------------------
 
-export default function ContractPage() {
+export default function CareerPage() {
   return (
     <>
       <Helmet>
-        <title> Contract | Minimal UI </title>
+        <title> Career | Minimal UI </title>
       </Helmet>
 
-      <ContractView />
+      <CareerView />
     </>
   );
 }
