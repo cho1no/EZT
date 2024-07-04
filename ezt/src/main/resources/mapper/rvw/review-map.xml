@@ -153,8 +153,10 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 <!-- 후기 수정(별점 및 내용)  -->
 <update id="updateReview" parameterType="ReviewVO">
 	UPDATE review
+	
 	SET	content = #{content}
 		,star = #{star}
+		
 	WHERE review_no = #{reviewNo}
 </update>
 <!-- 후기 삭제 -->

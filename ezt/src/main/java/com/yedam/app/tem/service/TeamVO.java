@@ -23,7 +23,5 @@ public class TeamVO {
 	private int headCount;
 	private int requestNo;
 	
-	
-	
 	private List<TeamWorkCategoryVO> workCategoryVO;
 }

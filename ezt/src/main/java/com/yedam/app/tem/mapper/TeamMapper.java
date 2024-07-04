@@ -26,6 +26,5 @@ public interface TeamMapper {
 	//전체 게시물 갯수
 	public int getTotalCount(Criteria cri);
 	
-	//총 모집 인원 수
-	public int totalHeadCount(TeamWorkCategoryVO twcVO);
+
 }
