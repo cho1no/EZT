@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.yedam.app.api.service.NhDevService;
+import com.yedam.app.common.mapper.ProcessMapper;
+import com.yedam.app.pay.service.PayVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,13 +17,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SchedulerClient {
 	@Autowired NhDevService nhDevSvc;
+	@Autowired ProcessMapper procMap;
+	
 	@Test
 	public void testCheck() {
+		List<PayVO> payList = procMap.selectPayList();
 		List<Object> list = nhDevSvc.getVirtualAcRecieveList("");
+		for (PayVO payVO : payList) {
+//			String 
+		}
+		
+		log.info(payList.toString());
 		for (Object obj : list) {
 			Map<String, String> map = (Map<String, String>) obj;
-			log.info(map.get("MnrcAmt"));
-			log.info(map.get("Vran"));
+			log.info(map.toString());
+			log.info(map.get("MnrcAmt") + " " + map.get("Vran"));
+			
 		}
 	}
 }

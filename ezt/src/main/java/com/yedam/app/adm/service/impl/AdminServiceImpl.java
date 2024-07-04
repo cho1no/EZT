@@ -10,6 +10,7 @@ import com.yedam.app.adm.mapper.AdminMapper;
 import com.yedam.app.adm.service.AdminService;
 import com.yedam.app.doc.service.UnityContractVO;
 import com.yedam.app.usr.service.UserVO;
+import com.yedam.app.wkr.service.CareerVO;
 
 @Service
 public class AdminServiceImpl implements AdminService{
@@ -69,4 +70,27 @@ public class AdminServiceImpl implements AdminService{
 	public int postUnityContract(UnityContractVO vo) {
 		return admMapper.insertUnityContract(vo);
 	}
+
+	
+	// 경력 인증 관련
+	@Override
+	public List<CareerVO> getCareers() {
+		return admMapper.selectCareers();
+	}
+	
+	@Override
+	public CareerVO getCareer(int no) {
+		return admMapper.selectCareer(no);
+	}
+
+	@Override
+	public int setCareerAccept(int no) {
+		return admMapper.updateCareerAccept(no);
+	}
+
+	@Override
+	public int setCareerDeny(int no) {
+		return admMapper.updateCareerDeny(no);
+	}
+	
 }

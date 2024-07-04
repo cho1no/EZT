@@ -10,6 +10,7 @@ import lombok.Data;
 public class CareerVO {
 	private Integer careerNo;
 	private int usersNo;
+	private String usersName;
 	private String careerInfo;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -20,7 +21,7 @@ public class CareerVO {
 	
 	private int fileId;
 	private String careerAccessTf;
-	
+	private String careerAccessTfNm;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date writeDt;
 }

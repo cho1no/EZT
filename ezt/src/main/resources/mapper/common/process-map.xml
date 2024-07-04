@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.common.mapper.ProcessMapper">
+	<select id="selectPayList" resultType="PayVO">
+		SELECT pay_no
+				, requester
+				, price
+				, pay_dt
+				, contract_no
+				, virtual_account
+		FROM pay
+		ORDER BY pay_dt DESC
+	</select>
+</mapper>
