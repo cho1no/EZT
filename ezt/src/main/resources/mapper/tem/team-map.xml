@@ -6,15 +6,16 @@
 </resultMap>
 <!-- 팀신청 전체 조회 -->
 <select id="teamList" resultMap="twcMap">
-	SELECT   t.team_no
+	SELECT t.team_no
+			,t.team_no tem_no
 			,t.work_title
 			,t.work_content
+			,t.writer
 			,USERNAME(t.writer) as writer_name
 			,t.write_dt
 			,t.contract_no
 			,FIND_COMMONCODE(r.region_code) as region_code
 			,r.request_no
-			
 	FROM team t
 		JOIN contract c
 		ON c.contract_no = t.contract_no
@@ -22,7 +23,6 @@
 		ON p.proposal_no = c.proposal_no
 		JOIN request r
 		ON r.request_no = p.request_no
-		
 	ORDER BY write_dt DESC
 </select>
 
@@ -46,8 +46,6 @@
 		ON r.request_no = p.request_no
 		
 	WHERE t.team_no = #{teamNo}
-	
-	ORDER BY team_no DESC
 </select>
 
 <!-- 팀신청 카테고리 별 인원 -->

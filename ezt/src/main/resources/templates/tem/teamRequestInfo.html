@@ -9,18 +9,24 @@
 </head>
 <body>
 <form name="infoForm" th:object="${team}">
-	<table>
+	<table class="table">
 		<tr>
 			<th>제목</th>
 			<td><input th:field="*{workTitle}"></td>
 		</tr>
 		<tr>
 			<th>내용</th>
-			<td><input th:field="*{workContent}"></td>
+			<td><textarea name="workContent" th:text="${team.workContent}"></textarea></td>
 		</tr>
 		<tr>
-			<th>제목</th>
+			<th></th>
 			<td><a>의뢰 상세보기</a></td>
+		</tr>
+		<tr>
+			<th>모집분야/인원</th>
+			<th:block th:each="twc :${team.workCategoryVO}">
+				<td>[[${twc.workCode}]]<span>|</span>n/[[${twc.headcount}]]</td>
+			</th:block>
 		</tr>
 	</table>
 </form>
