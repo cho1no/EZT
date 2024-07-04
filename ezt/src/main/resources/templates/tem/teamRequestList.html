@@ -50,8 +50,7 @@ img{
              <img th:src="@{/images/rvw/team.jpg}">
             
             <h5  class="text-truncate">
-            <p>[[${team.teamNo}]] sdf</p>
-            <a class="text-black" th:onclick="|location.href='@{/team/requestInfo(teamNo=${team.teamNo})}'|">[[${team.workTitle}]]</a>
+            <a class="text-black" th:onclick="|location.href='@{/team/requestInfo(teamNo=${team.temNo})}'|">[[${team.workTitle}]]</a>
             </h5>
             <div>작성자 : [[${team.writerName}]]<span class="mx-2">|</span>지역 : [[${team.regionCode}]]</div>
             <div class="text-truncate">

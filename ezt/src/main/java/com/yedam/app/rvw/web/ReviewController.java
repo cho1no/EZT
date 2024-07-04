@@ -23,7 +23,7 @@ import com.yedam.app.sgi.service.LoginUserVO;
 //리뷰 CRUD
 @RequestMapping("review")
 @Controller
-public class reviewController {
+public class ReviewController {
 	
 	@Autowired
 	ReviewService reviewService;
@@ -47,7 +47,7 @@ public class reviewController {
 	
 	//리뷰 상세조회
 	@GetMapping("/info")
-	public String smRvInfo(ReviewVO reviewVO, Model model) {
+	public String reviewInfo(ReviewVO reviewVO, Model model) {
 		ReviewVO findVO = reviewService.reviewInfo(reviewVO);
 		
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
