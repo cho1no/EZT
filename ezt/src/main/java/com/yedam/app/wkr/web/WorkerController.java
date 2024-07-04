@@ -15,7 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.common.service.SimpleFileService;
+import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.sgi.service.LoginUserVO;
+import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.usr.mapper.UserMapper;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
@@ -112,6 +114,16 @@ public class WorkerController {
 	   careerVO.setFileId(result);
 	   model.addAttribute("car", workerService.insertCareer(careerVO));
 	   return "redirect:/worker/careerList";
+   }
+   
+   @PostMapping("/reviewList")
+   public String workerReviewList(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+	   model.addAttribute("userVO", vo.getUserVO());
+	   List<ReviewVO> list = workerService.selectWorkerReviewList(vo.getUserVO());
+	   model.addAttribute("reviewList", list);
+	   List<MemberVO> tList = workerService.selectWorkerTeamReviewList(vo.getUserVO());
+	   model.addAttribute("teamReviewList", tList);
+	   return "";
    }
    
    //작업자 탈퇴 (상태 수정) 페이지

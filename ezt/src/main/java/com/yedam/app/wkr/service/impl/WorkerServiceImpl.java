@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yedam.app.rvw.service.ReviewVO;
+import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.mapper.WorkerMapper;
 import com.yedam.app.wkr.service.CareerVO;
@@ -72,6 +74,16 @@ public class WorkerServiceImpl implements WorkerService{
 	@Override
 	public int insertCareer(CareerVO careerVO) {
 		return workerMapper.insertCareer(careerVO);
+	}
+
+	@Override
+	public List<ReviewVO> selectWorkerReviewList(UserVO userVO) {
+		return workerMapper.selectWorkerReviewList(userVO);
+	}
+
+	@Override
+	public List<MemberVO> selectWorkerTeamReviewList(UserVO userVO) {
+		return workerMapper.selectWorkerTeamReviewList(userVO);
 	}
 
 	

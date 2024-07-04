@@ -86,14 +86,14 @@
         }
       });
 
-
+	
     // functions
     function toggleModal() {
     	document.getElementById("myModal").classList.toggle("show");
     }
 	
    	function reqModal(requestNo){
-   		$('#modalHtml').load('/reviewInsert?requestNo='+requestNo, function(){
+   		$('#modalHtml').load('/review/insert?requestNo='+requestNo, function(){
    			toggleModal();
    		});
    	}

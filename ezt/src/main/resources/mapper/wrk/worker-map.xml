@@ -13,6 +13,7 @@
 		WHERE users_no = #{usersNo}
 	</select>
 	
+	<!-- 경력증명서 리스트 -->
 	<select id="selectCareerList" resultType="CareerVO">
 		SELECT career_start_dt
 			   , career_end_dt
@@ -24,6 +25,23 @@
 		WHERE users_no = #{usersNo}
 	</select>
 	
+	<select id="selectWorkerReviewList" resultType="ReviewVO">
+		SELECT *
+		FROM review
+		WHERE worker = #{usersNo};
+	</select>
+	
+	<select id="selectWorkerTeamReviewList" resultType="MemberVO">
+		SELECT *
+		FROM review
+		WHERE worker IN (SELECT writer
+                 		 FROM team
+                 		 WHERE team_no IN (SELECT team_no
+                                   		   FROM member
+                                   		   WHERE users_no = #{usersNo}));
+	</select>
+	
+	<!-- 작업자 정보수정 -->
 	<delete id="deleteWorkerRegion" parameterType="UserVO">
 		DELETE FROM active_region
 		WHERE users_no = #{usersNo}

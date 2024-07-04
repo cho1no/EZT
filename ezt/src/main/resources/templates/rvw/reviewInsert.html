@@ -1,17 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org"
-		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-		layout:decorate="~{common/layouts/default_layout}"
-		layout:fragment="Content">
+<html xmlns:th="https://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>후기 작성</title>
-    <link rel="stylesheet" href="/css/rvw/reviewInsert.css">
   </head>
   <body>
-    <!-- 모달 버튼 -->
-    <button id="modalBtn">후기 쓰기</button>
 
     <!-- 모달 창 -->
     <div id="myModal" class="modal">
@@ -27,28 +19,28 @@
 		       		
 					<tr>
 						<th>작업자명</th>
-						<td>ddd</td>
+						<td>[[${request.usersName}]]</td>
 					</tr>
 					<tr>
 						<th>지역</th>
-						<td th:text="${request.regionCodeNm}"></td>
+						<td id="regionCode">[[${request.regionCodeNm}]]</td>
 					</tr>
 					<tr>
 						<th>작업 카테고리</th>
-						<td th:text="${request.categoryCodeNm}"></td>
+						<td id="categoryCode">[[${request.categoryCodeNm}]]</td>
 					</tr>
 					<tr>
 						<th>면적</th>
-						<td th:text="${request.cttPlaceArea}"></td>
+						<td id="cttPlaceArea">[[${request.cttPlaceArea}]]</td>
 					</tr>
 					<tr>
 						<th>작업내용</th>
-						<td th:text="${request.content}"></td>
+						<td id="content">[[${request.content}]]</td>
 					</tr>
 				</table>
 			</div>
 		 </div>
-			<form name="rvInsertForm" th:action="@{/reviewInsert}" th:object="${review}" method="post">
+			<form name="rvInsertForm" th:action="@{/review/insert}" th:object="${review}" method="post">
 				<table class="table">
 					<td style="display:none"><input th:value="${request.requestNo}" name="requestNo"></td>
 		       		<td style="display:none"><input th:value="${writer}" name="writer"></td>
@@ -76,7 +68,7 @@
 						</td>
 					</tr>
 				</table>
-					<input style="display:none" th:field="${review.reviewDivision}" value="F" >
+					<input style="display:none" th:field="${review.reviewDivision}" value="F">
 					<button style="text-align:center">등록</button>
         </form>
      </div>
@@ -92,20 +84,20 @@
         var closeBtn = document.getElementById("closeBtn");
 
         // functions
-        function toggleModal() {
-          modal.classList.toggle("show");
-        }
+//         function toggleModal() {
+//           modal.classList.toggle("show");
+//         }
 
         // events
         modalBtn.addEventListener("click", toggleModal);
         closeBtn.addEventListener("click", toggleModal);
 
-        window.addEventListener("click", function (event) {
-          // 모달의 검은색 배경 부분이 클릭된 경우 닫히도록 하는 코드
-          if (event.target === modal) {
-            toggleModal();
-          }
-        });
+//         window.addEventListener("click", function (event) {
+//           // 모달의 검은색 배경 부분이 클릭된 경우 닫히도록 하는 코드
+//           if (event.target === modal) {
+//             toggleModal();
+//           }
+//         });
       });
     </script>
   </body>
