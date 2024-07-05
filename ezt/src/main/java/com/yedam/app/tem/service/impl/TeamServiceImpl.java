@@ -43,7 +43,7 @@ public class TeamServiceImpl implements TeamService {
 		//팀신청 수정
 		
 		int result = teamMapper.updateTeam(teamVO);
-		
+		System.out.println("------>"+teamVO);
 		//팀상세 삭제 후 등록
 		if(teamVO.getWorkCategoryVO() != null) {
 			teamMapper.deleteCategory(teamVO.getTeamNo());

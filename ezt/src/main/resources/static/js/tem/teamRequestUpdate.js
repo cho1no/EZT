@@ -27,8 +27,8 @@
 		}//수정완료 버튼 클릭시
 		else{
 			for(i=0; i < $('tbody #detail' ).length; i++){
-				$('tbody #detail:eq('+i+') td:eq(0) select' ).attr('name', 'teamWorkCategoryVO['+i+'].categoryCode')
-				$('tbody #detail:eq('+i+') td:eq(1) input' ).attr('name', 'teamWorkCategoryVO['+i+'].headcount')
+				$('tbody #detail:eq('+i+') td:eq(0) select' ).attr('name', 'workCategoryVO['+i+'].categoryCode')
+				$('tbody #detail:eq('+i+') td:eq(1) input' ).attr('name', 'workCategoryVO['+i+'].headcount')
 			}
 			
 			
