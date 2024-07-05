@@ -105,7 +105,7 @@ public class ContractController {
 		model.addAttribute("reqInfo", reqVO);
 		
 		// 통일 계약서 조회
-		UnityContractVO unityVO = conService.unityConSelect();
+		UnityContractVO unityVO = conService.IncludeUnityCon(findVO.getContractNo());
 		model.addAttribute("unity", unityVO);
 
 		return "doc/contractInfo";
@@ -139,7 +139,7 @@ public class ContractController {
 		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
 		model.addAttribute("code", codeVO);
 		// 통일 계약서 조회
-		UnityContractVO unityVO = conService.unityConSelect();
+		UnityContractVO unityVO = conService.IncludeUnityCon(findVO.getContractNo());
 		model.addAttribute("unity", unityVO);
 
 		return "doc/contractUpdate";
@@ -198,7 +198,7 @@ public class ContractController {
 		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
 		model.addAttribute("code", codeVO);
 		// 통일 계약서 조회
-		UnityContractVO unityVO = conService.unityConSelect();
+		UnityContractVO unityVO = conService.IncludeUnityCon(findVO.getContractNo());
 		model.addAttribute("unity", unityVO);
 
 		return "doc/contractWrite";

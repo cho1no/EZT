@@ -55,10 +55,11 @@ public class PayController {
 	}
 
 	@PostMapping("payment")
-	public String payInsert(PayVO payVO) {
+	@ResponseBody
+	public int payInsert(PayVO payVO) {
 		int no = payService.payInsert(payVO);
 
-		return "redirect:payInfo?payNo=" + no;
+		return no;
 	}
 
 	// 결제 명세서

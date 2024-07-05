@@ -15,4 +15,5 @@ public class ContractDetailVO {
 	private Date paymentDt; // 지급 일
 	private String history; // 내역
 	private int round; // 회차
+	private String PaymentTf; // 대금 지급 여부
 }
