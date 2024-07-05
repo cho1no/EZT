@@ -24,13 +24,12 @@
 							<h3 class="text-black mb-5 border-bottom pb-2">
 								<b>견적서 수정</b>
 							</h3>
-							<input type="hidden" class="form-control" name="requestNo"
+							<input type="hidden" name="requestNo"
 								th:value="${reqInfo.requestNo}"> <input type="hidden"
-								class="form-control" name="requester"
-								th:value="${reqInfo.requester}"> <input type="hidden"
-								class="form-control" name="worker"
-								th:value="${#authentication.principal.userNo}"> <input type="hidden"
-								name="proposalNo" th:value="${ppsInfo.proposalNo}">
+								name="requester" th:value="${reqInfo.requester}"> <input
+								type="hidden" name="worker"
+								th:value="${#authentication.principal.userNo}"> <input
+								type="hidden" name="proposalNo" th:value="${ppsInfo.proposalNo}">
 							<div class="row form-group">
 								<div class="col-2">
 									<b class="text-black">작성자ID</b>
@@ -154,9 +153,10 @@
 										th:value="${list.division}" /></td>
 									<td><input type="text" style="border: 0; width: 100%;"
 										th:value="${list.unit}" /></td>
-									<td><input type="text" style="border: 0; width: 100%;" maxlength="4"
-										th:value="${#numbers.formatInteger(list.qty,1)}" /></td>
-									<td><input type="text" style="border: 0; width: 100%;" maxlength="8"
+									<td><input type="text" style="border: 0; width: 100%;"
+										maxlength="4" th:value="${#numbers.formatInteger(list.qty,1)}" /></td>
+									<td><input type="text" style="border: 0; width: 100%;"
+										maxlength="8"
 										th:value="${#numbers.formatInteger(list.unitprice,1)}" /></td>
 									<td><input type="text" style="border: 0; width: 100%;"
 										th:value="${#numbers.formatInteger(list.qty * list.unitprice,1,'COMMA')}" /></td>
@@ -184,7 +184,8 @@
 								class="btn btn-block btn-light btn-md">수정 완료</button>
 						</div>
 						<div class="col-6">
-							<button type="button" onClick="history.back();" class="btn btn-block btn-primary btn-md">뒤로가기</button>
+							<button type="button" onClick="history.back();"
+								class="btn btn-block btn-primary btn-md">뒤로가기</button>
 						</div>
 					</div>
 				</div>

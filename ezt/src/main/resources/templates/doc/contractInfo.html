@@ -63,7 +63,10 @@ canvas {
 	height: 100px;
 }
 
-
+.unity{
+	word-break : keep-all;
+	overflow-wrap : break-word;
+}
 </style>
 </head>
 <body>
@@ -75,6 +78,12 @@ canvas {
 						<div class="col">
 							<h3 class="text-black mb-5 border-bottom pb-2">
 								<b>계약서 상세</b>
+						<th:block th:if="${con.contractState == 'G01'}">
+							<span class="fs-6 fw-light text-success">[ 서명 중 ]</span>
+						</th:block>
+						<th:block th:if="${con.contractState == 'G02'}">
+							<span class="fs-6 fw-light text-success">[ 서명 완료 ]</span>
+						</th:block>
 							</h3>
 							<p class="hr-sect">
 								<b>공사개요</b>
@@ -127,7 +136,7 @@ canvas {
 										<b>총 공사금액 </b>
 									</h5>
 								</div>
-								<div class="col-4">
+								<div class="col">
 									<p class="text-black h5" style="margin-top: 8px">
 										[[${#numbers.formatInteger(con.cttPrice,1,'COMMA')}]]<b> 원</b>
 									</p>
@@ -175,21 +184,15 @@ canvas {
 											<div class="accordion-item">
 												<h3 class="mb-0 heading ms-1">
 													<a class="btn-block h4" data-toggle="collapse"
-														href="#collapseFive" role="button" aria-expanded="true"
-														aria-controls="collapseFive">제1조 (공사내역)<span
+														href="#collapseFive" role="button" aria-expanded="false"
+														aria-controls="collapseFive">[[${unity.title}]]<span
 														class="icon"></span>
 													</a>
 												</h3>
-												<div id="collapseFive" class="collapse show"
+												<div id="collapseFive" class="collapse"
 													aria-labelledby="headingOne" data-parent="#accordion">
-													<div class="body-text">
-														<p>① “을”은 공사착수 전 “갑”에게 설계도서(도면, 시방서, 공사내역서 등)를 제출하여
-															승인을 득하여야 한다.</p>
-														<p>② 공사에 사용할 재료의 품질 및 규격은 설계서와 일치되어야 한다. 다만, 설계도서에
-															품질․품명이 명 확히 규정되지 아니하거나 해당 재료가 품절인 경우 상호 협의하여 달리 결정할 수 있다.
-														</p>
-														<p>③ 전항의 합의가 없는 경우 공사에 사용할 재료는 표준품 또는 표준품에 상당하는 재료로서
-															계약의 목적을 달성하는데 가장 적합한 것으로 한다.</p>
+													<div class="body-text unity">
+														<p>[[${unity.contractTermsContent}]]</p>
 													</div>
 												</div>
 											</div>
@@ -251,6 +254,11 @@ canvas {
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
+													<p class="text-black" style="margin: 5px 0">[[${con.requesterBankcode}]]</p>
+												</div></li>
+												<li class="mb-2 row form-group"><div class="col-4">
+												</div>
+												<div class="col">
 													<p class="text-black" style="margin: 5px 0">[[${con.requesterAccount}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
@@ -310,6 +318,11 @@ canvas {
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
+												</div>
+												<div class="col">
+													<p class="text-black" style="margin: 5px 0">[[${con.workerBankcode}]]</p>
+												</div></li>
+											<li class="mb-2 row form-group"><div class="col-4">
 												</div>
 												<div class="col">
 													<p class="text-black" style="margin: 5px 0">[[${con.workerAccount}]]</p>
@@ -380,7 +393,6 @@ canvas {
 	<script th:inline="javascript">
 	
 	// 년원일 표기
-	
 	var date = /*[[${#dates.format(con.updateDt,'yyyy-MM-dd')}]]*/""
 	var date_num1 =  date.indexOf('-');
 	var date_num2 = date.indexOf('-', date_num1 + 1)
@@ -399,7 +411,7 @@ canvas {
     $('.info_worker #input_detailAddr').html(work_addr.substring(work_num2 + 1,));
     }
     
- // 주소 표기
+ 	// 주소 표기
  	if(/*[[${con.requesterAddress}]]*/"" != null){
     var req_addr = /*[[${con.requesterAddress}]]*/""
 	var req_num1=  req_addr.indexOf('_');
@@ -409,6 +421,12 @@ canvas {
     $('.info_req #input_detailAddr').html(req_addr.substring(req_num2 + 1,));
     }
 	
+ 	// 통일 계약서 표기
+    var unity_origin = /*[[${unity.contractTermsContent}]]*/""
+    var unity_content = unity_origin.replaceAll('\n', '<br />');
+    $('.unity p').html(unity_content);
+ 	
+ 	
  	let fileList = /*[[${con.fileList}]]*/""
  
 	// 첨부 파일 다운로드 

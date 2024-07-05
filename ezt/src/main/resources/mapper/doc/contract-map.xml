@@ -2,6 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.doc.mapper.ContractMapper">
 
+	<!-- 은행 코드 조회 -->
+	<select id="selectBankcode" resultType="CommonCodeVO">
+		SELECT CODE_NO, CODE_NAME
+		FROM common_code
+		WHERE CODE_NO like '0__' and USE_TF = 'Y'
+	</select>
+	<!-- 은행 코드 조회 -->
+	
+	<!-- 통일 계약서 조회 -->
+	<select id="selectUnityCon" resultType="UnityContractVO">
+		SELECT 
+		UNITY_CONTRACT_NO
+		, WRITE_DT
+		, TITLE
+		, CHANGES
+		, CONTRACT_TERMS_CONTENT
+		FROM unity_contract
+		WHERE BASIC_CONTRACT_TF = 'Y'
+	</select>
+	<!-- 통일 계약서 조회 -->
+	
+	<!-- 계약서 등록된 통일 계약서 조회 -->
+	<select id="selectIncludetUnityCon" resultType="UnityContractVO" parameterType="int" >
+	SELECT 
+		u.UNITY_CONTRACT_NO as unityContractNo
+		, u.WRITE_DT as writeDt
+		, u.TITLE as title
+		, u.CHANGES as changes
+		, u.CONTRACT_TERMS_CONTENT as contractTermsContent
+		FROM unity_contract u
+        JOIN contract c
+        ON c.UNITY_CONTRACT_NO= u.UNITY_CONTRACT_NO
+		WHERE c.CONTRACT_NO = #{contractNo};
+	</select>
+	<!-- 계약서 등록된 계약서 조회 -->
+	
 
 	<!-- 계약서 등록 -->
 	<insert id="insertConInfo" parameterType="ContractVO">
@@ -15,35 +51,28 @@
 		, CTT_NAME
 		, CTT_PRICE
 		, CTT_START_DT
-		,
-		CTT_END_DT
+		, CTT_END_DT
 		, REQUESTER_INFO
-		, REQUESTER_ADDRESS
-		, REQUESTER_ACCOUNT
-		,
-		WORKER_INFO
+		, WORKER_INFO
 		, WORKER_ADDRESS
 		, WORKER_ACCOUNT
 		, UNITY_CONTRACT_NO
-		,
-		PROPOSAL_NO
+		, PROPOSAL_NO
+		, WORKER_BANKCODE
 		)
 		VALUES (
 		#{contractNo}
 		, #{cttName}
 		, #{cttPrice}
-		,
-		#{cttStartDt}
+		, #{cttStartDt}
 		, #{cttEndDt}
 		, #{requesterInfo}
-		, #{requesterAddress}
-		,
-		#{requesterAccount}
 		, #{workerInfo}
 		, #{workerAddress}
 		, #{workerAccount}
 		, #{unityContractNo}
 		, #{proposalNo}
+		, #{workerBankcode}
 		)
 	</insert>
 	<!-- 계약서 등록 -->
@@ -60,12 +89,12 @@
 		CONTRACT_DETAIL_NO
 		, CONTRACT_NO
 		, PRICE
-		,
-		PAYMENT_DT
+		, PAYMENT_DT
 		, HISTORY
 		, ROUND
 		)
-		VALUES (#{contractDetailNo}
+		VALUES (
+		#{contractDetailNo}
 		, #{contractNo}
 		, #{price}
 		, #{paymentDt}
@@ -110,19 +139,19 @@
 		, CTT_START_DT
 		, CTT_END_DT
 		, REQUESTER_INFO
-		,
-		REQUESTER_ADDRESS
+		, REQUESTER_ADDRESS
 		, REQUESTER_ACCOUNT
 		, WORKER_INFO
 		, WORKER_ADDRESS
-		,
-		WORKER_ACCOUNT
+		, WORKER_ACCOUNT
 		, UNITY_CONTRACT_NO
 		, FILE_ID
 		, PROPOSAL_NO
 		, WRITE_DT
 		, UPDATE_DT
 		, CONTRACT_STATE
+		, FIND_COMMONCODE(REQUESTER_BANKCODE) as requesterBankcode
+		, FIND_COMMONCODE(WORKER_BANKCODE) as workerBankcode
 		FROM contract
 		WHERE proposal_no = #{proposalNo}
 	</select>
@@ -162,17 +191,18 @@
 		SET
 		UPDATE_DT = sysdate
 		<if test="type == 0">
-		CTT_NAME = #{cttName}
-		, CTT_PRICE = #{cttPrice}
+		, CTT_NAME = #{cttName}
 		, CTT_START_DT =
 		#{cttStartDt}
 		, CTT_END_DT = #{cttEndDt}
 		, WORKER_ADDRESS = #{workerAddress}
 		, WORKER_ACCOUNT = #{workerAccount}
+		, WORKER_BANKCODE = #{workerBankcode}
 		</if>
 		<if test="type == 1">
 		, REQUESTER_ADDRESS = #{requesterAddress}
 		, REQUESTER_ACCOUNT = #{requesterAccount}
+		, REQUESTER_BANKCODE = #{requesterBankcode}
 		</if>
 		WHERE contract_no = #{contractNo}
 	</update>
@@ -193,7 +223,8 @@
 		WHERE contract_no = #{contractNo} and users_no = #{usersNo}
 	</delete>
 	<!-- 서명 삭제 -->
-
+	
+	<!-- 계약서 전송 -->
 	<update id="sendConInfo" parameterType="ContractVO">
 		UPDATE contract
     	SET
@@ -210,6 +241,6 @@
     	</choose>
     	WHERE proposal_no = #{proposalNo}
 	</update>
-
+	<!-- 계약서 전송 -->
 
 </mapper>

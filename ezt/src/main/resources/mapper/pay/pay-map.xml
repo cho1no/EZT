@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.pay.mapper.PayMapper">
 
+	<!-- 결제 등록 -->
 	<insert id="insertPayInfo" parameterType="PayVO">
 		<selectKey keyProperty="payNo" resultType="Integer"
 			order="BEFORE">
@@ -25,7 +26,9 @@
         , #{virtualAccount}
 		)
 	</insert>
+	<!-- 결제 등록 -->
 	
+	<!-- 결제 조회 -->
 	<select id="selectPayInfo" resultType="PayVO">
 		SELECT
 			p.PAY_NO
@@ -39,5 +42,6 @@
 		ON c.CONTRACT_NO = p.CONTRACT_NO
 		WHERE PAY_NO = #{payNo}
 	</select>
-
+	<!-- 결제 조회 -->
+	
 </mapper>

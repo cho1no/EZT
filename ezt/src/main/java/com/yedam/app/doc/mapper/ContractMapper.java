@@ -4,12 +4,20 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.yedam.app.common.service.FileVO;
+import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.doc.service.ContractDetailVO;
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.SignsVO;
+import com.yedam.app.doc.service.UnityContractVO;
 
 public interface ContractMapper {
+	
+	// 은행 코드 조회
+	public List<CommonCodeVO> selectBankcode();
+	// 통일 계약서 조회
+	public UnityContractVO selectUnityCon();
+	// 계약서 등록된 통일 계약서 조회
+	public UnityContractVO selectIncludetUnityCon(int contractNo);
 	
 	// -- 계약서 등록
 	// 계약서 등록

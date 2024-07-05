@@ -19,9 +19,9 @@
 					<div class="row form-group">
 				<div class="col-lg-7 mb-5 mb-lg-0">
 						<h3 class="text-black mb-5 border-bottom pb-2"><b>견적서 작성</b></h3>
-						<input type="hidden" class="form-control" name="requestNo" th:value="${reqInfo.requestNo}">
-						<input type="hidden" class="form-control" name="requester" th:value="${reqInfo.requester}">
-						<input type="hidden" class="form-control" name="worker" th:value="${#authentication.principal.userNo}">
+						<input type="hidden" name="requestNo" th:value="${reqInfo.requestNo}">
+						<input type="hidden" name="requester" th:value="${reqInfo.requester}">
+						<input type="hidden" name="worker" th:value="${#authentication.principal.userNo}">
 						
 						<div class="row form-group">
 							<div class="col-2">

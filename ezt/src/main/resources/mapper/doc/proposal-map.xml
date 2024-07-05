@@ -50,8 +50,7 @@
 		, update_dt
 		, proposal_state
 		FROM proposal
-		WHERE proposal_no =
-		#{proposalNo}
+		WHERE proposal_no =	#{proposalNo}
 	</select>
 
 	<!-- 견적서 상세조회 -->

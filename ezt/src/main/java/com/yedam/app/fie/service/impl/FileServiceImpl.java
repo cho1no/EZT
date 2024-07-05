@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.aspectj.weaver.tools.UnsupportedPointcutPrimitiveException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class FileServiceImpl implements FileService {
+	
+	@Value("${file.upload.path}")
+	String uploadFolder;
+	
 	// 폴더 저장 경로
 	private String getForder() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -51,7 +56,7 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public List<FileVO> uploadFiles(MultipartFile[] uploadFile) {
 		// 폴더 경로
-		String uploadFolder = "C:\\temp";
+
 		List<FileVO> list = new ArrayList<>();
 
 		String uploadFolderPath = getForder();
@@ -120,7 +125,7 @@ public class FileServiceImpl implements FileService {
 			String fileName = list.getSavePath().replace("\\", "/") + '/' + list.getSaveName() + "_" 
 						+ list.getOriginalFileName() + "." + list.getExt();
 			try {
-				File file = new File("C:\\temp\\" + URLDecoder.decode(fileName, "UTF-8"));
+				File file = new File(uploadFolder + URLDecoder.decode(fileName, "UTF-8"));
 
 				file.delete();
 
@@ -136,7 +141,7 @@ public class FileServiceImpl implements FileService {
 	public ResponseEntity<Resource> downlodeFile(String fileName) {
 		log.info("download file: " + fileName);
 
-		FileSystemResource resource = new FileSystemResource("C:\\temp\\" + fileName);
+		FileSystemResource resource = new FileSystemResource(uploadFolder + fileName);
 
 		log.info("resource : " + resource);
 

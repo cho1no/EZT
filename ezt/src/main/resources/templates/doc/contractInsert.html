@@ -67,15 +67,23 @@
 
 canvas {
 	border: 1px solid black;
-	width:260px;
-	height:100px;
-
+	width: 260px;
+	height: 100px;
 }
 
 .modal-backdrop {
 	/* bug fix - no overlay */
 	display: none;
 }
+
+.dropdown button {
+	height: 35px;
+}
+.unity{
+	word-break : keep-all;
+	overflow-wrap : break-word;
+}
+
 </style>
 </head>
 <body>
@@ -90,15 +98,13 @@ canvas {
 							<h3 class="text-black mb-5 border-bottom pb-2">
 								<b>계약서 작성</b>
 							</h3>
-							<input type="hidden" class="form-control" name="requesterInfo"
+							<input type="hidden" name="requesterInfo"
 								th:value="${ppsInfo.requester}"> <input type="hidden"
-								class="form-control" name="requesterAddress"> <input
-								type="hidden" class="form-control" name="workerInfo"
-								th:value="${ppsInfo.worker}"> <input type="hidden"
-								class="form-control" name="workerAddress"> <input
-								type="hidden" class="form-control" name="proposalNo"
-								th:value="${ppsInfo.proposalNo}"> <input type="hidden"
-								class="form-control" name="unityContractNo" value=1>
+								name="workerInfo" th:value="${ppsInfo.worker}"> <input
+								type="hidden" name="workerAddress"> <input type="hidden"
+								name="proposalNo" th:value="${ppsInfo.proposalNo}"> <input
+								type="hidden" name="workerBankcode"> <input
+								type="hidden" name="unityContractNo" th:value="${unity.unityContractNo}">
 							<p class="hr-sect">
 								<b>공사개요</b>
 							</p>
@@ -151,7 +157,8 @@ canvas {
 									</h5>
 								</div>
 								<div class="col-4">
-									<input type="text" class="form-control" name="cttPrice" readonly>
+									<input type="text" class="form-control" name="cttPrice"
+										readonly>
 								</div>
 								<div class="col-auto">
 									<h5 class="text-black" style="padding-top: 10px">
@@ -194,21 +201,15 @@ canvas {
 											<div class="accordion-item">
 												<h3 class="mb-0 heading ms-1">
 													<a class="btn-block h4" data-toggle="collapse"
-														href="#collapseFive" role="button" aria-expanded="true"
-														aria-controls="collapseFive">제1조 (공사내역)<span
+														href="#collapseFive" role="button" aria-expanded="false"
+														aria-controls="collapseFive">[[${unity.title}]]<span
 														class="icon"></span>
 													</a>
 												</h3>
-												<div id="collapseFive" class="collapse show"
+												<div id="collapseFive" class="collapse"
 													aria-labelledby="headingOne" data-parent="#accordion">
-													<div class="body-text">
-														<p>① “을”은 공사착수 전 “갑”에게 설계도서(도면, 시방서, 공사내역서 등)를 제출하여
-															승인을 득하여야 한다.</p>
-														<p>② 공사에 사용할 재료의 품질 및 규격은 설계서와 일치되어야 한다. 다만, 설계도서에
-															품질․품명이 명 확히 규정되지 아니하거나 해당 재료가 품절인 경우 상호 협의하여 달리 결정할 수 있다.
-														</p>
-														<p>③ 전항의 합의가 없는 경우 공사에 사용할 재료는 표준품 또는 표준품에 상당하는 재료로서
-															계약의 목적을 달성하는데 가장 적합한 것으로 한다.</p>
+													<div class="body-text unity">
+														<p>[[${unity.contractTermsContent}]]</p>
 													</div>
 												</div>
 											</div>
@@ -255,13 +256,17 @@ canvas {
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
 												</div>
-												<div class="col">
-												<input type="hidden" name="requesterAccount">
-												</div></li>
+												<div class="col"></div></li>
+											<li class="mb-2 row form-group"><div class="col-4">
+												</div>
+												<div class="col"></div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
 												</div>
 												<div class="col"></div></li>
+											<li><div class="text-center mt-2">
+													<canvas></canvas>
+												</div></li>
 										</ul>
 									</div>
 								</div>
@@ -276,13 +281,13 @@ canvas {
 													<strong class="text-black">성명</strong>
 												</div>
 												<div class="col-4">
-													<p class="text-black" style="margin: 5px 0">[[${userName}]]</p>
+													<p class="text-black m-0 mt-1">[[${userName}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">전화번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${userPhone}]]</p>
+													<p class="text-black m-0 mt-1">[[${userPhone}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">우편번호</strong>
@@ -311,10 +316,22 @@ canvas {
 													<strong class="text-black">주민등록번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${userRnn}]]</p>
+													<p class="text-black m-0 mt-1">[[${userRnn}]]</p>
 												</div></li>
+
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
+												</div>
+												<div class="col">
+													<select class="selectpicker show-tick form-control"
+														data-style="btn-white py-0 pb-2 m-0" data-width="100%"
+														data-live-search="true" title="은행 선택">
+														<th:block th:each=" list : ${code}">
+															<option>[[${list.codeName+'('+list.codeNo+')'}]]</option>
+														</th:block>
+													</select>
+												</div></li>
+											<li class="mb-2 row form-group"><div class="col-4">
 												</div>
 												<div class="col">
 													<input type="text" class="form-control"
@@ -328,10 +345,11 @@ canvas {
 														class="btn btn-outline-success sendBtn"
 														data-bs-toggle="modal" data-bs-target="#sendModal">서명
 														하기</button>
-												</div>
-												<div id="input_sign" class="text-center mt-2"></div>
-												</li>
-												
+												</div></li>
+											<li><div id="input_sign" class="text-center mt-2">
+													<canvas id="signatureCanvas"></canvas>
+												</div></li>
+
 										</ul>
 									</div>
 								</div>
@@ -384,7 +402,7 @@ canvas {
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
-				<div class="modal-body" style="height:180px">
+				<div class="modal-body" style="height: 180px">
 					<form method="post" action="" class="sigPad">
 						<ul class="sigNav">
 							<li class="drawIt"><a href="#draw-it">그리기</a></li>
@@ -423,7 +441,8 @@ canvas {
 		totalPrice += priceList[i].qty * priceList[i].unitprice;
 	}
 	
-	$('input[name="cttPrice"]').val(totalPrice);
+	$('input[name="cttPrice"]').val(totalPrice.toString().replace(
+			/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
 	
 	
 	// 현재 년월일 표시
@@ -435,7 +454,11 @@ canvas {
     $('.cur_year').html(year + '년');
     $('.cur_month').html(month + '월');
     $('.cur_day').html(day + '일');
-
+ 	// 통일 계약서 표기
+    var unity_origin = /*[[${unity.contractTermsContent}]]*/""
+    var unity_content = unity_origin.replaceAll('\n', '<br />');
+    $('.unity p').html(unity_content);
+    
     
 	// + 버튼 : tbody tr 추가
 	$('table thead button').on('click', addForm);
@@ -467,33 +490,6 @@ canvas {
 	    //GetTotal();
 	    addRound();
 	});
-	
-	// 폼 데이터 전송 이전에 데이터 처리
-	$('#insertBtn').on('click', function(e) {
-		
-			$('input[name="workerAddress"]').val($('#input_postcode').val() + '_' 
-					+ $('#input_addr').val() + '_' + $('#input_detailAddr').val())
-		
-		
-			let startDt = $('#startDt');
-			let endDt = $('#endDt');
-			
-			if(startDt.val() == ''){
-				startDt.val('1900-01-01');
-			}
-			if(endDt.val() == ''){
-				endDt.val('1900-01-01');
-			}
-		
-		
-	    for(i=0; i < $('tbody tr').length; i++){
-	    	$('tbody tr:eq('+i+') td:eq(0) input').attr('name', 'dList['+i+'].round');
-	    	$('tbody tr:eq('+i+') td:eq(1) input').attr('name', 'dList['+i+'].price');
-	    	$('tbody tr:eq('+i+') td:eq(2) input').attr('name', 'dList['+i+'].paymentDt');
-	    	$('tbody tr:eq('+i+') td:eq(3) input').attr('name', 'dList['+i+'].history');
-	    }
-
-	});
 
 	
 	// 폼 데이터 전송
@@ -503,8 +499,8 @@ canvas {
 	
 	function insertAjax(e){
 		
-		var formData = new FormData(document.conInsertForm);
 		
+		// 이미지&오디오 파일 제약
 		var inputFile = $("input[name='uploadFile']");
 		
 		var files = inputFile[0].files;
@@ -524,6 +520,45 @@ canvas {
 			}
 		}
 		
+		
+		// 폼 데이터 처리
+		$('input[name="workerAddress"]').val($('#input_postcode').val() + '_' 
+				+ $('#input_addr').val() + '_' + $('#input_detailAddr').val());
+				
+		var bankcode = $('.dropdown button div div div').html();
+		var bank_num1 = bankcode.indexOf('(');
+		if(bankcode != '은행 선택'){
+		$('input[name="workerBankcode"]').val(bankcode.substring(bank_num1+1).replace(')', ''));
+		}else{
+			$('input[name="workerBankcode"]').val(0);
+		}
+		
+				
+		$('input[name="cttPrice"]').val($('input[name="cttPrice"]').val().replace(',', ''));
+	
+		let startDt = $('#startDt');
+		let endDt = $('#endDt');
+		
+		if(startDt.val() == ''){
+			startDt.val('1900-01-01');
+		}
+		if(endDt.val() == ''){
+			endDt.val('1900-01-01');
+		}
+	
+	
+    	for(i=0; i < $('tbody tr').length; i++){
+    		$('tbody tr:eq('+i+') td:eq(0) input').attr('name', 'dList['+i+'].round');
+    		$('tbody tr:eq('+i+') td:eq(1) input').attr('name', 'dList['+i+'].price');
+    		$('tbody tr:eq('+i+') td:eq(2) input').attr('name', 'dList['+i+'].paymentDt');
+    		$('tbody tr:eq('+i+') td:eq(3) input').attr('name', 'dList['+i+'].history');
+    	}
+    	
+    	
+		
+		// 폼 데이터 전송
+		var formData = new FormData(document.conInsertForm);
+		
 		formData.append("worSign.signsContent", compressedData);
 		
 		for (const pair of formData.entries()) {
@@ -542,28 +577,13 @@ canvas {
 			location.href='/conInfo?proposalNo='+proposalNo;
 	}
 	
-	function getEmpObj(){
-		let formAry = $('form').serializeArray();
-		
-		
-		let formObj = {};
-		formAry.forEach(inputTag => {
-			formObj[inputTag.name] = inputTag.value;
-		})
-		return formObj;
-	}
-	// 폼 데이터 전송
-	
 		// 서명
 		var compressedData;
     	
         $('.sigPad').signaturePad({drawOnly:true});
  
         $('#saveModal').click(function(event) {
-        	//event.preventDefault(); // 폼의 기본 제출 동작을 방지
- 			$('#input_sign canvas').remove();
-        	$('#input_sign').append(`<canvas id="signatureCanvas"></canvas>`);
-        	
+        	event.preventDefault(); // 폼의 기본 제출 동작을 방지
         	
 	        // 서명 데이터를 JSON 형식으로 가져오기
 	        var signatureData = $('.sigPad').signaturePad().getSignatureString();
