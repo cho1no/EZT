@@ -236,7 +236,11 @@
 			processData : false,
 			contentType : false,
 			data : formData,
-			type :'Post'
+			type :'Post',
+			async : false,
+			success : function(result){	
+				location.href='/payInfo?payNo='+result;
+			}
 		})
 	}
 	

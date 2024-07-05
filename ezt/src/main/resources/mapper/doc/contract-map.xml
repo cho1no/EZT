@@ -34,7 +34,7 @@
 		FROM unity_contract u
         JOIN contract c
         ON c.UNITY_CONTRACT_NO= u.UNITY_CONTRACT_NO
-		WHERE c.CONTRACT_NO = #{contractNo};
+		WHERE c.CONTRACT_NO = #{contractNo}
 	</select>
 	<!-- 계약서 등록된 계약서 조회 -->
 	
