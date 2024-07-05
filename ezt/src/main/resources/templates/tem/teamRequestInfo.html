@@ -7,28 +7,49 @@
 <meta charset="UTF-8">
 <title>팀 모집 상세</title>
 </head>
+<style>
+.btnn{
+    background: transparent;
+	border:none;
+    font-size:14px;
+    margin:3px;
+    width:70px;
+}
+</style>
 <body>
 <form name="infoForm" th:object="${team}">
+<h4>팀 신청 상세보기</h4>
+			<input type="hidden" th:field="*{teamNo}">
 	<table class="table">
 		<tr>
 			<th>제목</th>
-			<td><input th:field="*{workTitle}"></td>
+			<td colspan="3"><input class="border border-light" th:field="*{workTitle}" readonly></td>
 		</tr>
 		<tr>
 			<th>내용</th>
-			<td><textarea name="workContent" th:text="${team.workContent}"></textarea></td>
+			<td colspan="3"><textarea class=" w-75 p-3 h-100 d-inline-block border border-light" name="workContent" th:text="${team.workContent}" readonly></textarea></td>
 		</tr>
 		<tr>
 			<th></th>
-			<td><a>의뢰 상세보기</a></td>
+			<td colspan="3"><a>의뢰 상세보기</a></td>
 		</tr>
 		<tr>
-			<th>모집분야/인원</th>
-			<th:block th:each="twc :${team.workCategoryVO}">
-				<td>[[${twc.workCode}]]<span>|</span>n/[[${twc.headcount}]]</td>
-			</th:block>
+			<th colspan="4">모집분야/인원</th>
 		</tr>
+		<th:block th:each="twc :${team.workCategoryVO}">
+			<tr id="detail">
+				<th></th>
+				<td><select th:value="${twc.categoryCode}" name="categoryCode" disabled >
+                        <option th:each="category :${categoryCode}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
+                    </select></td>
+				<td> [[${twc.partCount}]] / <input class="border border-light" th:value="${twc.headcount}" name="headcount" readonly></td>
+				<td><button class="btnn">신청자 확인하기</button></td>
+			</tr>
+		</th:block>
 	</table>
+	<button type="button" class="btn btn-primary upBtn update" >수정</button>
+	<button type="button" class="btn btn-primary" >삭제</button>
 </form>
+<script src="/js/tem/teamRequestUpdate.js"></script>
 </body>
 </html>

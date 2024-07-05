@@ -9,7 +9,6 @@ import com.yedam.app.req.service.Criteria;
 import com.yedam.app.tem.mapper.TeamMapper;
 import com.yedam.app.tem.service.TeamService;
 import com.yedam.app.tem.service.TeamVO;
-import com.yedam.app.tem.service.TeamWorkCategoryVO;
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -38,13 +37,25 @@ public class TeamServiceImpl implements TeamService {
 		return result == 1 ? teamVO.getTeamNo() : -1;
 	}
 
-	//팀신청 수정
+	//팀신청 수정 & 팀상세 삭제 및 등록
 	@Override
-	public boolean updateTeam(TeamVO teamVO) {
-
-		return teamMapper.updateTeam(teamVO) == 1;
+	public int updateTeam(TeamVO teamVO) {
+		//팀신청 수정
+		
+		int result = teamMapper.updateTeam(teamVO);
+		
+		//팀상세 삭제 후 등록
+		if(teamVO.getWorkCategoryVO() != null) {
+			teamMapper.deleteCategory(teamVO.getTeamNo());
+			teamVO.getWorkCategoryVO().forEach(e -> {
+				e.setTeamNo(teamVO.getTeamNo());
+				teamMapper.insertCategory(e);
+			});
+		}
+		
+		return result == 1 ? teamVO.getTeamNo() : -1;
 	}
-
+	
 	//팀신청 삭제
 	@Override
 	public int deleteTeam(int teamNo) {
@@ -58,6 +69,9 @@ public class TeamServiceImpl implements TeamService {
 
 		return teamMapper.getTotalCount(cri);
 	}
+
+
+
 
 
 }

@@ -68,7 +68,7 @@ $(document).ready(function(){
 			
 			$(".reStar").css("display", "none");
 			
-			//location.reload();
+			location.reload();
 		}
 	})
 	

@@ -15,8 +15,8 @@ public interface TeamService {
 	//팀신청 등록
 	public int insertTeam(TeamVO teamVO);
 	
-	//팀신청 수정
-	public boolean updateTeam(TeamVO teamVO);
+	//팀신청 수정(제목, 내용)
+	public int updateTeam(TeamVO teamVO);
 	
 	//팀신청 삭제
 	public int deleteTeam(int teamNO);

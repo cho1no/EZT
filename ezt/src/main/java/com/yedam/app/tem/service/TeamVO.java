@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 public class TeamVO {
 	private Integer teamNo;	//팀신청번호
-	private int temNo;
 	private String workTitle;	//팀신청 작업 제목
 	private String workContent;	//팀신청 작업 내용
 	private int writer;	//팀신청자

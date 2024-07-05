@@ -19,6 +19,16 @@ public interface ReviewService {
 	
 	
 	
-	//전체 데이터 갯수
+	//후기 전체 데이터 갯수
 	public int getTotal(Criteria cri);
+	
+	
+	//댓글 조회
+	public WorkerReplyVO replyInfo(WorkerReplyVO replyVO);
+	//댓글 등록
+	public int insertReply(WorkerReplyVO replyVO);
+	//댓글 수정
+	public boolean updateReply(WorkerReplyVO replyVO);
+	//댓글 삭제
+	public int deleteReply(int workerReplyNo);
 }
