@@ -14,17 +14,22 @@ public interface TeamMapper {
 	//팀신청 단건조회
 	public TeamVO teamInfo(TeamVO teamVO);
 	
-	//팀신청 등록
+	//팀신청 등록(제목, 내용)
 	public int insertTeam(TeamVO teamVO);
 	
-	//팀신청 수정
+	//팀신청 수정(제목, 내용)
 	public int updateTeam(TeamVO teamVO);
 	
-	//팀신청 삭제
+	//팀신청 삭제(제목, 내용)
 	public int deleteTeam(int teamNo); 
 	
 	//전체 게시물 갯수
 	public int getTotalCount(Criteria cri);
 	
-
+	
+	//팀신청 삭제 (카테고리,카테고리 별 인원)
+	public int deleteCategory(int teamNo);
+	
+	//팀신청 등록(카테고리, 카테고리 별 인원)
+	public int insertCategory(TeamWorkCategoryVO twcVO);
 }

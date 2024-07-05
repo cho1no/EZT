@@ -19,8 +19,9 @@ import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewService;
 import com.yedam.app.rvw.service.ReviewVO;
+import com.yedam.app.rvw.service.WorkerReplyVO;
 import com.yedam.app.sgi.service.LoginUserVO;
-//리뷰 CRUD
+//리뷰 CRUD 및 댓글 CRUD
 @RequestMapping("review")
 @Controller
 public class ReviewController {
@@ -31,6 +32,7 @@ public class ReviewController {
 	CommonCodeService commonCodeService;
 	@Autowired
 	RequestService requestService;
+
 	
 	//리뷰 전체조회
 	@GetMapping("/list")
@@ -47,14 +49,20 @@ public class ReviewController {
 	
 	//리뷰 상세조회
 	@GetMapping("/info")
-	public String reviewInfo(ReviewVO reviewVO, Model model) {
+	public String reviewInfo(ReviewVO reviewVO,WorkerReplyVO replyVO,  Model model) {
+		//리뷰 조회
 		ReviewVO findVO = reviewService.reviewInfo(reviewVO);
+		model.addAttribute("review",findVO);
 		
+		//공통코드
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
 		model.addAttribute("cttPlace", commonCodeService.selectCommonCodeAll("0P"));
 		model.addAttribute("regionCode", commonCodeService.selectCommonCodeAll("0B"));
 		
-		model.addAttribute("review",findVO);
+		//댓글 조회
+		WorkerReplyVO reply = reviewService.replyInfo(replyVO);			
+		model.addAttribute("reply",reply);
+		
 		return "rvw/reviewInfo";
 	}
 	
@@ -91,6 +99,37 @@ public class ReviewController {
 	@GetMapping("/delete")
 	public String reviewDelete(Integer reviewNo) {
 		reviewService.deleteReview(reviewNo);
+		return "redirect:list";
+	}
+	
+	
+	
+	//댓글 등록
+	@GetMapping("replyInsert")
+	public String replyInsert(Model model) {
+
+		model.addAttribute("reply", new WorkerReplyVO());
+
+		return "rvw/reviewInsert";
+	}
+	
+	@PostMapping("replyInsert")
+	public String replyInsert(WorkerReplyVO replyVO) {
+		reviewService.insertReply(replyVO);
+		return "redirect:list";
+	}
+	
+	//댓글 수정
+	@PostMapping("replyUpdate")
+	@ResponseBody
+	public boolean replyUpdate(@RequestBody WorkerReplyVO replyVO) {
+		return reviewService.updateReply(replyVO);
+	}
+	
+	//댓글 삭제
+	@GetMapping("replyDelete")
+	public String replyDelete(Integer workerReplyNo) {
+		reviewService.deleteReply(workerReplyNo);
 		return "redirect:list";
 	}
 	
