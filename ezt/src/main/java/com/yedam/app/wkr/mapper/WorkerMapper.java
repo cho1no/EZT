@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.rvw.service.ReviewVO;
+import com.yedam.app.usr.service.UserRevCriteria;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
 import com.yedam.app.wkr.service.PortfolioVO;
@@ -62,6 +63,9 @@ public interface WorkerMapper {
 	
 	//작업자 탈퇴(상태수정)
 	public int updateWorkerState(UserVO userVO);
+	
+	//작업자 리뷰 갯수
+	public int getTotalReviewCount(UserRevCriteria cri);
 	
 	
 }

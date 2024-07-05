@@ -12,6 +12,7 @@ import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.tem.service.MemberVO;
+import com.yedam.app.usr.service.UserRevCriteria;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.mapper.WorkerMapper;
 import com.yedam.app.wkr.service.CareerVO;
@@ -130,5 +131,12 @@ public class WorkerServiceImpl implements WorkerService{
 	@Override
 	public boolean workerStateUpdate(UserVO userVO) {
 		return workerMapper.updateWorkerState(userVO) == 1;
+	}
+
+	
+	//후기목록 페이징
+	@Override
+	public int reviewGetTotal(UserRevCriteria cri) {
+		return workerMapper.getTotalReviewCount(cri);
 	}
 }

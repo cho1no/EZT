@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.rvw.service.ReviewVO;
-import com.yedam.app.tem.service.MemberVO;
+import com.yedam.app.usr.service.UserRevCriteria;
 import com.yedam.app.usr.service.UserVO;
 
 @Service
@@ -57,4 +57,7 @@ public interface WorkerService {
 	
 	//회원탈퇴 (상태수정)
 	public boolean workerStateUpdate(UserVO userVO);
+	
+	//전체 리뷰 데이터 갯수
+	public int reviewGetTotal(UserRevCriteria cri);
 }

@@ -20,6 +20,9 @@ import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.mapper.UserMapper;
+import com.yedam.app.usr.service.UserRevCriteria;
+import com.yedam.app.usr.service.UserRevPageDTO;
+import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
 import com.yedam.app.wkr.service.PortfolioVO;
@@ -39,6 +42,9 @@ public class WorkerController {
    
    @Autowired
    SimpleFileService simpleFileService;
+   
+   @Autowired
+   UserService userService; 
    
    @Autowired
    UserMapper userMapper;
@@ -120,12 +126,17 @@ public class WorkerController {
    
    //작업자 후기 목록조회
    @GetMapping("/reviewList")
-   public String workerReviewList(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+   public String workerReviewList(@AuthenticationPrincipal LoginUserVO vo, Model model, UserRevCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
 	   List<ReviewVO> list = workerService.selectWorkerReviewList(vo.getUserVO());
 	   model.addAttribute("reviewList", list);
 	   List<ReviewVO> tList = workerService.selectWorkerTeamReviewList(vo.getUserVO());
 	   model.addAttribute("teamReviewList", tList);
+	   cri.setWriter(vo.getUserVO().getUsersNo());
+	   //페이징
+	   int total = workerService.reviewGetTotal(cri);
+	   model.addAttribute("page", new UserRevPageDTO(cri, total));
+	   
 	   return "wkr/workerReviewList";
    }
    
