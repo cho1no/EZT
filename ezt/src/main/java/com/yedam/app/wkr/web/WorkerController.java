@@ -15,12 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.common.service.SimpleFileService;
+import com.yedam.app.doc.service.ContractVO;
+import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.sgi.service.LoginUserVO;
-import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.usr.mapper.UserMapper;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
+import com.yedam.app.wkr.service.PortfolioVO;
 import com.yedam.app.wkr.service.WorkerService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -116,14 +118,63 @@ public class WorkerController {
 	   return "redirect:/worker/careerList";
    }
    
-   @PostMapping("/reviewList")
+   //작업자 후기 목록조회
+   @GetMapping("/reviewList")
    public String workerReviewList(@AuthenticationPrincipal LoginUserVO vo, Model model) {
 	   model.addAttribute("userVO", vo.getUserVO());
 	   List<ReviewVO> list = workerService.selectWorkerReviewList(vo.getUserVO());
 	   model.addAttribute("reviewList", list);
-	   List<MemberVO> tList = workerService.selectWorkerTeamReviewList(vo.getUserVO());
+	   List<ReviewVO> tList = workerService.selectWorkerTeamReviewList(vo.getUserVO());
 	   model.addAttribute("teamReviewList", tList);
-	   return "";
+	   return "wkr/workerReviewList";
+   }
+   
+   //작업자 의뢰 목록조회
+   @GetMapping("/requestList")
+   public String workerRequestList(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+	   model.addAttribute("userVO", vo.getUserVO());
+	   List<ReviewVO> list = workerService.selectWorkerRequestList(vo.getUserVO());
+	   model.addAttribute("requestList", list);
+	   //팀목록
+//	   List<ReviewVO> tList = workerService.selectWorkerTeamReviewList(vo.getUserVO());
+//	   model.addAttribute("teamRequestList", tList);
+	   return "wkr/workerRequestList";
+   }
+   
+   //작업자 견적서/계약서 목록조회
+   @GetMapping("/documentList")
+   public String workerPpsCttList(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+	   model.addAttribute("userVO", vo.getUserVO());
+	   List<ProposalVO> pList = workerService.selectWorkerProposalList(vo.getUserVO());
+	   model.addAttribute("proposalList", pList);
+	   List<ContractVO> cList = workerService.selectWorkerContractList(vo.getUserVO());
+	   model.addAttribute("contractList", cList);
+	   return "wkr/workerDocumentList";
+   }
+   
+   //작업자 포트폴리오 목록조회
+   @GetMapping("/portfolioList")
+   public String workerpfList(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+	   model.addAttribute("userVO", vo.getUserVO());
+	   List<PortfolioVO> list = workerService.selectWorkerPortfolioList(vo.getUserVO());
+	   model.addAttribute("portfolioList", list);
+	   return "wkr/workerPortfolioList";
+   }   
+   //작업자 포트폴리오 등록 페이지
+   @GetMapping("portfolioInsert")
+   public String workerpfInsertForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+	   model.addAttribute("userVO", vo.getUserVO());
+	   model.addAttribute("categories", commonCodeService.selectCommonCodeAll("0C"));
+	   model.addAttribute("ptf", new PortfolioVO());
+	   return "wkr/workerPortfolioInsert";
+   }
+   //작업자 포트폴리오 등록 기능(처리)
+   @PostMapping("portfolioInsert")
+   public String workerpfInsert(MultipartFile[] uploadFile, PortfolioVO pvo, Model model) {
+	   int result = simpleFileService.uploadFiles(uploadFile);
+	   pvo.setFileId(result);
+	   model.addAttribute("ptf", workerService.insertWorkerPortfolio(pvo));
+	   return "redirect:/worker/workerPortfolioList";
    }
    
    //작업자 탈퇴 (상태 수정) 페이지

@@ -29,6 +29,7 @@ public class ProposalVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updateDt; //수정 일
 	private String proposalState; //견적서 상태
+	private String proposalStateNm; //견적서 상태 이름
 	
 	
 	private List<ProposalDetailVO> list;
@@ -38,7 +39,7 @@ public class ProposalVO {
 	//조인 컬럼
 	private String usersName;  //유저이름
 	private String usersPhone; //유저 휴대폰번호
-	private int total;  //총금액
+	private long total;  //총금액
 	private int contractNo;
 	
 }

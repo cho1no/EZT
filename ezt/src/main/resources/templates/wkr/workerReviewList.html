@@ -8,6 +8,30 @@
 <title>작업자 마이페이지</title>
 </head>
 <body>
+	<h3>[[${userVO.usersName}]]님 안녕하세요.</h3>
+	<hr>
+	<h4>후기 목록</h4>
+	 <th:block th:each="review : ${reviewList}">
+	<div class="list-group">
+	  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+	    <div class="d-flex w-100 justify-content-between">
+		  <h5 class="mb-1">내용 : [[${review.content}]]
+		  	별점 : [[${review.star}]]</h5>
+		  <small>구분 : [[${review.reviewDivision}]]</small>
+		  <small>[[${#dates.format(review.writeDt, 'yyyy-MM-dd')}]]</small>
+		</div>
+	  </a>
+	</div>
+  </th:block>
+  <!-- 페이징 구현 -->
+  
+  <!-- 팀후기목록 -->
+  
 
+  
+  <!-- 페이징 구현 -->
+<script type="text/javascript">
+
+</script>
 </body>
 </html>
