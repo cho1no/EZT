@@ -27,9 +27,30 @@
 	
 	<!-- 후기목록 조회 -->
 	<select id="selectWorkerReviewList" resultType="ReviewVO">
-		SELECT *
-		FROM review
-		WHERE worker = #{usersNo}
+		SELECT c.*
+		FROM (
+			  SELECT ROWNUM as rn
+			  		, a.*
+			  FROM (
+					SELECT *
+					FROM review
+					WHERE worker = #{usersNo}
+					ORDER BY write_dt desc ) a ) c
+		<![CDATA[
+		WHERE c.rn <= #{pageNum} * #{amount} AND
+			  c.rn > (#{pageNum} -1 ) * #{amount}
+		]]>
+	</select>
+	
+	<select id="getTotalReviewCount" resultType="int">
+		SELECT COUNT(*)
+		FROM (
+			  SELECT ROWNUM as rn
+			  		, a.*
+			  FROM (
+					SELECT *
+					FROM review
+					WHERE worker = #{usersNo})
 	</select>
 	<!-- 팀 후기목록 조회 -->
 	<select id="selectWorkerTeamReviewList" resultType="ReviewVO">
@@ -190,4 +211,6 @@
 		SET users_state = quit
 		WHERE users_id = #{usersId}
 	</update>
+	
+	
 </mapper>
