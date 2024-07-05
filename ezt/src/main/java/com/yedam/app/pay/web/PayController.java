@@ -30,6 +30,7 @@ public class PayController {
 	@Autowired
 	PayService payService;
 
+	// 결제 등록 조회
 	@GetMapping("pay")
 	public String pay(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
 		// 계약서 정보 조회

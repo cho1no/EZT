@@ -47,7 +47,8 @@ public class ProposalController {
 	
 	// 견적서 단건조회
 	@GetMapping("ppsInfo")
-	public String ppsInfo(ProposalVO proposalVO, Model model) {
+	public String ppsInfo(ProposalVO proposalVO
+						  , Model model) {
 		// 견적서 정보 조회
 		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO.getProposalNo());
 		model.addAttribute("ppsInfo", findVO);
@@ -68,8 +69,10 @@ public class ProposalController {
 
 	// 견적서 등록
 	@GetMapping("ppsInsert")
-	public String ppsInsert(ProposalVO proposalVO, RequestVO requestVO, Model model,
-			@AuthenticationPrincipal LoginUserVO user) {
+	public String ppsInsert(ProposalVO proposalVO
+							, RequestVO requestVO
+							, Model model
+							, @AuthenticationPrincipal LoginUserVO user) {
 		model.addAttribute("proposalVO", new ProposalVO());
 		// 견적서 의뢰정보조회
 		RequestVO reqVO = ppsSerivce.reqInfo(requestVO.getRequestNo());
@@ -83,17 +86,16 @@ public class ProposalController {
 	}
 
 	@PostMapping("ppsInsert")
-	public String ppsInsertProcess(ProposalVO proposalVO, RequestVO requestVO) {
+	public String ppsInsertProcess(ProposalVO proposalVO
+								   , RequestVO requestVO) {
 
 		int no = ppsSerivce.ppsInsert(proposalVO);
 		String url = null;
 
-		RequestVO reqVO = ppsSerivce.reqInfo(requestVO.getRequestNo());
-
 		if (no > -1) {
 			url = "redirect:ppsInfo?proposalNo=" + no ;
 		} else {
-			url = "redirect:ppsInsert?requestNo=" + reqVO.getRequestNo();
+			url = "redirect:ppsInsert?requestNo=" + proposalVO.getRequestNo();
 		}
 
 		return url;
@@ -101,8 +103,10 @@ public class ProposalController {
 
 	// 견적서 수정
 	@GetMapping("ppsUpdate")
-	public String ppsUpdate(RequestVO requestVO, ProposalVO proposalVO, Model model,
-			@AuthenticationPrincipal LoginUserVO user) {
+	public String ppsUpdate(RequestVO requestVO
+							, ProposalVO proposalVO
+							, Model model
+							, @AuthenticationPrincipal LoginUserVO user) {
 		// 견적서 정보 조회
 		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO.getProposalNo());
 		model.addAttribute("ppsInfo", findVO);
@@ -130,66 +134,43 @@ public class ProposalController {
 		ppsSerivce.ppsDelete(proposalNo);
 		return "redirect:main";
 	}
-
-	// 견적서 단건 전송
-	@GetMapping("ppsSend")
-	public String ppsSend(ProposalVO proposalVO) {
-		ppsSerivce.ppsFileUpdate(proposalVO);
-		return "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo();
-	}
-
-	// 폴더 저장 경로
-	private String getForder() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-		Date date = new Date();
-		String str = sdf.format(date);
-		return str.replace("-", File.separator);
-	}
-
-	// 이미지 체크
-	private boolean checkImageType(File file) {
-		try {
-			String contentType = Files.probeContentType(file.toPath());
-
-			return contentType.startsWith("image");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+	
 	// 파일 업로드
 	@PostMapping(value = "/uploadAjaxAction", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> uploadAjaxPost(MultipartFile[] uploadFile, ProposalVO proposalVO) {
-		
-		List<FileVO> list = fileService.uploadFiles(uploadFile);
-		// proposalVO에 값 넣기
-		proposalVO.setFileList(list);
+	public ResponseEntity<String> uploadAjaxPost(MultipartFile[] uploadFile
+												, ProposalVO proposalVO) {
+		if(uploadFile != null && uploadFile.length > 0) {
+			List<FileVO> list = fileService.uploadFiles(uploadFile);
+			if (!list.isEmpty()) {
+			// proposalVO에 값 넣기
+			proposalVO.setFileList(list);
+			}
+		}
 		ppsSerivce.ppsFileUpdate(proposalVO);
 
-		return new ResponseEntity<>("String", HttpStatus.OK);
+		return new ResponseEntity<>("true", HttpStatus.OK);
 	}
 	// 파일 다운로드
 	@GetMapping(value = "/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-	@ResponseBody
 	public ResponseEntity<Resource> downloadFile(String fileName) {
 
 		return fileService.downlodeFile(fileName);
 	}
+	
 	// 파일 삭제
 	@PostMapping("/deleteFile")
 	@ResponseBody
-	public ResponseEntity<String> deleteFile(@RequestBody List<FileVO> fileVO, ProposalVO proposalVO)
+	public ResponseEntity<String> deleteFile(@RequestBody List<FileVO> fileVO
+											, ProposalVO proposalVO)
 			throws UnsupportedEncodingException {
 
-		int no = fileService.deleteFile(fileVO);
+		fileService.deleteFile(fileVO);
+		ppsSerivce.ppsFileDelete(fileVO.get(0).getFileId());
 
-		if(no > 0) {
-			ppsSerivce.ppsFileDelete(fileVO.get(0).getFileId());
-			}
 		return new ResponseEntity<String>("deleted", HttpStatus.OK);
 
 	}
+	
 	// 견적서 승인
 	@GetMapping("ppsApprove")
 	public String ppsApprove(ProposalVO proposalVO) {

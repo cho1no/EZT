@@ -1,6 +1,18 @@
 package com.yedam.app.doc.service;
 
+import java.util.List;
+
+import com.yedam.app.common.service.CommonCodeVO;
+import com.yedam.app.common.service.FileVO;
+
 public interface ContractService {
+	
+	// 은행 코드 조회
+	public List<CommonCodeVO> bankcodeSelect();
+	// 통일 계약서 조회
+	public UnityContractVO unityConSelect();
+	// 계약서 등록된 통일 계약서 조회
+	public UnityContractVO IncludeUnityCon(int contractNo);
 
 	// 계약서 등록&상세
 	public int conInsert(ContractVO contracVO);
@@ -10,6 +22,9 @@ public interface ContractService {
 	
 	// 계약서 수정
 	public int conUpdate(ContractVO contractVO);
+	
+	// 파일 조회
+	public List<FileVO> fileSelect(ContractVO contractVO);
 	
 	// 계약서 전송
 	public int conSend(ContractVO contractVO);

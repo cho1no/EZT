@@ -38,9 +38,9 @@ public class ProposalServiceImpl implements ProposalService {
 	// 견적서 단건조회 & 상세 동시 처리
 	@Override
 	public ProposalVO ppsInfo(int proposalNo) {
+		ProposalVO pps = ppsMapper.selectPpsInfo(proposalNo);
 		List<ProposalDetailVO> list = ppsMapper.selectPpsDetailList(proposalNo);
 		List<FileVO> fileList = fileMapper.selectProFileList(proposalNo);
-		ProposalVO pps = ppsMapper.selectPpsInfo(proposalNo);
 		pps.setList(list);
 		pps.setFileList(fileList);
 		return pps;
@@ -77,17 +77,10 @@ public class ProposalServiceImpl implements ProposalService {
 	// 견적서 삭제
 	@Override
 	public int ppsDelete(int proposalNo) {
-		boolean result = false;
-		if (ppsMapper.deletePpsDetailInfo(proposalNo) == 1) {
-			result = true;
-		}
+		ppsMapper.deletePpsDetailInfo(proposalNo);
+		int success = ppsMapper.deletePpsInfo(proposalNo);
+		return success == 1 ? proposalNo: -1;
 
-		if (result == true) {
-			int success = ppsMapper.deletePpsInfo(proposalNo);
-			return success == 1 ? 1 : -1;
-		} else {
-			return -1;
-		}
 	}
 
 	// 견적서 목록 조회(특정 의뢰와 관련해 본인이 작성한 견적서 목록)
@@ -101,7 +94,7 @@ public class ProposalServiceImpl implements ProposalService {
 	public int ppsFileUpdate(ProposalVO proposalVO) {
 		
 		if (proposalVO.getFileList() != null) {
-				fileMapper.insertFileAttrProInfo(proposalVO);
+			fileMapper.insertFileAttrProInfo(proposalVO);
 			proposalVO.getFileList().forEach(e -> {
 				e.setFileId(proposalVO.getFileId());
 				fileMapper.insertFileInfo(e);

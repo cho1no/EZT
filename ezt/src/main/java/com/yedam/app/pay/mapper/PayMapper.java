@@ -9,4 +9,6 @@ public interface PayMapper {
 	
 	// 결제 조회
 	public PayVO selectPayInfo(PayVO payVO);
+	
+	// 
 }

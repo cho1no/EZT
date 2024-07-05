@@ -1,5 +1,6 @@
 package com.yedam.app.doc.web;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.service.ContractService;
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalService;
 import com.yedam.app.doc.service.ProposalVO;
-import com.yedam.app.doc.service.SignsVO;
+import com.yedam.app.doc.service.UnityContractVO;
 import com.yedam.app.fie.service.FileService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.sgi.service.LoginUserVO;
@@ -38,7 +40,9 @@ public class ContractController {
 
 	// 계약서 등록
 	@GetMapping("conInsert")
-	public String conInsert(ProposalVO proposalVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
+	public String conInsert(ProposalVO proposalVO
+							, Model model
+							, @AuthenticationPrincipal LoginUserVO user) {
 
 		model.addAttribute("contractVO", new ContractVO());
 
@@ -54,12 +58,20 @@ public class ContractController {
 		// 의뢰 정보 조회
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
+		
+		// 은행 코드 조회
+		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
+		model.addAttribute("code", codeVO);
+		// 통일 계약서 조회
+		UnityContractVO unityVO = conService.unityConSelect();
+		model.addAttribute("unity", unityVO);
 
 		return "doc/contractInsert";
 	}
 
 	@PostMapping(value = "/conInsert", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> uploadAjaxPost(MultipartFile[] uploadFile, ContractVO contractVO) {
+	public ResponseEntity<String> uploadAjaxPost(MultipartFile[] uploadFile
+												, ContractVO contractVO) {
 
 		List<FileVO> list = fileService.uploadFiles(uploadFile);
 		if (!list.isEmpty()) {
@@ -72,7 +84,9 @@ public class ContractController {
 
 	// 계약서 상세
 	@GetMapping("conInfo")
-	public String conInfo(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
+	public String conInfo(ContractVO contractVO
+						  , Model model
+						  , @AuthenticationPrincipal LoginUserVO user) {
 
 		// 계약서 정보 조회
 		ContractVO findVO = conService.conInfo(contractVO);
@@ -89,6 +103,10 @@ public class ContractController {
 		// 의뢰 정보 조회
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
+		
+		// 통일 계약서 조회
+		UnityContractVO unityVO = conService.unityConSelect();
+		model.addAttribute("unity", unityVO);
 
 		return "doc/contractInfo";
 
@@ -96,7 +114,9 @@ public class ContractController {
 
 	// 계약서 수정
 	@GetMapping("conUpdate")
-	public String conUpdate(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
+	public String conUpdate(ContractVO contractVO
+							, Model model
+							, @AuthenticationPrincipal LoginUserVO user) {
 
 		// 계약서 정보 조회
 		ContractVO findVO = conService.conInfo(contractVO);
@@ -114,16 +134,33 @@ public class ContractController {
 		// 의뢰 정보 조회
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
+		
+		// 은행 코드 조회
+		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
+		model.addAttribute("code", codeVO);
+		// 통일 계약서 조회
+		UnityContractVO unityVO = conService.unityConSelect();
+		model.addAttribute("unity", unityVO);
 
 		return "doc/contractUpdate";
 
 	}
 
 	@PostMapping(value = "/conUpdate", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> uploadAjaxPostUpdate(MultipartFile[] uploadFile, ContractVO contractVO) {
-
+	public ResponseEntity<String> uploadAjaxPostUpdate(MultipartFile[] uploadFile
+													   , ContractVO contractVO) {
+		// 파일 삭제
+		List<FileVO> fileList = conService.fileSelect(contractVO);
+		if(!fileList.isEmpty()) {
+			try {
+				fileService.deleteFile(fileList);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}}
+		
+		// 수정
 		if (uploadFile != null) {
-
+			
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
 			if (!list.isEmpty()) {
 				contractVO.setFileList(list);
@@ -136,7 +173,9 @@ public class ContractController {
 
 	// 계약서 수정
 	@GetMapping("conWrite")
-	public String conWrite(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
+	public String conWrite(ContractVO contractVO
+						   , Model model
+						   , @AuthenticationPrincipal LoginUserVO user) {
 
 		// 계약서 정보 조회
 		ContractVO findVO = conService.conInfo(contractVO);
@@ -154,6 +193,13 @@ public class ContractController {
 		// 의뢰 정보 조회
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
+		
+		// 은행 코드 조회
+		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
+		model.addAttribute("code", codeVO);
+		// 통일 계약서 조회
+		UnityContractVO unityVO = conService.unityConSelect();
+		model.addAttribute("unity", unityVO);
 
 		return "doc/contractWrite";
 

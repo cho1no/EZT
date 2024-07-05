@@ -74,6 +74,15 @@ canvas {
 	/* bug fix - no overlay */
 	display: none;
 }
+
+.dropdown button {
+	height: 35px;
+}
+
+.unity{
+	word-break : keep-all;
+	overflow-wrap : break-word;
+}
 </style>
 </head>
 <body>
@@ -89,17 +98,18 @@ canvas {
 								<b>계약서 수정</b>
 							</h3>
 							<input type="hidden" name="contractNo"
-								th:value="${con.contractNo}"> <input
-								type="hidden" name="requesterInfo" th:value="${con.requesterInfo}">
-							<input type="hidden" name="requesterAddress"> <input
-								type="hidden" name="type" value=1>
-								<input type="hidden" name="uploadFile" >
+								th:value="${con.contractNo}"> <input type="hidden"
+								name="requesterInfo" th:value="${con.requesterInfo}"> <input
+								type="hidden" name="requesterAddress"> <input
+								type="hidden" name="requesterBankcode"> <input
+								type="hidden" name="type" value=1> <input type="hidden"
+								name="uploadFile">
 							<p class="hr-sect">
 								<b>공사개요</b>
 							</p>
 							<div class="row form-group">
 								<div class="col-6">
-									<label><b>공사명</b></label> 
+									<label><b>공사명</b></label>
 									<p class="text-black">[[${con.cttName}]]</p>
 								</div>
 							</div>
@@ -119,12 +129,12 @@ canvas {
 							<!-- datepicker : id&type="text"-->
 							<div class="row form-group">
 								<div class="col-4">
-									<label for="startDt"><b>공사시작날짜</b></label> 
+									<label for="startDt"><b>공사시작날짜</b></label>
 									<p class="text-black">[[${#dates.format(con.cttStartDt,
 										'yyyy-MM-dd')}]]</p>
 								</div>
 								<div class="col-4">
-									<label for="endDt"><b>공사마감날짜</b></label> 
+									<label for="endDt"><b>공사마감날짜</b></label>
 									<p class="text-black">[[${#dates.format(con.cttEndDt,
 										'yyyy-MM-dd')}]]</p>
 								</div>
@@ -192,21 +202,15 @@ canvas {
 											<div class="accordion-item">
 												<h3 class="mb-0 heading ms-1">
 													<a class="btn-block h4" data-toggle="collapse"
-														href="#collapseFive" role="button" aria-expanded="true"
-														aria-controls="collapseFive">제1조 (공사내역)<span
+														href="#collapseFive" role="button" aria-expanded="false"
+														aria-controls="collapseFive">[[${unity.title}]]<span
 														class="icon"></span>
 													</a>
 												</h3>
-												<div id="collapseFive" class="collapse show"
+												<div id="collapseFive" class="collapse"
 													aria-labelledby="headingOne" data-parent="#accordion">
-													<div class="body-text">
-														<p>① “을”은 공사착수 전 “갑”에게 설계도서(도면, 시방서, 공사내역서 등)를 제출하여
-															승인을 득하여야 한다.</p>
-														<p>② 공사에 사용할 재료의 품질 및 규격은 설계서와 일치되어야 한다. 다만, 설계도서에
-															품질․품명이 명 확히 규정되지 아니하거나 해당 재료가 품절인 경우 상호 협의하여 달리 결정할 수 있다.
-														</p>
-														<p>③ 전항의 합의가 없는 경우 공사에 사용할 재료는 표준품 또는 표준품에 상당하는 재료로서
-															계약의 목적을 달성하는데 가장 적합한 것으로 한다.</p>
+													<div class="body-text unity">
+														<p>[[${unity.contractTermsContent}]]</p>
 													</div>
 												</div>
 											</div>
@@ -270,6 +274,17 @@ canvas {
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
+													<select class="selectpicker show-tick form-control" id="select_req"
+														data-style="btn-white py-0 pb-2 m-0" data-width="100%"
+														data-live-search="true" title="은행 선택">
+														<th:block th:each=" list : ${code}">
+															<option>[[${list.codeName+'('+list.codeNo+')'}]]</option>
+														</th:block>
+													</select>
+												</div></li>
+											<li class="mb-2 row form-group"><div class="col-4">
+												</div>
+												<div class="col">
 													<input type="text" class="form-control"
 														name="requesterAccount" th:value="${con.requesterAccount}">
 												</div></li>
@@ -277,14 +292,15 @@ canvas {
 													<strong class="text-black">서명</strong>
 												</div>
 												<div class="col">
-												<button type="button"
+													<button type="button"
 														class="btn btn-outline-success sendBtn"
 														data-bs-toggle="modal" data-bs-target="#sendModal">서명
 														하기</button>
 												</div>
 												<div class="h-75">
-												<div id="input_sign_req" class="text-center mt-2">
-												<canvas id="signatureCanvas_req"></canvas></div>
+													<div id="input_sign_req" class="text-center mt-2">
+														<canvas id="signatureCanvas_req"></canvas>
+													</div>
 												</div></li>
 										</ul>
 									</div>
@@ -319,7 +335,8 @@ canvas {
 													<strong class="text-black">주소</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0" id="input_addr_work"></p>
+													<p class="text-black" style="margin: 5px 0"
+														id="input_addr_work"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">상세주소</strong>
@@ -336,6 +353,11 @@ canvas {
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
+												</div>
+												<div class="col">
+													<p class="text-black" style="margin: 5px 0">[[${con.workerBankcode}]]</p>
+												</div></li>
+											<li class="mb-2 row form-group"><div class="col-4">
 												</div>
 												<div class="col">
 													<p class="text-black" style="margin: 5px 0">[[${con.workerAccount}]]</p>
@@ -374,7 +396,8 @@ canvas {
 								id="updateBtn">수정 완료</button>
 						</div>
 						<div class="col-6">
-							<button class="btn btn-block btn-primary btn-md" onClick="history.back();">뒤로가기</button>
+							<button class="btn btn-block btn-primary btn-md"
+								onClick="history.back();">뒤로가기</button>
 						</div>
 					</div>
 				</div>
@@ -383,7 +406,7 @@ canvas {
 	</section>
 
 
-<!-- Modal -->
+	<!-- Modal -->
 	<div class="modal fade" id="sendModal" tabindex="-1"
 		aria-labelledby="sendModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered  modal-sm">
@@ -393,7 +416,7 @@ canvas {
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
-				<div class="modal-body" style="height:180px">
+				<div class="modal-body" style="height: 180px">
 					<form method="post" action="" class="sigPad">
 						<ul class="sigNav">
 							<li class="drawIt"><a href="#draw-it">그리기</a></li>
@@ -446,18 +469,12 @@ canvas {
     $('#input_detailAddr').val(req_addr.substring(req_num2 + 1,));
     }
     
-    
-	
-	
-	// 업데이트 전 데이터 추가
-	$('button[type="button"]').on('click', function(e) {
-		
-			$('input[name="requesterAddress"]').val($('#input_postcode').val() + '_' 
-					+ $('#input_addr').val() + '_' + $('#input_detailAddr').val())
-
-	});
-
-
+ 	// 은행 표기
+    $('.select_req').attr('title', /*[[${con.workerBankcode}]]*/"");
+ 	// 통일 계약서 표기
+    var unity_origin = /*[[${unity.contractTermsContent}]]*/""
+    var unity_content = unity_origin.replaceAll('\n', '<br />');
+    $('.unity p').html(unity_content);
 	
 	var proposalNo = [[${con.proposalNo}]];
 	
@@ -466,7 +483,17 @@ canvas {
 	$('#updateBtn').on('click', insertAjax );
 	
 	function insertAjax(e){
+		// 폼 데이터 처리
+		$('input[name="requesterAddress"]').val($('#input_postcode').val() + '_' 
+				+ $('#input_addr').val() + '_' + $('#input_detailAddr').val());
 		
+		var bankcode = $('.dropdown button div div div').html();
+		var bank_num1 = bankcode.indexOf('(');
+		if(bankcode != /*[[${con.requesterBankcode}]]*/"" || bankcode != '은행 선택'){
+			$('input[name="requesterBankcode"]').val(bankcode.substring(bank_num1+1).replace(')', ''));
+		}
+		
+		// 폼 데이터 전송
 		var formData = new FormData(document.conUpdateForm);
 		
 		formData.append("reqSign.signsContent", reqNewSign);
@@ -547,7 +574,6 @@ $('.sigPad').signaturePad({drawOnly:true});
 $('#saveModal').click(function(e) {
 	event.preventDefault(); // 폼의 기본 제출 동작을 방지
 
-	$('#input_sign canvas').remove();
 		
     // 서명 데이터를 JSON 형식으로 가져오기
     var signatureData = $('.sigPad').signaturePad().getSignatureString();
@@ -579,7 +605,7 @@ $('#saveModal').click(function(e) {
 
 	<!-- uploadAjax -->
 	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
-	
+
 	<!-- 서명 -->
 	<script src="/js/doc/json2.min.js"></script>
 </body>

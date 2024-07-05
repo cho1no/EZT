@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.mapper.ContractMapper;
 import com.yedam.app.doc.mapper.FileMapper;
@@ -13,6 +14,7 @@ import com.yedam.app.doc.service.ContractDetailVO;
 import com.yedam.app.doc.service.ContractService;
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.SignsVO;
+import com.yedam.app.doc.service.UnityContractVO;
 
 @Service
 public class ContractServiceImpl implements ContractService {
@@ -26,6 +28,25 @@ public class ContractServiceImpl implements ContractService {
 	@Autowired
 	FileMapper fileMapper;
 
+	// 은행 코드 조회
+	@Override
+	public List<CommonCodeVO> bankcodeSelect() {
+		List<CommonCodeVO> codeVO = conMapper.selectBankcode();
+		return codeVO;
+	}
+	// 통일 계약서 조회
+	@Override
+	public UnityContractVO unityConSelect() {
+		UnityContractVO unityVO = conMapper.selectUnityCon();
+		return unityVO;
+	}
+	// 계약서 등록된 통일 계약서 조회
+	@Override
+	public UnityContractVO IncludeUnityCon(int contractNo) {
+		UnityContractVO unityVO = conMapper.selectIncludetUnityCon(contractNo);
+		return unityVO;
+	}
+	
 	// 계약서 등록
 	@Override
 	public int conInsert(ContractVO contractVO) {
@@ -109,7 +130,7 @@ public class ContractServiceImpl implements ContractService {
 	// 계약서 수정
 	@Override
 	public int conUpdate(ContractVO contractVO) {
-		System.out.println("++++++++++++++++++++++" + contractVO);
+
 		// 계약서 수정
 		int result = conMapper.updateConInfo(contractVO);
 		// 계약서 상세 삭제 후 등록
@@ -156,6 +177,12 @@ public class ContractServiceImpl implements ContractService {
 		}
 		
 		return result == 1 ? contractVO.getContractNo() : -1;
+	}
+	
+	// 파일 조회
+	@Override
+	public List<FileVO> fileSelect(ContractVO contractVO) {
+		return fileMapper.selectConFileList(contractVO.getContractNo());
 	}
 	
 	// 계약서 전송

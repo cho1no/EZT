@@ -27,6 +27,8 @@ public class ContractVO {
 	private Date writeDt; // 작성 일
 	private Date updateDt; // 수정 일
 	private String contractState; // 계약서 상태
+	private String requesterBankcode; // 의뢰자 은행코드
+	private String workerBankcode; // 작업자 은행코드
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date cttStartDt; // 공사 시작 일
@@ -45,4 +47,6 @@ public class ContractVO {
 	private String usersPhone;
 	
 	private int type;
+	
+	private String contractStateNm;
 }
