@@ -13,6 +13,7 @@ import com.yedam.app.sgi.handler.LoginFailHandler;
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
+	
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -22,11 +23,16 @@ public class SpringSecurityConfig {
     LoginFailHandler loginFailHandler() {
 		return new LoginFailHandler();
 	}
-	
+//    @Bean
+//    AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+//        return http.getSharedObject(AuthenticationManagerBuilder.class)
+//                .build();
+//    }
 	
 	@Bean
 	SecurityFilterChain filterChin(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()
+//		        .antMatchers("/adm/**").authenticated()
 				.antMatchers("/", "/main", "/findIdPw/**", "/review/**", "/request/**","/adm/**", "/api/**", "/verify/**", "/login/**", "/signUp/**", "/css/**", "/fonts/**", "/images/**", "/js/**").permitAll()
 				.antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				.antMatchers("/worker/**").hasAnyRole("WORKER", "ADMIN")
