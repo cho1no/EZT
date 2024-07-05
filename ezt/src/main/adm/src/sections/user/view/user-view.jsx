@@ -18,13 +18,13 @@ import { fDateTime } from 'src/utils/format-time';
 
 import Scrollbar from 'src/components/scrollbar';
 
-import TableNoData from '../table-no-data';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
-import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
-import { style, boxStyle, contentStyle } from '../../../theme/css';
+import TableNoData from '../../common-table/table-no-data';
+import TableEmptyRows from '../../common-table/table-empty-rows';
+import { style, boxStyle, contentStyle } from '../../common-table/css';
+import { emptyRows, applyFilter, getComparator } from '../../common-table/utils';
 // ----------------------------------------------------------------------
 
 export default function UserPage() {
@@ -61,6 +61,7 @@ export default function UserPage() {
             usersJoinDt: _.usersJoinDt,
             usersRole: _.usersRole,
             usersState: _.usersState,
+            usersStateNm: _.usersStateNm,
           }))
         );
       })
@@ -156,7 +157,7 @@ export default function UserPage() {
                     { id: 'usersPhone', label: '전화번호' },
                     { id: 'usersJoinDt', label: '가입일' },
                     { id: 'usersRole', label: '구분' },
-                    { id: 'usersState', label: '활동상태', align: 'center' },
+                    { id: 'usersStateNm', label: '활동상태', align: 'center' },
                   ]}
                 />
                 <TableBody>
@@ -173,6 +174,7 @@ export default function UserPage() {
                         joinDt={row.usersJoinDt}
                         role={row.usersRole}
                         state={row.usersState}
+                        stateNm={row.usersStateNm}
                         onClick={() => handleOpen(row.usersNo)}
                       />
                     ))}

@@ -32,6 +32,9 @@ public interface AdminMapper {
 	public UnityContractVO selectUnityContract(int no);
 	// 통일 계약서 등록 하기
 	public int insertUnityContract(UnityContractVO vo);
+	// 통일 계약서 기본계약서 여부 처리
+	public int updateUnityContractBasicTfN(); // 전체 N
+	public int updateUnityContractBasicTfY(int no); // 전체 Y
 	
 	
 	// 경력 인증 신청 전체 가져오기
@@ -42,4 +45,8 @@ public interface AdminMapper {
 	public int updateCareerAccept(int no);
 	// 경력 인증 반려
 	public int updateCareerDeny(int no);
+	// 경력 인증 반려 사유 등록
+	public int insertCareerDeny(Map<String, String> map);
+	// 경력 인증 반려 사유 삭제
+	public int deleteCareerDeny(int no);
 }

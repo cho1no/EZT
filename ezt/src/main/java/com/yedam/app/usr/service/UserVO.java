@@ -57,7 +57,7 @@ public class UserVO {
 	private Date usersStateChangeDt;
 	
 	private String usersState;
-	
+	private String usersStateNm;
 	
 	private Integer licenseNo;
 	private String licenseDetailNo;

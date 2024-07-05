@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.aspectj.weaver.tools.UnsupportedPointcutPrimitiveException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class SimpleFileServiceImpl implements SimpleFileService {
+	@Value("${file.upload.path}")
+	private String uploadFolder;
+	
 	@Autowired SimpleFileMapper sfm;
 	@Autowired FileService fsvc;
+	
 	// 폴더 저장 경로
 	private String getForder() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -56,7 +61,7 @@ public class SimpleFileServiceImpl implements SimpleFileService {
 	
 	public List<FileVO> uploadFile(MultipartFile[] uploadFile) {
 		// 폴더 경로
-		String uploadFolder = "C:\\temp";
+//		String uploadFolder = "C:\\temp";
 		List<FileVO> list = new ArrayList<>();
 
 		String uploadFolderPath = getForder();

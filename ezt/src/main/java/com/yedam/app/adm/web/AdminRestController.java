@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -88,10 +90,13 @@ public class AdminRestController {
 	// 통일 계약서 등록
 	@PostMapping("/postUnityContract")
 	public UnityContractVO postUnityContract(@RequestBody UnityContractVO vo) {
-		admSvc.postUnityContract(vo);
-		return vo;
+		return admSvc.postUnityContract(vo);
 	}
-	
+	// 기본 계약서 업데이트
+	@GetMapping("/putUnityBasic/{no}")
+	public int putUnityContract(@PathVariable int no) {
+		return admSvc.putUnityContractBasicTf(no);
+	}
 	
 	// 경력 인증 전체 조회
 	@GetMapping("/careersInfo")
@@ -108,9 +113,14 @@ public class AdminRestController {
 	public int setCareerAccept(@PathVariable int careerNo) {
 		return admSvc.setCareerAccept(careerNo);
 	}
-	// 경력 인증 반려
+	// 경력 인증 반려 <- 사용 X
 	@GetMapping("/careerDeny/{careerNo}")
 	public int setCareerDeny(@PathVariable int careerNo) {
 		return admSvc.setCareerDeny(careerNo);
+	}
+	// 경력인증 반려 사유 등록
+	@PostMapping("/careerDeny")
+	public int postCareerDeny(@RequestBody Map<String, String> map) {
+		return admSvc.postCareerDeny(map);
 	}
 }

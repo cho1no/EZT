@@ -1,11 +1,7 @@
 import PropTypes from 'prop-types';
 
-import Grid from '@mui/material/Grid';
-// import Button from '@mui/material/Button';
-// import Tooltip from '@mui/material/Tooltip';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-// import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 
@@ -13,12 +9,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function CareerTableToolbar({
-  //  numSelected,
-  filterName,
-  onFilterName,
-  onNewContract,
-}) {
+export default function CareerTableToolbar({ filterName, onFilterName }) {
   return (
     <Toolbar
       sx={{
@@ -27,11 +18,8 @@ export default function CareerTableToolbar({
         justifyContent: 'space-between',
       }}
     >
-      <Grid container spacing={2}>
-        <Grid item>
-          <Typography variant="h4">통일 계약서 관리</Typography>
-        </Grid>
-      </Grid>
+      <Typography variant="h4">경력 인증 관리</Typography>
+
       <OutlinedInput
         value={filterName}
         onChange={onFilterName}
@@ -50,8 +38,6 @@ export default function CareerTableToolbar({
 }
 
 CareerTableToolbar.propTypes = {
-  // numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
-  onNewContract: PropTypes.func,
 };

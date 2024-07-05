@@ -20,13 +20,13 @@ import { fDateTime } from 'src/utils/format-time';
 
 import Scrollbar from 'src/components/scrollbar';
 
-import TableNoData from '../../user/table-no-data';
 import ContractTableRow from '../contract-table-row';
 import ContractTableHead from '../contract-table-head';
-import TableEmptyRows from '../../user/table-empty-rows';
+import TableNoData from '../../common-table/table-no-data';
 import ContractTableToolbar from '../contract-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
-import { style, contentStyle, textareaStyle } from '../../../theme/css';
+import TableEmptyRows from '../../common-table/table-empty-rows';
+import { style, contentStyle, textareaStyle } from '../../common-table/css';
+import { emptyRows, showAlert, applyFilter, getComparator } from '../../common-table/utils';
 // ----------------------------------------------------------------------
 
 export default function ContractPage() {
@@ -110,9 +110,29 @@ export default function ContractPage() {
   // 계약서 등록
   const postConstract = async () => {
     const postData = await axios.post('/adm/postUnityContract', contractInfo);
+    console.log(postData.data);
     setContracts([postData.data, ...contracts]);
+    showAlert('success', '계약서 등록 성공');
   };
-
+  // 기본계약서 지정
+  const putBasicContract = async () => {
+    const putData = await axios.get(`/adm/putUnityBasic/${contractInfo.unityContractNo}`);
+    if (putData.data > 0) {
+      showAlert('success', '기본 계약서 변경 완료');
+      setContracts(updateContracts());
+      setContractInfo({ ...contractInfo, basicContractTf: 'Y' });
+    } else {
+      showAlert('error', '기본 계약서 변경 실패');
+    }
+  };
+  // list의 상태 업데이트
+  const updateContracts = () =>
+    contracts.map((obj) => {
+      if (obj.unityContractNo === contractInfo.unityContractNo) {
+        return { ...obj, basicContractTf: 'Y' };
+      }
+      return { ...obj, basicContractTf: 'N' };
+    });
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -162,8 +182,8 @@ export default function ContractPage() {
                     { id: 'title', label: '제목' },
                     { id: 'changes', label: '변경사항' },
                     { id: 'writeDt', label: '작성일' },
-                    { id: 'useTf', label: '사용여부', width: '12%' },
-                    { id: 'basicContractTf', label: '기본 계약서 여부', width: '12%' },
+                    { id: 'useTf', label: '사용여부', align: 'center' },
+                    { id: 'basicContractTf', label: '기본 계약서 여부', align: 'center' },
                   ]}
                 />
                 <TableBody>
@@ -211,9 +231,16 @@ export default function ContractPage() {
         aria-describedby="modal-modal-description"
       >
         <Card sx={{ ...style, width: '50%' }}>
-          <Typography variant="h6" component="h2">
-            통일 계약서 정보
-          </Typography>
+          <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="h6" component="h2">
+              통일 계약서 정보
+            </Typography>
+            {!isEdit && contractInfo.basicContractTf === 'N' && (
+              <Button variant="contained" color="primary" onClick={putBasicContract}>
+                기본 계약서로 지정
+              </Button>
+            )}
+          </Grid>
           <CardContent sx={contentStyle}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -247,34 +274,38 @@ export default function ContractPage() {
                   required
                 />
               </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">작성일</Typography>
-                <TextField
-                  variant="outlined"
-                  value={fDateTime(contractInfo.writeDt, 'yyyy/MM/dd hh:mm')}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item container spacing={2} xs={12}>
-                <Grid item xs={6}>
-                  <Typography variant="subtitle1">기본 계약서 여부</Typography>
-                  <TextField
-                    variant="outlined"
-                    value={contractInfo.basicContractTf || ''}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="subtitle1">사용 여부</Typography>
-                  <TextField variant="outlined" value={contractInfo.useTf || ''} fullWidth />
-                </Grid>
-              </Grid>
+              {!isEdit && (
+                <>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1">작성일</Typography>
+                    <TextField
+                      variant="outlined"
+                      value={fDateTime(contractInfo.writeDt, 'yyyy/MM/dd hh:mm')}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item container spacing={2} xs={12}>
+                    <Grid item xs={6}>
+                      <Typography variant="subtitle1">기본 계약서 여부</Typography>
+                      <TextField
+                        variant="outlined"
+                        value={contractInfo.basicContractTf || ''}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="subtitle1">사용 여부</Typography>
+                      <TextField variant="outlined" value={contractInfo.useTf || ''} fullWidth />
+                    </Grid>
+                  </Grid>
+                </>
+              )}
             </Grid>
           </CardContent>
           <Button
             variant="contained"
             fullWidth
-            color={isEdit ? 'success' : 'warning'}
+            color={isEdit ? 'success' : 'primary'}
             sx={buttonStyle}
             onClick={async () => {
               if (isEdit) {

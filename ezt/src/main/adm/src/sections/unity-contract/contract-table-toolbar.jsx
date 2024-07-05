@@ -2,10 +2,8 @@ import PropTypes from 'prop-types';
 
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-// import Tooltip from '@mui/material/Tooltip';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-// import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 
@@ -13,12 +11,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function ContractTableToolbar({
-  //  numSelected,
-  filterName,
-  onFilterName,
-  onNewContract,
-}) {
+export default function ContractTableToolbar({ filterName, onFilterName, onNewContract }) {
   return (
     <Toolbar
       sx={{
@@ -60,7 +53,6 @@ export default function ContractTableToolbar({
 }
 
 ContractTableToolbar.propTypes = {
-  // numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
   onNewContract: PropTypes.func,
