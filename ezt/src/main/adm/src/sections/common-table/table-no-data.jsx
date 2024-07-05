@@ -22,7 +22,6 @@ export default function TableNoData({ query }) {
 
           <Typography variant="body2">
             <strong>&quot;{query}&quot;</strong>에 대한 검색결과가 없습니다.
-            {/* <br /> Try checking for typos or using complete words. */}
           </Typography>
         </Paper>
       </TableCell>

@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Swal from 'sweetalert2';
+
 export const visuallyHidden = {
   border: 0,
   margin: -1,
@@ -53,4 +56,14 @@ export function applyFilter({ inputData, comparator, filterName }) {
   }
 
   return inputData;
+}
+
+export function showAlert(icon, title) {
+  Swal.fire({
+    icon,
+    title,
+    showConfirmButton: false,
+    timer: 900,
+    width: '30%',
+  });
 }

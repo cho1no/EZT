@@ -3,6 +3,8 @@ package com.yedam.app.adm.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,16 +63,22 @@ public class AdminServiceImpl implements AdminService{
 	public List<UnityContractVO> getUnityContracts() {
 		return admMapper.selectUnityContracts();
 	}
-
 	@Override
 	public UnityContractVO getUnityContract(int no) {
 		return admMapper.selectUnityContract(no);
 	}
 	@Override
-	public int postUnityContract(UnityContractVO vo) {
-		return admMapper.insertUnityContract(vo);
+	@Transactional
+	public UnityContractVO postUnityContract(UnityContractVO vo) {
+		admMapper.insertUnityContract(vo);	
+		return admMapper.selectUnityContract(vo.getUnityContractNo());
 	}
-
+	@Override
+	@Transactional
+	public int putUnityContractBasicTf(int no) {
+		admMapper.updateUnityContractBasicTfN();
+		return admMapper.updateUnityContractBasicTfY(no);
+	}
 	
 	// 경력 인증 관련
 	@Override
@@ -84,13 +92,23 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
+	@Transactional
 	public int setCareerAccept(int no) {
+		admMapper.deleteCareerDeny(no);
 		return admMapper.updateCareerAccept(no);
 	}
 
 	@Override
 	public int setCareerDeny(int no) {
 		return admMapper.updateCareerDeny(no);
+	}
+
+	@Override
+	@Transactional
+	public int postCareerDeny(Map<String, String> map) {
+		admMapper.deleteCareerDeny(Integer.parseInt(map.get("careerNo")));
+		admMapper.updateCareerDeny(Integer.parseInt(map.get("careerNo")));
+		return admMapper.insertCareerDeny(map);
 	}
 	
 }

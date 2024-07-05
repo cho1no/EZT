@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import axios from 'axios';
+// eslint-disable-next-line import/no-extraneous-dependencies
+// import Swal from 'sweetalert2';
 import { useState, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
@@ -9,7 +11,6 @@ import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
-// import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import TableContainer from '@mui/material/TableContainer';
@@ -21,12 +22,12 @@ import { fDateTime } from 'src/utils/format-time';
 import Scrollbar from 'src/components/scrollbar';
 
 import CareerTableRow from '../career-table-row';
-import TableNoData from '../../user/table-no-data';
 import CareerTableHead from '../career-table-head';
-import TableEmptyRows from '../../user/table-empty-rows';
 import CareerTableToolbar from '../career-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
-import { style, boxStyle, contentStyle, textareaStyle } from '../../../theme/css';
+import TableNoData from '../../common-table/table-no-data';
+import TableEmptyRows from '../../common-table/table-empty-rows';
+import { style, boxStyle, contentStyle, textareaStyle } from '../../common-table/css';
+import { emptyRows, showAlert, applyFilter, getComparator } from '../../common-table/utils';
 // ----------------------------------------------------------------------
 
 export default function CareerPage() {
@@ -108,8 +109,43 @@ export default function CareerPage() {
   const setInputValue = (event) => {
     const { value } = event.target;
     setDenyReason(value);
-    // console.log(value);
   };
+  // 승인 처리
+  const setCareerAccept = async () => {
+    const accept = await axios.get(`/adm/careerAccept/${careerInfo.careerNo}`);
+    if (accept.data === 1) {
+      setCareer(updateCareer('A02', '승인'));
+      setCareerInfo({ ...careerInfo, careerAccessTf: 'A02', careerAccessTfNm: '승인' });
+      showAlert('success', '승인 처리 되었습니다.');
+    } else {
+      showAlert('error', '승인 처리에 실패했습니다.');
+    }
+  };
+  // 반려사유 등록
+  const postCareerDeny = async () => {
+    const data = {
+      content: denyReason,
+      writer: 10000, // 로그인 JWT 받아와야함
+      careerNo: careerInfo.careerNo,
+    };
+    const deny = await axios.post(`/adm/careerDeny`, data);
+    if (deny.data === 1) {
+      setCareer(updateCareer('A03', '반려'));
+      setCareerInfo({ ...careerInfo, careerAccessTf: 'A03', careerAccessTfNm: '반려' });
+      showAlert('success', '반려 처리 되었습니다.');
+      handleCloseDeny();
+    } else {
+      showAlert('error', '반려 처리에 실패했습니다.');
+    }
+  };
+  // list의 상태 업데이트 (state : 'A02'승인, 'A03'반려)
+  const updateCareer = (state, stateNm) =>
+    career.map((obj) => {
+      if (obj.careerNo === careerInfo.careerNo) {
+        return { ...obj, careerAccessTf: state, careerAccessTfNm: stateNm };
+      }
+      return obj;
+    });
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -129,7 +165,26 @@ export default function CareerPage() {
     filterName,
   });
   const notFound = !dataFiltered.length && !!filterName;
-
+  // eslint-disable-next-line react/no-unstable-nested-components
+  function DenyBtn() {
+    return (
+      <Grid item xs>
+        <Button variant="contained" fullWidth color="error" onClick={handleOpenDeny}>
+          반려하기
+        </Button>
+      </Grid>
+    );
+  }
+  // eslint-disable-next-line react/no-unstable-nested-components
+  function AcceptBtn() {
+    return (
+      <Grid item xs>
+        <Button variant="contained" fullWidth color="success" onClick={setCareerAccept}>
+          승인하기
+        </Button>
+      </Grid>
+    );
+  }
   return (
     <>
       <Container>
@@ -242,37 +297,18 @@ export default function CareerPage() {
             </Grid>
           </CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Button
-                variant="contained"
-                fullWidth
-                color="success"
-                onClick={async () => {
-                  await axios
-                    .get(`/adm/careerAccept/${careerInfo.careerNo}`)
-                    .then((resp) => {
-                      console.log(resp);
-                      console.log(career);
-                      setCareer(
-                        career.map((obj) => {
-                          if (obj.careerNo === careerInfo.careerNo) {
-                            return { ...obj, careerAccessTf: 'A02', careerAccessTfNm: '승인' };
-                          }
-                          return obj;
-                        })
-                      );
-                    })
-                    .catch();
-                }}
-              >
-                승인하기
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button variant="contained" fullWidth color="error" onClick={handleOpenDeny}>
-                반려하기
-              </Button>
-            </Grid>
+            {
+              {
+                A01: (
+                  <>
+                    <AcceptBtn />
+                    <DenyBtn />
+                  </>
+                ),
+                A02: <DenyBtn />,
+                A03: <AcceptBtn />,
+              }[careerInfo.careerAccessTf]
+            }
           </Grid>
         </Card>
       </Modal>
@@ -281,37 +317,27 @@ export default function CareerPage() {
         onClose={handleCloseDeny}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        id="myModal"
       >
-        <Card sx={{ ...style, width: '50%', height: '60%' }}>
+        <Card sx={{ ...style, width: '50%', height: '40%' }}>
           <Typography variant="h6" component="h2">
             반려사유 작성
           </Typography>
           <CardContent sx={contentStyle}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">반려사유</Typography>
-                <TextareaAutosize
-                  id="denyReason"
-                  style={{ ...textareaStyle, height: 380 }}
-                  value={denyReason}
-                  onChange={setInputValue}
-                  required
-                />
-              </Grid>
-            </Grid>
+            <TextareaAutosize
+              id="denyReason"
+              style={{ ...textareaStyle, height: 200 }}
+              value={denyReason}
+              onChange={setInputValue}
+              required
+            />
           </CardContent>
           <Button
             variant="contained"
+            sx={{ bottom: '30px' }}
             fullWidth
             color="error"
-            onClick={async () => {
-              await axios
-                .get(`/adm/careerDeny/${careerInfo.careerNo}`)
-                .then((resp) => {
-                  console.log(resp);
-                })
-                .catch();
-            }}
+            onClick={postCareerDeny}
           >
             반려확정
           </Button>

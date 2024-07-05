@@ -41,7 +41,8 @@
 				, users_gender
 				, users_name
 				, users_phone
-				, FIND_COMMONCODE(users_state) users_state
+				, users_state
+				, FIND_COMMONCODE(users_state) users_state_nm
 				, users_nick
 				, users_role
 				, users_join_dt
@@ -116,13 +117,25 @@
 			, contract_terms_content
 			, title
 			, changes
+			, basic_contract_tf
 		) VALUES (
 			SEQ_UNITYCONTRACT.NEXTVAL
 			, #{contractTermsContent}
 			, #{title}
 			, #{changes}
+			, 'N'
 		)
 	</insert>
+	<update id="updateUnityContractBasicTfN">
+		UPDATE unity_contract
+		SET basic_contract_tf = 'N'
+	</update>
+	<update id="updateUnityContractBasicTfY">
+		UPDATE unity_contract
+		SET basic_contract_tf = 'Y'
+		WHERE unity_contract_no = #{no}
+	</update>
+	
 	
 	<!-- 경력 인증 관련 -->
 	<select id="selectCareers" resultType="CareerVO">
@@ -168,4 +181,19 @@
 		SET career_access_tf = 'A03'
 		WHERE career_no = #{no}
 	</update>
+	<insert id="insertCareerDeny" parameterType="Map">
+		INSERT INTO career_deny(
+			content
+			, writer
+			, career_no
+		) VALUES (
+			#{content}
+			, #{writer}
+			, #{careerNo}
+		)
+	</insert>
+	<delete id="deleteCareerDeny" parameterType="int">
+		DELETE FROM career_deny
+		WHERE career_no = #{no}
+	</delete>
 </mapper>

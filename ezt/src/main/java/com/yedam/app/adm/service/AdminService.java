@@ -31,8 +31,9 @@ public interface AdminService {
 	// 통일 계약서 단건 조회
 	public UnityContractVO getUnityContract(int no);
 	// 통일 계약서 등록
-	public int postUnityContract(UnityContractVO vo);
-	
+	public UnityContractVO postUnityContract(UnityContractVO vo);
+	// 통일 계약서 기본 게약서 업데이트
+	public int putUnityContractBasicTf(int no);
 	
 	// 경력 인증 전체 조회
 	public List<CareerVO> getCareers();
@@ -40,7 +41,9 @@ public interface AdminService {
 	public CareerVO getCareer(int no);
 	// 경력 인증 승인
 	public int setCareerAccept(int no);
-	// 경력 인증 승인
+	// 경력 인증 반려
 	public int setCareerDeny(int no);
+	// 경력 인증 반려 사유 등록
+	public int postCareerDeny(Map<String, String> map);
 	
 }
