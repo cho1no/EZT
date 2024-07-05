@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/worker_mypage_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>작업자 마이페이지</title>
+<style>
+div.careerList {
+	margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<h3>[[${userVO.usersName}]]님 의</h3>
+<hr>
+<h4>포트폴리오 목록</h4>
+<div>
+	<label for="usersName">성명</label>
+	<input class="form-control d-inline-flex col-2"
+	  type="text" id="usersName" th:value="${userVO.usersName}" disabled readonly>
+</div>
+<div class="row row-cols-1 row-cols-md-3">
+	<th:block th:each="ptf : ${portfolioList}">
+			<div class="card col-4" style="width: 18rem;">
+				<div class="card-body">
+					
+					<h5 class="card-title">
+						<label for="ptfTitle">제목</label>
+					</h5>
+					<p class="card-text">
+					  <input class="form-control d-inline-flex col-12" type="text"
+					    id="ptfTitle" th:value="${ptf.title}" disabled>
+					</p>
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+					  <label for="ptfContent">내용</label>
+					  <input class="form-control d-inline-flex col-7" type="text"
+					  	 id="ptfContent" th:value="${ptf.content}" disabled>
+					  <label for="ptfPyung">평수</label>
+					  <input class="form-control d-inline-flex col-6" type="text"
+						 id="ptfPyung" th:value="${ptf.careerAccessTf}" disabled>
+					  <label for="ptfPrice">금액</label>
+					  <input class="form-control d-inline-flex col-6" type="text"
+						 id="ptfPrice" th:value="${ptf.careerAccessTf}" disabled>
+					</li>
+					<li class="list-group-item">
+					  <label for="ptfWriteDt">작성일</label>
+					</li>
+					<li class="list-group-item">
+					<input class="form-control  d-inline-flex" type="text"
+					  id="ptfWriteDt"
+					  th:value="${#dates.format(ptf.writeDt,'yyyy-MM-dd')}"
+					  disabled readonly>
+					</li>
+				</ul>
+				<div class="card-body">
+					<a href="#" class="card-link">File link</a>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</body>
+</html>

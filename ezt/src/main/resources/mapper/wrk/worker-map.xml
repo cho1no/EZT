@@ -25,20 +25,63 @@
 		WHERE users_no = #{usersNo}
 	</select>
 	
+	<!-- 후기목록 조회 -->
 	<select id="selectWorkerReviewList" resultType="ReviewVO">
 		SELECT *
 		FROM review
-		WHERE worker = #{usersNo};
+		WHERE worker = #{usersNo}
 	</select>
-	
-	<select id="selectWorkerTeamReviewList" resultType="MemberVO">
+	<!-- 팀 후기목록 조회 -->
+	<select id="selectWorkerTeamReviewList" resultType="ReviewVO">
 		SELECT *
 		FROM review
 		WHERE worker IN (SELECT writer
                  		 FROM team
                  		 WHERE team_no IN (SELECT team_no
                                    		   FROM member
-                                   		   WHERE users_no = #{usersNo}));
+                                   		   WHERE users_no = #{usersNo}))
+	</select>
+	
+	<!--  의뢰 목록 조회 -->
+	<select id="selectWorkerRequestList" resultType="RequestVO">
+		SELECT title
+			   , write_dt
+			   , FIND_COMMONCODE(request_state) as request_state_nm
+		FROM request
+		WHERE request_no IN (SELECT request_no
+		                     FROM proposal
+		                     WHERE proposal_state = 'A02'
+		                     		AND worker = #{usersNo})
+	</select>
+	<!--  팀 의뢰 목록 조회 -->
+<!-- 	<select id="selectWorkerTeamRequestList"> -->
+	
+<!-- 	</select> -->
+
+	<!-- 견적서 목록 조회 -->
+	<select id="selectWorkerProposalList" resultType="ProposalVO">
+		SELECT p.*
+			   , FIND_COMMONCODE(p.proposal_state) as proposal_state_nm
+        	   , (SELECT SUM(pd.unitprice * pd.qty)
+	              FROM proposal_detail pd
+	              WHERE pd.proposal_no = p.proposal_no) as total
+		FROM proposal p
+		WHERE worker = #{usersNo}
+		ORDER BY update_dt
+	</select>
+	<!-- 계약서 목록 조회 -->
+	<select id="selectWorkerContractList" resultType="ContractVO">
+		SELECT c.*, FIND_COMMONCODE(c.contract_state) as contract_state_nm
+		FROM contract c
+		WHERE worker_info = #{usersNo}
+		ORDER BY c.update_dt
+	</select>
+	
+	<!-- 포트폴리오 목록조회 -->
+	<select id="selectWorkerPortfolioList" resultType="PortfolioVO">
+		SELECT *
+		FROM portfolio
+		WHERE users_no = #{usersNo}
 	</select>
 	
 	<!-- 작업자 정보수정 -->
@@ -51,7 +94,42 @@
 		DELETE FROM active_category
 		WHERE users_no = #{usersNo}
 	</delete>
-
+	
+	<!-- 포트폴리오 등록 -->
+	<insert id="insertWorkerPortfolio" parameterType="PortfolioVO">
+		INSERT ALL 
+		INTO portfolio ( portfolio_no
+								, title
+								, content
+								, pyung
+								, price
+								, users_no
+								, file_id
+								, write_dt
+								, update_dt
+								, work_time
+							  )VALUES(
+							  	SEQ_PORTFOLIO.NEXTVAL
+								, #{title}
+								, #{content}
+								, #{pyung}
+								, #{price}
+								, #{usersNo}
+								, #{fileId}
+								, sysdate
+								, #{updateDt}
+								, #{workTime}
+							  )
+							  
+		<foreach item="category" collection="categoryCode" separator="">
+		INTO active_category( users_no, category_code )
+		VALUES (#{usersNo}, #{category} )
+		</foreach>
+		
+		SELECT *
+		FROM dual
+	</insert>
+	
 	<insert id="insertWorkerCode" parameterType="UserVO">
 		INSERT ALL
 		
@@ -106,7 +184,7 @@
 		WHERE users_id = #{usersId}
 	</update>
 
-	
+	<!-- 작업자 탈퇴 -->
 	<update id="updateWorkerState" parameterType="UserVO">
 		UPDATE users
 		SET users_state = quit
