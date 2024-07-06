@@ -3,17 +3,15 @@ package com.yedam.app;
 import java.util.List;
 import java.util.Map;
 
-import javax.crypto.SecretKey;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.yedam.app.api.service.NhDevService;
 import com.yedam.app.common.mapper.ProcessMapper;
+import com.yedam.app.pay.mapper.PayMapper;
 import com.yedam.app.pay.service.PayVO;
 
-import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
@@ -21,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class SchedulerClient {
 	@Autowired NhDevService nhDevSvc;
 	@Autowired ProcessMapper procMap;
-	
+	@Autowired PayMapper payMapper;
 //	@Test
 	public void testCheck() {
 		List<PayVO> payList = procMap.selectPayList();
@@ -40,5 +38,12 @@ public class SchedulerClient {
 	}
 	@Test
 	public void testJWT() {
+		List<Map<String, String>> list = payMapper.selectPaymentDtInfo();
+		log.info(list.toString());
+		list.forEach(e -> {
+//			log.info(e.toString());
+			log.info(e.get("USERSNAME"));
+			log.info(String.valueOf(e.get("PRICE")));
+		});
 	}
 }

@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yedam.app.adm.service.AdminService;
 import com.yedam.app.doc.service.UnityContractVO;
+import com.yedam.app.jwt.service.impl.JwtTokenProvider;
 import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
@@ -31,6 +33,22 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminRestController {
 	@Autowired
 	AdminService admSvc;
+	@Autowired
+	JwtTokenProvider jwtTokenProvider;
+	// 로그인 토큰 발급
+	@GetMapping("logInfo")
+	public Map<String, Object> getLogInfo(@AuthenticationPrincipal LoginUserVO vo, HttpServletRequest req) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("token",  jwtTokenProvider.createToken(vo.getUserNo().toString(), vo.getUserVO().getUsersRole()));
+//		req.getSession().setAttribute("token", map.get("token"));
+		return map;
+	}
+	// 토큰에서 userId받기
+	@GetMapping("getUserInfo/{token}")
+	public String getAuth(@PathVariable String token) {
+		return jwtTokenProvider.getUserPk(token);
+	}
+	
 	
 	// 통계(메인페이지)
 	@GetMapping("/getStatistic")
@@ -43,15 +61,6 @@ public class AdminRestController {
 		return map;
 	}
 
-	// 로그인 유저 반환
-	@GetMapping("logInfo")
-	public Map<String, Object> getLogInfo(@AuthenticationPrincipal LoginUserVO vo) {
-		Map<String, Object> map = new HashMap<>();
-		map.put("id", vo.getUsername());
-		map.put("auth", vo.getAuthorities());
-
-		return map;
-	}
 
 	// 회원 전체 조회
 	@GetMapping("/usersInfo")
