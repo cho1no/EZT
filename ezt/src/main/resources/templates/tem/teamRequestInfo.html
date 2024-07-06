@@ -12,7 +12,7 @@
     background: transparent;
 	border:none;
     font-size:14px;
-    margin:3px;
+    margin:1px;
     width:70px;
 }
 </style>
@@ -20,7 +20,7 @@
 <form name="infoForm" th:object="${team}">
 <h4>팀 신청 상세보기</h4>
 			<input type="hidden" th:field="*{teamNo}">
-	<table class="table">
+	<table class="table team">
 		<tr>
 			<th>제목</th>
 			<td colspan="3"><input class="border border-light" th:field="*{workTitle}" readonly></td>
@@ -33,23 +33,32 @@
 			<th></th>
 			<td colspan="3"><a>의뢰 상세보기</a></td>
 		</tr>
+	</table>
+</form>
+	<table class="table">
 		<tr>
 			<th colspan="4">모집분야/인원</th>
 		</tr>
 		<th:block th:each="twc :${team.workCategoryVO}">
 			<tr id="detail">
 				<th></th>
+				<input type="hidden" th:value="${twc.teamNo}">
+				<input type="hidden" th:value="${twc.categoryCode}">
+				
 				<td><select th:value="${twc.categoryCode}" name="categoryCode" disabled >
                         <option th:each="category :${categoryCode}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
                     </select></td>
 				<td> [[${twc.partCount}]] / <input class="border border-light" th:value="${twc.headcount}" name="headcount" readonly></td>
-				<td><button class="btnn">신청자 확인하기</button></td>
+				<td>
+					<button class="btnn">신청자 확인하기</button> 
+					<button class="btnn">수정</button> 
+					<button class="btnn"  th:onclick="|location.href='@{/team/teamDetailDelete(teamNo=${twc.teamNo},workCode=${twc.workCode})}'|" >삭제</button>
+				</td>
 			</tr>
 		</th:block>
 	</table>
 	<button type="button" class="btn btn-primary upBtn update" >수정</button>
-	<button type="button" class="btn btn-primary" >삭제</button>
-</form>
+	<button type="button" class="btn btn-primary">삭제</button>
 <script src="/js/tem/teamRequestUpdate.js"></script>
 </body>
 </html>
