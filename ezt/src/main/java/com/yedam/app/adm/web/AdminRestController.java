@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yedam.app.adm.service.AdminService;
 import com.yedam.app.doc.service.UnityContractVO;
-import com.yedam.app.jwt.service.impl.JwtTokenProvider;
-import com.yedam.app.sgi.service.LoginUserVO;
+import com.yedam.app.jwt.service.impl.JwtProvider;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
 
@@ -34,14 +31,17 @@ public class AdminRestController {
 	@Autowired
 	AdminService admSvc;
 	@Autowired
-	JwtTokenProvider jwtTokenProvider;
+	JwtProvider jwtTokenProvider;
 	// 로그인 토큰 발급
 	@GetMapping("logInfo")
-	public Map<String, Object> getLogInfo(@AuthenticationPrincipal LoginUserVO vo, HttpServletRequest req) {
+	public String getLogInfo(Authentication authentication) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("token",  jwtTokenProvider.createToken(vo.getUserNo().toString(), vo.getUserVO().getUsersRole()));
-//		req.getSession().setAttribute("token", map.get("token"));
-		return map;
+		if (authentication != null && authentication.getAuthorities().stream().anyMatch(a->a.getAuthority().equals("ROLE_ADMIN"))) {
+			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+			String token = jwtTokenProvider.createToken(userDetails.getUsername(), "ROLE_ADMIN");
+			return token;
+		}
+		return "접근 권한이 없습니다.";
 	}
 	// 토큰에서 userId받기
 	@GetMapping("getUserInfo/{token}")

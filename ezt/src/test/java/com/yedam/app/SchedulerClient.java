@@ -38,12 +38,6 @@ public class SchedulerClient {
 	}
 	@Test
 	public void testJWT() {
-		List<Map<String, String>> list = payMapper.selectPaymentDtInfo();
-		log.info(list.toString());
-		list.forEach(e -> {
-//			log.info(e.toString());
-			log.info(e.get("USERSNAME"));
-			log.info(String.valueOf(e.get("PRICE")));
-		});
+
 	}
 }
