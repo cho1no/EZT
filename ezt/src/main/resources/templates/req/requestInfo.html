@@ -67,7 +67,7 @@
                 <tr>
                     <td><h4>의뢰 내용</h4></td>
                     <td><button type="button" class="btn btn-secondary upBtn update">수정</button></td>
-                    <td><button type="button" class="btn btn-secondary delBtn" th:onclick="|location.href='@{delete(requestNo=${request.requestNo})}'|">삭제</button></td>
+                    <td><button type="button" class="btn btn-secondary delBtn" th:onclick="|location.href='@{/request/delete(requestNo=${request.requestNo})}'|">삭제</button></td>
                 </tr>
                 <tr>
                     <th>의뢰자명</th>

@@ -16,7 +16,7 @@ public interface TeamService {
 	public int insertTeam(TeamVO teamVO);
 	
 	//팀신청 수정(제목, 내용)
-	public int updateTeam(TeamVO teamVO);
+	public boolean updateTeam(TeamVO teamVO);
 	
 	//팀신청 삭제
 	public int deleteTeam(int teamNO);
@@ -24,4 +24,11 @@ public interface TeamService {
 	//전체 데이터 갯수
 	public int getTotal(Criteria cri);
 
+	
+	//팀 신청 상세 등록
+	public int insertCategory(TeamWorkCategoryVO twcVO);
+	//팀 신청 상세 수정
+	public boolean updateCategory(TeamWorkCategoryVO twcVO);
+	//팀 신청 상세 삭제
+	public int deleteCategory(TeamWorkCategoryVO twcVO);
 }
