@@ -3,7 +3,7 @@ package com.yedam.app.usr.service;
 import lombok.Data;
 
 @Data
-public class UserRevCriteria {
+public class UserRvwCriteria {
 	//페이징
 	private int pageNum;
 	private int amount;
@@ -13,10 +13,10 @@ public class UserRevCriteria {
 	private String type;
 	private String keyword;
 	
-	public UserRevCriteria() {
+	public UserRvwCriteria() {
 		this(1,5);
 	}
-	public UserRevCriteria(int pageNum, int amount) {
+	public UserRvwCriteria(int pageNum, int amount) {
 		this.pageNum = pageNum;
 		this.amount = amount;
 	}

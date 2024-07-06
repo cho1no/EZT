@@ -8,9 +8,7 @@
 <title>작업자 마이페이지</title>
 </head>
 <body>
-	<h3>[[${userVO.usersName}]]님 안녕하세요.</h3>
-	<hr>
-	<h4>의뢰 목록</h4>
+	<h3>[[${userVO.usersName}]]님의 의뢰목록</h3>
 
   <div class="row row-cols-3 row-cols-md-2 g-2">
   <th:block th:each="req : ${requestList}">
@@ -26,14 +24,8 @@
 	  </div>
   </th:block>	
 </div>
+<!-- 팀 의뢰목록 -->
   <!-- 페이징 구현 -->
   
-  
-  <div>
-  <h4>팀 의뢰 목록</h4>
- 
-  </div>
-  
-  <!-- 페이징 구현 -->
 </body>
 </html>

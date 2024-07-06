@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/worker_mypage_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>작업자 마이페이지</title>
+</head>
+<body>
+	<h4>[[${userVO.usersName}]]님의 자격증 목록</h4>
+
+<ul class="list-group list-group-flush">
+  <th:block th:each="lic : ${licenseList}">
+    <ol class="list-group ">
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+        <div class="fw-bold">[[${lic.licenseInfo}]]</div>
+          [[${#dates.format(lic.writeDt, 'yyyy-MM-dd')}]]
+        </div>
+        <span class="badge"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">상세보기</button></span>
+        <!-- Modal -->
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h1 class="modal-title fs-5" id="exampleModalLabel">자격증 정보</h1>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-body">
+		        <ul class="list-group list-group-flush">
+				  <li class="list-group-item">[[${lic.licenseInfo}]]</li>
+<!-- 				  <li class="list-group-item">[[${lic.fileId}]]</li> -->
+				  <li class="list-group-item">발급일 : [[${#dates.format(lic.licenseGetDt, 'yyyy-MM-dd')}]]</li>
+				  <li class="list-group-item">인증기관 : [[${lic.checkCenter}]]</li>
+				  <li class="list-group-item">등록일 : [[${#dates.format(lic.writeDt, 'yyyy-MM-dd')}]]</li>
+				</ul>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+      </li>
+    </ol>
+  </th:block>
+</ul>
+
+
+  <!-- 페이징 구현 -->
+   <div class="row pagination-wrap mt-5" >
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+          <a th:if="${page.prev}" th:href="@{/worker/licenseList(pageNum=${page.startPage - 1})}" class="prev">Prev</a>
+          <div class="d-inline-block" id="pagination">
+            <th:block th:each="num : ${#numbers.sequence(page.startPage, page.endPage)}">
+       	      <a th:class="${page.cri.pageNum == num ? 'active' : ''}" th:href="|@{/worker/licenseList(pageNum=${num})}|" >[[${num}]]</a>
+	  	 	</th:block> 
+          </div>
+          <a th:if="${page.next}" th:href="@{/worker/licenseList(pageNum=${page.endPage + 1})}" class="next">Next</a>
+        </div>
+      </div>
+    </div>
+  
+ <!-- Button trigger modal -->
+
+
+
+</body>
+</html>

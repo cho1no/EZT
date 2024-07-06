@@ -12,7 +12,7 @@ import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.usr.mapper.UserMapper;
 import com.yedam.app.usr.service.UserReqCriteria;
-import com.yedam.app.usr.service.UserRevCriteria;
+import com.yedam.app.usr.service.UserRvwCriteria;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
 
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService{
 
 	//후기목록
 	@Override
-	public List<ReviewVO> userReviewList(UserRevCriteria cri) {
+	public List<ReviewVO> userReviewList(UserRvwCriteria cri) {
 		return userMapper.selectUserRvwList(cri);
 	}
 	
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService{
 	
 	//후기 목록 페이징()
 	@Override
-	public int reviewGetTotal(UserRevCriteria cri) {
+	public int reviewGetTotal(UserRvwCriteria cri) {
 		return userMapper.getTotalReviewCount(cri);
 	}
 	

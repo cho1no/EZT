@@ -103,25 +103,26 @@
 	
 	<select id="selectUserRvwList" resultType="ReviewVO">
 		SELECT c.*
-		FROM (
-			SELECT ROWNUM as rn
-				, a.*	
-			FROM (SELECT re.request_no
-				   , re.star
-				   , re.content 
-				   , USERNAME(re.worker) as worker_name
-				   , re.review_division
-				   , FIND_COMMONCODE(rq.category_code) as category_code
-				   , FIND_COMMONCODE(rq.region_code) as region_code
-			FROM review re
-			    JOIN request rq
-			    ON re.request_no = rq.request_no
-			WHERE re.writer = #{writer}
-			ORDER BY re.request_no desc ) a ) c
-			<![CDATA[
-			WHERE c.rn <= #{pageNum} * #{amount} AND
-				  c.rn > (${pageNum} -1 ) * #{amount}
-			]]>
+		FROM (	SELECT ROWNUM as rn
+					, a.*	
+				FROM (SELECT re.request_no
+					   , re.star
+					   , re.content 
+					   , USERNAME(re.worker) as worker_name
+					   , re.review_division
+					   , FIND_COMMONCODE(rq.category_code) as category_code
+					   , FIND_COMMONCODE(rq.region_code) as region_code
+					  FROM review re
+					      JOIN request rq
+				  	      ON re.request_no = rq.request_no
+					  WHERE re.writer = #{writer}
+					  ORDER BY re.request_no desc 
+					  ) a 
+			  ) c
+		 <![CDATA[
+		 WHERE c.rn <= #{pageNum} * #{amount} AND
+		 	   c.rn > (${pageNum} -1 ) * #{amount}
+		 ]]>
 	</select>
 	
 	<select id="selectUserReqList" resultType="RequestVO">

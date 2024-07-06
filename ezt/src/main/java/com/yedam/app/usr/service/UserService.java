@@ -18,7 +18,7 @@ public interface UserService {
 	public boolean updateUserPw(UserVO userVO);
 
 	//후기목록 조회
-	public List<ReviewVO> userReviewList(UserRevCriteria cri);
+	public List<ReviewVO> userReviewList(UserRvwCriteria cri);
 	
 	//의뢰목록 조회
 	public List<RequestVO> userReqList(UserReqCriteria cri);
@@ -28,7 +28,7 @@ public interface UserService {
 	
 	
 	//전체 리뷰 데이터 갯수
-	public int reviewGetTotal(UserRevCriteria cri);
+	public int reviewGetTotal(UserRvwCriteria cri);
 	
 	//전체 의뢰 데이터 갯수
 	public int requestGetTotal(UserReqCriteria cri);

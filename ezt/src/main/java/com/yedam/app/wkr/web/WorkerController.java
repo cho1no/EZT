@@ -20,12 +20,15 @@ import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.mapper.UserMapper;
-import com.yedam.app.usr.service.UserRevCriteria;
-import com.yedam.app.usr.service.UserRevPageDTO;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
+import com.yedam.app.wkr.service.LicenseVO;
 import com.yedam.app.wkr.service.PortfolioVO;
+import com.yedam.app.wkr.service.WorkerLcsCriteria;
+import com.yedam.app.wkr.service.WorkerLcsPageDTO;
+import com.yedam.app.wkr.service.WorkerRvwCriteria;
+import com.yedam.app.wkr.service.WorkerRvwPageDTO;
 import com.yedam.app.wkr.service.WorkerService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -126,17 +129,18 @@ public class WorkerController {
    
    //작업자 후기 목록조회
    @GetMapping("/reviewList")
-   public String workerReviewList(@AuthenticationPrincipal LoginUserVO vo, Model model, UserRevCriteria cri) {
+   public String workerReviewList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
-	   List<ReviewVO> list = workerService.selectWorkerReviewList(vo.getUserVO());
+	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   List<ReviewVO> list = workerService.selectWorkerReviewList(cri);
 	   model.addAttribute("reviewList", list);
-	   List<ReviewVO> tList = workerService.selectWorkerTeamReviewList(vo.getUserVO());
+	   List<ReviewVO> tList = workerService.selectWorkerTeamReviewList(cri);
 	   model.addAttribute("teamReviewList", tList);
-	   cri.setWriter(vo.getUserVO().getUsersNo());
 	   //페이징
-	   int total = workerService.reviewGetTotal(cri);
-	   model.addAttribute("page", new UserRevPageDTO(cri, total));
-	   
+	   int total = workerService.workerReviewGetTotal(cri);
+	   model.addAttribute("page", new WorkerRvwPageDTO(cri, total));
+	   int tTotal = workerService.workerTeamReviewGetTotal(cri);
+	   model.addAttribute("tPage", new WorkerRvwPageDTO(cri, tTotal));
 	   return "wkr/workerReviewList";
    }
    
@@ -169,6 +173,10 @@ public class WorkerController {
 	   model.addAttribute("userVO", vo.getUserVO());
 	   List<PortfolioVO> list = workerService.selectWorkerPortfolioList(vo.getUserVO());
 	   model.addAttribute("portfolioList", list);
+	   
+	   //페이징
+//	   int total = workerService.workerLicenseGetTotal(cri);
+//	   model.addAttribute("page", new WorkerLcsPageDTO(cri, total));
 	   return "wkr/workerPortfolioList";
    }   
    //작업자 포트폴리오 등록 페이지
@@ -188,12 +196,45 @@ public class WorkerController {
 	   return "redirect:/worker/workerPortfolioList";
    }
    
+   //작업자 자격증 목록조회
+   @GetMapping("licenseList")
+   public String workerLicenseList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerLcsCriteria cri) {
+	   model.addAttribute("userVO", vo.getUserVO());
+	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   List<LicenseVO> list = workerService.selectWorkerLicenseList(cri);
+	   model.addAttribute("licenseList", list);
+	   
+	   //페이징
+	   int total = workerService.workerLicenseGetTotal(cri);
+	   model.addAttribute("page", new WorkerLcsPageDTO(cri, total));
+	   return "wkr/workerLicenseList";
+   }
+   
+   //작업자 자격증 등록 페이지
+   @GetMapping("licenseInsert")
+   public String workerLicenseForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+	   model.addAttribute("userVO", vo.getUserVO());
+	   model.addAttribute("lcs", new LicenseVO());
+	   return "wkr/workerLicenseInsert";
+   }
+   
+   //작업자 자격증 등록 기능(처리)
+   @PostMapping("licenseInsert")
+   public String workerLicenseInsert(MultipartFile[] uploadFile, LicenseVO lvo, Model model) {
+	   int result = simpleFileService.uploadFiles(uploadFile);
+	   lvo.setFileId(result);
+	   model.addAttribute("lcs", workerService.insertWorkerLicense(lvo));
+	   return "redirect:/workerLicenseList";
+   }
+   
+   
    //작업자 탈퇴 (상태 수정) 페이지
    @GetMapping("/quit")
    public String workerStateUpdateForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
       model.addAttribute("userId", vo.getUserVO());
       return "wkr/workerStateUpdate";
    }
+   
    
    //작업자 탈퇴 기능 (상태 수정)
    @PostMapping("/quit")

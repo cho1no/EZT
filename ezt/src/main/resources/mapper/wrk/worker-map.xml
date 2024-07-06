@@ -42,25 +42,48 @@
 		]]>
 	</select>
 	
-	<select id="getTotalReviewCount" resultType="int">
+	<select id="getWorkerTotalReviewCount" resultType="int">
 		SELECT COUNT(*)
-		FROM (
-			  SELECT ROWNUM as rn
-			  		, a.*
-			  FROM (
-					SELECT *
-					FROM review
-					WHERE worker = #{usersNo})
+		FROM (SELECT *
+			  FROM review
+			  WHERE worker = #{usersNo})
 	</select>
 	<!-- 팀 후기목록 조회 -->
 	<select id="selectWorkerTeamReviewList" resultType="ReviewVO">
-		SELECT *
-		FROM review
-		WHERE worker IN (SELECT writer
-                 		 FROM team
-                 		 WHERE team_no IN (SELECT team_no
-                                   		   FROM member
-                                   		   WHERE users_no = #{usersNo}))
+	SELECT c.*
+	FROM (
+		  SELECT ROWNUM as rn
+		  		, a.*
+		  FROM (SELECT *
+				FROM review
+				WHERE worker IN (SELECT writer
+		                		 FROM team
+		                		 WHERE team_no IN (SELECT team_no
+		                                  		   FROM member
+		                                  		   WHERE users_no = #{usersNo}
+		                                  		   )
+		        				)
+		        ) a 
+		  ) c
+		<![CDATA[
+		WHERE c.rn <= #{pageNum} * #{amount} AND
+			  c.rn > (#{pageNum} -1 ) * #{amount}
+		]]>
+                                   		   
+	</select>
+	
+	<select id="getWorkerTotalTeamReviewCount" resultType="int">
+		SELECT COUNT(*)
+		FROM (SELECT *
+			  FROM review
+			  WHERE worker IN (SELECT writer
+	                		   FROM team
+	                		   WHERE team_no IN (SELECT team_no
+	                                  		     FROM member
+	                                  		     WHERE users_no = #{usersNo}
+	                                  		     )
+	                           )
+	          )                 
 	</select>
 	
 	<!--  의뢰 목록 조회 -->
@@ -78,7 +101,7 @@
 <!-- 	<select id="selectWorkerTeamRequestList"> -->
 	
 <!-- 	</select> -->
-
+	
 	<!-- 견적서 목록 조회 -->
 	<select id="selectWorkerProposalList" resultType="ProposalVO">
 		SELECT p.*
@@ -105,6 +128,30 @@
 		WHERE users_no = #{usersNo}
 	</select>
 	
+	<!-- 자격증 목록조회 -->
+	<select id="selectWorkerLicenseList" resultType="LicenseVO">
+		SELECT c.*
+		FROM (
+			  SELECT ROWNUM as rn
+			  		, a.*
+			  FROM (
+					SELECT *
+					FROM license
+					WHERE users_no = #{usersNo}
+					ORDER BY write_dt desc ) a ) c
+		<![CDATA[
+		WHERE c.rn <= #{pageNum} * #{amount} AND
+			  c.rn > (#{pageNum} -1 ) * #{amount}
+		]]>
+	</select>
+	<!-- 자격증 갯수조회 -->
+	<select id="getWorkerTotalLicenseCount" resultType="int">
+		SELECT COUNT(*)
+		FROM (SELECT *
+			  FROM license
+			  WHERE users_no = #{usersNo})
+			  	
+	</select>
 	<!-- 작업자 정보수정 -->
 	<delete id="deleteWorkerRegion" parameterType="UserVO">
 		DELETE FROM active_region
@@ -149,6 +196,27 @@
 		
 		SELECT *
 		FROM dual
+	</insert>
+	<!-- 자격증 등록 -->
+	<insert id="insertWorkerLicense" parameterType="LicenseVO">
+		INSERT INTO license(license_no
+						    , license_detail_no
+						    , users_no
+						    , license_get_dt
+						    , license_info
+						    , write_dt
+						    , file_id
+						    , check_center
+						    )VALUES(
+						     SEQ_LICENSE.NEXTVAL
+						     , #{licenseDetailNo}
+						     , #{usersNo}
+						     , #{licenseGetDt}
+						     , #{licenseInfo}
+						     , sysdate
+						     , #{fileId}
+						     , #{checkCenter}
+						    )
 	</insert>
 	
 	<insert id="insertWorkerCode" parameterType="UserVO">
