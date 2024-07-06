@@ -27,35 +27,27 @@
 		<input type="hidden" th:field="${userVO.usersNo}">
 		<div class="row mb-2">
 			<div class="col-md-2">
-				<label class="text-black" for="careerStartDt">제목</label>
+				<label class="text-black" for="title">제목</label>
 			</div>
 			<div class="col-md-4">
-				<input name="careerStartDt" type="date" id="careerStartDt" class="form-control" th:field="${car.careerStartDt}" placeholder="YYYY-MM-DD(시작일)">
+				<input type="date" id="title" class="form-control" th:field="${ptf.title}">
 			</div>
 		</div>
 		<div class="row mb-2">
 			<div class="col-md-2">
-				<label for="careerInfo" class="text-black">내용</label>
+				<label class="text-black" for="content">내용</label>
 			</div>
 			<div class="col-md-10">
-				<input name="careerInfo" type="text" id="careerInfo" class="form-control" th:field="${car.careerInfo}" >
+				<input type="text" id="content" class="form-control" th:field="${ptf.content}" >
 			</div>
 		</div>
 		<div class="row">
 			<label class="text-black" for="categories">작업 분야</label>
 			<div class="col-md-12 mb-3 mb-md-0">
 				<th:block th:each="category : ${categories}">
-					<input type="checkbox" name="categoryCode" th:value="${category.codeNo}">
+					<input type="checkbox" id="categoryCode" th:value="${category.codeNo}">
 					<label th:for="${category.codeNo}">[[${category.codeName}]]</label>
 				</th:block>
-			</div>
-		</div>
-		<div class="row mb-2">
-			<div class="col-md-2">
-				<label class="text-black" for="careerStartDt">제목</label>
-			</div>
-			<div class="col-md-4">
-				<input name="careerStartDt" type="date" id="careerStartDt" class="form-control" th:field="${car.careerStartDt}" placeholder="YYYY-MM-DD(시작일)">
 			</div>
 		</div>
 		<div class="row mb-2">
@@ -72,38 +64,40 @@
 		</div>
 	</form>
 <script th:inline="javascript">
-	$('#insert-career-Btn').click(() => {checkCareer()}); 
-	function checkCareer(){
-		var startDt = $('#careerStartDt').val();
-		var endDt = $('#careerEndDt').val();
-		var carInfo = $('#careerInfo').val();
-		var uploadFile = $('#uploadFile').val(); 
-		//파일첨부 = ~;
-		if(startDt == '' || endDt == ''){
-		  Swal.fire({
-		    text:'근무기간을 입력해주세요',
-			icon: 'warning' 
-		 })
-		 return false;
-		}
+// 	$('#insert-career-Btn').click(() => {checkCareer()}); 
+// 	function checkCareer(){
+// 		var startDt = $('#careerStartDt').val();
+// 		var endDt = $('#careerEndDt').val();
+// 		var carInfo = $('#careerInfo').val();
+// 		var uploadFile = $('#uploadFile').val(); 
+// 		//파일첨부 = ~;
+// 		if(startDt == '' || endDt == ''){
+// 		  Swal.fire({
+// 		    text:'근무기간을 입력해주세요',
+// 			icon: 'warning' 
+// 		 })
+// 		 return false;
+// 		}
 		 
-		if(carInfo == ''){
-			Swal.fire({
-				text:'작업내용을 입력해주세요',
-				icon: 'warning' 
-			})
-		 	return false;
-		}
+// 		if(carInfo == ''){
+// 			Swal.fire({
+// 				text:'작업내용을 입력해주세요',
+// 				icon: 'warning' 
+// 			})
+// 		 	return false;
+// 		}
 		
-		if(uploadFile == ''){
-			Swal.fire({
-				text:'경력증명서 첨부필요.',
-				icon: 'warning' 
-			})
-		 	return false;
-		}
-		$(insertCareer).submit();
-	};
+// 		if(uploadFile == ''){
+// 			Swal.fire({
+// 				text:'경력증명서 첨부필요.',
+// 				icon: 'warning' 
+// 			})
+// 		 	return false;
+// 		}
+// 		$(insertCareer).submit();
+// 	};
+
+	
 </script>
 </body>
 </html>

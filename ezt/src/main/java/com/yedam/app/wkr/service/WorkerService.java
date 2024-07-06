@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.rvw.service.ReviewVO;
-import com.yedam.app.usr.service.UserRevCriteria;
+import com.yedam.app.usr.service.UserRvwCriteria;
 import com.yedam.app.usr.service.UserVO;
 
 @Service
@@ -32,10 +32,10 @@ public interface WorkerService {
 	public int insertCareer(CareerVO careerVO);
 	
 	//작업자 후기 목록
-	public List<ReviewVO> selectWorkerReviewList(UserVO userVO);
+	public List<ReviewVO> selectWorkerReviewList(WorkerRvwCriteria cri);
 	
 	//작업자 팀 후기 목록
-	public List<ReviewVO> selectWorkerTeamReviewList(UserVO userVO);
+	public List<ReviewVO> selectWorkerTeamReviewList(WorkerRvwCriteria cri);
 	
 	//작업자 의뢰 목록
 	public List<ReviewVO> selectWorkerRequestList(UserVO userVO);
@@ -53,11 +53,20 @@ public interface WorkerService {
 	//작업자 포트폴리오 등록
 	public int insertWorkerPortfolio(PortfolioVO portfolioVO);
 	
+	//작업자 자격증 목록
+	public List<LicenseVO> selectWorkerLicenseList(WorkerLcsCriteria cri);
 	
+	//작업자 자격증 등록
+	public int insertWorkerLicense(LicenseVO licenseVO);
 	
 	//회원탈퇴 (상태수정)
 	public boolean workerStateUpdate(UserVO userVO);
 	
 	//전체 리뷰 데이터 갯수
-	public int reviewGetTotal(UserRevCriteria cri);
+	public int workerReviewGetTotal(WorkerRvwCriteria cri);
+	//전체 팀리뷰 데이터 갯수
+	public int workerTeamReviewGetTotal(WorkerRvwCriteria cri);
+	
+	//전체 자격증 갯수
+	public int workerLicenseGetTotal(WorkerLcsCriteria cri);
 }

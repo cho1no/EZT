@@ -11,12 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.rvw.service.ReviewVO;
-import com.yedam.app.tem.service.MemberVO;
-import com.yedam.app.usr.service.UserRevCriteria;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.mapper.WorkerMapper;
 import com.yedam.app.wkr.service.CareerVO;
+import com.yedam.app.wkr.service.LicenseVO;
 import com.yedam.app.wkr.service.PortfolioVO;
+import com.yedam.app.wkr.service.WorkerLcsCriteria;
+import com.yedam.app.wkr.service.WorkerRvwCriteria;
 import com.yedam.app.wkr.service.WorkerService;
 
 @Service
@@ -78,13 +79,13 @@ public class WorkerServiceImpl implements WorkerService{
 	
 	//작업자 후기목록
 	@Override
-	public List<ReviewVO> selectWorkerReviewList(UserVO userVO) {
-		return workerMapper.selectWorkerReviewList(userVO);
+	public List<ReviewVO> selectWorkerReviewList(WorkerRvwCriteria cri) {
+		return workerMapper.selectWorkerReviewList(cri);
 	}
 	//작업자 팀후기목록
 	@Override
-	public List<ReviewVO> selectWorkerTeamReviewList(UserVO userVO) {
-		return workerMapper.selectWorkerTeamReviewList(userVO);
+	public List<ReviewVO> selectWorkerTeamReviewList(WorkerRvwCriteria cri) {
+		return workerMapper.selectWorkerTeamReviewList(cri);
 	}
 	
 	
@@ -93,8 +94,11 @@ public class WorkerServiceImpl implements WorkerService{
 	public List<ReviewVO> selectWorkerRequestList(UserVO userVO) {
 		return workerMapper.selectWorkerRequestList(userVO);
 	}
-	
-	
+	//작업자 팀의뢰 목록
+	@Override
+	public List<ReviewVO> selectWorkerTeamRequestList(UserVO userVO) {
+		return workerMapper.selectWorkerTeamRequestList(userVO);
+	}
 	//작업자 견적서 목록
 	@Override
 	public List<ProposalVO> selectWorkerProposalList(UserVO userVO) {
@@ -106,11 +110,6 @@ public class WorkerServiceImpl implements WorkerService{
 		return workerMapper.selectWorkerContractList(userVO);
 	}
 
-	//작업자 팀후기 목록
-	@Override
-	public List<ReviewVO> selectWorkerTeamRequestList(UserVO userVO) {
-		return null;
-	}
 	
 	//작업자 포트폴리오 목록
 	@Override
@@ -123,7 +122,16 @@ public class WorkerServiceImpl implements WorkerService{
 		return workerMapper.insertWorkerPortfolio(portfolioVO);
 	}
 	
-	
+	//작업자 자격증 목록
+	@Override
+	public List<LicenseVO> selectWorkerLicenseList(WorkerLcsCriteria cri) {
+		return workerMapper.selectWorkerLicenseList(cri);
+	}
+	//작업자 자격증 등록
+	@Override
+	public int insertWorkerLicense(LicenseVO licenseVO) {
+		return workerMapper.insertWorkerLicense(licenseVO);
+	}
 	
 
 	
@@ -136,7 +144,23 @@ public class WorkerServiceImpl implements WorkerService{
 	
 	//후기목록 페이징
 	@Override
-	public int reviewGetTotal(UserRevCriteria cri) {
-		return workerMapper.getTotalReviewCount(cri);
+	public int workerReviewGetTotal(WorkerRvwCriteria cri) {
+		return workerMapper.getWorkerTotalReviewCount(cri);
 	}
+	//팀후기 목록 페이징
+	@Override
+	public int workerTeamReviewGetTotal(WorkerRvwCriteria cri) {
+		return workerMapper.getWorkerTotalTeamReviewCount(cri);
+	}
+
+	//자격증목록 페이징
+	@Override
+	public int workerLicenseGetTotal(WorkerLcsCriteria cri) {
+		return workerMapper.getWorkerTotalLicenseCount(cri);
+	}
+	
+
+	
+
+	
 }

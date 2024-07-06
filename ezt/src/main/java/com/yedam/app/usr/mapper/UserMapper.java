@@ -8,7 +8,7 @@ import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.usr.service.UserReqCriteria;
-import com.yedam.app.usr.service.UserRevCriteria;
+import com.yedam.app.usr.service.UserRvwCriteria;
 import com.yedam.app.usr.service.UserVO;
 
 @Mapper
@@ -36,7 +36,7 @@ public interface UserMapper {
 	public int updateUserPw(UserVO userVO);
 	
 	//사용자 후기목록
-	public List<ReviewVO> selectUserRvwList(UserRevCriteria cri);
+	public List<ReviewVO> selectUserRvwList(UserRvwCriteria cri);
 
 	//사용자 의뢰목록
 	public List<RequestVO> selectUserReqList(UserReqCriteria cri);
@@ -46,7 +46,7 @@ public interface UserMapper {
 
 	
 	//사용자 리뷰 갯수
-	public int getTotalReviewCount(UserRevCriteria cri);
+	public int getTotalReviewCount(UserRvwCriteria cri);
 	
 	//사용자 의뢰 갯수
 	public int getTotalRequestCount(UserReqCriteria cri);

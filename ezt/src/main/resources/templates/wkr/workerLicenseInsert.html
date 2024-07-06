@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/worker_mypage_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>작업자 마이페이지</title>
+</head>
+<body>
+<hr>
+<h4>자격증 등록</h4>
+	<div class="col-md-4 mb-3 mb-md-0 d-inline-flex">
+		<label class="text-black col-md-4" for="usersName">성명</label>
+		 <input name="usersName" type="text" id="usersName"
+		  class="form-control d-inline-flex col-md-6" th:value="${userVO.usersName}" disabled>
+	</div>
+	
+	<div class="col-md-4 mb-3 mb-md-0 d-inline-flex">
+		<label class="text-black col-md-5" for="usersBirth">생년월일</label>
+		 <input name="usersBirth" type="text" id="usersBirth"
+		  class="form-control d-inline-flex col-md-6" th:value="${userVO.usersBirth}" disabled>
+	</div>
+	
+	<form th:action="@{/worker/licenseInsert}" th:object="${LicenseVO}"
+		method="post" class="p-4 border rounded" name="insertLicense" enctype="multipart/form-data">
+		<input type="hidden" th:field="${userVO.usersNo}">
+		<div class="row mb-2">
+			<div class="col-md-2">
+				<label class="text-black" for="lName">자격증 이름</label>
+			</div>
+			<div class="col-md-4">
+				<input type="text" id="lName" class="form-control" th:field="${lcs.licenseInfo}">
+			</div>
+		</div>
+		<div class="row mb-2">
+			<div class="col-md-2">
+				<label class="text-black" for="lNo">자격증 번호</label>
+			</div>
+			<div class="col-md-10">
+				<input type="text" id="lNo" class="form-control" th:field="${lcs.licenseDetailNo}" >
+			</div>
+		</div>
+		<div class="row mb-2">
+			<div class="col-md-2">
+				<label class="text-black" for="getDt">취득 일자</label>
+			</div>
+			<div class="col-md-10">
+				<input type="date" id="getDt" class="form-control" th:field="${lcs.licenseGetDt}" >
+			</div>
+		</div>
+		<div class="row mb-2">
+			<div class="col-md-2">
+				<label class="text-black" for="lChkCenter">발급 기관</label>
+			</div>
+			<div class="col-md-10">
+				<input type="text" id="lChkCenter" class="form-control" th:field="${lcs.checkCenter}" >
+			</div>
+		</div>
+		<div class="row mb-2">
+			<div class="col-md-2">  
+			<label for="uploadFile" class="text-black">파일첨부</label>
+			</div>
+			<div class="col-md-10"> 
+			<input name="uploadFile" type="file" multiple="multiple" id="uploadFile" class="form-control">
+			</div>		
+		</div>
+		
+		<div class="col-md-3">
+			<button type="button" id="insert-license-Btn" class="btn px-4 btn-primary text-white">등록하기</button>
+		</div>
+	</form>
+<script th:inline="javascript">
+	$('#insert-license-Btn').click(() => {checkLicense()}); 
+	function checkLicense(){
+		var lName = $('#lName').val();
+		var lNo = $('#lNo').val();
+		var getDt = $('#getDt').val();
+		var ChkCenter = $('#lChkCenter').val();
+		var uploadFile = $('#uploadFile').val(); 
+		//파일첨부 = ~;
+		if(lName == ''){
+		  Swal.fire({
+		    text:'자격증이름을 입력해주세요',
+			icon: 'warning' 
+		 })
+		 return false;
+		}
+		 
+		if(lNo == ''){
+			Swal.fire({
+				text:'자격증 번호를 입력해주세요',
+				icon: 'warning' 
+			})
+		 	return false;
+		}
+		
+		if(getDt == ''){
+			Swal.fire({
+				text:'취득 일자를 입력해주세요',
+				icon: 'warning' 
+			})
+		 	return false;
+		}
+		if(ChkCenter == ''){
+			Swal.fire({
+				text:'발급기관을 입력해주세요',
+				icon: 'warning' 
+			})
+		 	return false;
+		}
+		
+		if(uploadFile == ''){
+			Swal.fire({
+				text:'자격증 첨부필요.',
+				icon: 'warning' 
+			})
+		 	return false;
+		}
+		$(insertLicense).submit();
+	};
+
+	
+</script>
+</body>
+</html>

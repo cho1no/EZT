@@ -23,7 +23,7 @@
 	        <p class="card-text reqState">진행상태 : <span>[[${req.requestStateNm}]]</span></p>
 	        <div class="row">
 	        	<div class="col-md-6" style="text-align:center;">
-			        <button type="button" th:href="@{/request/Info(requestNo=${req.requestNo})}"
+			        <button type="button" th:onclick="|location.href='@{/request/info(requestNo=${req.requestNo})}'|"
 			         class="btn btn-primary border-width-2 d-none d-lg-inline-block">상세</button>
 		        </div>
 		        <div class="col-md-6">

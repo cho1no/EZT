@@ -8,10 +8,12 @@ import org.apache.ibatis.annotations.Mapper;
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.rvw.service.ReviewVO;
-import com.yedam.app.usr.service.UserRevCriteria;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
+import com.yedam.app.wkr.service.LicenseVO;
 import com.yedam.app.wkr.service.PortfolioVO;
+import com.yedam.app.wkr.service.WorkerLcsCriteria;
+import com.yedam.app.wkr.service.WorkerRvwCriteria;
 
 @Mapper
 public interface WorkerMapper {
@@ -39,16 +41,16 @@ public interface WorkerMapper {
 	public int insertCareer(CareerVO careerVO);
 	
 	//작업자 후기 목록
-	public List<ReviewVO> selectWorkerReviewList(UserVO userVO);
+	public List<ReviewVO> selectWorkerReviewList(WorkerRvwCriteria cri);
 	
 	//작업자 팀 후기 목록
-	public List<ReviewVO> selectWorkerTeamReviewList(UserVO userVO);
+	public List<ReviewVO> selectWorkerTeamReviewList(WorkerRvwCriteria cri);
 	
 	//작업자 의뢰 목록
 	public List<ReviewVO> selectWorkerRequestList(UserVO userVO);
 	
 	//작업자 팀 의뢰목록
-//	public List<ReviewVO> selectWorkerTeamRequestList(UserVO userVO);
+	public List<ReviewVO> selectWorkerTeamRequestList(UserVO userVO);
 	
 	//작업자 견적서 목록
 	public List<ProposalVO> selectWorkerProposalList(UserVO userVO);
@@ -61,11 +63,23 @@ public interface WorkerMapper {
 	//작업자 포트폴리오 등록
 	public int insertWorkerPortfolio(PortfolioVO portfolioVO);
 	
+	//작업자 자격증 목록
+	public List<LicenseVO> selectWorkerLicenseList(WorkerLcsCriteria cri);
+	
+	//작업자 자격증 등록
+	public int insertWorkerLicense(LicenseVO licenseVO);
+	
 	//작업자 탈퇴(상태수정)
 	public int updateWorkerState(UserVO userVO);
 	
 	//작업자 리뷰 갯수
-	public int getTotalReviewCount(UserRevCriteria cri);
+	public int getWorkerTotalReviewCount(WorkerRvwCriteria cri);
+	
+	//작업자 팀리뷰 갯수
+	public int getWorkerTotalTeamReviewCount(WorkerRvwCriteria cri);
+	
+	//작업자 자격증 갯수
+	public int getWorkerTotalLicenseCount(WorkerLcsCriteria cri);
 	
 	
 }

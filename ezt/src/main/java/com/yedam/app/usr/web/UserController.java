@@ -22,8 +22,8 @@ import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.mapper.UserMapper;
 import com.yedam.app.usr.service.UserReqCriteria;
 import com.yedam.app.usr.service.UserReqPageDTO;
-import com.yedam.app.usr.service.UserRevCriteria;
-import com.yedam.app.usr.service.UserRevPageDTO;
+import com.yedam.app.usr.service.UserRvwCriteria;
+import com.yedam.app.usr.service.UserRvwPageDTO;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
 
@@ -85,7 +85,7 @@ public class UserController {
 	
 	//사용자 후기목록 조회
 	@GetMapping("/revList")
-	public String userReviewList(Model model, UserRevCriteria cri, @AuthenticationPrincipal LoginUserVO vo) {
+	public String userReviewList(Model model, UserRvwCriteria cri, @AuthenticationPrincipal LoginUserVO vo) {
 		model.addAttribute("userVO", vo.getUserVO());
 		
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
@@ -95,7 +95,7 @@ public class UserController {
 		model.addAttribute("reviewList", list);
 		//페이징
 		int total = userService.reviewGetTotal(cri);
-		model.addAttribute("page", new UserRevPageDTO(cri, total));
+		model.addAttribute("page", new UserRvwPageDTO(cri, total));
 		
 		
 		return "usr/userReviewList";

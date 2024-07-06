@@ -1,18 +1,18 @@
-package com.yedam.app.usr.service;
+package com.yedam.app.wkr.service;
 
 import lombok.Data;
 
 @Data
-public class UserRevPageDTO {
+public class WorkerLcsPageDTO {
 	
 	private int startPage; //시작 페이지
 	private int endPage;  //끝 페이지
 	private boolean prev, next;
 	
 	private int total; //전체 게시물 수 
-	private UserRevCriteria cri; // 페이지에서 보여주는 게시물 수 (amount), 현재 페이지 번호(pageNum)
+	private WorkerLcsCriteria cri; // 페이지에서 보여주는 게시물 수 (amount), 현재 페이지 번호(pageNum)
 	
-	public UserRevPageDTO(UserRevCriteria cri, int total) {
+	public WorkerLcsPageDTO(WorkerLcsCriteria cri, int total) {
 		this.cri = cri;
 		this.total = total;
 		
