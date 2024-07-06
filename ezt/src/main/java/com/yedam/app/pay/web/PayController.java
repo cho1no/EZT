@@ -67,6 +67,7 @@ public class PayController {
 	public String payInfo(PayVO payVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
 		// 결제 정보 조회
 		PayVO pno = payService.payInfo(payVO);
+		model.addAttribute("pay", pno);
 		ContractVO contractVO = new ContractVO();
 		contractVO.setProposalNo(pno.getProposalNo());
 		

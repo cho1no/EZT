@@ -566,10 +566,12 @@ canvas {
 	
 		var bankcode = $('.dropdown button div div div').html();
 		var bank_num1 = bankcode.indexOf('(');
-		if(bankcode != /*[[${con.workerBankcode}]]*/"" || bankcode != '은행 선택'){
+		if(bankcode == '은행 선택'){
+			$('input[name="workerBankcode"]').val(null);
+		}else if(bankcode != /*[[${con.workerBankcode}]]*/"" && bankcode != '은행 선택'){
 			$('input[name="workerBankcode"]').val(bankcode.substring(bank_num1+1).replace(')', ''));
-		}	
-				
+		}
+			
 	
 		let startDt = $('#startDt');
 		let endDt = $('#endDt');

@@ -17,4 +17,10 @@ public class docController {
 		return "doc/index";
 	}
 	
+	@GetMapping("report")
+    public String loginModal() {
+        return "doc/report";
+    }
+
+	
 }

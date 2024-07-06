@@ -1,5 +1,8 @@
 package com.yedam.app.pay.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import com.yedam.app.pay.service.PayVO;
 
 public interface PayMapper {
@@ -10,5 +13,6 @@ public interface PayMapper {
 	// 결제 조회
 	public PayVO selectPayInfo(PayVO payVO);
 	
-	// 
+	// 오늘 대금 지급 일자인 작업자
+	public List<Map<String, String>> selectPaymentDtInfo();
 }
