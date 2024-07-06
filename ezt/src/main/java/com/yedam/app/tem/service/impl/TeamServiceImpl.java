@@ -9,6 +9,7 @@ import com.yedam.app.req.service.Criteria;
 import com.yedam.app.tem.mapper.TeamMapper;
 import com.yedam.app.tem.service.TeamService;
 import com.yedam.app.tem.service.TeamVO;
+import com.yedam.app.tem.service.TeamWorkCategoryVO;
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -37,23 +38,30 @@ public class TeamServiceImpl implements TeamService {
 		return result == 1 ? teamVO.getTeamNo() : -1;
 	}
 
-	//팀신청 수정 & 팀상세 삭제 및 등록
+//	//팀신청 수정 & 팀상세 삭제 및 등록
+//	@Override
+//	public int updateTeam(TeamVO teamVO) {
+//		//팀신청 수정
+//		
+//		int result = teamMapper.updateTeam(teamVO);
+//		System.out.println("------>"+teamVO);
+//		//팀상세 삭제 후 등록
+//		if(teamVO.getWorkCategoryVO() != null) {
+//			teamMapper.deleteCategory(teamVO.getTeamNo());
+//			teamVO.getWorkCategoryVO().forEach(e -> {
+//				e.setTeamNo(teamVO.getTeamNo());
+//				teamMapper.insertCategory(e);
+//			});
+//		}
+//		
+//		return result == 1 ? teamVO.getTeamNo() : -1;
+//	}
+
+	//팀 수정
 	@Override
-	public int updateTeam(TeamVO teamVO) {
-		//팀신청 수정
-		
-		int result = teamMapper.updateTeam(teamVO);
-		System.out.println("------>"+teamVO);
-		//팀상세 삭제 후 등록
-		if(teamVO.getWorkCategoryVO() != null) {
-			teamMapper.deleteCategory(teamVO.getTeamNo());
-			teamVO.getWorkCategoryVO().forEach(e -> {
-				e.setTeamNo(teamVO.getTeamNo());
-				teamMapper.insertCategory(e);
-			});
-		}
-		
-		return result == 1 ? teamVO.getTeamNo() : -1;
+	public boolean updateTeam(TeamVO teamVO) {
+	
+		return teamMapper.updateTeam(teamVO) == 1;
 	}
 	
 	//팀신청 삭제
@@ -68,6 +76,27 @@ public class TeamServiceImpl implements TeamService {
 	public int getTotal(Criteria cri) {
 
 		return teamMapper.getTotalCount(cri);
+	}
+
+	//팀 상세 등록
+	@Override
+	public int insertCategory(TeamWorkCategoryVO twcVO) {
+		int result = teamMapper.insertCategory(twcVO);
+		return result == 1 ? twcVO.getTeamNo() : -1;
+	}
+	
+	//팀 상세 수정
+	@Override
+	public boolean updateCategory(TeamWorkCategoryVO twcVO) {
+		
+		return teamMapper.updateCategory(twcVO) == 1;
+	}
+	
+	//팀 상세 삭제
+	@Override
+	public int deleteCategory(TeamWorkCategoryVO twcVO) {
+		
+		return teamMapper.deleteCategory(twcVO);
 	}
 
 

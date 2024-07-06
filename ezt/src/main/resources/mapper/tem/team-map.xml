@@ -78,6 +78,12 @@
 	WHERE team_no = #{teamNo}
 </update>
 
+<!-- 팀신청 삭제하기 -->
+<delete id="deleteTeam" parameterType="int">
+	DELTET FROM team
+	WHERE team_no = #{teamNo}
+</delete>
+
 <!-- 팀신청 상세 등록(카테고리,카테고리 별 인원) -->
 <insert id="insertCategory" parameterType="TeamVO">
 	INSERT INTO team_work_category
@@ -95,14 +101,19 @@
 		,#{teamNo}
 	)
 </insert>
-<!-- 팀신청 삭제하기 -->
-<delete id="deleteTeam" parameterType="int">
-	DELTET FROM team
-	WHERE team_no = #{teamNo}
-</delete>
+
+<!-- 팀신청 상세 수정하기 -->
+<update id="updateCategory" parameterType="TeamWorkCategoryVO">
+	UPDATE team_work_category
+	
+	SET	work_code = #{workCode}
+		,headcount = #{headcount}
+		,hire_complete_tf = #{hireCompleteTf}
+	WHERE team_no = #{teamNo} and work_code = #{workCode}
+</update>
 <!-- 팀신청 상세 삭제하기 -->
-<delete id="deleteCategory" parameterType="int">
+<delete id="deleteCategory" parameterType="TeamWorkCategoryVO">
 	DELETE FROM team_work_category
-	WHERE team_no = #{teamNo}
+	WHERE team_no = #{teamNo} and work_code = #{workCode}
 </delete>
 </mapper>

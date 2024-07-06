@@ -27,9 +27,13 @@ public interface TeamMapper {
 	public int getTotalCount(Criteria cri);
 	
 	
-	//팀신청 삭제 (카테고리,카테고리 별 인원)
-	public int deleteCategory(int teamNo);
+	
 	
 	//팀신청 등록(카테고리, 카테고리 별 인원)
 	public int insertCategory(TeamWorkCategoryVO twcVO);
+	//팀신청 수정 (카테고리, 카테고리 별 인원)
+	public int updateCategory(TeamWorkCategoryVO twcVO);
+	//팀신청 삭제 (카테고리,카테고리 별 인원)
+	public int deleteCategory(TeamWorkCategoryVO twcVO);
+	
 }

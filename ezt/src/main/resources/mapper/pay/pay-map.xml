@@ -44,4 +44,22 @@
 	</select>
 	<!-- 결제 조회 -->
 	
+	<!-- 오늘 대급 지급 일 -->
+	<select id="selectPaymentDtInfo" resultType="map">
+	SELECT 
+	u.users_name as usersName
+	, c.WORKER_ACCOUNT as workerAccount
+	, c.WORKER_BANKCODE as workerBankcode
+	, d.PRICE as price
+	FROM contract c
+	JOIN users u 
+	ON u.users_no = c.worker_info
+	JOIN contract_detail d
+	ON d.contract_no = c.contract_no
+	JOIN pay p
+	ON c.contract_no = p.contract_no
+	WHERE d.PAYMENT_DT = TO_DATE(sysdate, 'YY/MM/dd')
+	</select>
+	<!-- 오늘 대급 지급 일 -->
+	
 </mapper>
