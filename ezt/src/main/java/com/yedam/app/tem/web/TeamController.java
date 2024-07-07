@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
@@ -75,9 +76,12 @@ public class TeamController {
 	}
 	//팀 신청 상세 삭제
 	@GetMapping("/teamDetailDelete")
-	public String teamDetailDelete(TeamWorkCategoryVO twcVO) {
-		teamService.deleteCategory(twcVO);
-		
-		return "redirect:teamRequestInfo";
+	public String teamDetailDelete(@RequestParam("teamNo") int teamNo, @RequestParam("workCode") String workCode) {
+	    TeamWorkCategoryVO twcVO = new TeamWorkCategoryVO();
+	    twcVO.setTeamNo(teamNo);
+	    twcVO.setWorkCode(workCode);
+	    
+	    teamService.deleteCategory(twcVO);
+		return "tem/teamRequestInfo";
 	}
 }
