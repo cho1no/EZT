@@ -111,6 +111,7 @@
 		,hire_complete_tf = #{hireCompleteTf}
 	WHERE team_no = #{teamNo} and work_code = #{workCode}
 </update>
+
 <!-- 팀신청 상세 삭제하기 -->
 <delete id="deleteCategory" parameterType="TeamWorkCategoryVO">
 	DELETE FROM team_work_category
