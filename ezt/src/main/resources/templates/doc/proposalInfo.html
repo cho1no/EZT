@@ -346,25 +346,22 @@
 				/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 		$('.total').html(comTotal);
 
-		var proposalNo = [[${ppsInfo.proposalNo}]];
-		var requestNo = [[${ppsInfo.requestNo}]];
-		var worker = [[${ppsInfo.worker}]];
-		var fileList = [[${ppsInfo.fileList}]];
+		// 변수 선언
+		var proposalNo = /*[[${ppsInfo.proposalNo}]]*/"";
+		var requestNo = /*[[${ppsInfo.requestNo}]]*/"";
+		var worker = /*[[${ppsInfo.worker}]]*/"";
+		var fileList = /*[[${ppsInfo.fileList}]]*/"";
 		
-		// 첨부 파일 다운로드 
-		for(i = 0; i < [[${ppsInfo.fileList}]].length; i++){
-			var path = [[${ppsInfo.fileList}]][i].savePath.replaceAll('\\', '/');
-			var orgname = [[${ppsInfo.fileList}]][i].originalFileName;
-			var name = [[${ppsInfo.fileList}]][i].saveName;
-			var ext = [[${ppsInfo.fileList}]][i].ext;
-			console.log(path+'/'+name);
-			$('#fileDownload').append(`<p><a href="download?fileName=${path}/${name}_${orgname}.${ext}">${orgname}.${ext}</a></p> `)
+		// 첨부 파일 다운로드
+		window.onload = function(){
+			fileDownload(fileList);
 		}
-			
 	</script>
 
 	<!-- uploadAjax -->
 	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
 
+	<!-- 공통 js 파일 -->
+	<script type="text/javascript" th:src="@{/js/doc/doc_common.js}"></script>
 </body>
 </html>
