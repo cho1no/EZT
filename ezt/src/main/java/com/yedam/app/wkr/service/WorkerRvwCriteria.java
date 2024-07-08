@@ -24,6 +24,9 @@ public class WorkerRvwCriteria {
 	public String[] getTypeArr() {
 		return type == null? new String[] {} : type.split("");
 	}
+	public int getPage() {
+		return pageNum;
+	}
 	
 	
 	

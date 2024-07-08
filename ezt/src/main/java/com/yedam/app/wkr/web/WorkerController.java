@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.common.service.SimpleFileService;
@@ -190,26 +191,54 @@ public class WorkerController {
 	   List<ProposalVO> pList = workerService.selectWorkerProposalList(cri);
 	   model.addAttribute("proposalList", pList);
 	 //페이징
-	   int total = workerService.workerReviewGetTotal(cri);
+	   int total = workerService.workerProposalGetTotal(cri);
 	   model.addAttribute("page", new WorkerRvwPageDTO(cri, total));
 	   return "wkr/workerProposalList";
    }
    
-   //작업자 계약서 목록조회
+//   //작업자 계약서 목록조회
+//   @GetMapping("/contractList")
+//   public String workerContractList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri) {
+//	   model.addAttribute("userVO", vo.getUserVO());
+//	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+//	   List<ContractVO> cList = workerService.selectWorkerContractList(cri);
+//	   model.addAttribute("contractList", cList);
+//	   //페이징
+//	   int total = workerService.workerContractGetTotal(cri);
+//	   model.addAttribute("page", new WorkerRvwPageDTO(cri, total));
+//	   return "wkr/workerContractList";
+//   }
+   
+   
    @GetMapping("/contractList")
-   public String workerContractList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri) {
-	   model.addAttribute("userVO", vo.getUserVO());
-	   cri.setUsersNo(vo.getUserVO().getUsersNo());
-	   List<ContractVO> cList = workerService.selectWorkerContractList(cri);
-	   model.addAttribute("contractList", cList);
-	   //페이징
-	   int total = workerService.workerReviewGetTotal(cri);
-	   model.addAttribute("page", new WorkerRvwPageDTO(cri, total));
-	   return "wkr/workerContractList";
+   public String workerContractList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri, RedirectAttributes redirectAttributes) {
+       // 로그인 사용자 정보 가져오기
+       model.addAttribute("userVO", vo.getUserVO());
+
+       // 현재 사용자의 계약 목록 조회를 위한 조건 설정
+       cri.setUsersNo(vo.getUserVO().getUsersNo());
+
+       // 계약 목록 조회
+       List<ContractVO> cList = workerService.selectWorkerContractList(cri);
+       model.addAttribute("contractList", cList);
+
+       // 페이징 처리를 위한 총 게시물 수 조회
+       int total = workerService.workerContractGetTotal(cri);
+
+       // 페이징 정보 설정
+       WorkerRvwPageDTO pageDTO = new WorkerRvwPageDTO(cri, total);
+       model.addAttribute("page", pageDTO);
+
+       // 현재 페이지가 총 페이지 수를 초과하는 경우 마지막 페이지로 리디렉션
+       if (cri.getPage() > pageDTO.getEndPage()) {
+           redirectAttributes.addAttribute("page", pageDTO.getEndPage());
+           redirectAttributes.addFlashAttribute("error", "존재하지 않는 페이지입니다. 마지막 페이지로 이동합니다.");
+           return "redirect:/worker/contractList";
+       }
+
+       // 계약 목록 페이지로 이동
+       return "wkr/workerContractList";
    }
-   
-   
-   
    
    //작업자 포트폴리오 목록조회
    @GetMapping("/portfolioList")
