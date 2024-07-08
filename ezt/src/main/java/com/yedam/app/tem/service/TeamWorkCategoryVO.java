@@ -11,4 +11,6 @@ public class TeamWorkCategoryVO {
 	private String categoryCode; //작업코드(code_no)
 	private int partCount; // 작업코드별 인원 수 
 	
+	
+	private int twcTeamNo;
 }

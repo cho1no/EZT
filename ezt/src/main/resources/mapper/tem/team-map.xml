@@ -89,10 +89,10 @@
 		
 	VALUES
 		(
-			#{teamTeamNo}
+			#{teamNo}
 			,#{workTitle}
 			,#{workContent}
-			,#{wirter}
+			,#{writer}
 			,sysdate
 			,161
 			,'N'
@@ -117,13 +117,13 @@
 </delete>
 
 <!-- 팀신청 상세 등록(카테고리,카테고리 별 인원) -->
-<insert id="insertCategory" parameterType="TeamVO">
+<insert id="insertCategory" parameterType="TeamWorkCategoryVO">
 	INSERT INTO team_work_category
 	(
-		 work_code;
-		,headcount;
-		,hire_complete_tf;
-		,team_no;
+		 work_code
+		,headcount
+		,hire_complete_tf
+		,team_no
 	)
 	VALUES
 	(
