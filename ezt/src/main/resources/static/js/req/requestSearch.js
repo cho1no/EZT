@@ -6,7 +6,7 @@ $(document).ready(function(){
 
     $(".insertBtn").on("click", function(e){
         e.preventDefault();
-        if (!login) {
+        if (login == 'anonymousUser') {
             alert("로그인을 하세요");
             location.href = '/login'; // 로그인페이지로 이동
         } else {

@@ -102,35 +102,33 @@ public class ReviewController {
 		return "redirect:list";
 	}
 	
-	
-	
 	//댓글 등록
-	@GetMapping("replyInsert")
+	@GetMapping("/replyInsert")
 	public String replyInsert(Model model) {
 
-		model.addAttribute("reply", new WorkerReplyVO());
+		model.addAttribute("replyVO", new WorkerReplyVO());
 
 		return "rvw/reviewInsert";
 	}
 	
-	@PostMapping("replyInsert")
+	@PostMapping("/replyInsert")
 	public String replyInsert(WorkerReplyVO replyVO) {
 		reviewService.insertReply(replyVO);
 		return "redirect:list";
 	}
 	
 	//댓글 수정
-	@PostMapping("replyUpdate")
+	@PostMapping("/replyUpdate")
 	@ResponseBody
 	public boolean replyUpdate(@RequestBody WorkerReplyVO replyVO) {
 		return reviewService.updateReply(replyVO);
 	}
 	
 	//댓글 삭제
-	@GetMapping("replyDelete")
+	@GetMapping("/replyDelete")
 	public String replyDelete(Integer workerReplyNo) {
 		reviewService.deleteReply(workerReplyNo);
-		return "redirect:list";
+		return "rvw/reviewInfo";
 	}
 	
 }

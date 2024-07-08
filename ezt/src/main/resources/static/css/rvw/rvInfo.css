@@ -1,6 +1,11 @@
-button{
-	text-align:center;
+
+.btnn{
+    background: transparent;
+	border:none;
+    font-size:14px;
+    margin:1px;
 }
+
 #container{
 	margin:0 auto;
 }
