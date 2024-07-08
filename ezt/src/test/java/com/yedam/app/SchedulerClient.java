@@ -20,20 +20,17 @@ public class SchedulerClient {
 	@Autowired NhDevService nhDevSvc;
 	@Autowired ProcessMapper procMap;
 	@Autowired PayMapper payMapper;
-//	@Test
+	@Test
 	public void testCheck() {
 		List<PayVO> payList = procMap.selectPayList();
 		List<Object> list = nhDevSvc.getVirtualAcRecieveList("");
 		for (PayVO payVO : payList) {
-//			String 
+			log.info(payVO.toString());
 		}
 		
-		log.info(payList.toString());
 		for (Object obj : list) {
 			Map<String, String> map = (Map<String, String>) obj;
 			log.info(map.toString());
-			log.info(map.get("MnrcAmt") + " " + map.get("Vran"));
-			
 		}
 	}
 	@Test
