@@ -15,4 +15,6 @@ public interface FileService {
 	public int deleteFile(List<FileVO> fileVO) throws UnsupportedEncodingException;
 	
 	public ResponseEntity<Resource> downlodeFile(String fileName);
+	
+	public ResponseEntity<byte[]> getFile(String fileName);
 }

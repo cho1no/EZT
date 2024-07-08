@@ -64,7 +64,7 @@
 <script>
 function fileList(){
 	
-	console.log("file");
+	//console.log("file");
 	
 	var formData = new FormData();
 	
@@ -88,17 +88,41 @@ function fileList(){
 		data : formData,
 		type :'Post',
 		async : false
-		/*
-		success : function(result){
-			console.log(result);
-			location.reload();
+		
+		//success : function(result){
+			//console.log(result);
+			//location.reload();
 
-		}*/
+		//}
 	})
-		//console.log(result);
+		console.log(result);
 			//location.reload();
 	
 };
+
+
+function showUpFile(uploadResultArr){
+	var str = "";
+	
+	$(uploadResultArr).each(function(i, obj){
+	
+		var fileCallPath = encodeURIComponent( obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName);
+		
+		var originPath = obj.uploadPath + "\\" + obj.uuid + "_" + obj.fileName;
+		
+		originPath = originPath.replace(new RegExp(/\\/g), "/");
+		
+		str += `<li><a href=\"javascript:showImage(\'"+originPath+"\')\">
+			<img str='/display?fileName="+ fileCallPath+ "'></a></li>`;
+		
+	});
+	
+	uploadResult.append(str);
+}
+
+function showImage(fileCallPath){
+	alert(fileCallPath);
+}
 
 </script>
 
