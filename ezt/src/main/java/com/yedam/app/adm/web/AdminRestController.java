@@ -50,10 +50,17 @@ public class AdminRestController {
 
 	@CheckToken
 	@GetMapping("/checkJwt")
-	public ResponseEntity<?> isOk(@RequestHeader("Authorization") String authHeader) {
+	public ResponseEntity<?> isOk() {
 		return ResponseEntity.ok().build();
 	}
 
+	@CheckToken
+	@GetMapping("/getMyInfo")
+	public UserVO getMyInfo(@RequestHeader("Authorization") String authHeader) {
+		String token = authHeader.substring(7);
+		return jwtProvider.getUserInfo(token);
+	}
+	
 	// 통계(메인페이지)
 	@CheckToken
 	@GetMapping("/getStatistic")

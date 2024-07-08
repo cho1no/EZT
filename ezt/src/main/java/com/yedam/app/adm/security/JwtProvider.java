@@ -50,6 +50,7 @@ public class JwtProvider {
         Claims claims = Jwts.claims().setSubject(userVO.getUsersName()); // JWT payload 에 저장되는 정보단위
         claims.put("role", userVO.getUsersRole()); // 정보는 key / value 쌍으로 저장된다.
         claims.put("usersNo", userVO.getUsersNo().toString()); // 정보는 key / value 쌍으로 저장된다.
+        claims.put("usersId", userVO.getUsersId()); // 정보는 key / value 쌍으로 저장된다.
         Date now = new Date();
         String newToken =  Jwts.builder()
 			                .setClaims(claims) // 정보 저장
@@ -74,6 +75,7 @@ public class JwtProvider {
         vo.setUsersName(claims.getSubject());
         vo.setUsersRole((String) claims.get("role"));
         vo.setUsersNo(Integer.parseInt((String) claims.get("usersNo")));
+        vo.setUsersId((String) claims.get("usersId"));
         return vo;
     }
     

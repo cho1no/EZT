@@ -2,7 +2,7 @@
 import axios from 'axios';
 // eslint-disable-next-line import/no-extraneous-dependencies
 // import Swal from 'sweetalert2';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
@@ -21,6 +21,8 @@ import { fDateTime } from 'src/utils/format-time';
 
 import Scrollbar from 'src/components/scrollbar';
 
+// eslint-disable-next-line import/no-cycle
+import { MyContext } from '../../../app';
 import CareerTableRow from '../career-table-row';
 import CareerTableHead from '../career-table-head';
 import CareerTableToolbar from '../career-table-toolbar';
@@ -50,6 +52,8 @@ export default function CareerPage() {
   const [careerInfo, setCareerInfo] = useState({});
 
   const [denyReason, setDenyReason] = useState('');
+
+  const myInfo = useContext(MyContext);
 
   useEffect(() => {}, [careerInfo]);
 
@@ -125,7 +129,7 @@ export default function CareerPage() {
   const postCareerDeny = async () => {
     const data = {
       content: denyReason,
-      writer: 10000, // 로그인 JWT 받아와야함
+      writer: myInfo.usersNo, // 로그인 JWT 받아와야함
       careerNo: careerInfo.careerNo,
     };
     const deny = await axios.post(`/adm/careerDeny`, data);

@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="headerFragment">
   <div class="container-fluid">
-    <div class="row align-items-center">
-      <div class="site-logo col-6"><a href="/main">JobBoard</a></div>
+    <div class="d-flex justify-content-between">
+      <div class="site-logo align-self-center">
+        <a href="/main">이지테리어</a>
+      </div>
 
-      <nav class="col-5 site-navigation">
+      <nav class="mx-auto site-navigation align-self-center">
         <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
           <li><a th:href="@{/request/list}" class="nav-link">의뢰 목록</a></li>
-          <li><a href="about.html">작업자 찾기</a></li>
+          <li><a href="#">작업자 찾기</a></li>
           <li><a th:href="@{/review/list}">후기 목록</a></li>
           <li><a th:href="@{/team/requestList}">팀 찾기</a></li>
           <li class="d-lg-none"><a href="/signUp/joinUser">회원가입</a></li>
@@ -16,9 +18,39 @@
         </ul>
       </nav>
 
-      <div class="right-cta-menu text-right d-flex aligin-items-center col-6">
+      <div class="right-cta-menu text-right d-flex align-self-center">
         <div class="ml-auto">
-          <!-- <div sec:authorize="hasRole('ROLE_ANONYMOUS')"> -->
+          <th:block sec:authorize="!isAnonymous()">
+            <span class="text-white d-lg-inline-block me-2"
+              >[[${#authentication.principal.username}]]님
+            </span>
+            <div class="d-none d-lg-inline-block me-2">
+              <div class="alarm-menu cpointer opened">
+                <i
+                  class="fa-regular fa-bell text-white"
+                  style="font-size: 18pt"
+                ></i>
+                <div class="alarm-circle"></div>
+              </div>
+              <div class="alarm-window" id="alarmWindow">
+                <div class="alarm-header">
+                  <i
+                    id="alarmBack"
+                    style="display: none"
+                    class="fa-solid fa-chevron-left cpointer"
+                  ></i>
+                  <span class="alarmTitle">알림</span>
+                  <span id="readAllAlarm" class="float-end cpointer"
+                    >전체 읽음</span
+                  >
+                </div>
+                <div class="alarm-body">
+                  <!-- content -->
+                </div>
+              </div>
+            </div>
+          </th:block>
+
           <div sec:authorize="isAnonymous()">
             <a
               href="/signUp/joinUser"
@@ -38,11 +70,6 @@
               <span class="mr-2 icon-lock_outline"></span>로그인</a
             >
           </div>
-          <th:block sec:authorize="!isAnonymous()">
-            <span class="text-white"
-              >[[${#authentication.principal.username}]]님&nbsp;&nbsp;
-            </span>
-          </th:block>
           <th:block sec:authorize="hasRole('ROLE_USER')" style="color: write">
             <a
               id="mypage"
@@ -82,6 +109,40 @@
           class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"
           ><span class="icon-menu h3 m-0 p-0 mt-2"></span
         ></a>
+      </div>
+    </div>
+  </div>
+  <div class="floating-menu">
+    <input type="checkbox" />
+    <span class="plus-icon">
+      <span class="fa fa-plus" aria-hidden="true"></span>
+    </span>
+    <ul class="floating-nav">
+      <li id="chatButton">
+        <span class="fa fa-comments" aria-hidden="true"></span>
+      </li>
+      <li>
+        <span class="fa fa-book" aria-hidden="true"></span>
+      </li>
+      <li>
+        <span class="fa fa-calculator" aria-hidden="true"></span>
+      </li>
+    </ul>
+    <div class="floated-window" id="floatedWindow">
+      <div class="floated-header">
+        <span class="floatedTitle">플롯메뉴</span>
+        <span
+          id="closeFloatedWindow"
+          class="fa fa-x cpointer"
+          aria-hidden="true"
+        ></span>
+      </div>
+      <div class="floated-body">
+        <!-- content -->
+      </div>
+      <div class="chat-footer">
+        <input id="chat-input" type="text" onkeyup="enterKeyDown()" />
+        <button id="chat-send" class="fa fa-play" type="button"></button>
       </div>
     </div>
   </div>

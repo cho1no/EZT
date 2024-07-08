@@ -4,17 +4,17 @@
 .alarm-circle {
   display: none;
   position: absolute;
-  width: 15px;
-  height: 15px;
-  background-color: red;
+  width: 13px;
+  height: 13px;
+  background-color: rgb(232, 71, 71);
   border-radius: 50%;
   z-index: 4;
   /* 원하는 위치에 배치 */
   top: 0px; /* 위에서 10px */
-  left: 15px; /* 왼쪽에서 10px */
+  left: 12px; /* 왼쪽에서 10px */
 }
 .alarm-header {
-  background-color: orange;
+  background-color: #89ba16;
   color: white;
   padding: 10px;
   /* display: flex; */
@@ -23,6 +23,8 @@
 }
 .alarm-window {
   display: none;
+  position: absolute;
+  right: 200px;
   width: 300px;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -30,6 +32,7 @@
   background-color: white;
   flex-direction: column;
   overflow: hidden;
+  text-align: start !important;
 }
 .alarm-body {
   padding: 10px;

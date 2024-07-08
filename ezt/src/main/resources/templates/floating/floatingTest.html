@@ -42,7 +42,6 @@
         </div>
       </div>
       </div>
-    </div>
     <div class="floating-menu">
       <input type="checkbox" />
       <span class="plus-icon">
@@ -84,7 +83,7 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"
     ></script>
     <script th:inline="javascript">
-      let uno = /*[[${#authentication.principal.username}]]*/ "users no";
+      let uno = /*[[${#authentication.principal.userNo}]]*/ "users no";
     </script>
     <!-- <script src="/js/floating/floating.js"></script> -->
     <script src="/js/socket/socket_common.js"></script>

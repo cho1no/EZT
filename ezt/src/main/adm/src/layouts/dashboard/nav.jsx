@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect, useContext } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -20,6 +20,8 @@ import { account } from 'src/_mock/account';
 import Logo from 'src/components/logo';
 import Scrollbar from 'src/components/scrollbar';
 
+// eslint-disable-next-line import/no-cycle
+import { MyContext } from '../../app';
 import { NAV } from './config-layout';
 import navConfig from './config-navigation';
 
@@ -27,7 +29,7 @@ import navConfig from './config-navigation';
 
 export default function Nav({ openNav, onCloseNav }) {
   const pathname = usePathname();
-
+  const myInfo = useContext(MyContext);
   const upLg = useResponsive('up', 'lg');
 
   useEffect(() => {
@@ -53,10 +55,14 @@ export default function Nav({ openNav, onCloseNav }) {
       <Avatar src={account.photoURL} alt="photoURL" />
 
       <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{account.displayName}</Typography>
+        <Typography variant="subtitle2">
+          {/* {account.displayName} */}
+          {myInfo.usersName}
+        </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           {account.role}
+          {myInfo.usersId}
         </Typography>
       </Box>
     </Box>

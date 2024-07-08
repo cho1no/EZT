@@ -27,12 +27,15 @@
 	</select>
 	
 	<select id="selectChatHistory" resultType="ChatVO" parameterType="int">
-		SELECT chat_no
-				, users_no
-				, chat_room_no
-				, content
-				, chat_time
-		FROM chat
+		SELECT c.chat_no
+				, c.users_no
+				, c.chat_room_no
+				, c.content
+				, (SELECT users_name
+					FROM users
+					WHERE users_no = c.users_no) writer
+				, c.chat_time
+		FROM chat c
 		WHERE chat_room_no = #{chatRoomNo}
 		ORDER BY chat_time ASC
 	</select>

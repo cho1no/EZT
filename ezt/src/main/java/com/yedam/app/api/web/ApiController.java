@@ -4,16 +4,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yedam.app.api.service.DatahubService;
 import com.yedam.app.api.service.NhDevService;
 import com.yedam.app.api.service.PublicDataService;
+import com.yedam.app.sgi.service.LoginUserVO;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -25,7 +30,13 @@ public class ApiController {
 	@Autowired DatahubService datahubSvc;
 	@Autowired PublicDataService publicDataSvc;
 	@Autowired NhDevService nhDevSvc;
-
+	@GetMapping("/getInfo")
+	public ResponseEntity<?> getMyInfo(@AuthenticationPrincipal LoginUserVO vo) {
+		if (vo != null) {
+			return ResponseEntity.ok(vo.getUserVO());
+		}
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 되지 않았습니다.");
+	}
 	/** 
 	 * datahub 신분증 확인 api
 	 * @param map
