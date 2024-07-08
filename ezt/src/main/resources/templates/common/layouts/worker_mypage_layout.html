@@ -26,10 +26,10 @@
 				</div>
 			</div>
 		</section>
+	<section class="site-section">
 	<div class="container">
 		<div class="row">
 			<div class="col-3">
-			<section class="pt-4">
 				<div class="accordion accordion-flush " id="accordionFlushExample">
 					<div class="accordion-item">
 						<h2 class="accordion-header">
@@ -95,6 +95,12 @@
 								<strong><a class="nav-link" href="/worker/reviewList">후기 목록</a></strong>
 							</div>
 						</div>
+						<div id="flush-collapseThree" class="accordion-collapse collapse"
+							data-bs-parent="#accordionFlushExample">
+							<div class="accordion-body">
+								<strong><a class="nav-link" href="/worker/teamReviewList">팀 후기 목록</a></strong>
+							</div>
+						</div>
 					</div>
 					
 					<div class="accordion-item">
@@ -113,7 +119,7 @@
 						<div id="flush-collapseFour" class="accordion-collapse collapse"
 							data-bs-parent="#accordionFlushExample">
 							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/documentList">내 문서</a></strong>
+								<strong><a class="nav-link" href="/worker/teamRequestList">팀 의뢰 목록</a></strong>
 							</div>
 						</div>
 					</div>
@@ -123,15 +129,37 @@
 							<button class="accordion-button collapsed" type="button"
 								data-bs-toggle="collapse" data-bs-target="#flush-collapseFive"
 								aria-expanded="false" aria-controls="flush-collapseFive">
+								내 문서</button>
+						</h2>
+						
+						<div id="flush-collapseFive" class="accordion-collapse collapse"
+							data-bs-parent="#accordionFlushExample">
+							<div class="accordion-body">
+								<strong><a class="nav-link" href="/worker/proposalList">내가 쓴 견적서</a></strong>
+							</div>
+						</div>
+						<div id="flush-collapseFive" class="accordion-collapse collapse"
+							data-bs-parent="#accordionFlushExample">
+							<div class="accordion-body">
+								<strong><a class="nav-link" href="/worker/contractList">내가 쓴 계약서</a></strong>
+							</div>
+						</div>
+					</div>
+					
+					<div class="accordion-item">
+						<h2 class="accordion-header">
+							<button class="accordion-button collapsed" type="button"
+								data-bs-toggle="collapse" data-bs-target="#flush-collapseSix"
+								aria-expanded="false" aria-controls="flush-collapseSix">
 								포트폴리오</button>
 						</h2>
-						<div id="flush-collapseFive" class="accordion-collapse collapse"
+						<div id="flush-collapseSix" class="accordion-collapse collapse"
 							data-bs-parent="#accordionFlushExample">
 							<div class="accordion-body">
 								<strong><a class="nav-link" href="/worker/portfolioList">포트폴리오 목록</a></strong>
 							</div>
 						</div>
-						<div id="flush-collapseFive" class="accordion-collapse collapse"
+						<div id="flush-collapseSix" class="accordion-collapse collapse"
 							data-bs-parent="#accordionFlushExample">
 							<div class="accordion-body">
 								<strong><a class="nav-link" href="/worker/portfolioInsert">포트폴리오 등록</a></strong>
@@ -142,17 +170,17 @@
 					<div class="accordion-item">
 						<h2 class="accordion-header">
 							<button class="accordion-button collapsed" type="button"
-								data-bs-toggle="collapse" data-bs-target="#flush-collapseSix"
-								aria-expanded="false" aria-controls="flush-collapseSix">
+								data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven"
+								aria-expanded="false" aria-controls="flush-collapseSeven">
 								자격증</button>
 						</h2>
-						<div id="flush-collapseSix" class="accordion-collapse collapse"
+						<div id="flush-collapseSeven" class="accordion-collapse collapse"
 							data-bs-parent="#accordionFlushExample">
 							<div class="accordion-body">
 								<strong><a class="nav-link" href="/worker/licenseList">자격증 목록</a></strong>
 							</div>
 						</div>
-						<div id="flush-collapseSix" class="accordion-collapse collapse"
+						<div id="flush-collapseSeven" class="accordion-collapse collapse"
 							data-bs-parent="#accordionFlushExample">
 							<div class="accordion-body">
 								<strong><a class="nav-link" href="/worker/licenseInsert">자격증 등록</a></strong>
@@ -174,14 +202,15 @@
 							</div>
 						</div>
 					</div>
-					
+
 				</div>
-			</section>
 			</div>
 			<div class="col-9 pt-4 pb-4">
 			<main layout:fragment="Content" ></main>
 			</div>
 		</div>
+		</div>
+		</section>
 		<footer class="site-footer"
 			th:insert="common/fragments/default_footer :: footerFragment"></footer>
 	</div>

@@ -38,14 +38,14 @@ public interface WorkerService {
 	public List<ReviewVO> selectWorkerTeamReviewList(WorkerRvwCriteria cri);
 	
 	//작업자 의뢰 목록
-	public List<ReviewVO> selectWorkerRequestList(UserVO userVO);
+	public List<ReviewVO> selectWorkerRequestList(WorkerReqCriteria cri);
 	//작업자 팀 의뢰목록
 	public List<ReviewVO> selectWorkerTeamRequestList(UserVO userVO);
 	
 	//작업자 견적서 목록
-	public List<ProposalVO> selectWorkerProposalList(UserVO userVO);
+	public List<ProposalVO> selectWorkerProposalList(WorkerRvwCriteria cri);
 	//작업자 계약서 목록
-	public List<ContractVO> selectWorkerContractList(UserVO userVO);
+	public List<ContractVO> selectWorkerContractList(WorkerRvwCriteria cri);
 	
 	//작업자 포트폴리오 목록
 	public List<PortfolioVO> selectWorkerPortfolioList(UserVO userVO);
@@ -66,6 +66,15 @@ public interface WorkerService {
 	public int workerReviewGetTotal(WorkerRvwCriteria cri);
 	//전체 팀리뷰 데이터 갯수
 	public int workerTeamReviewGetTotal(WorkerRvwCriteria cri);
+	
+	//전체 의뢰 데이터 갯수
+	public int workerRequestGetTotal(WorkerReqCriteria cri);
+	//전체 팀의뢰 데이터 갯수
+	
+	//전체 견적서 갯수
+	public int workerProposalGetTotal(WorkerRvwCriteria cri);
+	//전체 계약서 갯수
+	public int workerContractGetTotal(WorkerRvwCriteria cri);
 	
 	//전체 자격증 갯수
 	public int workerLicenseGetTotal(WorkerLcsCriteria cri);

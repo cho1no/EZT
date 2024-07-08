@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/worker_mypage_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>작업자 마이페이지</title>
+</head>
+<body>
+	<h3>[[${userVO.usersName}]]님 안녕하세요.</h3>
+	<hr>
+	<h4>팀 후기 목록</h4>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+	<th:block th:each="tRvw : ${teamReviewList}">
+	  <div class="list-group m-3">
+	    <a th:href="@{/review/info(reviewNo=${tRvw.reviewNo})}" class="list-group-item list-group-item-action" aria-current="true">
+		  <span>내용 : [[${tRvw.content}]]</span><hr>
+		  <span>팀 별점 : [[${tRvw.star}]]</span>
+		  <small>구분 : [[${tRvw.reviewDivision}]]</small>
+		  <small>[[${#dates.format(tRvw.writeDt, 'yyyy-MM-dd')}]]</small>
+		</a>
+	  </div>
+	</th:block>
+ 	<!-- 페이징 구현 -->
+    <div class="row pagination-wrap mt-5" >
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+          <a th:if="${tPage.prev}" th:href="@{/worker/teamReviewList(pageNum=${page.startPage - 1})}" class="prev">Prev</a>
+          <div class="d-inline-block" id="pagination">
+            <th:block th:each="num : ${#numbers.sequence(tPage.startPage, tPage.endPage)}">
+       	      <a th:class="${tPage.cri.pageNum == num ? 'active' : ''}" th:href="|@{/worker/teamReviewList(pageNum=${num})}|" >[[${num}]]</a>
+	  		</th:block> 
+          </div>
+          <a th:if="${tPage.next}" th:href="@{/worker/teamReviewList(pageNum=${tPage.endPage + 1})}" class="next">Next</a>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+</body>
+</html>
