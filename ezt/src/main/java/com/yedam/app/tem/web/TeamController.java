@@ -1,5 +1,5 @@
 package com.yedam.app.tem.web;
-//팀신청 CRUD
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,94 +18,115 @@ import com.yedam.app.tem.service.TeamVO;
 import com.yedam.app.tem.service.TeamWorkCategoryVO;
 
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Controller
 @RequestMapping("team")
 public class TeamController {
 
-	@Autowired
-	TeamService teamService;
-	@Autowired
-	CommonCodeService commonCodeService;
-	//팀 신청 전체조회
-	@GetMapping("/requestList")
-	public String teamRequestList(Model model) {
-		List<TeamVO> teamList = teamService.teamList();
-		model.addAttribute("teamList",teamList);
-		log.info(teamList.toString());
+    @Autowired
+    TeamService teamService;
 
-		return "tem/teamRequestList";
-	}
-	//팀 신청 단건조회
-	@GetMapping("/requestInfo")
-	public String teamRequestInfo(Model model, TeamVO teamVO) {
-		//팀 신청 단건조회
-		TeamVO findVO = teamService.teamInfo(teamVO);
-		model.addAttribute("team", findVO);
-		
-		//공통코드
-		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
-		return "tem/teamRequestInfo";
-	}
-	
-	//팀 신청 등록
-	@GetMapping("/requestInsert")
-	public String teamRequestInsert(Model model) {
-		model.addAttribute("team", new TeamVO());
-		model.addAttribute("twc", new TeamWorkCategoryVO());
-		//공통코드
-		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
-				
-		return "tem/teamRequestInsert";	
-	}
-	@PostMapping("/requestInsert")
-	public String teamRequestInsert(TeamVO teamVO, TeamWorkCategoryVO twcVO) {
-		teamService.insertTeam(teamVO);
-		teamService.insertCategory(twcVO);
-		return "redirect:/requestList";
-		
-	}
-	//팀 신청 수정
-	@PostMapping("/requestUpdate")
-	@ResponseBody
-	public boolean teamRequestUpdate(@RequestBody TeamVO teamVO) {
-		return teamService.updateTeam(teamVO);
-	}
+    @Autowired
+    CommonCodeService commonCodeService;
 
-	//팀 신청 삭제
-	@GetMapping("/requestDelete")
-	public String teamDelete(Integer teamNo) {
-		teamService.deleteTeam(teamNo);
-		
-		return "redirect:requestList";
-	}
-	//팀 신청 상세 등록
-	@GetMapping("/teamDetailInsert")
-	public String teamDetailInsert(Model model) {
-		model.addAttribute("twcVO", new TeamWorkCategoryVO());
-		
-		return "team/teamRequestInfo";
-	}
-	
-	@PostMapping("/teamDetailInsert")
-	public String teamDetailInsert(TeamWorkCategoryVO twcVO) {
-		teamService.insertCategory(twcVO);
-		return "redirect:requestList";
-	}
-	//팀 신청 상세 수정
-	@PostMapping("/teamDetailUpdate")
-	@ResponseBody
-	public boolean teamDetailUpdate(@RequestBody TeamWorkCategoryVO twcVO) {
-		return teamService.updateCategory(twcVO);
-	}
-	//팀 신청 상세 삭제
-	@GetMapping("/teamDetailDelete")
-	public String teamDetailDelete(@RequestParam("teamNo") int teamNo, @RequestParam("workCode") String workCode) {
-	    TeamWorkCategoryVO twcVO = new TeamWorkCategoryVO();
-	    twcVO.setTeamNo(teamNo);
-	    twcVO.setWorkCode(workCode);
-	    
-	    teamService.deleteCategory(twcVO);
-		return "tem/teamRequestInfo";
-	}
+    // 팀 신청 전체 조회
+    @GetMapping("/requestList")
+    public String teamRequestList(Model model) {
+        List<TeamVO> teamList = teamService.teamList();
+        model.addAttribute("teamList", teamList);
+        log.info(teamList.toString());
+
+        return "tem/teamRequestList";
+    }
+
+    // 팀 신청 단건 조회
+    @GetMapping("/requestInfo")
+    public String teamRequestInfo(Model model, TeamVO teamVO) {
+        // 팀 신청 단건 조회
+        TeamVO findVO = teamService.teamInfo(teamVO);
+        model.addAttribute("team", findVO);
+
+        // 공통 코드
+        model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
+        return "tem/teamRequestInfo";
+    }
+
+    // 팀 신청 등록 페이지
+    @GetMapping("/requestInsert")
+    public String teamRequestInsert(Model model) {
+        model.addAttribute("team", new TeamVO());
+        model.addAttribute("twc", new TeamWorkCategoryVO());
+        // 공통 코드
+        model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
+
+        return "tem/teamRequestInsert";
+    }
+
+    // 팀 신청 등록 처리
+    @PostMapping("/requestInsert")
+    @ResponseBody
+    public boolean teamRequestInsert(@RequestBody TeamVO teamVO) {
+        
+            // 팀 정보 삽입
+            teamService.insertTeam(teamVO);
+
+            // 카테고리 정보 삽입
+            List<TeamWorkCategoryVO> workCategoryVOList = teamVO.getWorkCategoryVO();
+            if (workCategoryVOList != null) {
+                for (TeamWorkCategoryVO twcVO : workCategoryVOList) {
+                    twcVO.setTwcTeamNo(teamVO.getTeamNo());
+                    teamService.insertCategory(twcVO);
+                }
+            }
+
+            return true;
+        } 
+
+    // 팀 신청 수정
+    @PostMapping("/requestUpdate")
+    @ResponseBody
+    public boolean teamRequestUpdate(@RequestBody TeamVO teamVO) {
+        return teamService.updateTeam(teamVO);
+    }
+
+    // 팀 신청 삭제
+    @GetMapping("/requestDelete")
+    public String teamDelete(Integer teamNo) {
+        teamService.deleteTeam(teamNo);
+
+        return "redirect:/team/requestList";
+    }
+
+    // 팀 신청 상세 등록
+    @GetMapping("/teamDetailInsert")
+    public String teamDetailInsert(Model model) {
+        model.addAttribute("twcVO", new TeamWorkCategoryVO());
+
+        return "team/teamRequestInfo";
+    }
+
+    @PostMapping("/teamDetailInsert")
+    public String teamDetailInsert(TeamWorkCategoryVO twcVO) {
+        teamService.insertCategory(twcVO);
+        return "redirect:/team/requestList";
+    }
+
+    // 팀 신청 상세 수정
+    @PostMapping("/teamDetailUpdate")
+    @ResponseBody
+    public boolean teamDetailUpdate(@RequestBody TeamWorkCategoryVO twcVO) {
+        return teamService.updateCategory(twcVO);
+    }
+
+    // 팀 신청 상세 삭제
+    @GetMapping("/teamDetailDelete")
+    public String teamDetailDelete(@RequestParam("teamNo") int teamNo, @RequestParam("workCode") String workCode) {
+        TeamWorkCategoryVO twcVO = new TeamWorkCategoryVO();
+        twcVO.setTeamNo(teamNo);
+        twcVO.setWorkCode(workCode);
+
+        teamService.deleteCategory(twcVO);
+        return "tem/teamRequestInfo";
+    }
 }
