@@ -1,42 +1,105 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/default_layout}"
-	layout:fragment="Content">
-<head>
-<meta charset="UTF-8">
-<title></title>
-<style>
-.modal-backdrop {
-	/* bug fix - no overlay */
-	display: none;
-}
-</style>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="reportFragment">
 
-</head>
-<body>
-<!-- Button trigger modal -->
-<button type="button" id="modalBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-  Launch static backdrop modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
-    </div>
-  </div>
+<div class="modal-header">
+	<h1 class="modal-title fs-5 text-center" id="staticBackdropLabel">
+		<b>공사 보고 작성</b>
+	</h1>
+	<button type="button" class="btn-close" data-bs-dismiss="modal"
+		aria-label="Close"></button>
 </div>
-</body>
+<div class="modal-body mx-3 my-3">
+	<form>
+		<ul class="list-unstyled pl-3 mb-0">
+			<li class="mb-2 row form-group"><div class="col-4">
+					<strong class="text-black">제목</strong>
+				</div>
+				<div class="col">
+					<input type="text" class="form-control">
+				</div></li>
+				<li class="mb-2 row form-group"><div class="col-4">
+					<strong class="text-black">시공분야</strong>
+				</div>
+				<div class="col">
+					<input type="text" class="form-control">
+				</div></li>
+				<li class="mb-2 row form-group"><div class="col-4">
+					<strong class="text-black">공사 보고 유형</strong>
+				</div>
+				<div class="col">
+					<input type="text" class="form-control">
+				</div></li>
+				<li class="mb-2 row form-group"><div class="col-4">
+					<strong class="text-black">공사 보고 일시</strong>
+				</div>
+				<div class="col">
+					<input type="text" class="form-control">
+				</div></li>
+				
+				<li>
+				<div class="form-floating" style="margin-top: 30px; margin-bottom: 30px">
+								<textarea class="form-control" placeholder="Leave a comment here"  style="height: 100px" id="floatingTextarea"></textarea>
+								<label for="floatingTextarea"><b>상세 내용</b></label>
+							</div></li>
+				<li>			
+				<p class="uploadTitle mt-5">첨부 이미지 업로드</p>
+								<div class="uploadDiv">
+									<label for="multiFile">파일찾기</label> 
+									<input type="file"
+										multiple="multiple" name="uploadFile" id="multiFile"
+										onChange="fileList()">
+								</div>
+								<div class="uploadResult">
+									<ul>
+									</ul>
+								</div></li>
+		</ul>
+	</form>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	<button type="button" class="btn btn-primary">등록</button>
+</div>
+
+<script>
+function fileList(){
+	
+	console.log("file");
+	
+	var formData = new FormData();
+	
+	var inputFile = $("input[name='uploadFile']");
+	
+	var files = inputFile[0].files;
+	
+	
+	// formData에 데이터 넣기
+	for(var i = 0; i < files.length; i++){
+	
+		formData.append("uploadFile", files[i]);
+		
+	}
+	
+	// Ajax
+	$.ajax({
+		url: '/rptInsert',
+		processData : false,
+		contentType : false,
+		data : formData,
+		type :'Post',
+		async : false
+		/*
+		success : function(result){
+			console.log(result);
+			location.reload();
+
+		}*/
+	})
+		//console.log(result);
+			//location.reload();
+	
+};
+
+</script>
+
 </html>

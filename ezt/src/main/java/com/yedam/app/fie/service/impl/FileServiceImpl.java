@@ -1,6 +1,8 @@
 package com.yedam.app.fie.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -24,6 +26,7 @@ import com.yedam.app.common.service.FileVO;
 import com.yedam.app.fie.service.FileService;
 
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnailator;
 
 @Service
 @Slf4j
@@ -95,12 +98,21 @@ public class FileServiceImpl implements FileService {
 
 				try {
 					File saveFile = new File(uploadPath, uploadFileName);
-
-					if (!checkImageType(saveFile)) {
-						// 파일 저장
-						multipartFile.transferTo(saveFile);
-						list.add(fileVO);
+					multipartFile.transferTo(saveFile);
+					
+					
+					if (checkImageType(saveFile)) {
+						// 이미지 파일 섬네일 저장
+						FileInputStream inputFile = new FileInputStream(saveFile);
+						FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
+	                    // createThumbnail(inputStream, outputStream, width, height)
+	                    // InputStream과 File객체를 이용하여 파일을 생성한다
+	                    Thumbnailator.createThumbnail(inputFile, thumbnail, 100, 100);
+	                    
+	                    thumbnail.close();
 					}
+					
+					list.add(fileVO);
 
 				} catch (Exception e) {
 					e.printStackTrace();

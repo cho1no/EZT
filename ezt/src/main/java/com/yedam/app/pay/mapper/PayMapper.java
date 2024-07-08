@@ -3,6 +3,8 @@ package com.yedam.app.pay.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yedam.app.pay.service.PayVO;
 
 public interface PayMapper {
@@ -15,4 +17,6 @@ public interface PayMapper {
 	
 	// 오늘 대금 지급 일자인 작업자
 	public List<Map<String, String>> selectPaymentDtInfo();
+	
+	public int updatePaymentTf(@Param("contractDetailNo")int contractDetailNo);
 }
