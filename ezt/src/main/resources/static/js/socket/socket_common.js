@@ -5,7 +5,8 @@
 
 let stomp = null;
 let sockJs = null;
-
+let uvo = "";
+function getMyInfo() {}
 // date format
 function formatDate(date) {
   const year = date.getFullYear();
@@ -35,12 +36,18 @@ function initializeWebSocket() {
     subscribeAlarm();
     if (currentRoomNo) {
       subscribeToRoom(currentRoomNo);
-    } else {
-      subscribeAllChat();
     }
   });
 }
 $(document).ready(function () {
   // 소켓 열기
-  initializeWebSocket();
+  // getMyInfo();
+  $.ajax({
+    type: "get",
+    url: "/api/getInfo",
+    success: (resp) => {
+      uvo = resp;
+      initializeWebSocket();
+    },
+  });
 });

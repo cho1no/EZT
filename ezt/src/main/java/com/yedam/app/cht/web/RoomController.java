@@ -75,8 +75,8 @@ public class RoomController {
         return "cht/room";
     }
     
-    @GetMapping("float")
-    public String goFloat() {
-    	return "floating/floatingTest";
-    }
+//    @GetMapping("float")
+//    public String goFloat() {
+//    	return "floating/floatingTest";
+//    }
 }
