@@ -20,11 +20,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.common.service.FileVO;
 import com.yedam.app.fie.service.FileService;
 
+import io.netty.handler.codec.http.HttpHeaders;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnailator;
 
@@ -103,7 +105,10 @@ public class FileServiceImpl implements FileService {
 					
 					if (checkImageType(saveFile)) {
 						// 이미지 파일 섬네일 저장
+						// transferTo가 먼저 일어나면 섬네일 이미지로 읽어야할 파일(업로드 되기 전 저장된)이 먼저 삭제됨
+						// saveFile을 이용해 업로드된 파일을 읽음
 						FileInputStream inputFile = new FileInputStream(saveFile);
+						
 						FileOutputStream thumbnail = new FileOutputStream(new File(uploadPath, "s_" + uploadFileName));
 	                    // createThumbnail(inputStream, outputStream, width, height)
 	                    // InputStream과 File객체를 이용하여 파일을 생성한다
@@ -122,7 +127,7 @@ public class FileServiceImpl implements FileService {
 		return list;
 	}
 	
-	
+	// 파일 삭제
 	@Override
 	public int deleteFile(List<FileVO> fileVO) throws UnsupportedEncodingException {
 		
@@ -149,24 +154,53 @@ public class FileServiceImpl implements FileService {
 		return 1;
 	}
 	
+	// 파일 다운로드
 	@Override
 	public ResponseEntity<Resource> downlodeFile(String fileName) {
 		log.info("download file: " + fileName);
 
 		FileSystemResource resource = new FileSystemResource(uploadFolder + fileName);
 
+		if(resource.exists() == false) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
 		log.info("resource : " + resource);
 
 		String resourceName = resource.getFilename();
 
 		org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
 		try {
+			
 			headers.add("Content-Disposition",
 					"attachment; filename=" + new String(resourceName.getBytes("UTF-8"), "ISO-8859-1"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+	}
+	
+	// 파일 호출
+	@Override
+	public ResponseEntity<byte[]> getFile(String fileName){
+		log.info("fileName: " + fileName);
+		
+		File file = new File(uploadFolder + fileName);
+		
+		log.info("file : " + file);
+		
+		ResponseEntity<byte[]> result = null;
+		
+		try {
+			org.springframework.http.HttpHeaders header = new org.springframework.http.HttpHeaders();
+			
+			header.add("Content-Type", Files.probeContentType(file.toPath()));
+			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+					
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 }
