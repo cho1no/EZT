@@ -48,6 +48,23 @@ public class TeamController {
 		return "tem/teamRequestInfo";
 	}
 	
+	//팀 신청 등록
+	@GetMapping("/requestInsert")
+	public String teamRequestInsert(Model model) {
+		model.addAttribute("team", new TeamVO());
+		model.addAttribute("twc", new TeamWorkCategoryVO());
+		//공통코드
+		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
+				
+		return "tem/teamRequestInsert";	
+	}
+	@PostMapping("/requestInsert")
+	public String teamRequestInsert(TeamVO teamVO, TeamWorkCategoryVO twcVO) {
+		teamService.insertTeam(teamVO);
+		teamService.insertCategory(twcVO);
+		return "redirect:/requestList";
+		
+	}
 	//팀 신청 수정
 	@PostMapping("/requestUpdate")
 	@ResponseBody
@@ -55,6 +72,13 @@ public class TeamController {
 		return teamService.updateTeam(teamVO);
 	}
 
+	//팀 신청 삭제
+	@GetMapping("/requestDelete")
+	public String teamDelete(Integer teamNo) {
+		teamService.deleteTeam(teamNo);
+		
+		return "redirect:requestList";
+	}
 	//팀 신청 상세 등록
 	@GetMapping("/teamDetailInsert")
 	public String teamDetailInsert(Model model) {

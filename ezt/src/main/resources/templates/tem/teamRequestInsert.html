@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{common/layouts/default_layout}"
+		layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>팀 모집 글쓰기</title>
+</head>
+<body>
+<form name="insertTeam" th:action="@{/requestInsert}" method="post">
+	<h4>팀원 모집 글 작성</h4>
+	<table class="table">
+		<tbody>
+			<td><input type="hidden" th:value="${team.teamNo}" name="teamTeamNo"><td>
+			<td><input type="hidden" th:value="${#authentication.principal.userNo}" name="teamTeamNo"><td>
+			<tr>
+				<th>작업 제목</th>
+				<td colspan="4"><input type="text" th:value="${team.workTitle}" name="workTitle"></td>
+			</tr>
+			<tr>
+				<th>작업 내용</th>
+				<td colspan="4" th:value="${team.workContent}" name="workContent"><textarea ></textarea></td>
+			</tr>
+			<tr>
+				<th>의뢰 내용</th>
+				<td colspan="4"><a>의뢰 바로가기</a></td>
+			</tr>
+			<td><input type="hidden" th:value="${twc.teamNo}" name="twcTeamNo"><td>
+			<td><input type="hidden" th:value="${twc.hireCompleteTf}" name="hireCompleteTf"><td>
+			<tr id="detail">
+			<th></th>
+			<td>
+	            <select>
+					<option th:each="category :${categoryCode}"
+							th:value="${category.codeNo}" 
+		                    th:text="${category.codeName}">
+	                </option>
+	           </select>
+	        </td>
+	        <td><input type="text" th:value="${twc.headcount}" name="headcount">명</td>
+	        </tr>
+		</tbody>
+	</table>
+	<button type="submit" class="btn btn-primary insert">등록</button>
+	<button  id='btn-add-row' class="btn btn-primary" type="button">+</button>
+	<button id='btn-delete-row' class="btn btn-primary"  type="button">ㅡ</button>
+</form>
+<script src="/js/tem/teamRequestInsert.js"></script>
+</body>
+</html>

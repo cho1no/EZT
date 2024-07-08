@@ -128,7 +128,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		  ,r.hope_ctt_budget
 		  ,r.hope_ctt_start_dt
 		  ,r.hope_ctt_end_dt
-		  ,r.postcode
+		  ,r.postcode 
 		  ,r.address
 		  ,r.detail_address
 		  ,r.title
@@ -217,7 +217,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		,ctt_place_situation = #{cttPlaceSituation}
 		,ctt_place_area = #{cttPlaceArea}
 		,content = #{content}
-		,postcode = REGION(#{postcode})
+		,postcode = #{postcode} 
 	WHERE request_no = #{requestNo}
 </update>
 

@@ -77,11 +77,10 @@ img{
          </div>
        </div>
      </div>
+ <p>[[${#authentication.principal}]]</p>
 </section>
 <script th:inline="javascript">
-    /*<![CDATA[*/
     var login = /*[[${#authentication.principal}]]*/ "";
-    /*]]>*/
 </script>
 <script src="/js/req/requestSearch.js" ></script>
 </body>
