@@ -69,7 +69,6 @@
 		WHERE c.rn <= #{pageNum} * #{amount} AND
 			  c.rn > (#{pageNum} -1 ) * #{amount}
 		]]>
-                                   		   
 	</select>
 	
 	<select id="getWorkerTotalTeamReviewCount" resultType="int">
@@ -88,37 +87,102 @@
 	
 	<!--  의뢰 목록 조회 -->
 	<select id="selectWorkerRequestList" resultType="RequestVO">
-		SELECT title
-			   , write_dt
-			   , FIND_COMMONCODE(request_state) as request_state_nm
-		FROM request
-		WHERE request_no IN (SELECT request_no
-		                     FROM proposal
-		                     WHERE proposal_state = 'A02'
-		                     		AND worker = #{usersNo})
+	SELECT c.*
+	FROM (SELECT ROWNUM as rn
+		  		, a.*
+  		  FROM (SELECT title
+  		  			   , request_no
+			   	 	   , write_dt
+			   		   , FIND_COMMONCODE(request_state) as request_state_nm
+			    FROM request
+				WHERE request_no IN (SELECT request_no
+		                     		 FROM proposal
+		                     		 WHERE proposal_state = 'A02'
+		                     		 AND worker = #{usersNo})
+		        )  a 
+		  ) c
+		<![CDATA[
+		WHERE c.rn <= #{pageNum} * #{amount} AND
+			  c.rn > (#{pageNum} -1 ) * #{amount}
+		]]>    		                     		
 	</select>
+	
+	<select id="getWorkerTotalRequestCount" resultType="int">
+		SELECT COUNT(*)
+		FROM (SELECT title
+					 , request_no
+			   	 	 , write_dt
+			   		 , FIND_COMMONCODE(request_state) as request_state_nm
+			  FROM request
+			  WHERE request_no IN (SELECT request_no
+		                     	   FROM proposal
+		                     	   WHERE proposal_state = 'A02'
+		                     	   AND worker = #{usersNo})
+			  )
+	</select>
+	
 	<!--  팀 의뢰 목록 조회 -->
 <!-- 	<select id="selectWorkerTeamRequestList"> -->
 	
 <!-- 	</select> -->
-	
+<!-- 	<select id="selectWorkerTeamRequestCount" resultType="int"> -->
+		
+<!-- 	</select> -->
+
 	<!-- 견적서 목록 조회 -->
 	<select id="selectWorkerProposalList" resultType="ProposalVO">
-		SELECT p.*
+	SELECT c.*
+	FROM (SELECT ROWNUM as rn
+		  		, a.*
+		  FROM (SELECT p.*
 			   , FIND_COMMONCODE(p.proposal_state) as proposal_state_nm
         	   , (SELECT SUM(pd.unitprice * pd.qty)
 	              FROM proposal_detail pd
 	              WHERE pd.proposal_no = p.proposal_no) as total
-		FROM proposal p
-		WHERE worker = #{usersNo}
-		ORDER BY update_dt
+				FROM proposal p
+				WHERE worker = #{usersNo}
+				ORDER BY update_dt desc
+				)  a 
+		  ) c
+		<![CDATA[
+		WHERE c.rn <= #{pageNum} * #{amount} AND
+			  c.rn > (#{pageNum} -1 ) * #{amount}
+		]]>  
 	</select>
+	
+	<select id="getWorkerTotalProposalCount" resultType="int">
+	SELECT COUNT(*)
+	FROM (SELECT p.*
+			       , FIND_COMMONCODE(p.proposal_state) as proposal_state_nm
+        	       , (SELECT SUM(pd.unitprice * pd.qty)
+	                  FROM proposal_detail pd
+	                  WHERE pd.proposal_no = p.proposal_no) as total
+		  FROM proposal p
+		  WHERE worker = #{usersNo}
+		 )
+	</select>
+	
 	<!-- 계약서 목록 조회 -->
 	<select id="selectWorkerContractList" resultType="ContractVO">
-		SELECT c.*, FIND_COMMONCODE(c.contract_state) as contract_state_nm
-		FROM contract c
-		WHERE worker_info = #{usersNo}
-		ORDER BY c.update_dt
+	SELECT c.*
+	FROM (SELECT ROWNUM as rn
+		  		, a.*
+		  FROM (SELECT c.*, FIND_COMMONCODE(c.contract_state) as contract_state_nm
+				FROM contract c
+				WHERE worker_info = #{usersNo})  a 
+		  ) c
+		<![CDATA[
+		WHERE c.rn <= #{pageNum} * #{amount} AND
+			  c.rn > (#{pageNum} -1 ) * #{amount}
+		]]>  
+	</select>
+	
+	<select id="getWorkerTotalContractCount" resultType="int">
+		SELECT COUNT (*)
+		FROM (SELECT c.*, FIND_COMMONCODE(c.contract_state) as contract_state_nm
+			  FROM contract c
+		 	  WHERE worker_info = #{usersNo}
+			 )
 	</select>
 	
 	<!-- 포트폴리오 목록조회 -->

@@ -27,6 +27,8 @@ import com.yedam.app.wkr.service.LicenseVO;
 import com.yedam.app.wkr.service.PortfolioVO;
 import com.yedam.app.wkr.service.WorkerLcsCriteria;
 import com.yedam.app.wkr.service.WorkerLcsPageDTO;
+import com.yedam.app.wkr.service.WorkerReqCriteria;
+import com.yedam.app.wkr.service.WorkerReqPageDTO;
 import com.yedam.app.wkr.service.WorkerRvwCriteria;
 import com.yedam.app.wkr.service.WorkerRvwPageDTO;
 import com.yedam.app.wkr.service.WorkerService;
@@ -134,38 +136,80 @@ public class WorkerController {
 	   cri.setUsersNo(vo.getUserVO().getUsersNo());
 	   List<ReviewVO> list = workerService.selectWorkerReviewList(cri);
 	   model.addAttribute("reviewList", list);
-	   List<ReviewVO> tList = workerService.selectWorkerTeamReviewList(cri);
-	   model.addAttribute("teamReviewList", tList);
 	   //페이징
 	   int total = workerService.workerReviewGetTotal(cri);
 	   model.addAttribute("page", new WorkerRvwPageDTO(cri, total));
+	   return "wkr/workerReviewList";
+   }
+   
+   //작업자 팀후기 목록조회
+   @GetMapping("/teamReviewList")
+   public String workerTeamReviewList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri) {
+	   model.addAttribute("userVO", vo.getUserVO());
+	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   List<ReviewVO> tList = workerService.selectWorkerTeamReviewList(cri);
+	   model.addAttribute("teamReviewList", tList);
+	   //페이징
 	   int tTotal = workerService.workerTeamReviewGetTotal(cri);
 	   model.addAttribute("tPage", new WorkerRvwPageDTO(cri, tTotal));
-	   return "wkr/workerReviewList";
+	   return "wkr/workerTeamReviewList";
    }
    
    //작업자 의뢰 목록조회
    @GetMapping("/requestList")
-   public String workerRequestList(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+   public String workerRequestList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerReqCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
-	   List<ReviewVO> list = workerService.selectWorkerRequestList(vo.getUserVO());
+	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   List<ReviewVO> list = workerService.selectWorkerRequestList(cri);
 	   model.addAttribute("requestList", list);
-	   //팀목록
-//	   List<ReviewVO> tList = workerService.selectWorkerTeamReviewList(vo.getUserVO());
-//	   model.addAttribute("teamRequestList", tList);
+	   //페이징
+	   int total = workerService.workerRequestGetTotal(cri);
+	   model.addAttribute("page", new WorkerReqPageDTO(cri, total));
 	   return "wkr/workerRequestList";
    }
    
-   //작업자 견적서/계약서 목록조회
-   @GetMapping("/documentList")
-   public String workerPpsCttList(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+   //작업자 팀의뢰 목록조회
+//   @GetMapping("/teamRequestList")
+//   public String workerTeamRequestList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerReqCriteria cri) {
+//	   model.addAttribute("userVO", vo.getUserVO());
+//	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+//	   List<ReviewVO> list = workerService.selectWorkerTeamRequestList(cri);
+//	   model.addAttribute("teamRequestList", list);
+//	   //팀목록
+//	   //페이징
+//	   int total = workerService.workerTeamRequestGetTotal(cri);
+//	   model.addAttribute("page", new WorkerReqPageDTO(cri, total));
+//	   return "wkr/workerTeamRequestList";
+//   }
+   
+   //작업자 견적서 목록조회
+   @GetMapping("/proposalList")
+   public String workerProposalList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
-	   List<ProposalVO> pList = workerService.selectWorkerProposalList(vo.getUserVO());
+	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   List<ProposalVO> pList = workerService.selectWorkerProposalList(cri);
 	   model.addAttribute("proposalList", pList);
-	   List<ContractVO> cList = workerService.selectWorkerContractList(vo.getUserVO());
-	   model.addAttribute("contractList", cList);
-	   return "wkr/workerDocumentList";
+	 //페이징
+	   int total = workerService.workerReviewGetTotal(cri);
+	   model.addAttribute("page", new WorkerRvwPageDTO(cri, total));
+	   return "wkr/workerProposalList";
    }
+   
+   //작업자 계약서 목록조회
+   @GetMapping("/contractList")
+   public String workerContractList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri) {
+	   model.addAttribute("userVO", vo.getUserVO());
+	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   List<ContractVO> cList = workerService.selectWorkerContractList(cri);
+	   model.addAttribute("contractList", cList);
+	   //페이징
+	   int total = workerService.workerReviewGetTotal(cri);
+	   model.addAttribute("page", new WorkerRvwPageDTO(cri, total));
+	   return "wkr/workerContractList";
+   }
+   
+   
+   
    
    //작업자 포트폴리오 목록조회
    @GetMapping("/portfolioList")

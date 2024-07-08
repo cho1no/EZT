@@ -54,7 +54,7 @@
 	</insert>
 	
 	<!-- 작업자 회원가입 -->
-	<insert id="saveWorker" parameterType="com.yedam.app.usr.service.UserVO">
+	<insert id="saveWorker">
 		<selectKey keyProperty="usersNo" resultType="Integer" order="BEFORE">
 			SELECT SEQ_USERS.NEXTVAL as usersNo
 			FROM dual	 
@@ -68,8 +68,8 @@
 				, #{usersPhone}, #{usersNick}, #{usersEmail}, #{usersBirth}
 				, #{usersRnn}, 'active', #{usersGender}, sysdate )
 					
-		INTO license( license_no, license_detail_no, users_no,  write_dt) 
-		VALUES ( SEQ_LICENSE.NEXTVAL, #{licenseDetailNo}, #{usersNo}, sysdate )
+		INTO license( license_no, license_detail_no, users_no,  write_dt, file_id) 
+		VALUES ( SEQ_LICENSE.NEXTVAL, #{licenseVO.licenseDetailNo}, #{usersNo}, sysdate, #{licenseVO.fileId} )
 
 	
 		<foreach item="region" collection="regionCode" separator="">
