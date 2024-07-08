@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
+// eslint-disable-next-line import/no-cycle
 import { CareerView } from 'src/sections/career/view/';
 
 // ----------------------------------------------------------------------

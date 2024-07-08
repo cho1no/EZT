@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 
+// eslint-disable-next-line import/no-cycle
 import Nav from './nav';
 import Main from './main';
 import Header from './header';

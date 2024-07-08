@@ -2,13 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yedam.app.common.mapper.ProcessMapper">
 	<select id="selectPayList" resultType="PayVO">
-		SELECT pay_no
-				, requester
-				, price
-				, pay_dt
-				, contract_no
-				, virtual_account
-		FROM pay
-		ORDER BY pay_dt DESC
+		SELECT p.pay_no
+		        , p.requester
+		        , p.price
+		        , p.pay_dt
+		        , p.contract_no
+		        , p.virtual_account
+		FROM pay p
+		JOIN contract c ON p.contract_no = c.contract_no
+		JOIN proposal pr ON c.contract_no = pr.proposal_no
+		JOIN request r ON pr.proposal_no = r.request_no
+		WHERE r.request_state = 'S02'
+		ORDER BY p.pay_dt DESC
 	</select>
 </mapper>
