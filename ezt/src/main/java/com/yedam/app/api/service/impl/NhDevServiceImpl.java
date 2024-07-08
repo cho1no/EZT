@@ -60,11 +60,11 @@ public class NhDevServiceImpl implements NhDevService{
 		String ApiNm = "ReceivedTransferAccountNumber";
 		String APISvcCd = "ReceivedTransferA";
 		Map<String, Object> map = createHeader(ApiNm, APISvcCd);
-		map.put("Bncd", "은행코드");
-		map.put("Acno", "계좌번호");
-		map.put("Tram", "가격");
-		map.put("DractOtlt", "출금계좌인자내용");
-		map.put("MractOtlt", "입금계좌인자내용");
+		map.put("Bncd", input.get("WORKERBANKCODE"));
+		map.put("Acno", input.get("WORKERACCOUNT"));
+		map.put("Tram", String.valueOf(input.get("PRICE")));
+		map.put("DractOtlt", input.get("USERSNAME"));
+		map.put("MractOtlt", "이지테리어");
 		return sendApi(ApiNm, map);
 	}
 	
@@ -73,11 +73,11 @@ public class NhDevServiceImpl implements NhDevService{
 		String ApiNm = "ReceivedTransferOtherBank";
 		String APISvcCd = "ReceivedTransferA";
 		Map<String, Object> map = createHeader(ApiNm, APISvcCd);
-		map.put("Bncd", "은행코드");
-		map.put("Acno", "계좌번호");
-		map.put("Tram", "가격");
-		map.put("DractOtlt", "출금계좌인자내용");
-		map.put("MractOtlt", "입금계좌인자내용");
+		map.put("Bncd", input.get("WORKERBANKCODE"));
+		map.put("Acno", input.get("WORKERACCOUNT"));
+		map.put("Tram", String.valueOf(input.get("PRICE")));
+		map.put("DractOtlt", input.get("USERSNAME"));
+		map.put("MractOtlt", "이지테리어");
 		return sendApi(ApiNm, map);
 	}
 

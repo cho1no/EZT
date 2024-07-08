@@ -51,6 +51,7 @@
 	, c.WORKER_ACCOUNT as workerAccount
 	, c.WORKER_BANKCODE as workerBankcode
 	, d.PRICE as price
+	, d.CONTRACT_DETAIL_NO as contractDetailNo
 	FROM contract c
 	JOIN users u 
 	ON u.users_no = c.worker_info
@@ -58,8 +59,15 @@
 	ON d.contract_no = c.contract_no
 	JOIN pay p
 	ON c.contract_no = p.contract_no
-	WHERE d.PAYMENT_DT = TO_DATE(sysdate, 'YY/MM/dd')
+	WHERE d.PAYMENT_DT = TO_DATE(sysdate, 'YY/MM/dd') AND d.PAYMENT_TF = 'N'
 	</select>
 	<!-- 오늘 대급 지급 일 -->
+	
+	<!-- 대금 지급 여부 수정 -->
+	<update id="updatePaymentTf" parameterType="int">
+	UPDATE contract_detail 
+	SET PAYMENT_TF = 'Y' 
+	WHERE CONTRACT_DETAIL_NO = #{contractDetailNo}
+	</update>
 	
 </mapper>
