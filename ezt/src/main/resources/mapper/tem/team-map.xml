@@ -94,7 +94,7 @@
 			,#{workContent}
 			,#{writer}
 			,sysdate
-			,161
+			,#{contractNo}
 			,'N'
 		)
 		
@@ -149,4 +149,27 @@
 	DELETE FROM team_work_category
 	WHERE team_no = #{teamNo} and work_code = #{workCode}
 </delete>
+
+<!-- 카테고리별 지원자 조회 -->
+<select id="volunteerList">
+	SELECT   m.enroll_no
+			,USERNAME(m.worker) as worker
+			,m.worker as users_no
+			,m.content
+			,m.process_result
+			,FIND_COMMONCODE(m.work_code) as work_code
+			,m.team_no
+			,(SELECT
+                SUM(trunc ( ( months_between ( c.career_end_dt, c.career_start_dt ) ) / 12 ))
+              FROM career
+              WHERE users_no = m.worker)as career 
+	FROM member_enroll m
+		JOIN users u
+		ON u.users_no = m.worker
+		LEFT OUTER JOIN career c
+		ON u.users_no = c.users_no
+	WHERE team_no = #{meTeamNo} and work_code = #{meWorkCode}
+	ORDER BY process_result		
+</select>
+
 </mapper>

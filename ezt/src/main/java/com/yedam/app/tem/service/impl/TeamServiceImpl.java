@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.tem.mapper.TeamMapper;
+import com.yedam.app.tem.service.MemberEnrollVO;
 import com.yedam.app.tem.service.TeamService;
 import com.yedam.app.tem.service.TeamVO;
 import com.yedam.app.tem.service.TeamWorkCategoryVO;
@@ -98,6 +99,13 @@ public class TeamServiceImpl implements TeamService {
 		
 		return teamMapper.deleteCategory(twcVO);
 	}
+
+	@Override
+	public List<MemberEnrollVO> volunteerList(MemberEnrollVO memberEnrollVO) {
+		
+		return teamMapper.volunteerList(memberEnrollVO);
+	}
+
 
 
 

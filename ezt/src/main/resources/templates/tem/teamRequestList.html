@@ -21,7 +21,7 @@ img{
 </style>
 </head>
 <body>
-<section class="site-section">
+
 <h2>팀 모집 목록</h2>
 <form id="searchForm" >
 	<div>
@@ -38,7 +38,7 @@ img{
 			<button class="btn btn-primary">검색</button>	
 		</div>
 		<div style="text-align:right" >
-			<button class="btn btn-primary insertBtn">글쓰기</button>
+			<button type="button" class="btn btn-primary insertBtn">글쓰기</button>
 		</div>
 	</div>
       <div class="container">
@@ -78,6 +78,16 @@ img{
          </div>
        </div>
      </div>
-</section>
+
+
+<script>
+$(document).ready(function(){
+    $('.insertBtn').click(function(){
+        if(confirm("대규모 작업을 함께할 팀원이 필요하신가요?")) {
+            window.location.href = '/worker/contractList';
+        }
+    });
+});
+</script>
 </body>
 </html>

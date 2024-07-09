@@ -4,9 +4,15 @@ import lombok.Data;
 
 @Data
 public class MemberEnrollVO {
-	private Integer enrollNo;
-	private int worker;
-	private String content;
-	private String processResult;
-	private int workCode;
+	private Integer enrollNo;	//신청 번호
+	private int worker; 	//신청자(작업자)
+	private String content;	//내용
+	private String processResult;	//처리 상태
+	private String workCode;	//작업 카테고리
+	private int teamNo;	//팀 번호
+	
+	private int meTeamNo;
+	private String meWorkCode;
+	private int usersNo;
+	private int career;
 }

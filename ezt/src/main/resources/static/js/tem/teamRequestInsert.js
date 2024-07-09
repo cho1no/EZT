@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $('#btn-add-row').click(function() {
         let clone = $('#detail-template').clone();
-        let index = $('.table tbody tr').length - 1; // 현재 행의 개수
+        let index = $('.table tbody #detail-template').length; // 현재 행의 개수
         clone.find('select, input').each(function() {
             let name = $(this).attr('name');
             if (name) {
@@ -9,7 +9,7 @@ $(document).ready(function(){
                 $(this).attr('name', newName);
             }
         });
-        clone.removeAttr('id');
+        //clone.removeAttr('id');
         clone.appendTo('.table tbody');
     });
 
@@ -22,6 +22,7 @@ $(document).ready(function(){
     // 게시글 등록 버튼 눌렀을 때 
     $('.insert').click(function() {
         let formData = getRequestInsert();
+        console.log(formData);
         $.ajax({
             url: '/team/requestInsert',
             type: 'post',
