@@ -17,6 +17,7 @@ import com.yedam.app.wkr.service.CareerVO;
 import com.yedam.app.wkr.service.LicenseVO;
 import com.yedam.app.wkr.service.PortfolioVO;
 import com.yedam.app.wkr.service.WorkerLcsCriteria;
+import com.yedam.app.wkr.service.WorkerPFCriteria;
 import com.yedam.app.wkr.service.WorkerReqCriteria;
 import com.yedam.app.wkr.service.WorkerRvwCriteria;
 import com.yedam.app.wkr.service.WorkerService;
@@ -28,12 +29,12 @@ public class WorkerServiceImpl implements WorkerService{
 	
 	//작업자 정보 조회
 	@Override
-	public List<Map<String, Object>> selectCategoryInfo(int id) {
+	public List<String> selectCategoryInfo(int id) {
 		return workerMapper.selectCategoryInfo(id);
 	}
 
 	@Override
-	public List<Map<String, Object>> selectRegionInfo(int id) {
+	public List<String> selectRegionInfo(int id) {
 		return workerMapper.selectRegionInfo(id);
 	}
 
@@ -68,8 +69,8 @@ public class WorkerServiceImpl implements WorkerService{
 	
 	//작업자 경력증명서 목록
 	@Override
-	public List<CareerVO> selectCareerList(UserVO userVO) {
-		return workerMapper.selectCareerList(userVO);
+	public List<CareerVO> selectCareerList(WorkerPFCriteria cri) {
+		return workerMapper.selectCareerList(cri);
 	}
 	//작업자 경력증명서 등록
 	@Override
@@ -114,8 +115,8 @@ public class WorkerServiceImpl implements WorkerService{
 	
 	//작업자 포트폴리오 목록
 	@Override
-	public List<PortfolioVO> selectWorkerPortfolioList(UserVO userVO) {
-		return workerMapper.selectWorkerPortfolioList(userVO);
+	public List<PortfolioVO> selectWorkerPortfolioList(WorkerPFCriteria cri) {
+		return workerMapper.selectWorkerPortfolioList(cri);
 	}
 	//작업자 포트폴리오 등록
 	@Override
@@ -133,6 +134,15 @@ public class WorkerServiceImpl implements WorkerService{
 	public int insertWorkerLicense(LicenseVO licenseVO) {
 		return workerMapper.insertWorkerLicense(licenseVO);
 	}
+	
+	//페이징
+	
+	//경력서 페이징
+	@Override
+	public int workerCareerGetTotal(WorkerPFCriteria cri) {
+		return workerMapper.getWorkerTotalCareerList(cri);
+	}
+	
 	
 	//후기목록 페이징
 	@Override
@@ -164,6 +174,12 @@ public class WorkerServiceImpl implements WorkerService{
 	}
 	
 
+	//포트폴리오목록 페이징
+	@Override
+	public int workerPortfolioGetTotal(WorkerPFCriteria cri) {
+		return workerMapper.getWorkerTotalPortfolioCount(cri);
+	}
+	
 	//자격증목록 페이징
 	@Override
 	public int workerLicenseGetTotal(WorkerLcsCriteria cri) {
@@ -177,6 +193,9 @@ public class WorkerServiceImpl implements WorkerService{
 	public boolean workerStateUpdate(UserVO userVO) {
 		return workerMapper.updateWorkerState(userVO) == 1;
 	}
+
+
+	
 
 	
 	

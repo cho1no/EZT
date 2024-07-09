@@ -179,5 +179,28 @@
 				FROM request
 				WHERE requester = #{usersNo})
 	</select>
+	<!-- 작업자 찾기 -->
+	<select id="selectFindWorkerList" parameterType="UserVO">
+		SELECT c.*		  
+   	   	FROM ( SELECT ROWNUM as rn
+   	   		 		  , a.*
+			   FROM (SELECT *
+				     FROM users
+				     WHERE users_role = 'ROLE_WORKER'
+				     ORDER BY users_join_dt desc ) a 
+			 ) c
+	    <![CDATA[
+	    WHERE c.rn <= #{pageNum} * #{amount} AND
+		      c.rn > (#{pageNum} -1 ) * #{amount}
+	    ]]>
+	</select>
+	
+	<select id="getTotalWorkerCount" resultType="int">
+		SELECT COUNT(*)
+		FROM (SELECT *
+			  FROM users
+			  WHERE users_role = 'ROLE_WORKER')
+	</select>
+	
 	
 </mapper>

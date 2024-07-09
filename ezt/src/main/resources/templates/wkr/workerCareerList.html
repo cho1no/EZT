@@ -13,9 +13,7 @@ div.careerList {
 </style>
 </head>
 <body>
-<h3>[[${userVO.usersName}]]님 의</h3>
-<hr>
-<h4>경력인증서 목록</h4>
+<h3>[[${userVO.usersName}]]님의 경력인증서 목록</h3>
 <div>
 	<label for="usersName">성명</label>
 	<input class="form-control d-inline-flex col-2"
@@ -23,7 +21,7 @@ div.careerList {
 </div>
 <div class="row row-cols-1 row-cols-md-3 t-2">
 	<th:block th:each="career : ${careerList}">
-			<div class="card col-4" style="width: 18rem;">
+			<div class="card col-4 mb-2" style="width: 18rem;">
 				<div class="card-body">
 					
 					<h5 class="card-title">
@@ -64,6 +62,21 @@ div.careerList {
 			</div>
 		</div>
 	</th:block>
+	
+	<!-- 페이징 구현 -->
+   <div class="row pagination-wrap mt-5" >
+      <div class="col-md-12 text-center ">
+        <div class="custom-pagination ml-auto">
+          <a th:if="${page.prev}" th:href="@{/worker/careerList(pageNum=${page.startPage - 1})}" class="prev">Prev</a>
+          <div class="d-inline-block" id="pagination">
+            <th:block th:each="num : ${#numbers.sequence(page.startPage, page.endPage)}">
+       	      <a th:class="${page.cri.pageNum == num ? 'active' : ''}" th:href="|@{/worker/careerList(pageNum=${num})}|" >[[${num}]]</a>
+	  	 	</th:block> 
+          </div>
+          <a th:if="${page.next}" th:href="@{/worker/careerList(pageNum=${page.endPage + 1})}" class="next">Next</a>
+        </div>
+      </div>
+    </div>
 </body>
 <script th:inline="javascript">
 	

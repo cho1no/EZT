@@ -28,6 +28,8 @@ import com.yedam.app.wkr.service.LicenseVO;
 import com.yedam.app.wkr.service.PortfolioVO;
 import com.yedam.app.wkr.service.WorkerLcsCriteria;
 import com.yedam.app.wkr.service.WorkerLcsPageDTO;
+import com.yedam.app.wkr.service.WorkerPFCriteria;
+import com.yedam.app.wkr.service.WorkerPFPageDTO;
 import com.yedam.app.wkr.service.WorkerReqCriteria;
 import com.yedam.app.wkr.service.WorkerReqPageDTO;
 import com.yedam.app.wkr.service.WorkerRvwCriteria;
@@ -106,10 +108,16 @@ public class WorkerController {
    
    //경력증명서 목록
    @GetMapping("/careerList")
-   public String workerCareerList (@AuthenticationPrincipal LoginUserVO vo, Model model) {
+   public String workerCareerList (@AuthenticationPrincipal LoginUserVO vo, Model model, MultipartFile[] uploadFile, WorkerPFCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
-	   List<CareerVO> list = workerService.selectCareerList(vo.getUserVO());
+	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   List<CareerVO> list = workerService.selectCareerList(cri);
 	   model.addAttribute("careerList", list); 
+	   
+	   //페이징
+	   int total = workerService.workerCareerGetTotal(cri);
+	   model.addAttribute("page", new WorkerPFPageDTO(cri, total));
+	   
 	   return "wkr/workerCareerList";
    } 
    
@@ -242,14 +250,15 @@ public class WorkerController {
    
    //작업자 포트폴리오 목록조회
    @GetMapping("/portfolioList")
-   public String workerpfList(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+   public String workerpfList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerPFCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
-	   List<PortfolioVO> list = workerService.selectWorkerPortfolioList(vo.getUserVO());
+	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   List<PortfolioVO> list = workerService.selectWorkerPortfolioList(cri);
 	   model.addAttribute("portfolioList", list);
 	   
 	   //페이징
-//	   int total = workerService.workerLicenseGetTotal(cri);
-//	   model.addAttribute("page", new WorkerLcsPageDTO(cri, total));
+	   int total = workerService.workerPortfolioGetTotal(cri);
+	   model.addAttribute("page", new WorkerPFPageDTO(cri, total));
 	   return "wkr/workerPortfolioList";
    }   
    //작업자 포트폴리오 등록 페이지
@@ -257,16 +266,18 @@ public class WorkerController {
    public String workerpfInsertForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
 	   model.addAttribute("userVO", vo.getUserVO());
 	   model.addAttribute("categories", commonCodeService.selectCommonCodeAll("0C"));
+	   model.addAttribute("pyung", commonCodeService.selectCommonCodeAll("0S"));	   
 	   model.addAttribute("ptf", new PortfolioVO());
 	   return "wkr/workerPortfolioInsert";
    }
    //작업자 포트폴리오 등록 기능(처리)
    @PostMapping("portfolioInsert")
    public String workerpfInsert(MultipartFile[] uploadFile, PortfolioVO pvo, Model model) {
+	   log.info(pvo.toString());
 	   int result = simpleFileService.uploadFiles(uploadFile);
 	   pvo.setFileId(result);
-	   model.addAttribute("ptf", workerService.insertWorkerPortfolio(pvo));
-	   return "redirect:/worker/workerPortfolioList";
+	   workerService.insertWorkerPortfolio(pvo);
+	   return "redirect:/worker/portfolioList";
    }
    
    //작업자 자격증 목록조회
@@ -297,7 +308,7 @@ public class WorkerController {
 	   int result = simpleFileService.uploadFiles(uploadFile);
 	   lvo.setFileId(result);
 	   model.addAttribute("lcs", workerService.insertWorkerLicense(lvo));
-	   return "redirect:/workerLicenseList";
+	   return "redirect:/worker/licenseList";
    }
    
    

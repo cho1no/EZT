@@ -6,22 +6,30 @@
 <head>
 <meta charset="UTF-8">
 <title>작업자 마이페이지</title>
+<style>
+button.teamBtn {
+	border-bottom-left-radius: 0.25rem;
+	border-bottom-right-radius: 0.25rem;
+	border: 1px solid rgba(0, 0, 0, 0.125);
+	background-color: #efefef !important;
+}
+</style>
 </head>
 <body>
 	<h3>[[${userVO.usersName}]]님 의 계약서 목록</h3>
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
 	<th:block th:each="ctt : ${contractList}">
-		<div class="list-group m-3">
+		<div class="list-group m-3 list-group-item-action">
 		  <a th:href="@{/conInfo(proposalNo=${ctt.proposalNo})}" class="list-group-item list-group-item-action">
 		    <span>공사명 : [[${ctt.cttName}]]</span>/
 		    <span>공사 일정: [[${#dates.format(ctt.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(ctt.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
 		    <span>단가 : [[${ctt.cttPrice}]]</span><span>원 / </span>
 		    <span>작성일 : [[${#dates.format(ctt.writeDt, 'yyyy-MM-dd')}]]</span>/
 		    <span>상태 : [[${ctt.contractStateNm}]]</span>
-		    <button type="button" th:onclick="|location.href='@{/team/requestInsert(${ctt.contractNo)}'|" 
-		    th:if="${ctt.contractState} == 'G02'">팀이 필요하세요?</button>
 		  </a>
+		  <button class="teamBtn" type="button" th:onclick="|location.href='@{/team/requestInsert(contractNo=${ctt.contractNo})}'|" 
+		  th:if="${ctt.contractState} == 'G01'">팀이 필요하세요?</button>
 		</div>
 	</th:block>
   </div>
@@ -41,7 +49,8 @@
       </div>
     </div>
     
-    
-    
+<script th:inline="javascript">
+
+</script>    
 </body>
 </html>
