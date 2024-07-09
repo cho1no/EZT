@@ -4,18 +4,11 @@
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
 <head>
-
-<!-- jQuery datePicker -->
-<link rel="stylesheet"
-	href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
-<!-- 서명 -->
 <link href="/css/doc/jquery.signaturepad.css" rel="stylesheet">
 <script src="/js/doc/jquery.signaturepad.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
-
-<title>계약서 수정</title>
+<title>동업 계약서 상세</title>
 
 <style>
 .hr-sect {
@@ -70,15 +63,6 @@ canvas {
 	height: 100px;
 }
 
-.modal-backdrop {
-	/* bug fix - no overlay */
-	display: none;
-}
-
-.dropdown button {
-	height: 35px;
-}
-
 .unity{
 	word-break : keep-all;
 	overflow-wrap : break-word;
@@ -86,23 +70,21 @@ canvas {
 </style>
 </head>
 <body>
+
 		<div class="container">
 			<div class="row mb-5">
-				<form class="p-4 p-md-5 border rounded" name="conUpdateForm"
-					id="conUpdateForm" th:action="@{/conUpdate}" method="post"
-					th:object="${contractVO}">
+				<form class="p-4 p-md-5 border rounded">
 					<div class="row form-group">
 						<div class="col">
 							<h3 class="text-black mb-5 border-bottom pb-2">
-								<b>계약서 수정</b>
+									<b>동업 계약서 상세</b>
+						<th:block th:if="${con.contractState == 'G01'}">
+							<span class="fs-6 fw-light text-success">[ 서명 중 ]</span>
+						</th:block>
+						<th:block th:if="${con.contractState == 'G02'}">
+							<span class="fs-6 fw-light text-success">[ 서명 완료 ]</span>
+						</th:block>
 							</h3>
-							<input type="hidden" name="contractNo"
-								th:value="${con.contractNo}"> <input type="hidden"
-								name="requesterInfo" th:value="${con.requesterInfo}"> <input
-								type="hidden" name="requesterAddress"> <input
-								type="hidden" name="requesterBankcode"> <input
-								type="hidden" name="type" value=1> <input type="hidden"
-								name="uploadFile">
 							<p class="hr-sect">
 								<b>공사개요</b>
 							</p>
@@ -128,12 +110,12 @@ canvas {
 							<!-- datepicker : id&type="text"-->
 							<div class="row form-group">
 								<div class="col-4">
-									<label for="startDt"><b>공사시작날짜</b></label>
+									<label><b>공사시작날짜</b></label>
 									<p class="text-black">[[${#dates.format(con.cttStartDt,
 										'yyyy-MM-dd')}]]</p>
 								</div>
 								<div class="col-4">
-									<label for="endDt"><b>공사마감날짜</b></label>
+									<label><b>공사마감날짜</b></label>
 									<p class="text-black">[[${#dates.format(con.cttEndDt,
 										'yyyy-MM-dd')}]]</p>
 								</div>
@@ -154,11 +136,12 @@ canvas {
 										<b>총 공사금액 </b>
 									</h5>
 								</div>
-								<div class="col-4">
+								<div class="col">
 									<p class="text-black h5" style="margin-top: 8px">
 										[[${#numbers.formatInteger(con.cttPrice,1,'COMMA')}]]<b> 원</b>
 									</p>
 								</div>
+
 							</div>
 							<p class="text-black">
 								<b>대금 지급 시기</b>
@@ -222,10 +205,10 @@ canvas {
 
 
 							<div class="row form-group">
-
-								<div class="col-6 info_requester" style="padding-top: 60px">
+								
+								<div class="col-6 info_req" style="padding-top: 60px">
 									<div class="p-4 mb-3 bg-white border p-4 rounded">
-										<h3 class="mt-3 h5 pl-3 mb-3 ">발주자(시행자) "갑"</h3>
+										<h3 class="mt-3 h5 pl-3 mb-3 ">동업자 "갑"</h3>
 										<ul class="list-unstyled pl-3 mb-0 con_ul">
 
 											<li class="mb-2 row form-group"><div class="col-4">
@@ -240,28 +223,32 @@ canvas {
 												<div class="col">
 													<p class="text-black" style="margin: 5px 0">[[${requester.usersPhone}]]</p>
 												</div></li>
+												<li class="mb-2 row form-group"><div class="col-4">
+													<strong class="text-black">공사 담당 분야</strong>
+												</div>
+												<div class="col">
+													<p class="text-black m-0 mt-1">[[${leaderCode}]]</p>
+												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">우편번호</strong>
 												</div>
 												<div class="col-3">
-													<input type="text" class="form-control" id="input_postcode">
+													<p class="text-black" style="margin: 5px 0"
+														id="input_postcode"></p>
 												</div>
-												<div class="col">
-													<button type="button" class="btn btn-primary"
-														onclick="input_execDaumPostcode()">우편번호 찾기</button>
-												</div></li>
+												<div class="col"></div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주소</strong>
 												</div>
 												<div class="col">
-													<input type="text" class="form-control" id="input_addr">
+													<p class="text-black" style="margin: 5px 0" id="input_addr"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">상세주소</strong>
 												</div>
 												<div class="col">
-													<input type="text" class="form-control"
-														id="input_detailAddr">
+													<p class="text-black" style="margin: 5px 0"
+														id="input_detailAddr"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주민등록번호</strong>
@@ -273,32 +260,19 @@ canvas {
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-													<select class="form-select" >
-														<option selected>은행 선택</option>
-													<th:block th:each=" list : ${code}">
-														<option>[[${list.codeName+'('+list.codeNo+')'}]]</option>
-													</th:block>
-												</select>
+													<p class="text-black" style="margin: 5px 0">[[${con.requesterBankcode}]]</p>
 												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
+												<li class="mb-2 row form-group"><div class="col-4">
 												</div>
 												<div class="col">
-													<input type="text" class="form-control"
-														name="requesterAccount" th:value="${con.requesterAccount}">
+													<p class="text-black" style="margin: 5px 0">[[${con.requesterAccount}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
 												</div>
-												<div class="col">
-													<button type="button"
-														class="btn btn-outline-success sendBtn"
-														data-bs-toggle="modal" data-bs-target="#sendModal">서명
-														하기</button>
-												</div>
-												<div class="h-75">
-													<div id="input_sign_req" class="text-center mt-2">
-														<canvas id="signatureCanvas_req"></canvas>
-													</div>
+												<div class="col h-75">
+												<div id="input_sign_req" class="text-center mt-2">
+												<canvas id="signatureCanvas_req"></canvas></div>
 												</div></li>
 										</ul>
 									</div>
@@ -307,7 +281,7 @@ canvas {
 
 								<div class="col-6 info_worker" style="padding-top: 60px">
 									<div class="p-4 mb-3 bg-white border p-4 rounded">
-										<h3 class="mt-3 h5 pl-3 mb-3 ">수급자(시공자) "을"</h3>
+										<h3 class="mt-3 h5 pl-3 mb-3 ">동업자 "을"</h3>
 										<ul class="list-unstyled pl-3 mb-0 con_ul">
 
 											<li class="mb-2 row form-group"><div class="col-4">
@@ -322,26 +296,31 @@ canvas {
 												<div class="col">
 													<p class="text-black" style="margin: 5px 0">[[${worker.usersPhone}]]</p>
 												</div></li>
+												<li class="mb-2 row form-group"><div class="col-4">
+													<strong class="text-black">공사 담당 분야</strong>
+												</div>
+												<div class="col">
+													<p class="text-black m-0 mt-1">[[${memberCode}]]</p>
+												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">우편번호</strong>
 												</div>
 												<div class="col-3">
 													<p class="text-black" style="margin: 5px 0"
-														id="input_postcode_work"></p>
+														id="input_postcode"></p>
 												</div>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주소</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0"
-														id="input_addr_work"></p>
+													<p class="text-black" style="margin: 5px 0" id="input_addr"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">상세주소</strong>
 												</div>
 												<div class="col">
 													<p class="text-black" style="margin: 5px 0"
-														id="input_detailAddr_work"></p>
+														id="input_detailAddr"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주민등록번호</strong>
@@ -363,8 +342,7 @@ canvas {
 											<li class="mb-2 row form-group"><div class="col-3">
 													<strong class="text-black">서명</strong>
 												</div>
-												<div class="col"></div>
-												<div class="h-75">
+												<div class="col h-75">
 													<div id="input_sign_work" class="text-center mt-2">
 														<canvas id="signatureCanvas_work"></canvas>
 													</div>
@@ -374,13 +352,15 @@ canvas {
 								</div>
 
 								<p class="text-center text-black mt-5">
-									<b>"갑"과 "을"은 상호 신의와 성실을 원칙으로 이 계약서에 의하여 공사계약을 체결하고 계약서 2부를
+								<b>"갑"과 "을"은 상호 신의와 성실을 원칙으로 이 계약서에 의하여 동업계약을 체결하고 계약서 2부를
 										작성하여 각각 1부씩 보관한다.</b>
 								</p>
 								<p class="text-center" style="letter-spacing: 3px">
 									<b><span class="me-5 cur_year">2024년</span><span
 										class="me-5 cur_month">06월</span><span class="me-5 cur_day">28일</span></b>
 								</p>
+								<p class="uploadTitle mt-5">첨부 파일</p>
+								<div class="col" id="fileDownload"></div>
 							</div>
 						</div>
 					</div>
@@ -389,14 +369,31 @@ canvas {
 			<div class="row align-items-center mb-5">
 				<div class="col-lg-4 ml-auto" style="padding-top: 30px">
 					<div class="row">
+					
+					
+						<th:block th:if="${#authentication.principal.userNo == con.workerInfo} and ${con.contractState == null}">
 						<div class="col-6">
-							<button type="button" class="btn btn-block btn-light btn-md"
-								id="updateBtn">수정 완료</button>
+									
+									<button type="submit" class="btn btn-block btn-light btn-md"
+								th:onClick="|location.href='@{/conUpdate(proposalNo=${con.proposalNo})}'|">수정</button>
 						</div>
 						<div class="col-6">
-							<button class="btn btn-block btn-primary btn-md"
-								onClick="history.back();">뒤로가기</button>
+							<button type="button" class="btn btn-block btn-primary btn-md"
+								th:onClick="|location.href='@{/sendCon(proposalNo=${con.proposalNo}, type=0)}'|">보내기</button>
 						</div>
+						</th:block>
+					
+						<th:block th:if="${#authentication.principal.userNo == con.requesterInfo} and ${con.contractState == 'G01'}">
+						<div class="col-6">
+							<button type="submit" class="btn btn-block btn-light btn-md"
+								th:onClick="|location.href='@{/conWrite(proposalNo=${con.proposalNo})}'|">수정</button>
+						</div>
+						
+						<div class="col-6">
+									<button type="button" class="btn btn-block btn-primary btn-md"
+								th:onClick="|location.href='@{/sendCon(proposalNo=${con.proposalNo}, type=1)}'|">서명 완료</button>
+						</div>
+						</th:block>
 					</div>
 				</div>
 			</div>
@@ -404,216 +401,110 @@ canvas {
 	
 
 
-	<!-- Modal -->
-	<div class="modal fade" id="sendModal" tabindex="-1"
-		aria-labelledby="sendModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered  modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="sendModalLabel">서명 하기</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
-				</div>
-				<div class="modal-body" style="height: 180px">
-					<form method="post" action="" class="sigPad">
-						<ul class="sigNav">
-							<li class="drawIt"><a href="#draw-it">그리기</a></li>
-							<li class="clearButton"><a href="#clear">지우기</a></li>
-						</ul>
-						<div class="sig sigWrapper">
-							<div class="typed"></div>
-							<canvas class="pad" width="260" height="100"></canvas>
-							<input type="hidden" name="output" class="output">
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-bs-dismiss="modal">닫기</button>
-					<button type="button" id="saveModal" class="btn btn-primary">서명</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-
 
 	<script th:inline="javascript">
-	// 조회 데이터 표기
-	date = new Date();
-    year = date.getFullYear();
-    month = date.getMonth() + 1;
-    day = date.getDate();
 	
-    $('.cur_year').html(year + '년');
-    $('.cur_month').html(month + '월');
-    $('.cur_day').html(day + '일');
-
+	// 년원일 표기
+	var date = /*[[${#dates.format(con.updateDt,'yyyy-MM-dd')}]]*/""
+	var date_num1 =  date.indexOf('-');
+	var date_num2 = date.indexOf('-', date_num1 + 1)
+	$('.cur_year').html(date.substring(0, date_num1) + '년');
+    $('.cur_month').html(date.substring(date_num1 + 1, date_num2) + '월');
+    $('.cur_day').html(date.substring(date_num2 + 1,) + '일');
+    
+    
     // 주소 표기
-    var work_addr = [[${con.workerAddress}]]
+    if(/*[[${con.workerAddress}]]*/"" != null){
+    var work_addr = /*[[${con.workerAddress}]]*/""
 	var work_num1=  work_addr.indexOf('_');
 	var work_num2 = work_addr.indexOf('_', work_num1 + 1)
-	$('#input_postcode_work').html(work_addr.substring(0, work_num1));
-    $('#input_addr_work').html(work_addr.substring(work_num1 + 1, work_num2));
-    $('#input_detailAddr_work').html(work_addr.substring(work_num2 + 1,));
-    
-    if([[${con.requesterAddress}]] != null){
-    var req_addr = [[${con.requesterAddress}]]
-	var req_num1=  req_addr.indexOf('_');
-	var req_num2 = req_addr.indexOf('_', req_num1 + 1)
-	$('#input_postcode').val(req_addr.substring(0, req_num1));
-    $('#input_addr').val(req_addr.substring(req_num1 + 1, req_num2));
-    $('#input_detailAddr').val(req_addr.substring(req_num2 + 1,));
+	$('.info_worker #input_postcode').html(work_addr.substring(0, work_num1));
+    $('.info_worker #input_addr').html(work_addr.substring(work_num1 + 1, work_num2));
+    $('.info_worker #input_detailAddr').html(work_addr.substring(work_num2 + 1,));
     }
     
- 	// 은행 표기
- 	if(/*[[${con.requesterBankcode}]]*/"" != null){
-    	for(i=0; i<$('option').length ; i++){
-   			if( $('option:eq('+i+')').val().includes(/*[[${con.requesterBankcode}]]*/"")){
-   			 $('option:eq('+i+')').prop("selected",true);
-    		}
-    	}
- 	}
-
+ 	// 주소 표기
+ 	if(/*[[${con.requesterAddress}]]*/"" != null){
+    var req_addr = /*[[${con.requesterAddress}]]*/""
+	var req_num1=  req_addr.indexOf('_');
+	var req_num2 = req_addr.indexOf('_', req_num1 + 1)
+	$('.info_req #input_postcode').html(req_addr.substring(0, req_num1));
+    $('.info_req #input_addr').html(req_addr.substring(req_num1 + 1, req_num2));
+    $('.info_req #input_detailAddr').html(req_addr.substring(req_num2 + 1,));
+    }
+	
  	// 통일 계약서 표기
     var unity_origin = /*[[${unity.contractTermsContent}]]*/""
     var unity_content = unity_origin.replaceAll('\n', '<br />');
     $('.unity p').html(unity_content);
+ 	
+ 	
+ 	let fileList = /*[[${con.fileList}]]*/""
+ 
+	// 첨부 파일 다운로드 
+	for(i = 0; i < fileList.length; i++){
+		var path = fileList[i].savePath.replaceAll('\\', '/');
+		var orgname = fileList[i].originalFileName;
+		var name = fileList[i].saveName;
+		var ext = fileList[i].ext;
+		//console.log(path+'/'+name);
+		$('#fileDownload').append(`<p><a href="download?fileName=${path}/${name}_${orgname}.${ext}">${orgname}.${ext}</a></p> `)
+	}
 	
-	var proposalNo = [[${con.proposalNo}]];
-	
-	
-	// 업데이트
-	$('#updateBtn').on('click', insertAjax );
-	
-	function insertAjax(e){
-		// 폼 데이터 처리
-		$('input[name="requesterAddress"]').val($('#input_postcode').val() + '_' 
-				+ $('#input_addr').val() + '_' + $('#input_detailAddr').val());
+		// 서명 표기
+		var workSign = /*[[${con.worSign.signsContent}]]*/"";
+
 		
-		var bankcode = $('select').val();
-		var bank_num1 = bankcode.indexOf('(');
-		if(bankcode == '은행 선택'){
-			$('input[name="requesterBankcode"]').val(null);
-		}else if(bankcode != /*[[${con.requesterBankcode}]]*/"" && bankcode != '은행 선택'){
-			$('input[name="requesterBankcode"]').val(bankcode.substring(bank_num1+1).replace(')', ''));
+		if(workSign != null){
+		 signView(workSign, 0);
 		}
 		
-		// 폼 데이터 전송
-		var formData = new FormData(document.conUpdateForm);
+		var reqSign = /*[[${con.reqSign.signsContent}]]*/"";
+
 		
-		formData.append("reqSign.signsContent", reqNewSign);
+		if(reqSign != null){
+		 signView(reqSign, 1);
+		}
 		
-		for (const pair of formData.entries()) {
-			  console.log(pair[0], pair[1]);
-			}
-		
-		$.ajax({
-			url: '/conUpdate',
-			processData : false,
-			contentType : false,
-			data : formData,
-			type :'Post',
-			async : false
-			
-		})
-			
-		location.href='/conInfo?proposalNo='+proposalNo;
-	}
+    function signView(compressedSignatureData, num) {
+        //console.log("compressedSignatureData = " + compressedSignatureData);
+        
+        // 압축된 데이터 복원
+        let decompressedSignatureData 
+                  = LZString.decompressFromBase64(compressedSignatureData);
 
-	
-	// 서명 표기
-	var workSign = [[${con.worSign.signsContent}]];
-	
-	if(workSign != null){
-	 signView(workSign, 0);
-	}
-	
-	var reqSign = [[${con.reqSign.signsContent}]];
-	var reqNewSign = '';
-	
-	if(reqSign != null){
-	 signView(reqSign, 1);
-	}
-	
-function signView(compressedSignatureData, num) {
-    //console.log("compressedSignatureData = " + compressedSignatureData);
-    console.log(num);
-    // 압축된 데이터 복원
-    let decompressedSignatureData 
-              = LZString.decompressFromBase64(compressedSignatureData);
+        // 복원된 서명을 JSON화
+        let signatureData = JSON.parse(decompressedSignatureData);
 
-    // 복원된 서명을 JSON화
-    let signatureData = JSON.parse(decompressedSignatureData);
-
-    // 서명 그리기
-    drawSignature(signatureData, num);
-}
-
-function drawSignature(data, num) {
-    // Canvas / 컨텍스트
-    let canvas;
-    
-    if(num == 0){
-    	canvas = document.getElementById('signatureCanvas_work');
-    }else{
-    	canvas = document.getElementById('signatureCanvas_req');
+        // 서명 그리기
+        drawSignature(signatureData, num);
     }
-    
-    let ctx = canvas.getContext('2d');
-    
- 	// 캔버스 초기화
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    for (let i = 0; i < data.length; i++) {
-        let point = data[i];
-        ctx.moveTo(point.mx, point.my);
-        ctx.lineTo(point.lx, point.ly);
+	
+    function drawSignature(data, num) {
+        // Canvas / 컨텍스트
+        let canvas;
+        if(num == 0){
+        canvas = document.getElementById('signatureCanvas_work');
+        }else{
+        	canvas = document.getElementById('signatureCanvas_req');
+        }
+        
+        let ctx = canvas.getContext('2d');
+        
+     	// 캔버스 초기화
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        for (let i = 0; i < data.length; i++) {
+        	let point = data[i];
+            ctx.moveTo(point.mx, point.my);
+            ctx.lineTo(point.lx, point.ly);
+        }
+        ctx.stroke();
+        
+        
     }
-    ctx.stroke();
-    $('#sendModal').modal('hide');
-    
-}
-	
-$('.sigPad').signaturePad({drawOnly:true});
 
-$('#saveModal').click(function(e) {
-	event.preventDefault(); // 폼의 기본 제출 동작을 방지
-
-		
-    // 서명 데이터를 JSON 형식으로 가져오기
-    var signatureData = $('.sigPad').signaturePad().getSignatureString();
-    
-    // 서명 데이터를 압축
-    compressedData = LZString.compressToBase64(signatureData);
-
-    // 압축된 데이터를 숨겨진 input에 저장
-    $('input.output').val(compressedData);
-
-    // 압축된 데이터 출력 (선택 사항)
-    //console.log(compressedData);
-   
-
-    reqNewSign = compressedData;
-    signView(compressedData, 1);
-   
-});
-
-	
 	</script>
-	<!-- datepicker -->
-	<script type="text/javascript" th:src="@{/js/doc/datepicker.js}"></script>
 
-	<!-- postcode -->
-	<script type="text/javascript" th:src="@{/js/doc/postcode.js}"></script>
-	<script
-		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
-	<!-- uploadAjax -->
-	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
-
-	<!-- 서명 -->
-	<script src="/js/doc/json2.min.js"></script>
 </body>
 </html>

@@ -16,7 +16,7 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
 
-<title>계약서 작성</title>
+<title>동업 계약서 작성</title>
 
 <style>
 .hr-sect {
@@ -76,10 +76,6 @@ canvas {
 	display: none;
 }
 
-.dropdown button {
-	height: 35px;
-}
-
 .unity {
 	word-break: keep-all;
 	overflow-wrap: break-word;
@@ -96,12 +92,7 @@ canvas {
 					<div class="row form-group">
 						<div class="col">
 							<h3 class="text-black mb-5 border-bottom pb-2">
-								<th:block th:if="${ptn == 0}">
 									<b>동업 계약서 작성</b>
-								</th:block>
-								<th:block th:unless="${ptn == 0}">
-									<b>계약서 작성</b>
-								</th:block>
 							</h3>
 							<input type="hidden" name="requesterInfo"
 								th:value="${ppsInfo.requester}"> <input type="hidden"
@@ -117,8 +108,9 @@ canvas {
 							</p>
 							<div class="row form-group">
 								<div class="col-6">
-									<label><b>공사명</b></label> <input type="text"
-										class="form-control" th:field="*{cttName}">
+									<label><b>공사명</b></label>
+									<p class="text-black" >[[${con.cttName}]]</p>
+									<input type="hidden" name="cttName" th:value="${con.cttName}">
 								</div>
 							</div>
 
@@ -137,14 +129,18 @@ canvas {
 							<!-- datepicker : id&type="text"-->
 							<div class="row form-group">
 								<div class="col-4">
-									<label for="startDt"><b>공사시작날짜</b></label> <input type="text"
-										class="form-control" id="startDt" th:field="*{cttStartDt}"
-										readonly placeholder="날짜 선택">
+									<label><b>공사시작날짜</b></label>
+									<p class="text-black">[[${#dates.format(con.cttStartDt,
+										'yyyy-MM-dd')}]]</p>
+									<input type="hidden" name="cttStartDt" 
+									th:value="${#dates.format(con.cttStartDt,'yyyy-MM-dd')}">
 								</div>
 								<div class="col-4">
-									<label for="endDt"><b>공사마감날짜</b></label> <input type="text"
-										class="form-control" id="endDt" th:field="*{cttEndDt}"
-										readonly placeholder="날짜 선택">
+									<label><b>공사마감날짜</b></label>
+									<p class="text-black">[[${#dates.format(con.cttEndDt,
+										'yyyy-MM-dd')}]]</p>
+									<input type="hidden" name="cttEndDt" 
+									th:value="${#dates.format(con.cttEndDt,'yyyy-MM-dd')}">
 								</div>
 								<div class="col-4">
 									<label><b>하자보수기간</b></label> <input type="text"
@@ -163,14 +159,11 @@ canvas {
 										<b>총 공사금액 </b>
 									</h5>
 								</div>
-								<div class="col-4">
-									<input type="text" class="form-control" name="cttPrice"
-										readonly>
-								</div>
-								<div class="col-auto">
-									<h5 class="text-black" style="padding-top: 10px">
-										<b>원</b>
-									</h5>
+								<div class="col">
+									<p class="text-black h5" style="margin-top: 8px">
+										[[${#numbers.formatInteger(con.cttPrice,1,'COMMA')}]]<b> 원</b>
+									</p>
+									<input type="hidden" name="cttPrice" th:value="${con.cttPrice}">
 								</div>
 
 							</div>
@@ -185,13 +178,20 @@ canvas {
 											<th scope="col" width="150px">금액</th>
 											<th scope="col" width="150px">일시</th>
 											<th scope="col">내역</th>
-											<th width="53px"><button type="button"
-													class="btn btn-primary"
-													style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">+</button></th>
 										</tr>
 									</thead>
 									<tbody class="content">
-
+										<th:block th:each=" list : ${con.dList}">
+											<tr class="text-center">
+												<td th:text="${list.round}" />
+												<td
+													th:text="${#numbers.formatInteger(list.price,1,'COMMA')} + 원" />
+												<td
+													th:text="${#dates.format(list.paymentDt,
+											'yyyy-MM-dd')}" />
+												<td th:text="${list.history}" />
+											</tr>
+										</th:block>
 									</tbody>
 								</table>
 							</div>
@@ -229,142 +229,6 @@ canvas {
 
 
 							<div class="row form-group">
-
-								<th:block th:unless="${ptn == 0}">
-								<div class="col-6" style="padding-top: 60px">
-									<div class="p-4 mb-3 bg-white border p-4 rounded">
-											<h3 class="mt-3 h5 pl-3 mb-3 ">발주자(시행자) "갑"</h3>
-										<ul class="list-unstyled pl-3 mb-0 con_ul">
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">성명</strong>
-												</div>
-												<div class="col-4">
-												<p class="text-black m-0 mt-1">[[${reqName}]]</p>
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">전화번호</strong>
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">우편번호</strong>
-												</div>
-												<div class="col-3"></div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">주소</strong>
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">상세주소</strong>
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">주민등록번호</strong>
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">계좌번호</strong>
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">서명</strong>
-												</div>
-												<div class="col"></div></li>
-											<li><div class="text-center mt-2">
-													<canvas></canvas>
-												</div></li>
-										</ul>
-									</div>
-								</div>
-
-
-								<div class="col-6" style="padding-top: 60px">
-									<div class="p-4 mb-3 bg-white border p-4 rounded">
-											<h3 class="mt-3 h5 pl-3 mb-3 ">수급자(시공자) "을"</h3>
-										<ul class="list-unstyled pl-3 mb-0 con_ul">
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">성명</strong>
-												</div>
-												<div class="col-4">
-													<p class="text-black m-0 mt-1">[[${userName}]]</p>
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">전화번호</strong>
-												</div>
-												<div class="col">
-													<p class="text-black m-0 mt-1">[[${userPhone}]]</p>
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">우편번호</strong>
-												</div>
-												<div class="col-3">
-													<input type="text" class="form-control" id="input_postcode">
-												</div>
-												<div class="col">
-													<button type="button" class="btn btn-primary"
-														onclick="input_execDaumPostcode()">우편번호 찾기</button>
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">주소</strong>
-												</div>
-												<div class="col">
-													<input type="text" class="form-control" id="input_addr">
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">상세주소</strong>
-												</div>
-												<div class="col">
-													<input type="text" class="form-control"
-														id="input_detailAddr">
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">주민등록번호</strong>
-												</div>
-												<div class="col">
-													<p class="text-black m-0 mt-1">[[${userRnn}]]</p>
-												</div></li>
-
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">계좌번호</strong>
-												</div>
-												<div class="col">
-													<select class="selectpicker show-tick form-control"
-														data-style="btn-white py-0 pb-2 m-0" data-width="100%"
-														data-live-search="true" title="은행 선택">
-														<th:block th:each=" list : ${code}">
-															<option>[[${list.codeName+'('+list.codeNo+')'}]]</option>
-														</th:block>
-													</select>
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-												</div>
-												<div class="col">
-													<input type="text" class="form-control"
-														th:field="*{workerAccount}">
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">서명</strong>
-												</div>
-												<div class="col">
-													<button type="button"
-														class="btn btn-outline-success sendBtn"
-														data-bs-toggle="modal" data-bs-target="#sendModal">서명
-														하기</button>
-												</div></li>
-											<li><div id="input_sign" class="text-center mt-2">
-													<canvas id="signatureCanvas"></canvas>
-												</div></li>
-
-										</ul>
-									</div>
-								</div>
-								</th:block>
-								
-								
-								<th:block th:if="${ptn == 0}">
 								<div class="col-6" style="padding-top: 60px">
 									<div class="p-4 mb-3 bg-white border p-4 rounded">
 											<h3 class="mt-3 h5 pl-3 mb-3 ">동업자 "갑"</h3>
@@ -422,13 +286,12 @@ canvas {
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-													<select class="selectpicker show-tick form-control"
-														data-style="btn-white py-0 pb-2 m-0" data-width="100%"
-														data-live-search="true" title="은행 선택">
-														<th:block th:each=" list : ${code}">
-															<option>[[${list.codeName+'('+list.codeNo+')'}]]</option>
-														</th:block>
-													</select>
+													<select class="form-select">
+														<option selected>은행 선택</option>
+													<th:block th:each=" list : ${code}">
+														<option>[[${list.codeName+'('+list.codeNo+')'}]]</option>
+													</th:block>
+												</select>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 												</div>
@@ -509,19 +372,11 @@ canvas {
 										</ul>
 									</div>
 								</div>
-								</th:block>
-								
 								
 
 								<p class="text-center text-black mt-5">
-								<th:block th:unless="${ptn == 0}">
-									<b>"갑"과 "을"은 상호 신의와 성실을 원칙으로 이 계약서에 의하여 공사계약을 체결하고 계약서 2부를
-										작성하여 각각 1부씩 보관한다.</b>
-								</th:block>
-								<th:block th:if="${ptn == 0}">
 								<b>"갑"과 "을"은 상호 신의와 성실을 원칙으로 이 계약서에 의하여 동업계약을 체결하고 계약서 2부를
 										작성하여 각각 1부씩 보관한다.</b>
-								</th:block>
 								</p>
 								<p class="text-center" style="letter-spacing: 3px">
 									<b><span class="me-5 cur_year">2024년</span><span
@@ -597,64 +452,21 @@ canvas {
 
 	<script th:inline="javascript">
 	
-	// 공사 대금 표기
-	 var totalPrice = 0;
-
-	let priceList = /*[[${ppsInfo.list}]]*/""
 	
-	for(i =0 ; i < priceList.length ; i++){
-		totalPrice += priceList[i].qty * priceList[i].unitprice;
-	}
-	
-	$('input[name="cttPrice"]').val(totalPrice.toString().replace(
-			/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
-	
-	
-	// 현재 년월일 표시
-	date = new Date();
-    year = date.getFullYear();
-    month = date.getMonth() + 1;
-    day = date.getDate();
-	
-    $('.cur_year').html(year + '년');
-    $('.cur_month').html(month + '월');
-    $('.cur_day').html(day + '일');
+	// 년원일 표기
+	var date = /*[[${#dates.format(con.updateDt,'yyyy-MM-dd')}]]*/""
+	var date_num1 =  date.indexOf('-');
+	var date_num2 = date.indexOf('-', date_num1 + 1)
+	$('.cur_year').html(date.substring(0, date_num1) + '년');
+    $('.cur_month').html(date.substring(date_num1 + 1, date_num2) + '월');
+    $('.cur_day').html(date.substring(date_num2 + 1,) + '일');
+    
  	// 통일 계약서 표기
     var unity_origin = /*[[${unity.contractTermsContent}]]*/""
     var unity_content = unity_origin.replaceAll('\n', '<br />');
     $('.unity p').html(unity_content);
     
     
-	// + 버튼 : tbody tr 추가
-	$('table thead button').on('click', addForm);
-	let num = 1;
-	function addForm(e){
-		$('.content').append(`<tr>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" 
-						onKeyup="this.value=this.value.replace(/[^-0-9]/g,'').replace('-','').replace(/^0+/, '');" 
-						value="0" maxlength="12" class="price_${num}" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" value='1900-01-01' /></td>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><button type="button" class="btn btn-outline-dark" name="deleteBtn"
-					style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">-</button></td>
-			</tr>`);
-		num += 1;
-		addRound();
-	}
-	// 회차 표기
-	function addRound(){
-		for(i=0; i < $('tbody tr').length; i++){
-	    	$('tbody tr:eq('+i+') td:eq(0) input').val(i + 1);
-	    }
-	}
-	
-	// - 버튼 : tbody tr 제거
-	$(document).on('click', 'button[name=deleteBtn]', function(e) {
-	    e.target.closest('tr').remove();
-	    //GetTotal();
-	    addRound();
-	});
 
 	
 	// 폼 데이터 전송
@@ -688,41 +500,21 @@ canvas {
 		$('input[name="workerAddress"]').val($('#input_postcode').val() + '_' 
 				+ $('#input_addr').val() + '_' + $('#input_detailAddr').val());
 				
-		var bankcode = $('.dropdown button div div div').html();
+		var bankcode = $('select').val();
 		var bank_num1 = bankcode.indexOf('(');
 		if(bankcode != '은행 선택'){
 		$('input[name="workerBankcode"]').val(bankcode.substring(bank_num1+1).replace(')', ''));
 		}else{
 			$('input[name="workerBankcode"]').val(null);
 		}
-		
-				
-		$('input[name="cttPrice"]').val($('input[name="cttPrice"]').val().replace(',', ''));
-	
-		let startDt = $('#startDt');
-		let endDt = $('#endDt');
-		
-		if(startDt.val() == ''){
-			startDt.val('1900-01-01');
-		}
-		if(endDt.val() == ''){
-			endDt.val('1900-01-01');
-		}
-	
-	
-    	for(i=0; i < $('tbody tr').length; i++){
-    		$('tbody tr:eq('+i+') td:eq(0) input').attr('name', 'dList['+i+'].round');
-    		$('tbody tr:eq('+i+') td:eq(1) input').attr('name', 'dList['+i+'].price');
-    		$('tbody tr:eq('+i+') td:eq(2) input').attr('name', 'dList['+i+'].paymentDt');
-    		$('tbody tr:eq('+i+') td:eq(3) input').attr('name', 'dList['+i+'].history');
-    	}
-    	
     	
 		
 		// 폼 데이터 전송
-		if(/*[[${ptn}]]*/"" == 0){
-			formData.append("leaderCategoryCode", /*[[${leaderCode.codeName}]]*/"");
-    		formData.append("memberCategoryCode", /*[[${leaderCode.codeName}]]*/"");
+		var formData = new FormData(document.conInsertForm);
+		formData.append("worSign.signsContent", compressedData);
+		
+			formData.append("leaderCategoryCode", /*[[${leaderCode.codeNo}]]*/"");
+    		formData.append("memberCategoryCode", /*[[${leaderCode.codeNo}]]*/"");
     		formData.append("teamNo", /*[[${teamNo}]]*/"");
     		
     		for (const pair of formData.entries()) {
@@ -743,32 +535,9 @@ canvas {
 					}
 			})
     		
-		}else{
-			
-			var formData = new FormData(document.conInsertForm);
-			formData.append("worSign.signsContent", compressedData);
-			
-			for (const pair of formData.entries()) {
-				  console.log(pair[0], pair[1]);
-				}
-			
-			$.ajax({
-				url: '/conInsert',
-				processData : false,
-				contentType : false,
-				data : formData,
-				type :'Post',
-				dataType:'JSON'
-					
-					,success : function(result){
-						console.log(result);
-						location.href='/conInfo?contractNo='+result;
-					}
-			})
 			
 		}
 		
-	}
 	
 		// 서명
 		var compressedData;

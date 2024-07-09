@@ -355,13 +355,12 @@ canvas {
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-													<select class="selectpicker show-tick form-control"
-														id="select_work" data-style="btn-white py-0 pb-2 m-0"
-														data-width="100%" data-live-search="true" title="은행 선택">
-														<th:block th:each=" list : ${code}">
-															<option>[[${list.codeName+'('+list.codeNo+')'}]]</option>
-														</th:block>
-													</select>
+													<select class="form-select">
+														<option selected>은행 선택</option>
+													<th:block th:each=" list : ${code}">
+														<option>[[${list.codeName+'('+list.codeNo+')'}]]</option>
+													</th:block>
+												</select>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 												</div>
@@ -498,11 +497,13 @@ canvas {
     }
     
     // 은행 표기
-    $('.select_work').attr('title', /*[[${con.workerBankcode}]]*/"");
-    // 통일 계약서 표기
-    var unity_origin = /*[[${unity.contractTermsContent}]]*/""
-    var unity_content = unity_origin.replaceAll('\n', '<br />');
-    $('.unity p').html(unity_content);
+   if(/*[[${con.requesterBankcode}]]*/"" != null){
+    	for(i=0; i<$('option').length ; i++){
+   			if( $('option:eq('+i+')').val().includes(/*[[${con.requesterBankcode}]]*/"")){
+   			 $('option:eq('+i+')').prop("selected",true);
+    		}
+    	}
+ 	}
     
 	// + 버튼 : tbody tr 추가
 	$('table thead button').on('click', addForm);
@@ -564,7 +565,7 @@ canvas {
 		$('input[name="workerAddress"]').val($('#input_postcode').val() + '_' 
 				+ $('#input_addr').val() + '_' + $('#input_detailAddr').val())
 	
-		var bankcode = $('.dropdown button div div div').html();
+		var bankcode = $('select').val();
 		var bank_num1 = bankcode.indexOf('(');
 		if(bankcode == '은행 선택'){
 			$('input[name="workerBankcode"]').val(null);
