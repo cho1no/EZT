@@ -2,6 +2,8 @@ package com.yedam.app.doc.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.common.service.FileVO;
 
@@ -28,5 +30,13 @@ public interface ContractService {
 	
 	// 계약서 전송
 	public int conSend(ContractVO contractVO);
+	
+	// 동업 계약서
+	// 분야 코드 조회
+	public CommonCodeVO workCodeSelect(int teamNo, int usersNo);
+	// 동업 계약서 등록
+	public int ptnConInsert(PartnershipContractVO partnershipContractVO);
+	// 동업 계약서 조회
+	public PartnershipContractVO ptnConSelect(int contractNo);
 	
 }

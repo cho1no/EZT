@@ -12,12 +12,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.service.ContractService;
 import com.yedam.app.doc.service.ContractVO;
+import com.yedam.app.doc.service.PartnershipContractVO;
 import com.yedam.app.doc.service.ProposalService;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.doc.service.UnityContractVO;
@@ -59,6 +61,9 @@ public class ContractController {
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
 		
+		UserVO requester = ppsSerivce.userInfo(ppsVO.getRequester());
+		model.addAttribute("reqName", requester.getUsersName());
+		
 		// 은행 코드 조회
 		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
 		model.addAttribute("code", codeVO);
@@ -70,16 +75,17 @@ public class ContractController {
 	}
 
 	@PostMapping(value = "/conInsert", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> uploadAjaxPost(MultipartFile[] uploadFile
+	@ResponseBody
+	public int uploadAjaxPost(MultipartFile[] uploadFile
 												, ContractVO contractVO) {
 
 		List<FileVO> list = fileService.uploadFiles(uploadFile);
 		if (!list.isEmpty()) {
 			contractVO.setFileList(list);
 		}
-		conService.conInsert(contractVO);
+		int no = conService.conInsert(contractVO);
 
-		return new ResponseEntity<>("String", HttpStatus.OK);
+		return no;
 	}
 
 	// 계약서 상세
@@ -209,6 +215,111 @@ public class ContractController {
 	@GetMapping("sendCon")
 	public String conSend(ContractVO contractVO) {
 		int no = conService.conSend(contractVO);
-		return "redirect:conInfo?proposalNo=" + no;
+		return "redirect:conInfo?contractNo=" + no;
 	}
+	
+	
+		// 동업 계약서 등록
+		@GetMapping("ptnconInsert")
+		public String ptnconInsert(ContractVO contractVO
+								, int teamNo
+								, int userNo
+								, Model model
+								, @AuthenticationPrincipal LoginUserVO user) {
+
+			model.addAttribute("contractVO", new ContractVO());
+			
+			// 계약서 정보 조회
+			ContractVO findVO = conService.conInfo(contractVO);
+
+			// 유저 정보
+			model.addAttribute("userName", user.getUserVO().getUsersName());
+			model.addAttribute("userPhone", user.getUserVO().getUsersPhone());
+			model.addAttribute("userRnn", user.getUserVO().getUsersRnn());
+			
+			UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
+			model.addAttribute("memberName", requester.getUsersName());
+			model.addAttribute("memberPhone", requester.getUsersPhone());
+			
+			// 분야 코드 조회
+			CommonCodeVO workCode = conService.workCodeSelect(teamNo, user.getUserNo());
+			model.addAttribute("leaderCode", workCode);
+			CommonCodeVO m_workCode = conService.workCodeSelect(teamNo, userNo);
+			model.addAttribute("memberCode", m_workCode);
+
+			// 견적서 정보 조회
+			ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
+			model.addAttribute("ppsInfo", ppsVO);
+
+			// 의뢰 정보 조회
+			RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
+			model.addAttribute("reqInfo", reqVO);
+			
+			// 은행 코드 조회
+			List<CommonCodeVO> codeVO = conService.bankcodeSelect();
+			model.addAttribute("code", codeVO);
+			// 통일 계약서 조회
+			UnityContractVO unityVO = conService.unityConSelect();
+			model.addAttribute("unity", unityVO);
+
+			// 팀 코드
+			model.addAttribute("teamNo", teamNo);
+
+			return "doc/ptncontractInsert";
+		}
+		
+		@PostMapping(value = "/ptnconInsert", produces = MediaType.APPLICATION_JSON_VALUE)
+		@ResponseBody
+		public int ptnconInsert(MultipartFile[] uploadFile
+													, ContractVO contractVO
+													, PartnershipContractVO partnershipContractVO) {
+
+			List<FileVO> list = fileService.uploadFiles(uploadFile);
+			if (!list.isEmpty()) {
+				contractVO.setFileList(list);
+			}
+			int no = conService.conInsert(contractVO);
+			partnershipContractVO.setContractNo(no);
+			conService.ptnConInsert(partnershipContractVO);
+
+			return no;
+		}
+		
+		// 계약서 상세
+		@GetMapping("ptnconInfo")
+		public String ptnConInfo(ContractVO contractVO
+							  , Model model
+							  , @AuthenticationPrincipal LoginUserVO user) {
+
+			// 계약서 정보 조회
+			ContractVO findVO = conService.conInfo(contractVO);
+			model.addAttribute("con", findVO);
+
+			// 유저 정보
+			UserVO worker = ppsSerivce.userInfo(findVO.getWorkerInfo());
+			model.addAttribute("worker", worker);
+			UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
+			model.addAttribute("requester", requester);
+
+			ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
+
+			// 의뢰 정보 조회
+			RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
+			model.addAttribute("reqInfo", reqVO);
+			
+			// 통일 계약서 조회
+			UnityContractVO unityVO = conService.IncludeUnityCon(findVO.getContractNo());
+			model.addAttribute("unity", unityVO);
+			
+			// 분야 코드 조회
+			PartnershipContractVO workCode = conService.ptnConSelect(findVO.getContractNo());
+			model.addAttribute("leaderCode", workCode.getLeaderCategoryCode());
+			model.addAttribute("memberCode", workCode.getMemberCategoryCode());
+			
+
+			return "doc/ptncontractInfo";
+
+		}
+		
+		
 }

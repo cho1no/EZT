@@ -79,317 +79,321 @@ canvas {
 .dropdown button {
 	height: 35px;
 }
-.unity{
-	word-break : keep-all;
-	overflow-wrap : break-word;
-}
 
+.unity {
+	word-break: keep-all;
+	overflow-wrap: break-word;
+}
 </style>
 </head>
 <body>
-	<section class="site-section">
-		<div class="container">
-			<div class="row mb-5">
-				<form class="p-4 p-md-5 border rounded" name="conInsertForm"
-					id="conInsertForm" th:action="@{/conInsert}" method="post"
-					th:object="${contractVO}">
-					<div class="row form-group">
-						<div class="col">
-							<h3 class="text-black mb-5 border-bottom pb-2">
-								<b>계약서 작성</b>
-							</h3>
-							<input type="hidden" name="requesterInfo"
-								th:value="${ppsInfo.requester}"> <input type="hidden"
-								name="workerInfo" th:value="${ppsInfo.worker}"> <input
-								type="hidden" name="workerAddress"> <input type="hidden"
-								name="proposalNo" th:value="${ppsInfo.proposalNo}"> <input
-								type="hidden" name="workerBankcode"> <input
-								type="hidden" name="unityContractNo" th:value="${unity.unityContractNo}">
-							<p class="hr-sect">
-								<b>공사개요</b>
-							</p>
-							<div class="row form-group">
-								<div class="col-6">
-									<label><b>공사명</b></label> <input type="text"
-										class="form-control" th:field="*{cttName}">
-								</div>
+
+	<div class="container">
+		<div class="row mb-5">
+			<form class="p-4 p-md-5 border rounded" name="conInsertForm"
+				id="conInsertForm" th:action="@{/conInsert}" method="post"
+				th:object="${contractVO}">
+				<div class="row form-group">
+					<div class="col">
+						<h3 class="text-black mb-5 border-bottom pb-2">
+							<b>계약서 작성</b>
+						</h3>
+						<input type="hidden" name="requesterInfo"
+							th:value="${ppsInfo.requester}"> <input type="hidden"
+							name="workerInfo" th:value="${ppsInfo.worker}"> <input
+							type="hidden" name="workerAddress"> <input type="hidden"
+							name="proposalNo" th:value="${ppsInfo.proposalNo}"> <input
+							type="hidden" name="workerBankcode"> <input type="hidden"
+							name="unityContractNo" th:value="${unity.unityContractNo}">
+
+						<p class="hr-sect">
+							<b>공사개요</b>
+						</p>
+						<div class="row form-group">
+							<div class="col-6">
+								<label><b>공사명</b></label> <input type="text"
+									class="form-control" th:field="*{cttName}">
+							</div>
+						</div>
+
+						<div class="row form-group">
+							<div class="col-10">
+								<label><b>공사주소</b></label>
+								<p class="text-black">[[${'(' + reqInfo.postcode + ') '
+									+reqInfo.address + ' ' + reqInfo.detailAddress}]]</p>
+							</div>
+							<div class="col-2">
+								<label><b>공사면적</b></label>
+								<p class="text-black">[[${reqInfo.cttPlaceArea}]]</p>
+							</div>
+						</div>
+
+						<!-- datepicker : id&type="text"-->
+						<div class="row form-group">
+							<div class="col-4">
+								<label for="startDt"><b>공사시작날짜</b></label> <input type="text"
+									class="form-control" id="startDt" th:field="*{cttStartDt}"
+									readonly placeholder="날짜 선택">
+							</div>
+							<div class="col-4">
+								<label for="endDt"><b>공사마감날짜</b></label> <input type="text"
+									class="form-control" id="endDt" th:field="*{cttEndDt}" readonly
+									placeholder="날짜 선택">
+							</div>
+							<div class="col-4">
+								<label><b>하자보수기간</b></label> <input type="text"
+									class="form-control">
+							</div>
+						</div>
+						<!-- datepicker -->
+
+						<p class="hr-sect" style="margin-top: 50px;">
+							<b>공사대금</b>
+						</p>
+						<div class="row form-group"
+							style="padding-top: 20px; margin-bottom: 30px">
+							<div class="col-2">
+								<h5 class="text-black" style="padding-top: 10px">
+									<b>총 공사금액 </b>
+								</h5>
+							</div>
+							<div class="col-4">
+								<input type="text" class="form-control" name="cttPrice" readonly>
+							</div>
+							<div class="col-auto">
+								<h5 class="text-black" style="padding-top: 10px">
+									<b>원</b>
+								</h5>
 							</div>
 
-							<div class="row form-group">
-								<div class="col-10">
-									<label><b>공사주소</b></label>
-									<p class="text-black">[[${'(' + reqInfo.postcode + ') '
-										+reqInfo.address + ' ' + reqInfo.detailAddress}]]</p>
-								</div>
-								<div class="col-2">
-									<label><b>공사면적</b></label>
-									<p class="text-black">[[${reqInfo.cttPlaceArea}]]</p>
-								</div>
-							</div>
+						</div>
+						<p class="text-black">
+							<b>대금 지급 시기</b>
+						</p>
+						<div class="p-4 mb-3 bg-white border p-4 rounded">
+							<table class="table table-hover">
+								<thead>
+									<tr class="text-center">
+										<th scope="col" width="60px">횟수</th>
+										<th scope="col" width="150px">금액</th>
+										<th scope="col" width="150px">일시</th>
+										<th scope="col">내역</th>
+										<th width="53px"><button type="button"
+												class="btn btn-primary"
+												style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">+</button></th>
+									</tr>
+								</thead>
+								<tbody class="content">
 
-							<!-- datepicker : id&type="text"-->
-							<div class="row form-group">
-								<div class="col-4">
-									<label for="startDt"><b>공사시작날짜</b></label> <input type="text"
-										class="form-control" id="startDt" th:field="*{cttStartDt}"
-										readonly placeholder="날짜 선택">
-								</div>
-								<div class="col-4">
-									<label for="endDt"><b>공사마감날짜</b></label> <input type="text"
-										class="form-control" id="endDt" th:field="*{cttEndDt}"
-										readonly placeholder="날짜 선택">
-								</div>
-								<div class="col-4">
-									<label><b>하자보수기간</b></label> <input type="text"
-										class="form-control">
-								</div>
-							</div>
-							<!-- datepicker -->
-
-							<p class="hr-sect" style="margin-top: 50px;">
-								<b>공사대금</b>
-							</p>
-							<div class="row form-group"
-								style="padding-top: 20px; margin-bottom: 30px">
-								<div class="col-2">
-									<h5 class="text-black" style="padding-top: 10px">
-										<b>총 공사금액 </b>
-									</h5>
-								</div>
-								<div class="col-4">
-									<input type="text" class="form-control" name="cttPrice"
-										readonly>
-								</div>
-								<div class="col-auto">
-									<h5 class="text-black" style="padding-top: 10px">
-										<b>원</b>
-									</h5>
-								</div>
-
-							</div>
-							<p class="text-black">
-								<b>대금 지급 시기</b>
-							</p>
-							<div class="p-4 mb-3 bg-white border p-4 rounded">
-								<table class="table table-hover">
-									<thead>
-										<tr class="text-center">
-											<th scope="col" width="60px">횟수</th>
-											<th scope="col" width="150px">금액</th>
-											<th scope="col" width="150px">일시</th>
-											<th scope="col">내역</th>
-											<th width="53px"><button type="button"
-													class="btn btn-primary"
-													style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">+</button></th>
-										</tr>
-									</thead>
-									<tbody class="content">
-
-									</tbody>
-								</table>
-							</div>
+								</tbody>
+							</table>
+						</div>
 
 
-							<p class="hr-sect" style="margin-top: 50px;">
-								<b>계약일반조건</b>
-							</p>
+						<p class="hr-sect" style="margin-top: 50px;">
+							<b>계약일반조건</b>
+						</p>
 
-							<section class="site-section" id="accordion" style="padding: 0">
-								<div class="container">
-									<div class="row accordion justify-content-center block__76208">
-										<div class="col">
-											<div class="accordion-item">
-												<h3 class="mb-0 heading ms-1">
-													<a class="btn-block h4" data-bs-toggle="collapse"
-														href="#collapseFive" role="button" aria-expanded="false"
-														aria-controls="collapseFive">[[${unity.title}]]<span
-														class="icon"></span>
-													</a>
-												</h3>
-												<div id="collapseFive" class="collapse"
-													aria-labelledby="headingOne" data-parent="#accordion">
-													<div class="body-text unity">
-														<p>[[${unity.contractTermsContent}]]</p>
-													</div>
+						<section class="site-section" id="accordion" style="padding: 0">
+							<div class="container">
+								<div class="row accordion justify-content-center block__76208">
+									<div class="col">
+										<div class="accordion-item">
+											<h3 class="mb-0 heading ms-1">
+												<a class="btn-block h4" data-bs-toggle="collapse"
+													href="#collapseFive" role="button" aria-expanded="false"
+													aria-controls="collapseFive">[[${unity.title}]]<span
+													class="icon"></span>
+												</a>
+											</h3>
+											<div id="collapseFive" class="collapse"
+												aria-labelledby="headingOne" data-parent="#accordion">
+												<div class="body-text unity px-5 mb-4">
+													<p>[[${unity.contractTermsContent}]]</p>
 												</div>
 											</div>
-											<!-- .accordion-item -->
 										</div>
+										<!-- .accordion-item -->
 									</div>
 								</div>
-							</section>
+							</div>
+						</section>
 
 
 
-							<div class="row form-group">
+						<div class="row form-group">
 
-								<div class="col-6" style="padding-top: 60px">
-									<div class="p-4 mb-3 bg-white border p-4 rounded">
-										<h3 class="mt-3 h5 pl-3 mb-3 ">발주자(시행자) "갑"</h3>
-										<ul class="list-unstyled pl-3 mb-0 con_ul">
-
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">성명</strong>
-												</div>
-												<div class="col-4"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">전화번호</strong>
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">우편번호</strong>
-												</div>
-												<div class="col-3"></div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">주소</strong>
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">상세주소</strong>
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">주민등록번호</strong>
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">계좌번호</strong>
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-												</div>
-												<div class="col"></div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">서명</strong>
-												</div>
-												<div class="col"></div></li>
-											<li><div class="text-center mt-2">
-													<canvas></canvas>
-												</div></li>
-										</ul>
-									</div>
-								</div>
-
-
-								<div class="col-6" style="padding-top: 60px">
-									<div class="p-4 mb-3 bg-white border p-4 rounded">
-										<h3 class="mt-3 h5 pl-3 mb-3 ">수급자(시공자) "을"</h3>
-										<ul class="list-unstyled pl-3 mb-0 con_ul">
-
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">성명</strong>
-												</div>
-												<div class="col-4">
-													<p class="text-black m-0 mt-1">[[${userName}]]</p>
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">전화번호</strong>
-												</div>
-												<div class="col">
-													<p class="text-black m-0 mt-1">[[${userPhone}]]</p>
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">우편번호</strong>
-												</div>
-												<div class="col-3">
-													<input type="text" class="form-control" id="input_postcode">
-												</div>
-												<div class="col">
-													<button type="button" class="btn btn-primary"
-														onclick="input_execDaumPostcode()">우편번호 찾기</button>
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">주소</strong>
-												</div>
-												<div class="col">
-													<input type="text" class="form-control" id="input_addr">
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">상세주소</strong>
-												</div>
-												<div class="col">
-													<input type="text" class="form-control"
-														id="input_detailAddr">
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">주민등록번호</strong>
-												</div>
-												<div class="col">
-													<p class="text-black m-0 mt-1">[[${userRnn}]]</p>
-												</div></li>
-
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">계좌번호</strong>
-												</div>
-												<div class="col">
-													<select class="selectpicker show-tick form-control"
-														data-style="btn-white py-0 pb-2 m-0" data-width="100%"
-														data-live-search="true" title="은행 선택">
-														<th:block th:each=" list : ${code}">
-															<option>[[${list.codeName+'('+list.codeNo+')'}]]</option>
-														</th:block>
-													</select>
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-												</div>
-												<div class="col">
-													<input type="text" class="form-control"
-														th:field="*{workerAccount}">
-												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
-													<strong class="text-black">서명</strong>
-												</div>
-												<div class="col">
-													<button type="button"
-														class="btn btn-outline-success sendBtn"
-														data-bs-toggle="modal" data-bs-target="#sendModal">서명
-														하기</button>
-												</div></li>
-											<li><div id="input_sign" class="text-center mt-2">
-													<canvas id="signatureCanvas"></canvas>
-												</div></li>
-
-										</ul>
-									</div>
-								</div>
-
-								<p class="text-center text-black mt-5">
-									<b>"갑"과 "을"은 상호 신의와 성실을 원칙으로 이 계약서에 의하여 공사계약을 체결하고 계약서 2부를
-										작성하여 각각 1부씩 보관한다.</b>
-								</p>
-								<p class="text-center" style="letter-spacing: 3px">
-									<b><span class="me-5 cur_year">2024년</span><span
-										class="me-5 cur_month">06월</span><span class="me-5 cur_day">28일</span></b>
-								</p>
-								<p class="uploadTitle mt-5">첨부 파일 업로드</p>
-								<div class="uploadDiv">
-									<label for="multiFile">파일찾기</label> <input type="file"
-										multiple="multiple" name="uploadFile" id="multiFile"
-										onChange="nameList()">
-								</div>
-								<div class="uploadResult">
-									<ul>
+							<div class="col-6" style="padding-top: 60px">
+								<div class="p-4 mb-3 bg-white border p-4 rounded">
+									<h3 class="mt-3 h5 pl-3 mb-3 ">발주자(시행자) "갑"</h3>
+									<ul class="list-unstyled pl-3 mb-0 con_ul">
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">성명</strong>
+											</div>
+											<div class="col-4">
+												<p class="text-black m-0 mt-1">[[${reqName}]]</p>
+											</div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">전화번호</strong>
+											</div>
+											<div class="col"></div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">우편번호</strong>
+											</div>
+											<div class="col-3"></div>
+											<div class="col"></div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">주소</strong>
+											</div>
+											<div class="col"></div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">상세주소</strong>
+											</div>
+											<div class="col"></div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">주민등록번호</strong>
+											</div>
+											<div class="col"></div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">계좌번호</strong>
+											</div>
+											<div class="col"></div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+											</div>
+											<div class="col"></div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">서명</strong>
+											</div>
+											<div class="col"></div></li>
+										<li><div class="text-center mt-2">
+												<canvas></canvas>
+											</div></li>
 									</ul>
 								</div>
 							</div>
+
+
+							<div class="col-6" style="padding-top: 60px">
+								<div class="p-4 mb-3 bg-white border p-4 rounded">
+									<h3 class="mt-3 h5 pl-3 mb-3 ">수급자(시공자) "을"</h3>
+									<ul class="list-unstyled pl-3 mb-0 con_ul">
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">성명</strong>
+											</div>
+											<div class="col-4">
+												<p class="text-black m-0 mt-1">[[${userName}]]</p>
+											</div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">전화번호</strong>
+											</div>
+											<div class="col">
+												<p class="text-black m-0 mt-1">[[${userPhone}]]</p>
+											</div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">우편번호</strong>
+											</div>
+											<div class="col-3">
+												<input type="text" class="form-control" id="input_postcode">
+											</div>
+											<div class="col">
+												<button type="button" class="btn btn-primary"
+													onclick="input_execDaumPostcode()">우편번호 찾기</button>
+											</div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">주소</strong>
+											</div>
+											<div class="col">
+												<input type="text" class="form-control" id="input_addr">
+											</div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">상세주소</strong>
+											</div>
+											<div class="col">
+												<input type="text" class="form-control"
+													id="input_detailAddr">
+											</div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">주민등록번호</strong>
+											</div>
+											<div class="col">
+												<p class="text-black m-0 mt-1">[[${userRnn}]]</p>
+											</div></li>
+
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">계좌번호</strong>
+											</div>
+											<div class="col">
+												<select class="selectpicker show-tick form-control"
+													data-style="btn-white py-0 pb-2 m-0" data-width="100%"
+													data-live-search="true" title="은행 선택">
+													<th:block th:each=" list : ${code}">
+														<option>[[${list.codeName+'('+list.codeNo+')'}]]</option>
+													</th:block>
+												</select>
+											</div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+											</div>
+											<div class="col">
+												<input type="text" class="form-control"
+													th:field="*{workerAccount}">
+											</div></li>
+										<li class="mb-2 row form-group"><div class="col-4">
+												<strong class="text-black">서명</strong>
+											</div>
+											<div class="col">
+												<button type="button"
+													class="btn btn-outline-success sendBtn"
+													data-bs-toggle="modal" data-bs-target="#sendModal">서명
+													하기</button>
+											</div></li>
+										<li><div id="input_sign" class="text-center mt-2">
+												<canvas id="signatureCanvas"></canvas>
+											</div></li>
+
+									</ul>
+								</div>
+							</div>
+
+
+
+							<p class="text-center text-black mt-5">
+								<th:block th:unless="${ptn == 0}">
+									<b>"갑"과 "을"은 상호 신의와 성실을 원칙으로 이 계약서에 의하여 공사계약을 체결하고 계약서 2부를
+										작성하여 각각 1부씩 보관한다.</b>
+								</th:block>
+							</p>
+							<p class="text-center" style="letter-spacing: 3px">
+								<b><span class="me-5 cur_year">2024년</span><span
+									class="me-5 cur_month">06월</span><span class="me-5 cur_day">28일</span></b>
+							</p>
+							<p class="uploadTitle mt-5">첨부 파일 업로드</p>
+							<div class="uploadDiv">
+								<label for="multiFile">파일찾기</label> <input type="file"
+									multiple="multiple" name="uploadFile" id="multiFile"
+									onChange="nameList()">
+							</div>
+							<div class="uploadResult">
+								<ul>
+								</ul>
+							</div>
 						</div>
 					</div>
-				</form>
-			</div>
-			<div class="row align-items-center mb-5">
-				<div class="col-lg-4 ml-auto" style="padding-top: 30px">
-					<div class="row">
-						<div class="col-6"></div>
-						<div class="col-6">
-							<button type="button" class="btn btn-block btn-primary btn-md"
-								id="insertBtn">저장</button>
-						</div>
+				</div>
+			</form>
+		</div>
+		<div class="row align-items-center mb-5">
+			<div class="col-lg-4 ml-auto" style="padding-top: 30px">
+				<div class="row">
+					<div class="col-6"></div>
+					<div class="col-6">
+						<button type="button" class="btn btn-block btn-primary btn-md"
+							id="insertBtn">저장</button>
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
+	</div>
+
 
 
 	<!-- Modal -->
@@ -493,8 +497,6 @@ canvas {
 
 	
 	// 폼 데이터 전송
-	var proposalNo = /*[[${ppsInfo.proposalNo}]]*/"";
-	
 	$('#insertBtn').on('click', insertAjax );
 	
 	function insertAjax(e){
@@ -558,23 +560,26 @@ canvas {
 		
 		// 폼 데이터 전송
 		var formData = new FormData(document.conInsertForm);
-		
 		formData.append("worSign.signsContent", compressedData);
-		
+			
 		for (const pair of formData.entries()) {
-			  console.log(pair[0], pair[1]);
-			}
-		
+			console.log(pair[0], pair[1]);
+		}
+			
 		$.ajax({
 			url: '/conInsert',
 			processData : false,
 			contentType : false,
 			data : formData,
 			type :'Post',
-			async : false
-			
+			dataType:'JSON'
+					
+			,success : function(result){
+				console.log(result);
+				location.href='/conInfo?contractNo='+result;
+			}
+		
 		})
-			location.href='/conInfo?proposalNo='+proposalNo;
 	}
 	
 		// 서명

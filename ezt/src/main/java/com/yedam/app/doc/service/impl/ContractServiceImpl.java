@@ -13,6 +13,7 @@ import com.yedam.app.doc.mapper.ProposalMapper;
 import com.yedam.app.doc.service.ContractDetailVO;
 import com.yedam.app.doc.service.ContractService;
 import com.yedam.app.doc.service.ContractVO;
+import com.yedam.app.doc.service.PartnershipContractVO;
 import com.yedam.app.doc.service.SignsVO;
 import com.yedam.app.doc.service.UnityContractVO;
 
@@ -93,7 +94,7 @@ public class ContractServiceImpl implements ContractService {
 	@Override
 	public ContractVO conInfo(ContractVO contracVO) {
 		// 단건 조회
-		ContractVO con = conMapper.selectConInfo(contracVO.getProposalNo());
+		ContractVO con = conMapper.selectConInfo(contracVO.getContractNo());
 
 		// 상세 조회
 		List<ContractDetailVO> list = conMapper.selectConDetailInfo(con.getContractNo());
@@ -189,7 +190,24 @@ public class ContractServiceImpl implements ContractService {
 	@Override
 	public int conSend(ContractVO contractVO) {
 		int result = conMapper.sendConInfo(contractVO);
-		return result == 1 ? contractVO.getProposalNo() : -1;
+		return result == 1 ? contractVO.getContractNo() : -1;
 	}
-
+	
+	// 동업 계약서
+	// 분야 코드 조회
+	@Override
+	public CommonCodeVO workCodeSelect(int teamNo, int usersNo) {
+		return conMapper.selectTeamWorkCode(teamNo, usersNo);
+	}
+	// 동업 계약서 등록
+	@Override
+	public int ptnConInsert(PartnershipContractVO partnershipContractVO) {
+		int result = conMapper.InsertPartnerCon(partnershipContractVO);
+		return result == 1 ? partnershipContractVO.getContractNo() : -1;
+	}
+	// 동업 계약서 조회
+	@Override
+	public PartnershipContractVO ptnConSelect(int contractNo) {
+		return conMapper.selectPtnSelect(contractNo);
+	}
 }
