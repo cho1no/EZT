@@ -331,6 +331,7 @@
 		FROM dual
 	</insert>
 
+	<!--경력증명서 등록 -->
 	<insert id="insertCareer" parameterType="CareerVO">
 		INSERT INTO career( career_no
 							, users_no
