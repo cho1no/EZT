@@ -5,126 +5,15 @@
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
-<title>사용자 마이페이지</title>
-<style>
-
-li{list-style:none;}
-.flex{
-  display:flex;
-}
-
-.flex-jc-c{
-  justify-content:center;
-}
-.con{
-  max-width:1200px;
-  margin:0 auto;
-}
-
-.article-board-box{
-  position:relative;
-}
-.slide_wrapper{
-  position:relative;
-  width:960px;
-  margin:0 auto;
-  height:300px;
-  overflow:hidden
-}
-
-.slides{
-  position:absolute;
-  left:0;
-  top:0;
-  transition:left 0.5s ease-out;
-}
-
-.slides li:not(:last-child){
-  justify-content:flex-start;
-  margin-right:30px;
-}
-
-
-.controls{
-  text-align:center;
-}
-
-.controls span{
-  z-index:2;
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-}
-
-.controls>.prev{
-  right:calc(100% - 40px);
-}
-
-.controls>.next{
-  left:calc(100% - 40px);
-}
-
-.ha{
-  width:50px;
-}
-</style>
+<title>작업자 상세정보</title>
 </head>
 <body>
-<div class="slide_wrapper ">
-  <ul class="slides flex">
-    <li><img src="http://placehold.it/300x300" alt=""></li>
-    <li><img src="/images/interior.jpg" alt=""></li>
-    <li><img src="http://placehold.it/300x300" alt=""></li>
-    <li><img src="http://placehold.it/300x300" alt=""></li>
-    <li><img src="http://placehold.it/300x300" alt=""></li>
-    <li><img src="http://placehold.it/300x300" alt=""></li>
-    <li><img src="http://placehold.it/300x300" alt=""></li>
-    <li><img src="http://placehold.it/300x300" alt=""></li>
-    <li><img src="http://placehold.it/300x300" alt=""></li>
-    <li><img src="http://placehold.it/300x300" alt=""></li>
-    <li><img src="http://placehold.it/300x300" alt=""></li>
-    <li><img src="http://placehold.it/300x300" alt=""></li>
-  </ul>
-  <p class="controls">
-    <span class="prev"><i class="fas fa-chevron-left"></i></span>
-    <span class="next"><i class="fas fa-chevron-right"></i></span>
-  </p>
-</div>
-
-<div class="ha"></div>
-<script th:inline="javascript">
-var slides = document.querySelector('.slides'),
-slide = document.querySelectorAll('.slides li'),
-currentIdx = 0,
-slideCount = slide.length,
-slideWidth = 300,
-slideMargin = 30,
-prevBtn = document.querySelector('.prev'),
-nextBtn = document.querySelector('.next');
-
-slides.style.width =
-(slideWidth + slideMargin) * slideCount - slideMargin + 'px';
-
-function moveSlide(num) {
-slides.style.left = -num * 330 + 'px';
-currentIdx = num;
-}
-
-nextBtn.addEventListener('click', function () {
-if( currentIdx < slideCount - 3){
-  moveSlide(currentIdx + 1);
-}else{
-  moveSlide(0);
-}   
-});
-
-prevBtn.addEventListener('click', function () {
-if( currentIdx > 0){
-  moveSlide(currentIdx - 1);
-}else{
-  moveSlide(slideCount - 3);
-}   
-});
-</script>
+	<p>이름: [[${userInfo.usersName}]]</p>
+	<th:block th:each="rev : ${revList}">
+	<p>리뷰 내용: [[${rev.content}]]</p>
+	</th:block>
+	<th:block th:each="pf : ${pfList}">
+	<p>포트폴리오 제목: [[${pf.title}]]</p>
+	</th:block>
 </body>
 </html>

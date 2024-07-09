@@ -29,12 +29,12 @@ public class WorkerServiceImpl implements WorkerService{
 	
 	//작업자 정보 조회
 	@Override
-	public List<String> selectCategoryInfo(int id) {
+	public List<Map<String, String>> selectCategoryInfo(int id) {
 		return workerMapper.selectCategoryInfo(id);
 	}
 
 	@Override
-	public List<String> selectRegionInfo(int id) {
+	public List<Map<String, String>> selectRegionInfo(int id) {
 		return workerMapper.selectRegionInfo(id);
 	}
 

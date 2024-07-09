@@ -13,18 +13,18 @@
 <div class="row row-cols-1 row-cols-md-2 g-4">
   <th:block th:each="wkl : ${workerList}">
     <div class="col-md-3">
-      <a href="/find/workerMoreInfo">
+      <a th:href="|@{/find/workerMoreInfo(usersNo=${wkl.usersNo})}|">
         <div class="card">
           <div class="card-body">
   		    <img src="/images/rvw/team.jpg" class="card-img-top" alt="...">
 	        <h5 class="card-title">이름:[[${wkl.usersName}]]</h5>
 	        <span>분야:</span>
 	        <th:block th:each="ctc : ${wkl.categoryCode}">
-	        <span class="card-text">[[${ctc}]] </span>
+	        <span class="card-text">[[${ctc.CATEGORY_CODE}]] </span>
 	        </th:block><br>
 	        <span>지역:</span>
 	        <th:block th:each="rcd : ${wkl.regionCode}">
-	        <span class="card-text">[[${rcd}]]</span>
+	        <span class="card-text">[[${rcd.REGION_CODE}]]</span>
 	        </th:block>
           </div>
         </div>
