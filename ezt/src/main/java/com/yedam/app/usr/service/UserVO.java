@@ -2,6 +2,7 @@ package com.yedam.app.usr.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -62,9 +63,9 @@ public class UserVO {
 	
 	
 	//활동지역
-	private List<String> regionCode;
+	private List<Map<String, String>> regionCode;
 	//작업분야(카테고리)
-	private List<String> categoryCode;
+	private List<Map<String, String>> categoryCode;
 	
 	private LicenseVO licenseVO;
 	

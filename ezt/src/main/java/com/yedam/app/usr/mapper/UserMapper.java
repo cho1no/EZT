@@ -15,7 +15,7 @@ import com.yedam.app.usr.service.UserVO;
 public interface UserMapper {
 	//사용자 정보조회
 	public UserVO selectUserInfo(String id);
-			
+	
 	//사용자 회원가입
 	void saveUser(UserVO userVO);
 	

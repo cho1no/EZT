@@ -14,9 +14,9 @@ import com.yedam.app.usr.service.UserVO;
 @Service
 public interface WorkerService {
 	//작업자 정보조회
-	public List<String> selectCategoryInfo(int id);
+	public List<Map<String, String>> selectCategoryInfo(int id);
 	
-	public List<String> selectRegionInfo(int id);
+	public List<Map<String, String>> selectRegionInfo(int id);
 	
 	//작업자 정보수정
 	public Map<String, Object> updateWorker(UserVO userVO);

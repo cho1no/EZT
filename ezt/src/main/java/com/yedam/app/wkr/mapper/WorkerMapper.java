@@ -20,9 +20,9 @@ import com.yedam.app.wkr.service.WorkerRvwCriteria;
 @Mapper
 public interface WorkerMapper {
 	//작업자 정보조회(분야,지역)
-	public List<String> selectCategoryInfo(int id);
+	public List<Map<String, String>> selectCategoryInfo(int id);
 	
-	public List<String> selectRegionInfo(int id);
+	public List<Map<String, String>> selectRegionInfo(int id);
 	
 	//작업자 정보수정
 	//닉네임,전화번호,이메일 수정
