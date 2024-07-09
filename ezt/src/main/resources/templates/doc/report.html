@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="reportFragment">
 
+<style>
+
+.uploadResult img{
+display: block;
+  width: 100px;
+  height: 80px;
+
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+
+</style>
+
 <div class="modal-header">
 	<h1 class="modal-title fs-5 text-center" id="staticBackdropLabel">
 		<b>공사 보고 작성</b>
@@ -42,16 +55,17 @@
 								<label for="floatingTextarea"><b>상세 내용</b></label>
 							</div></li>
 				<li>			
-				<p class="uploadTitle mt-5">첨부 이미지 업로드</p>
+				<p class="uploadTitle mt-5">첨부 이미지 업로드(최대 5장)</p>
 								<div class="uploadDiv">
 									<label for="multiFile">파일찾기</label> 
 									<input type="file"
 										multiple="multiple" name="uploadFile" id="multiFile"
-										onChange="fileList()">
+										onChange="fileList()" onClick="fileUploadClick()">
 								</div>
-								<div class="uploadResult">
-									<ul>
-									</ul>
+								<div class="uploadResult bg-light">
+									<div class="row">
+										
+									</div>
 								</div></li>
 		</ul>
 	</form>
@@ -62,7 +76,30 @@
 </div>
 
 <script>
+var uploadFiles = '';
+
+function fileUploadClick() {   
+
+	$('input[name="uploadFile"]').val('');
+	$('.uploadResult .row div').remove();
+};
+
 function fileList(){
+	
+	console.log(uploadFiles);
+	
+	if(uploadFiles != '' ){
+	$.ajax({
+		url: '/rptFileDelete',
+		type : 'post',
+		contentType : 'application/json',
+		data : JSON.stringify(uploadFiles),
+		async : false
+		
+	})
+	}
+	
+	
 	
 	//console.log("file");
 	
@@ -80,44 +117,64 @@ function fileList(){
 		
 	}
 	
+		
 	// Ajax
 	$.ajax({
-		url: '/rptInsert',
+		url: '/rptFileInsert',
 		processData : false,
 		contentType : false,
 		data : formData,
 		type :'Post',
-		async : false
+		dataType:'JSON'
 		
-		//success : function(result){
+		,success : function(result){
 			//console.log(result);
-			//location.reload();
+			showUpFile(result);
+			uploadFiles = result;
 
-		//}
-	})
-		console.log(result);
+		}
+	})		
+	
+			//console.log(files);
 			//location.reload();
 	
 };
 
 
 function showUpFile(uploadResultArr){
+	
+	console.log(uploadResultArr);
+	
+	if(!uploadResultArr || uploadResultArr.length == 0) return;
+	
+	var uploadUL = $('.uploadResult .row');
+	
 	var str = "";
 	
-	$(uploadResultArr).each(function(i, obj){
 	
-		var fileCallPath = encodeURIComponent( obj.uploadPath+"/s_"+obj.uuid+"_"+obj.fileName);
+	
+	$(uploadResultArr).each(function(i, obj){
 		
-		var originPath = obj.uploadPath + "\\" + obj.uuid + "_" + obj.fileName;
+		var savePath = obj.savePath.replaceAll("\\", "/")
+	
+		var fileCallPath = encodeURIComponent(savePath+"/s_"+obj.saveName+"_"+obj.originalFileName + "." + obj.ext);
+		
+		str += `<div class="col-4 col-lg-4 item pl-4 my-3">`;
+		
+		var originPath = fileCallPath;
 		
 		originPath = originPath.replace(new RegExp(/\\/g), "/");
 		
+		str += `<img src='/display?fileName=${originPath}' class="img-fluid">`;
+		str += `</div>`;
+
+		/*
 		str += `<li><a href=\"javascript:showImage(\'"+originPath+"\')\">
-			<img str='/display?fileName="+ fileCallPath+ "'></a></li>`;
+			<img src='/display?fileName="+ fileCallPath+ "'></a></li>`;*/
 		
 	});
 	
-	uploadResult.append(str);
+	uploadUL.append(str);
 }
 
 function showImage(fileCallPath){

@@ -115,6 +115,8 @@ public class FileServiceImpl implements FileService {
 	                    Thumbnailator.createThumbnail(inputFile, thumbnail, 100, 100);
 	                    
 	                    thumbnail.close();
+	                    inputFile.close();
+	                    
 					}
 					
 					list.add(fileVO);
@@ -143,7 +145,7 @@ public class FileServiceImpl implements FileService {
 						+ list.getOriginalFileName() + "." + list.getExt();
 			try {
 				File file = new File(uploadFolder + URLDecoder.decode(fileName, "UTF-8"));
-
+				log.info("File :" + file);
 				file.delete();
 
 			} catch (UnsupportedPointcutPrimitiveException e) {

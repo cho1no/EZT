@@ -90,7 +90,7 @@ $('#sendModal').on('hidden.bs.modal', function (e) {   
 
 $('input[name="uploadFile"]').val('');
 $('.uploadResult ul li').remove();
-});checkExtentsion
+});
 
 $('#deleteBtn').on("click", function(e){
 	

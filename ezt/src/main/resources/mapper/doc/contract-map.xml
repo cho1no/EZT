@@ -153,7 +153,7 @@
 		, FIND_COMMONCODE(REQUESTER_BANKCODE) as requesterBankcode
 		, FIND_COMMONCODE(WORKER_BANKCODE) as workerBankcode
 		FROM contract
-		WHERE proposal_no = #{proposalNo}
+		WHERE CONTRACT_NO = #{contractNo}
 	</select>
 	<!-- 계약서 조회 -->
 
@@ -239,8 +239,45 @@
     			contract_state = null
     		</otherwise>
     	</choose>
-    	WHERE proposal_no = #{proposalNo}
+    	WHERE CONTRACT_NO = #{contractNo}
 	</update>
 	<!-- 계약서 전송 -->
+
+	<!-- 분야 코드 조회 -->
+	<select id="selectTeamWorkCode" resultType="CommonCodeVO">
+		SELECT work_code as codeNo
+			, FIND_COMMONCODE(work_code) as codeName
+		FROM member
+		WHERE TEAM_NO = #{teamNo} AND USERS_NO = #{usersNo}
+	</select>
+	<!-- 분야 코드 조회 -->
+	
+	<!-- 동업 계약서 등록 -->
+	<insert id="InsertPartnerCon" parameterType="PartnershipContractVO">
+	<selectKey keyProperty="partnershipContractNo" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_PARTNERSHIPCONTRACT.NEXTVAL
+			FROM dual
+		</selectKey>
+		{Call 
+		INSERT_PARTNERSHIP_CONTRACT(
+		#{partnershipContractNo}
+		, #{contractNo}
+		, #{leaderCategoryCode}
+		, #{memberCategoryCode}
+		, #{teamNo})
+		}
+	</insert>
+	<!-- 동업 계약서 등록 -->
+	
+	<!-- 동업 계약서 조회 -->
+	<select id="PartnershipContractVO" resultType="PartnershipContractVO">
+		SELECT
+			, FIND_COMMONCODE(LEADER_CATEGORY_CODE) as leaderCategoryCode
+			, FIND_COMMONCODE(MEMBER_CATEGORY_CODE) as memberCategoryCode
+		FROM PARTNERSHIP_CONTRACT
+		WHERE CONTRACT_NO = #{contractNo}
+	</select>
+	<!-- 동업 계약서 조회 -->
 
 </mapper>
