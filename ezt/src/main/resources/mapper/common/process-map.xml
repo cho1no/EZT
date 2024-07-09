@@ -8,6 +8,7 @@
 		        , p.pay_dt
 		        , p.contract_no
 		        , p.virtual_account
+		        , r.request_no
 		FROM pay p
 		JOIN contract c ON p.contract_no = c.contract_no
 		JOIN proposal pr ON c.contract_no = pr.proposal_no
@@ -15,4 +16,9 @@
 		WHERE r.request_state = 'S02'
 		ORDER BY p.pay_dt DESC
 	</select>
+	<update id="updateRequestState" parameterType="int">
+		UPDATE request
+		SET request_state = 'S03'
+		WHERE request_no = #{no}
+	</update>
 </mapper>

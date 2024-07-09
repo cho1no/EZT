@@ -9,6 +9,21 @@
       th:replace="common/configs/default_config :: ConfigFragment"
     ></th:block>
     <scr th:insert="common/fragments/default_scr :: scrFragment"></scr>
+    <style>
+      .back-smooth {
+        position: absolute;
+        top: 0;
+        z-index: -5;
+        width: 100%;
+        height: 576px;
+        background: black !important;
+        background: linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(244, 244, 244, 1) 100%
+        ) !important;
+      }
+    </style>
   </head>
   <body id="top">
     <div class="site-wrap">
@@ -20,24 +35,11 @@
         th:insert="common/fragments/default_header :: headerFragment"
       ></header>
       <section
-        class="section-hero overlay inner-page bg-image"
-        style="background-image: url('/images/hero_1.jpg')"
+        class="section-hero inner-page"
         id="home-section"
-      >
-        <div class="container">
-          <div class="row">
-            <div class="col-md-7">
-              <h1 class="text-white font-weight-bold page-title">Our Blog</h1>
-              <div class="custom-breadcrumbs">
-                <a href="#">Home</a> <span class="mx-2 slash">/</span>
-                <span class="text-white"
-                  ><strong class="page-desc">About Us</strong></span
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        style="background-color: white"
+      ></section>
+      <sectoin class="back-smooth"></sectoin>
       <section class="site-section">
         <div class="container">
           <main layout:fragment="Content"></main>

@@ -1,5 +1,8 @@
 package com.yedam.app.api.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,15 @@ public class NhDevServiceImpl implements NhDevService{
 	@Autowired
 	WebClient webClient;
 	
+	private String getDay(int beforeDay) {
+		Date dt = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dt);
+		cal.add(Calendar.DATE,  -1 * beforeDay);
+		return sdf.format(cal.getTime());
+	}
+	
 	@Override
 	public Mono<String> getVirtualAc() {
 		String ApiNm = "OpenVirtualAccount";
@@ -40,8 +52,8 @@ public class NhDevServiceImpl implements NhDevService{
 		String ApiNm = "VirtualAccountReceivedListInquiry";
 		String APISvcCd = "10B_001_00";
 		Map<String, Object> map = createHeader(ApiNm, APISvcCd);
-		map.put("Insymd", "20240601");
-		map.put("Ineymd", "20240702");
+		map.put("Insymd", getDay(1));
+		map.put("Ineymd", getDay(0));
 		map.put("Vran", Vran);
 		map.put("Lnsq", "");
 		map.put("PageNo", "1");

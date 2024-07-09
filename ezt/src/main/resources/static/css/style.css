@@ -1,5 +1,8 @@
 /* @import url("https://fonts.googleapis.com/css?family=Nunito:200,300,400,700"); */
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
+* {
+  letter-spacing: 0.4px !important;
+}
 .site-navbar {
   margin-bottom: 0px;
   z-index: 1999;
@@ -8,11 +11,16 @@
   top: 2rem;
 }
 .site-navbar .container-fluid {
+  position: relative;
+  width: 76%;
+  /* min-width: 900px; */
+  margin: 0 auto;
   padding-left: 7rem;
   padding-right: 7rem;
 }
-@media (max-width: 1199.98px) {
+@media (max-width: 1399.98px) {
   .site-navbar .container-fluid {
+    width: 100%;
     padding-left: 15px;
     padding-right: 15px;
   }
@@ -28,7 +36,7 @@
   }
 }
 .site-navbar .site-logo a {
-  color: #fff;
+  color: #1d2124;
   font-size: 1.5rem;
   letter-spacing: 0.2rem;
   text-transform: uppercase;
@@ -49,7 +57,7 @@
   }
 }
 .site-navbar .site-menu-toggle {
-  color: #fff;
+  color: #1d2124;
   line-height: 0;
   font-size: 2.5rem;
   position: relative;
@@ -71,7 +79,7 @@
   margin-bottom: 0;
 }
 .site-navbar .site-navigation .site-menu .active {
-  color: #fff;
+  color: #eee;
   display: inline-block;
   padding: 5px 20px;
 }
@@ -84,13 +92,13 @@
   display: inline-block;
 }
 .site-navbar .site-navigation .site-menu > li > a {
-  padding: 20px 20px !important;
-  color: rgba(255, 255, 255, 0.5);
+  padding: 20px 10px !important;
+  color: #1d2124;
   display: inline-block;
   text-decoration: none !important;
 }
 .site-navbar .site-navigation .site-menu > li > a:hover {
-  color: #fff;
+  color: #89ba16;
 }
 .site-navbar .site-navigation .site-menu .has-children {
   position: relative;
@@ -1134,7 +1142,7 @@ h4 {
 .section-hero.inner-page > .container > .row {
   height: auto;
   min-height: auto;
-  padding-top: 6em;
+  padding-top: 3em;
   padding-bottom: 3em;
 }
 

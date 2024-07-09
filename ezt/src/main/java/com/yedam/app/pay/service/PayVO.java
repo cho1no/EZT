@@ -15,5 +15,7 @@ public class PayVO {
 	private String virtualAccount; // 가상 계좌 번호
 	
 	private int proposalNo; // 견적서 번호
+	
+	private int requestNo; // 의뢰 번호
 
 }
