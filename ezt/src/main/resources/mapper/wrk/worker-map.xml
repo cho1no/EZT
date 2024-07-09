@@ -85,6 +85,7 @@
 		                                  		   WHERE users_no = #{usersNo}
 		                                  		   )
 		        				)
+		        ORDER BY write_dt desc
 		        ) a 
 		  ) c
 		<![CDATA[
@@ -121,6 +122,7 @@
 		                     		 FROM proposal
 		                     		 WHERE proposal_state = 'A02'
 		                     		 AND worker = #{usersNo})
+		        ORDER BY write_dt desc
 		        )  a 
 		  ) c
 		<![CDATA[
@@ -191,7 +193,8 @@
 			  		, a.*
 			  FROM (SELECT c.*, FIND_COMMONCODE(c.contract_state) as contract_state_nm
 					FROM contract c
-					WHERE worker_info = #{usersNo})  a 
+					WHERE worker_info = #{usersNo}
+					ORDER BY update_dt desc)  a 
 			  ) c
 			<![CDATA[
 			WHERE c.rn <= #{pageNum} * #{amount} AND
@@ -214,7 +217,8 @@
 			  		, a.*
 			  FROM (SELECT *
 					FROM portfolio
-					WHERE users_no = #{usersNo})  a 
+					WHERE users_no = #{usersNo}
+					ORDER BY write_dt desc)  a 
 			  ) c
 			<![CDATA[
 			WHERE c.rn <= #{pageNum} * #{amount} AND

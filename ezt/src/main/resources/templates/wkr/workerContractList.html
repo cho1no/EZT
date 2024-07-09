@@ -26,6 +26,7 @@ button.teamBtn {
 		    <span>공사 일정: [[${#dates.format(ctt.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(ctt.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
 		    <span>단가 : [[${ctt.cttPrice}]]</span><span>원 / </span>
 		    <span>작성일 : [[${#dates.format(ctt.writeDt, 'yyyy-MM-dd')}]]</span>/
+		    <span>수정일 : [[${#dates.format(ctt.updateDt, 'yyyy-MM-dd')}]]</span>/
 		    <span>상태 : [[${ctt.contractStateNm}]]</span>
 		  </a>
 		  <button class="teamBtn" type="button" th:onclick="|location.href='@{/team/requestInsert(contractNo=${ctt.contractNo})}'|" 

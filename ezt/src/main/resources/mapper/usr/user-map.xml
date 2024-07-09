@@ -106,6 +106,7 @@
 		FROM (	SELECT ROWNUM as rn
 					, a.*	
 				FROM (SELECT re.request_no
+					   , re.write_dt
 					   , re.star
 					   , re.content 
 					   , USERNAME(re.worker) as worker_name
@@ -116,7 +117,7 @@
 					      JOIN request rq
 				  	      ON re.request_no = rq.request_no
 					  WHERE re.writer = #{writer}
-					  ORDER BY re.request_no desc 
+					  ORDER BY re.write_dt desc 
 					  ) a 
 			  ) c
 		 <![CDATA[
