@@ -26,6 +26,7 @@ import com.yedam.app.doc.service.UnityContractVO;
 import com.yedam.app.fie.service.FileService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.sgi.service.LoginUserVO;
+import com.yedam.app.tem.service.TeamVO;
 import com.yedam.app.usr.service.UserVO;
 
 @Controller
@@ -231,6 +232,7 @@ public class ContractController {
 			
 			// 계약서 정보 조회
 			ContractVO findVO = conService.conInfo(contractVO);
+			model.addAttribute("con", findVO);
 
 			// 유저 정보
 			model.addAttribute("userName", user.getUserVO().getUsersName());
@@ -272,6 +274,7 @@ public class ContractController {
 		@ResponseBody
 		public int ptnconInsert(MultipartFile[] uploadFile
 													, ContractVO contractVO
+													, TeamVO teamVO
 													, PartnershipContractVO partnershipContractVO) {
 
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
@@ -280,6 +283,7 @@ public class ContractController {
 			}
 			int no = conService.conInsert(contractVO);
 			partnershipContractVO.setContractNo(no);
+			partnershipContractVO.setTeamNo(teamVO.getTeamNo());
 			conService.ptnConInsert(partnershipContractVO);
 
 			return no;

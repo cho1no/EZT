@@ -76,10 +76,6 @@ canvas {
 	display: none;
 }
 
-.dropdown button {
-	height: 35px;
-}
-
 .unity {
 	word-break: keep-all;
 	overflow-wrap: break-word;
@@ -323,9 +319,8 @@ canvas {
 												<strong class="text-black">계좌번호</strong>
 											</div>
 											<div class="col">
-												<select class="selectpicker show-tick form-control"
-													data-style="btn-white py-0 pb-2 m-0" data-width="100%"
-													data-live-search="true" title="은행 선택">
+												<select class="form-select">
+														<option selected>은행 선택</option>
 													<th:block th:each=" list : ${code}">
 														<option>[[${list.codeName+'('+list.codeNo+')'}]]</option>
 													</th:block>
@@ -527,7 +522,7 @@ canvas {
 		$('input[name="workerAddress"]').val($('#input_postcode').val() + '_' 
 				+ $('#input_addr').val() + '_' + $('#input_detailAddr').val());
 				
-		var bankcode = $('.dropdown button div div div').html();
+		var bankcode = $('select').val();
 		var bank_num1 = bankcode.indexOf('(');
 		if(bankcode != '은행 선택'){
 		$('input[name="workerBankcode"]').val(bankcode.substring(bank_num1+1).replace(')', ''));

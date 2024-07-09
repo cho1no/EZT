@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.yedam.app.alm.service.AlarmVO;
@@ -12,7 +13,6 @@ import com.yedam.app.api.service.NhDevService;
 import com.yedam.app.common.mapper.ProcessMapper;
 import com.yedam.app.pay.mapper.PayMapper;
 import com.yedam.app.pay.service.PayVO;
-
 
 import lombok.extern.slf4j.Slf4j;
 
