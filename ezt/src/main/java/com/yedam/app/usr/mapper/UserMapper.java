@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
+import com.yedam.app.usr.service.FindWorkerCriteria;
 import com.yedam.app.usr.service.UserReqCriteria;
 import com.yedam.app.usr.service.UserRvwCriteria;
 import com.yedam.app.usr.service.UserVO;
@@ -50,4 +50,10 @@ public interface UserMapper {
 	
 	//사용자 의뢰 갯수
 	public int getTotalRequestCount(UserReqCriteria cri);
+	
+	//작업자 찾기
+	public List<UserVO> selectFindWorkerList(FindWorkerCriteria cri);
+	
+	//총 작업자 수
+	public int getTotalWorkerCount(FindWorkerCriteria cri);
 }

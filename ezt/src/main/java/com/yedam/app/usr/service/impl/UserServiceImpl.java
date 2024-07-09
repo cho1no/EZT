@@ -11,6 +11,7 @@ import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.usr.mapper.UserMapper;
+import com.yedam.app.usr.service.FindWorkerCriteria;
 import com.yedam.app.usr.service.UserReqCriteria;
 import com.yedam.app.usr.service.UserRvwCriteria;
 import com.yedam.app.usr.service.UserService;
@@ -79,6 +80,18 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int requestGetTotal(UserReqCriteria cri) {
 		return userMapper.getTotalRequestCount(cri);
+	}
+	
+	
+	//작업자 찾기
+	@Override
+	public List<UserVO> selectFindWorkerList(FindWorkerCriteria cri) {
+		return userMapper.selectFindWorkerList(cri);
+	}
+	//총 작업자 수
+	@Override
+	public int workerListGetTotal(FindWorkerCriteria cri) {
+		return userMapper.getTotalWorkerCount(cri);
 	}
 
 

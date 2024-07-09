@@ -29,7 +29,7 @@
 			<div class="col-md-2">
 				<label class="text-black" for="title">제목</label>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-8">
 				<input type="text" id="title" class="form-control" th:field="${ptf.title}">
 			</div>
 		</div>
@@ -37,18 +37,37 @@
 			<div class="col-md-2">
 				<label class="text-black" for="content">내용</label>
 			</div>
-			<div class="col-md-10">
+			<div class="col-md-8">
 				<input type="text" id="content" class="form-control" th:field="${ptf.content}" >
 			</div>
 		</div>
-		<div class="row">
-			<label class="text-black" for="categories">작업 분야</label>
-			<div class="col-md-12 mb-3 mb-md-0">
-				<th:block th:each="category : ${categories}">
-					<input type="checkbox" id="categoryCode" th:value="${category.codeNo}">
-					<label th:for="${category.codeNo}">[[${category.codeName}]]</label>
-				</th:block>
+		<div class="row mb-2">
+			<div class="col-md-2">
+				<label class="text-black" for="workTime">작업 기간(일)</label>
 			</div>
+			<div class="col-md-8">
+				<input type="text" id="workTime" class="form-control" th:field="${ptf.workTime}" placeholder="OO일">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 mb-3 mb-md-0">
+			<label class="text-black" for="pyung">평수</label>
+			<select name="pyung">
+				<th:block th:each="py : ${pyung}">
+					<option th:id="${py.codeNo}" th:value="${py.codeNo}">[[${py.codeName}]]</option>
+				</th:block>
+			</select>
+			</div>
+			<div class="col-md-6 mb-3 mb-md-0">
+			<label class="text-black" for="categories">작업 분야</label>
+			<select name="categoryCode">
+				<th:block th:each="category : ${categories}">
+					<option th:id="${category.codeNo}" th:value="${category.codeNo}">[[${category.codeName}]]</option>
+				</th:block>
+			</select>
+			</div>
+		</div>
+		<div class="row">
 		</div>
 		<div class="row mb-2">
 			<div class="col-md-2">  
@@ -60,42 +79,42 @@
 		</div>
 		
 		<div class="col-md-3">
-			<button type="button" id="insert-career-Btn" class="btn px-4 btn-primary text-white">등록하기</button>
+			<button type="submit" id="insert-ptf-Btn" class="btn px-4 btn-primary text-white">등록하기</button>
 		</div>
 	</form>
 <script th:inline="javascript">
-// 	$('#insert-career-Btn').click(() => {checkCareer()}); 
-// 	function checkCareer(){
-// 		var startDt = $('#careerStartDt').val();
-// 		var endDt = $('#careerEndDt').val();
-// 		var carInfo = $('#careerInfo').val();
-// 		var uploadFile = $('#uploadFile').val(); 
-// 		//파일첨부 = ~;
-// 		if(startDt == '' || endDt == ''){
-// 		  Swal.fire({
-// 		    text:'근무기간을 입력해주세요',
-// 			icon: 'warning' 
-// 		 })
-// 		 return false;
-// 		}
+	$('#insert-ptf-Btn').click(() => {checkPtf()}); 
+	function checkCareer(){
+		var title = $('#title').val();
+		var content = $('#content').val();
+		var carInfo = $('#careerInfo').val();
+		var uploadFile = $('#uploadFile').val(); 
+		//파일첨부 = ~;
+		if(startDt == '' || endDt == ''){
+		  Swal.fire({
+		    text:'근무기간을 입력해주세요',
+			icon: 'warning' 
+		 })
+		 return false;
+		}
 		 
-// 		if(carInfo == ''){
-// 			Swal.fire({
-// 				text:'작업내용을 입력해주세요',
-// 				icon: 'warning' 
-// 			})
-// 		 	return false;
-// 		}
+		if(carInfo == ''){
+			Swal.fire({
+				text:'작업내용을 입력해주세요',
+				icon: 'warning' 
+			})
+		 	return false;
+		}
 		
-// 		if(uploadFile == ''){
-// 			Swal.fire({
-// 				text:'경력증명서 첨부필요.',
-// 				icon: 'warning' 
-// 			})
-// 		 	return false;
-// 		}
-// 		$(insertCareer).submit();
-// 	};
+		if(uploadFile == ''){
+			Swal.fire({
+				text:'경력증명서 첨부필요.',
+				icon: 'warning' 
+			})
+		 	return false;
+		}
+		$(insertCareer).submit();
+	};
 
 	
 </script>

@@ -14,9 +14,9 @@ import com.yedam.app.usr.service.UserVO;
 @Service
 public interface WorkerService {
 	//작업자 정보조회
-	public List<Map<String, Object>> selectCategoryInfo(int id);
+	public List<String> selectCategoryInfo(int id);
 	
-	public List<Map<String, Object>> selectRegionInfo(int id);
+	public List<String> selectRegionInfo(int id);
 	
 	//작업자 정보수정
 	public Map<String, Object> updateWorker(UserVO userVO);
@@ -26,7 +26,7 @@ public interface WorkerService {
 	public boolean updateWorkerPw(UserVO userVO);
 
 	//경력증명서 목록조회
-	public List<CareerVO> selectCareerList(UserVO userVO);
+	public List<CareerVO> selectCareerList(WorkerPFCriteria cri);
 	
 	//경력증명서 등록
 	public int insertCareer(CareerVO careerVO);
@@ -48,7 +48,7 @@ public interface WorkerService {
 	public List<ContractVO> selectWorkerContractList(WorkerRvwCriteria cri);
 	
 	//작업자 포트폴리오 목록
-	public List<PortfolioVO> selectWorkerPortfolioList(UserVO userVO);
+	public List<PortfolioVO> selectWorkerPortfolioList(WorkerPFCriteria cri);
 	
 	//작업자 포트폴리오 등록
 	public int insertWorkerPortfolio(PortfolioVO portfolioVO);
@@ -61,6 +61,10 @@ public interface WorkerService {
 	
 	//회원탈퇴 (상태수정)
 	public boolean workerStateUpdate(UserVO userVO);
+	
+	
+	//전체 경력서 갯수
+	public int workerCareerGetTotal(WorkerPFCriteria cri);
 	
 	//전체 리뷰 데이터 갯수
 	public int workerReviewGetTotal(WorkerRvwCriteria cri);
@@ -76,6 +80,10 @@ public interface WorkerService {
 	//전체 계약서 갯수
 	public int workerContractGetTotal(WorkerRvwCriteria cri);
 	
+	//전체 포폴갯수
+	public int workerPortfolioGetTotal(WorkerPFCriteria cri);
+	
 	//전체 자격증 갯수
 	public int workerLicenseGetTotal(WorkerLcsCriteria cri);
+
 }

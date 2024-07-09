@@ -22,10 +22,10 @@ form span{
   <div class="container">
 	<hr>
 	<h1>비밀번호 변경</h1>
-	<form >
+	<form>
 		<div>
 			<label>현재 비밀번호</label>
-			<input class="form-control col-md-12" type="password"  id="usersPw">
+			<input class="form-control" type="password"  id="usersPw">
 			<span id="pwErr"></span>
 		</div>
 			<label>새 비밀번호</label>
@@ -36,7 +36,7 @@ form span{
 			<input class="form-control" type="password"id="usersNewPwChk">
 			<span id="newPwErr"></span>
 		</div>
-		<button id="info-update-btn">변경하기</button>		
+		<button id="info-update-btn" class="btn btn-primary border-width-2 d-none d-lg-inline-block" style="float:right;">변경하기</button>		
 	</form>
 <script th:inline="javascript">
 	$('#info-update-btn').click(() => {updateUserPw()});

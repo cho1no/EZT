@@ -13,15 +13,16 @@ import com.yedam.app.wkr.service.CareerVO;
 import com.yedam.app.wkr.service.LicenseVO;
 import com.yedam.app.wkr.service.PortfolioVO;
 import com.yedam.app.wkr.service.WorkerLcsCriteria;
+import com.yedam.app.wkr.service.WorkerPFCriteria;
 import com.yedam.app.wkr.service.WorkerReqCriteria;
 import com.yedam.app.wkr.service.WorkerRvwCriteria;
 
 @Mapper
 public interface WorkerMapper {
 	//작업자 정보조회(분야,지역)
-	public List<Map<String, Object>> selectCategoryInfo(int id);
+	public List<String> selectCategoryInfo(int id);
 	
-	public List<Map<String, Object>> selectRegionInfo(int id);
+	public List<String> selectRegionInfo(int id);
 	
 	//작업자 정보수정
 	//닉네임,전화번호,이메일 수정
@@ -36,7 +37,7 @@ public interface WorkerMapper {
 	public int updateWorkerPw(UserVO userVO);
 	
 	//경력증명서 목록 조회
-	public List<CareerVO> selectCareerList(UserVO userVO);
+	public List<CareerVO> selectCareerList(WorkerPFCriteria cri);
 	
 	//경력증명서 등록
 	public int insertCareer(CareerVO careerVO);
@@ -59,7 +60,7 @@ public interface WorkerMapper {
 	public List<ContractVO> selectWorkerContractList(WorkerRvwCriteria cri);
 	
 	//작업자 포트폴리오 목록
-	public List<PortfolioVO> selectWorkerPortfolioList(UserVO userVO);
+	public List<PortfolioVO> selectWorkerPortfolioList(WorkerPFCriteria cri);
 	
 	//작업자 포트폴리오 등록
 	public int insertWorkerPortfolio(PortfolioVO portfolioVO);
@@ -72,6 +73,9 @@ public interface WorkerMapper {
 	
 	//작업자 탈퇴(상태수정)
 	public int updateWorkerState(UserVO userVO);
+	
+	//작업자 경력서 갯수
+	public int getWorkerTotalCareerList(WorkerPFCriteria cri);
 	
 	//작업자 리뷰 갯수
 	public int getWorkerTotalReviewCount(WorkerRvwCriteria cri);
@@ -88,6 +92,9 @@ public interface WorkerMapper {
 	public int getWorkerTotalProposalCount(WorkerRvwCriteria cri);
 	//작업자 계약서 갯수
 	public int getWorkerTotalContractCount(WorkerRvwCriteria cri);
+	
+	//작업자 포트폴리오 갯수
+	public int getWorkerTotalPortfolioCount(WorkerPFCriteria cri);
 	
 	//작업자 자격증 갯수
 	public int getWorkerTotalLicenseCount(WorkerLcsCriteria cri);

@@ -8,10 +8,10 @@
 <title>사용자 마이페이지</title>
 </head>
 <body>
-  <h1>후기 목록</h1>
+<h1>후기 목록</h1>
   <th:block th:each="review : ${reviewList}">
-	<div class="list-group">
-	  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+    <div class="list-group">
+	  <a href="#" class="list-group-item list-group-item-action m-2" aria-current="true">
 	    <div class="d-flex w-100 justify-content-between">
 		  <h5 class="mb-1">지역 : [[${review.regionCode}]]
 		  	, 분야 : [[${review.categoryCode}]]</h5>
@@ -19,7 +19,7 @@
 		  <small>작업자 : [[${review.workerName}]]</small>
 		</div>
 		<p class="mb-1">내용 : [[${review.content}]]</p> 
-		<small>별점 : [[${review.star}]]</small>
+	    <small>별점 : [[${review.star}]]</small>
 	  </a>
 	</div>
   </th:block>

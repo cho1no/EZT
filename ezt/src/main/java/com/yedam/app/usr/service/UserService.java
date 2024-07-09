@@ -33,5 +33,9 @@ public interface UserService {
 	//전체 의뢰 데이터 갯수
 	public int requestGetTotal(UserReqCriteria cri);
 
+	//작업자 찾기
+	public List<UserVO> selectFindWorkerList(FindWorkerCriteria cri);
 	
+	//총 작업자 수
+	public int workerListGetTotal(FindWorkerCriteria cri);
 }

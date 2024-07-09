@@ -80,13 +80,21 @@
 	});
     window.addEventListener("click", function (event) {
     	var modal = document.getElementById("myModal");
+    	
+        closeBtn.addEventListener("click", toggleModal);
         // 모달의 검은색 배경 부분이 클릭된 경우 닫히도록 하는 코드
         if (event.target === modal) {
           toggleModal();
         }
       });
 
-	
+//     document.addEventListener("DOMContentLoaded", function () {
+//     	 var closeBtn = document.getElementById("closeBtn");
+//     	  closeBtn.addEventListener("click", toggleModal);
+//     });
+    
+    
+    
     // functions
     function toggleModal() {
     	document.getElementById("myModal").classList.toggle("show");

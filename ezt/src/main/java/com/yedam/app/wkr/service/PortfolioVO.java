@@ -12,7 +12,7 @@ public class PortfolioVO {
 	private Integer portfolioNo; //포트폴리오 번호
 	private String title; //제목
 	private String content; //내용
-	private int pyung; //평수
+	private String pyung; //평수
 	private int price; //금액
 	private int usersNo; //유저번호
 	private int fileId; //파일아이디
@@ -25,5 +25,5 @@ public class PortfolioVO {
 	
 	private String workTime; //작업시간(기간)
 	
-	private List<String> categoryCode; //작업분야(카테고리)
+	private String categoryCode; //작업분야(카테고리)
 }
