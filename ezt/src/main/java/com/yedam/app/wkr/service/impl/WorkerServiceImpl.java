@@ -17,6 +17,7 @@ import com.yedam.app.wkr.service.CareerVO;
 import com.yedam.app.wkr.service.LicenseVO;
 import com.yedam.app.wkr.service.PortfolioVO;
 import com.yedam.app.wkr.service.WorkerLcsCriteria;
+import com.yedam.app.wkr.service.WorkerReqCriteria;
 import com.yedam.app.wkr.service.WorkerRvwCriteria;
 import com.yedam.app.wkr.service.WorkerService;
 
@@ -91,8 +92,8 @@ public class WorkerServiceImpl implements WorkerService{
 	
 	//작업자 의뢰 목록
 	@Override
-	public List<ReviewVO> selectWorkerRequestList(UserVO userVO) {
-		return workerMapper.selectWorkerRequestList(userVO);
+	public List<ReviewVO> selectWorkerRequestList(WorkerReqCriteria cri) {
+		return workerMapper.selectWorkerRequestList(cri);
 	}
 	//작업자 팀의뢰 목록
 	@Override
@@ -101,13 +102,13 @@ public class WorkerServiceImpl implements WorkerService{
 	}
 	//작업자 견적서 목록
 	@Override
-	public List<ProposalVO> selectWorkerProposalList(UserVO userVO) {
-		return workerMapper.selectWorkerProposalList(userVO);
+	public List<ProposalVO> selectWorkerProposalList(WorkerRvwCriteria cri) {
+		return workerMapper.selectWorkerProposalList(cri);
 	}
 	//작업자 계약서 목록
 	@Override
-	public List<ContractVO> selectWorkerContractList(UserVO userVO) {
-		return workerMapper.selectWorkerContractList(userVO);
+	public List<ContractVO> selectWorkerContractList(WorkerRvwCriteria cri) {
+		return workerMapper.selectWorkerContractList(cri);
 	}
 
 	
@@ -133,15 +134,6 @@ public class WorkerServiceImpl implements WorkerService{
 		return workerMapper.insertWorkerLicense(licenseVO);
 	}
 	
-
-	
-	//작업자 탈퇴(상태 수정)
-	@Override
-	public boolean workerStateUpdate(UserVO userVO) {
-		return workerMapper.updateWorkerState(userVO) == 1;
-	}
-
-	
 	//후기목록 페이징
 	@Override
 	public int workerReviewGetTotal(WorkerRvwCriteria cri) {
@@ -152,14 +144,41 @@ public class WorkerServiceImpl implements WorkerService{
 	public int workerTeamReviewGetTotal(WorkerRvwCriteria cri) {
 		return workerMapper.getWorkerTotalTeamReviewCount(cri);
 	}
+	
+	//의뢰목록 페이징
+	@Override
+	public int workerRequestGetTotal(WorkerReqCriteria cri) {
+		return workerMapper.getWorkerTotalRequestCount(cri);
+	}
+	
+	//견적서목록 페이징
+	@Override
+	public int workerProposalGetTotal(WorkerRvwCriteria cri) {
+		return workerMapper.getWorkerTotalProposalCount(cri);
+	}
+
+	//계약서목록 페이징
+	@Override
+	public int workerContractGetTotal(WorkerRvwCriteria cri) {
+		return workerMapper.getWorkerTotalContractCount(cri);
+	}
+	
 
 	//자격증목록 페이징
 	@Override
 	public int workerLicenseGetTotal(WorkerLcsCriteria cri) {
 		return workerMapper.getWorkerTotalLicenseCount(cri);
 	}
+
 	
 
+	//작업자 탈퇴(상태 수정)
+	@Override
+	public boolean workerStateUpdate(UserVO userVO) {
+		return workerMapper.updateWorkerState(userVO) == 1;
+	}
+
+	
 	
 
 	

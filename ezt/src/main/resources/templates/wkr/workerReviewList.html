@@ -11,32 +11,12 @@
 	<h3>[[${userVO.usersName}]]님 안녕하세요.</h3>
 	<hr>
 	<h4>후기 목록</h4>
-	
-	
-  
-  
-  
-  
-  
-
-	  
-	  
-	  
-	  
-	  
-	  
-<nav>
-  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">후기 목록</button>
-    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">팀 후기목록</button>
-  </div>
-</nav>
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
 	 <!-- 후기목록 -->
     <th:block th:each="review : ${reviewList}">
       <div class="list-group m-3">
-	    <a th:href="@{/review/info(reviewNo=${review.reviewNo})}" class="list-group-item list-group-item-action active" aria-current="true">
+	    <a th:href="@{/review/info(reviewNo=${review.reviewNo})}" class="list-group-item list-group-item-action" aria-current="true">
 		  <span>내용 : [[${review.content}]]</span><hr>
 		  <span>별점 : [[${review.star}]]</span>
 		  <small>구분 : [[${review.reviewDivision}]]</small>
@@ -58,37 +38,6 @@
         </div>
       </div>
     </div>
-  </div>
-	 
-	 
-  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-  <!-- 팀후기목록 -->
-  <div th:fragment="teamRvwFrg">
-	<th:block th:each="tRvw : ${teamReviewList}">
-	  <div class="list-group m-3">
-	    <a th:href="@{/review/info(reviewNo=${tRvw.reviewNo})}" class="list-group-item list-group-item-action active" aria-current="true">
-		  <span>내용 : [[${tRvw.content}]]</span><hr>
-		  <span>팀 별점 : [[${tRvw.star}]]</span>
-		  <small>구분 : [[${tRvw.reviewDivision}]]</small>
-		  <small>[[${#dates.format(tRvw.writeDt, 'yyyy-MM-dd')}]]</small>
-		</a>
-	  </div>
-	</th:block>
- 	<!-- 페이징 구현 -->
-    <div class="row pagination-wrap mt-5" >
-      <div class="col-md-12 text-center ">
-        <div class="custom-pagination ml-auto">
-          <a th:if="${tPage.prev}" th:href="@{/worker/reviewList(pageNum=${page.startPage - 1})}" class="prev">Prev</a>
-          <div class="d-inline-block" id="pagination">
-            <th:block th:each="num : ${#numbers.sequence(tPage.startPage, tPage.endPage)}">
-       	      <a th:class="${tPage.cri.pageNum == num ? 'active' : ''}" th:href="|@{/worker/reviewList(pageNum=${num})}|" >[[${num}]]</a>
-	  		</th:block> 
-          </div>
-          <a th:if="${tPage.next}" th:href="@{/worker/reviewList(pageNum=${tPage.endPage + 1})}" class="next">Next</a>
-        </div>
-      </div>
-    </div>
-  </div>
   </div>
 </div>
 

@@ -43,9 +43,9 @@ form span {
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-6 mb-5" style="margin: auto">
-						<h2 class="mb-4">작업자 회원가입</h2>
+						<h2 class="mb-4">작업자 회원가입</h2>[[${errors}]]
 						<!-- 회원가입 폼 -->
-						<form th:action="@{/signUp/joinWorker}" th:object="${userVO}" method="post"
+						<form th:action="@{/signUp/joinWorker}" th:object="${userVO}" method="post" enctype="multipart/form-data"
 							class="p-4 border rounded" name="joinEzt">
 							<div class="row form-group">
 								<div class="col-md-12 mb-3 mb-md-0">
@@ -57,7 +57,7 @@ form span {
 										</div>
 										<div class="col-4">
 										<button type="button" id="checkBtn"
-										class="btn btn-primary float-end text-white px-4">중복확인</button>
+										class="btn btn-primary float-end text-white ">중복확인</button>
 										<input type="hidden" name="checked_id" value="">
 										</div>
 									</div>
@@ -107,7 +107,7 @@ form span {
 									<input  type="password" id="JUMIN2" maxlength="7" class="form-control col-md-4 d-inline-flex"
 										name="usersRnn" placeholder="1234567" th:field="*{usersRnn}"><span></span>
 									<input type="button" style="float: right" id="rnnChkBtn" value="실명인증"
-										class="btn px-4 btn-primary text-white" disabled>
+										class="btn  btn-primary text-white" disabled>
 										
 										<input type="hidden" name="checked_jumin" value="">
 										<button class="btn btn-primary" style="float: right; display:none;" id="loadChk" type="button">
@@ -148,22 +148,81 @@ form span {
 								</div>
 							</div>
 							<div class="row form-group">
-								<div class="col-md-12 mb-3 mb-md-0">
-								<div>
-								<label class="text-black" for="usersRnn">국가기술 자격증</label>
-								</div>
-									<input type="text" id="license" maxlength="12" class="form-control col-md-8 d-inline-flex" 
-											th:field="*{licenseDetailNo}" name="licenseDetailNo" placeholder="자격증 번호">
-									<input type="button" style="float: right" id="licChkBtn" value="자격증 검증"
-										class="btn px-4 btn-primary text-white d-inline-flex" >
-										<div class="row ">
-											<label class="col text-black">자격증 첨부파일</label>
-											<div class="col-md-4">
-											<input class="form-control" type="file" name="fileId" multiple>
+								
+								<section class="site-section" id="accordion" style="padding: 0">
+									<div class="container">
+										<div class="row accordion justify-content-center block__76208">
+											<div class="col">
+												<div class="accordion-item">
+													<h6 class="mb-0 heading ms-1">
+														<a class="btn-block" data-bs-toggle="collapse"
+															href="#collapseFive" role="button" aria-expanded="false"
+															aria-controls="collapseFive">국가기술 자격증<span
+															class="icon"></span>
+														</a>
+													</h6>
+													<div id="collapseFive" class="collapse"
+														aria-labelledby="headingOne" data-parent="#accordion">
+														<div class="body-text unity">
+														
+																<div class="row mb-2">
+																	<div class="col-md-4">
+																		<label class="text-black" for="lName">자격증 이름</label>
+																	</div>
+																	<div class="col-md-7">
+																		<input type="text" id="lName" class="form-control" th:field="${lcs.licenseInfo}">
+																	</div>
+																</div>
+																<div class="row mb-2">
+																	<div class="col-md-4">
+																		<label class="text-black" for="lNo">자격증 번호</label>
+																	</div>
+																	<div class="col-md-7">
+																		<input type="text" id="lNo" class="form-control" th:field="${lcs.licenseDetailNo}" >
+																	</div>
+																</div>
+																<div class="row mb-2">
+																	<div class="col-md-4">
+																		<label class="text-black" for="getDt">취득 일자</label>
+																	</div>
+																	<div class="col-md-7">
+																		<input type="date" id="getDt" class="form-control" th:field="${lcs.licenseGetDt}" >
+																	</div>
+																</div>
+																<div class="row mb-2">
+																	<div class="col-md-4">
+																		<label class="text-black" for="lChkCenter">발급 기관</label>
+																	</div>
+																	<div class="col-md-7">
+																		<input type="text" id="lChkCenter" class="form-control" th:field="${lcs.checkCenter}" >
+																	</div>
+																</div>
+																<div class="row mb-2">
+																	<div class="col-md-4">  
+																	<label for="uploadFile" class="text-black">파일첨부</label>
+																	</div>
+																	<div class="col-md-7"> 
+																	<input name="uploadFile" type="file" id="uploadFile" class="form-control">
+																	</div>		
+																</div>
+																
+																<div class="row col-md-12" align="right">
+																	<button type="button" id="check-license-Btn" class="btn btn-primary text-white">검증하기</button>
+																<input type="hidden" name="checked_license" value="">
+																	<button class="btn btn-primary" style="float: right; display:none;" id="licChk" type="button">
+																	  <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+																	  <span role="status">검증 중...</span>
+																</button>
+																</div>
+														</div>
+													</div>
+												</div>
+												<!-- .accordion-item -->
 											</div>
-											<input class="col" type="button" value="테스트" id="testBtn">
 										</div>
-								</div>
+									</div>
+								</section>
+										
 							</div>
 							<div class="row form-group">
 									<label class="text-black" for="regions">주 활동지역</label>
@@ -242,45 +301,98 @@ form span {
 		$('#rnnChkBtn').css('display', 'block');
 		$('#rnnChkBtn').attr('disabled', 'true');
 		$('#loadChk').css('display', 'none');
-// 		$.ajax({
-// 				url : "/api/idCardCheck",
-// 				type : "POST",
-// 				contentType : "application/json;charset=UTF-8",
-// 				data : JSON.stringify({
-// 						NAME : userName,
-// 						JUMIN : rnn,
-// 						ISSUEDATE : issuDate
-// 				}),
-// 				success : function(re){
-// 					if(re.result == "SUCCESS"){
-// 						$('input[name=checked_jumin]').val("y");
-// 						$('#rnnChkBtn').css('display', 'block');
-// 						$('#rnnChkBtn').attr('disabled', 'true');
-// 						$('#loadChk').css('display', 'none');
-// 						Swal.fire({
-// 							text: '실명인증 완료',
-// 							icon: 'success'
-// 						})
-// 					}else {
-// 						Swal.fire({
-// 							text: '입력오류',
-// 							icon: 'error'
-// 						})
-// 						$('#rnnChkBtn').css('display', 'block');
-// 						$('#loadChk').css('display', 'none');
-// 					}
-// 				},
-// 				error : function(er){
-// 					Swal.fire({
-// 						text: 'error',
-// 						icon: 'error'
-// 					})
-// 					$('#rnnChkBtn').css('display', 'none');
-// 					$('#loadChk').css('display', 'block');
-// 				}
-// 			})
+		$.ajax({
+				url : "/api/idCardCheck",
+				type : "POST",
+				contentType : "application/json;charset=UTF-8",
+				data : JSON.stringify({
+						NAME : userName,
+						JUMIN : rnn,
+						ISSUEDATE : issuDate
+				}),
+				success : function(re){
+					if(re.result == "SUCCESS"){
+						$('input[name=checked_jumin]').val("y");
+						$('#rnnChkBtn').css('display', 'block');
+						$('#rnnChkBtn').attr('disabled', 'true');
+						$('#loadChk').css('display', 'none');
+						Swal.fire({
+							text: '실명인증 완료',
+							icon: 'success'
+						})
+					}else {
+						Swal.fire({
+							text: '입력오류',
+							icon: 'error'
+						})
+						$('#rnnChkBtn').css('display', 'block');
+						$('#loadChk').css('display', 'none');
+					}
+				},
+				error : function(er){
+					Swal.fire({
+						text: 'error',
+						icon: 'error'
+					})
+					$('#rnnChkBtn').css('display', 'none');
+					$('#loadChk').css('display', 'block');
+				}
+			})
 	}
-	var pw = $('')
+	
+	//자격증 진위여부
+	$('#check-license-Btn').click(() => {checkLic()});
+	function checkLic() {
+		var lName = $('#lName').val();
+		var lNo = $('#lNo').val();
+		var getDt = $('#getDt').val();
+		var ChkCenter = $('#lChkCenter').val();
+		var uploadFile = $('#uploadFile').val();
+		
+		if(lName == ''){
+			$('#juminChk').text('자격증이름을 입력해주세요.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
+		if(lNo == ''){
+			$('#juminChk').text('자격증번호를 입력해주세요.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
+		if(getDt == ''){
+			$('#juminChk').text('취득일자를 입력해주세요.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
+		
+		if(ChkCenter == ''){
+			$('#juminChk').text('발급기관을 입력해주세요.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
+		
+		$.ajax({
+		    url: "/api/techCheck/" + lNo,
+		    type: "GET",
+		    success: function (response) {
+		    	body: 
+			    {
+			      items: {
+			        result: false
+			      }
+			      totalCount: 1
+			    }
+			  header: {
+			    resultCode: "00"
+			    resultMsg: "NORMAL SERICE"
+			  }
+		    },
+		    error: function (error) {
+		      console.log(error)
+		    },
+		  });
+	}
+	
 	
 	
 	//닉네임 중복체크

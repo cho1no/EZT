@@ -2,13 +2,14 @@ package com.yedam.app.usr.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.yedam.app.wkr.service.LicenseVO;
 
 import groovy.transform.builder.Builder;
 import lombok.AllArgsConstructor;
@@ -59,15 +60,12 @@ public class UserVO {
 	private String usersState;
 	private String usersStateNm;
 	
-	private Integer licenseNo;
-	private String licenseDetailNo;
-	private Integer fileId;
 	
 	//활동지역
 	private List<String> regionCode;
 	//작업분야(카테고리)
 	private List<String> categoryCode;
 	
-	
+	private LicenseVO licenseVO;
 	
 }

@@ -67,7 +67,39 @@
 </select>
 
 <!-- 팀 신청하기 -->
+<insert id="insertTeam" parameterType="TeamVO">
+	<selectKey keyProperty="teamNo"
+				resultType="Integer"
+				order="BEFORE">
+	
+		SELECT seq_team.NEXTVAL
+		FROM dual			
+	</selectKey>
 
+	INSERT	INTO team 
+	
+		(	team_no
+			,work_title
+			,work_content
+			,writer
+			,write_dt
+			,contract_no
+			,delete_tf
+		)
+		
+	VALUES
+		(
+			#{teamNo}
+			,#{workTitle}
+			,#{workContent}
+			,#{writer}
+			,sysdate
+			,161
+			,'N'
+		)
+		
+	
+</insert>
 <!-- 팀신청 수정하기(제목, 내용) -->
 <update id="updateTeam" parameterType="TeamVO">
 	UPDATE team
@@ -80,25 +112,25 @@
 
 <!-- 팀신청 삭제하기 -->
 <delete id="deleteTeam" parameterType="int">
-	DELTET FROM team
+	DELETE FROM team
 	WHERE team_no = #{teamNo}
 </delete>
 
 <!-- 팀신청 상세 등록(카테고리,카테고리 별 인원) -->
-<insert id="insertCategory" parameterType="TeamVO">
+<insert id="insertCategory" parameterType="TeamWorkCategoryVO">
 	INSERT INTO team_work_category
 	(
-		 work_code;
-		,headcount;
-		,hire_complete_tf;
-		,team_no;
+		 work_code
+		,headcount
+		,hire_complete_tf
+		,team_no
 	)
 	VALUES
 	(
 		#{workCode}
 		,#{headcount}
-		,#{hireCompleteTf}
-		,#{teamNo}
+		,'F'
+		,#{twcTeamNo}
 	)
 </insert>
 
@@ -109,7 +141,7 @@
 	SET	work_code = #{workCode}
 		,headcount = #{headcount}
 		,hire_complete_tf = #{hireCompleteTf}
-	WHERE team_no = #{teamNo} and work_code = #{workCode}
+	WHERE team_no = #{teamNo} and work_code = #{categoryCode}
 </update>
 
 <!-- 팀신청 상세 삭제하기 -->

@@ -202,7 +202,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		,#{reviewNo}
 		,#{writer}
 		,#{reply}
-		,#{writeDt}
+		,sysdate
 	)
 </insert>
 

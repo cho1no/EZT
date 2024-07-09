@@ -6,95 +6,132 @@
 <head>
 <meta charset="UTF-8">
 <link href="/css/doc/jquery.signaturepad.css" rel="stylesheet">
-    	<script src="/js/doc/jquery.signaturepad.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
-    <style>
-		canvas {
-	        border: 1px solid black;
-	        width:260px;
-	        height:100px;
-	    }
-	</style>
+<script src="/js/doc/jquery.signaturepad.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+<style>
+canvas {
+	border: 1px solid black;
+	width: 260px;
+	height: 100px;
+}
+
+.modal-backdrop {
+	/* bug fix - no overlay */
+	display: none;
+}
+
+</style>
 </head>
 <body>
-  <form method="post" action="" class="sigPad">
+	<form method="post" action="" class="sigPad">
 
-    <ul class="sigNav">
-      <li class="drawIt"><a href="#draw-it" >서명 하기</a></li>
-      <li class="clearButton"><a href="#clear">지우기</a></li>
-    </ul>
-    <div class="sig sigWrapper">
-      <div class="typed"></div>
-      <canvas class="pad" width="260" height="100"></canvas>
-      <input type="hidden" name="output" class="output">
-    </div>
-    <button type="submit" id="save">서명완료</button>
-    <canvas id="signatureCanvas"></canvas>
-    <button type="submit">I accept the terms of this agreement.</button>
-  </form>
-  
-  <script src="js/doc/jquery.signaturepad.js"></script>
-  <script>
-    $(document).ready(function() {
-		var compressedData;
-    	
-        $('.sigPad').signaturePad();
- 
-        $('#save').click(function(event) {
-        	event.preventDefault(); // 폼의 기본 제출 동작을 방지
- 
-	        // 서명 데이터를 JSON 형식으로 가져오기
-	        var signatureData = $('.sigPad').signaturePad().getSignatureString();
-	        
-	        // 서명 데이터를 압축
-	        compressedData = LZString.compressToBase64(signatureData);
-	
-	        // 압축된 데이터를 숨겨진 input에 저장
-	        $('input.output').val(compressedData);
-	
-	        // 압축된 데이터 출력 (선택 사항)
-	        console.log(compressedData);
-	        
-	        signView(compressedData);
-        });
-      
+		<ul class="sigNav">
+			<li class="drawIt"><a href="#draw-it">서명 하기</a></li>
+			<li class="clearButton"><a href="#clear">지우기</a></li>
+		</ul>
+		<div class="sig sigWrapper">
+			<div class="typed"></div>
+			<canvas class="pad" width="260" height="100"></canvas>
+			<input type="hidden" name="output" class="output">
+		</div>
+		<button type="submit" id="save">서명완료</button>
+		<canvas id="signatureCanvas"></canvas>
+		<button type="submit">I accept the terms of this agreement.</button>
+	</form>
 
-	  		function drawSignature(data) {
-		        // Canvas / 컨텍스트
-		        const canvas = document.getElementById('signatureCanvas');
-		        const ctx = canvas.getContext('2d');
-		        
-		     	// 캔버스 초기화
-		        ctx.clearRect(0, 0, canvas.width, canvas.height);
-		        ctx.beginPath();
-		        for (let i = 0; i < data.length; i++) {
-		            const point = data[i];
-		            ctx.moveTo(point.mx, point.my);
-		            ctx.lineTo(point.lx, point.ly);
-		        }
-		        ctx.stroke();
-		    }
-	 
-		    function signView(compressedSignatureData) {
-		        console.log("compressedSignatureData = " + compressedSignatureData);
-		        
-		        // 압축된 데이터 복원
-		        const decompressedSignatureData 
-	                      = LZString.decompressFromBase64(compressedSignatureData);
-	 
-		        // 복원된 서명을 JSON화
-		        const signatureData = JSON.parse(decompressedSignatureData);
-	 
-		        // 서명 그리기
-		        drawSignature(signatureData);
-		        console.log(signatureData);
-		    }
+	<!-- Button trigger modal -->
+	<button type="button" id="modalBtn" class="btn btn-primary"
+		data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+		Launch static backdrop modal</button>
 
-    });
-   
-    
-  </script>
-  <script src="/js/doc/json2.min.js"></script>
+	<!-- Modal -->
+	<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+		tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div
+			class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+			<div class="modal-content">
+				<scr th:insert="doc/report :: reportFragment"></scr>
+			</div>
+		</div>
+	</div>
+
+
+
+	<script src="js/doc/jquery.signaturepad.js"></script>
+	<script th:inline="javascript">
+		$(document).ready(
+				function() {
+					var compressedData;
+
+					$('.sigPad').signaturePad();
+
+					$('#save').click(
+							function(event) {
+								event.preventDefault(); // 폼의 기본 제출 동작을 방지
+
+								// 서명 데이터를 JSON 형식으로 가져오기
+								var signatureData = $('.sigPad').signaturePad()
+										.getSignatureString();
+
+								// 서명 데이터를 압축
+								compressedData = LZString
+										.compressToBase64(signatureData);
+
+								// 압축된 데이터를 숨겨진 input에 저장
+								$('input.output').val(compressedData);
+
+								// 압축된 데이터 출력 (선택 사항)
+								console.log(compressedData);
+
+								signView(compressedData);
+							});
+
+					function drawSignature(data) {
+						// Canvas / 컨텍스트
+						const canvas = document
+								.getElementById('signatureCanvas');
+						const ctx = canvas.getContext('2d');
+
+						// 캔버스 초기화
+						ctx.clearRect(0, 0, canvas.width, canvas.height);
+						ctx.beginPath();
+						for (let i = 0; i < data.length; i++) {
+							const point = data[i];
+							ctx.moveTo(point.mx, point.my);
+							ctx.lineTo(point.lx, point.ly);
+						}
+						ctx.stroke();
+					}
+
+					function signView(compressedSignatureData) {
+						console.log("compressedSignatureData = "
+								+ compressedSignatureData);
+
+						// 압축된 데이터 복원
+						const decompressedSignatureData = LZString
+								.decompressFromBase64(compressedSignatureData);
+
+						// 복원된 서명을 JSON화
+						const signatureData = JSON
+								.parse(decompressedSignatureData);
+
+						// 서명 그리기
+						drawSignature(signatureData);
+						console.log(signatureData);
+					}
+
+				});
+		
+		$('#staticBackdrop').on('shown.bs.modal', function (e) {     
+			$('.smoothscroll.scroll-top').attr('style', 'display:none');
+		})
+		$('#staticBackdrop').on('hidden.bs.modal', function (e) {
+			$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
+		})
+		
+	</script>
+	<script src="/js/doc/json2.min.js"></script>
 </body>
 
 </html>

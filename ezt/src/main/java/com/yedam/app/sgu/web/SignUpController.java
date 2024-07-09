@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.common.service.SimpleFileService;
 import com.yedam.app.sgu.service.SignUpService;
 import com.yedam.app.usr.service.UserVO;
+import com.yedam.app.wkr.service.LicenseVO;
+import com.yedam.app.wkr.service.WorkerService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +32,10 @@ public class SignUpController {
 	
 	@Autowired
 	CommonCodeService commonCodeService;
-	
+	 @Autowired
+	   SimpleFileService simpleFileService;
+	 @Autowired
+	   WorkerService workerService;
 	// == 사용자 회원가입 ==
 	@GetMapping("signUp/joinUser")
     public String signUpUserForm(Model model) {
@@ -67,25 +74,37 @@ public class SignUpController {
     public String signUpWorkerForm(Model model, UserVO userVO) {
     	model.addAttribute("categories", commonCodeService.selectCommonCodeAll("0C"));
     	model.addAttribute("regions", commonCodeService.selectCommonCodeAll("0B"));
+    	model.addAttribute("lcs", new LicenseVO());
     	return "sgu/signUp_worker";
     }
     
 
     
     @PostMapping("signUp/joinWorker")
-    public String signUpWorker(@Valid UserVO userVO, Errors errors, Model model, HttpServletResponse resp) {
+    public String signUpWorker(@Valid UserVO userVO, 
+					    		Errors errors, 
+					    		Model model,
+					    		MultipartFile[] uploadFile, 
+					    		LicenseVO lvo) {
     	if(!userVO.getUsersPw().equals(userVO.getUsersPwCheck())) {
     		errors.rejectValue("usersPwCheck", "error", "비밀번호가 다릅니다");
     		
     	}
     	if (errors.hasErrors()) {
+    		System.out.println("====================================="+errors);
     		// 회원가입 실패시 입력 데이터값을 유지
     		model.addAttribute("userVO", userVO);
     		model.addAttribute("categories", commonCodeService.selectCommonCodeAll("0C"));
         	model.addAttribute("regions", commonCodeService.selectCommonCodeAll("0B"));
+        	model.addAttribute("lcs", lvo);
     		return "sgu/signUp_worker";
     	}
+    	
+    	int result = simpleFileService.uploadFiles(uploadFile);
+    	lvo.setFileId(result);
+    	//workerService.insertWorkerLicense(lvo);
     	//  주석풀어야 회원가입됨
+    	userVO.setLicenseVO(lvo);
     	signUpService.joinWorker(userVO);
     	
     	model.addAttribute("msg", "회원가입 완료!");

@@ -13,6 +13,7 @@ import com.yedam.app.wkr.service.CareerVO;
 import com.yedam.app.wkr.service.LicenseVO;
 import com.yedam.app.wkr.service.PortfolioVO;
 import com.yedam.app.wkr.service.WorkerLcsCriteria;
+import com.yedam.app.wkr.service.WorkerReqCriteria;
 import com.yedam.app.wkr.service.WorkerRvwCriteria;
 
 @Mapper
@@ -47,15 +48,15 @@ public interface WorkerMapper {
 	public List<ReviewVO> selectWorkerTeamReviewList(WorkerRvwCriteria cri);
 	
 	//작업자 의뢰 목록
-	public List<ReviewVO> selectWorkerRequestList(UserVO userVO);
+	public List<ReviewVO> selectWorkerRequestList(WorkerReqCriteria cri);
 	
 	//작업자 팀 의뢰목록
 	public List<ReviewVO> selectWorkerTeamRequestList(UserVO userVO);
 	
 	//작업자 견적서 목록
-	public List<ProposalVO> selectWorkerProposalList(UserVO userVO);
+	public List<ProposalVO> selectWorkerProposalList(WorkerRvwCriteria cri);
 	//작업자 계약서 목록
-	public List<ContractVO> selectWorkerContractList(UserVO userVO);
+	public List<ContractVO> selectWorkerContractList(WorkerRvwCriteria cri);
 	
 	//작업자 포트폴리오 목록
 	public List<PortfolioVO> selectWorkerPortfolioList(UserVO userVO);
@@ -77,6 +78,16 @@ public interface WorkerMapper {
 	
 	//작업자 팀리뷰 갯수
 	public int getWorkerTotalTeamReviewCount(WorkerRvwCriteria cri);
+	
+	//작업자 의뢰 갯수
+	public int getWorkerTotalRequestCount(WorkerReqCriteria cri);
+	
+	//작업자 팀의뢰 갯수
+	
+	//작업자 견적서 갯수
+	public int getWorkerTotalProposalCount(WorkerRvwCriteria cri);
+	//작업자 계약서 갯수
+	public int getWorkerTotalContractCount(WorkerRvwCriteria cri);
 	
 	//작업자 자격증 갯수
 	public int getWorkerTotalLicenseCount(WorkerLcsCriteria cri);

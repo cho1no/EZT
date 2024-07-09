@@ -74,20 +74,39 @@
 			<td colspan="4"><textarea class="writerContent" name="content" th:text="${review.content}" readonly></textarea></td>
 		</tr>
 		</table>
-		<th:block th:if="${reply != null}">
-			<h4>작업자 한줄 평</h4>
+		
+		<h4>작업자 한줄 평</h4>
+		<th:block th:if="${reply == null}">
+			<form name="reply" th:action="@{/replyInsert}"method="post">
+				<input type="hidden"  name="workerReplyNo"  >
+				<input type="hidden" name="replyNo">
+				<input type="hidden" th:value="${#authentication.principal.userNo}" name="writer"  >
+				<table class="table">
+					<tbody>
+					<tr>
+					<th>내용</th>
+						<td><textarea name="reply" ></textarea></td>
+					</tr>
+					</tbody>
+				</table>
+				<button class="btnn" > 댓글등록 </button>
+			</form>
+		</th:block>
+		<th:block th:unless="${reply == null}">
 			<table class="table">
 				<tbody>
 				<tr>
-					<th>내용</th>
-					<td><textarea readonly th:text="${reply.reply}" ></textarea></td>
+				<th>내용</th>
+					<td><textarea readonly th:text="${reply.reply}"  ></textarea></td>
+					<td><button class="btnn">수정</button></td>
+					<td><button class="btnn" th:onclick="|location.href='@{/review/replyDelete(workerReplyNo=${reply.workerReplyNo})}'|">삭제</button></td>
 				</tr>
 				</tbody>
 			</table>
 		</th:block>
 	</div>
 	<button type="button" class="btn btn-secondary upBtn update">수정</button>
-    <button type="button" class="btn btn-secondary delBtn" th:onclick="|location.href='@{/review/delete(reviewNo=${review.reviewNo})}'|">삭제</button>
+    <button type="button" class="btn btn-secondary delBtn" th:onclick="|location.href='@{/review/delete(reviewNo=${review.reviewNo})}'|" >삭제</button>
     <button type="button" class="btn btn-secondary delBtn"  onclick="history.back()">뒤로가기</button>
 </form>	
 
@@ -113,5 +132,6 @@
 	}
 </script>
 <script src="/js/rvw/reviewUpdate.js"></script>
+
 </body>
 </html>

@@ -13,7 +13,7 @@
 	border:none;
     font-size:14px;
     margin:1px;
-    width:70px;
+    width:80px;
 }
 </style>
 <body>
@@ -45,10 +45,10 @@
 	        <tr id="detail">
 	            <th></th>
 	            <input type="hidden" th:value="${twc.teamNo}" name="teamNo">
-	            <input type="hidden" th:value="${twc.categoryCode}" name="workCode">
+	            <input type="hidden" th:value="${twc.categoryCode}" name="categoryCode">
 				<input type="hidden" th:value="${twc.hireCompleteTf}" name="hireCompleteTf">
 	            <td>
-	                <select th:value="${twc.categoryCode}" name="categoryCode" disabled >
+	                <select th:value="${twc.categoryCode}" name="workCode" disabled  >
 						<option th:each="category :${categoryCode}" 
 	                            th:value="${category.codeNo}" 
 	                            th:text="${category.codeName}"
@@ -67,7 +67,7 @@
 	</table>
 </form>
 	<button type="button" class="btn btn-primary upBtn update" >수정</button>
-	<button type="button" class="btn btn-primary">삭제</button>
+	<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/team/requestDelete(teamNo=${team.teamNo})}'|">삭제</button>
 <script src="/js/tem/teamRequestUpdate.js"></script>
 </body>
 </html>

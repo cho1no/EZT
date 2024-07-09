@@ -28,7 +28,7 @@ $(document).ready(function(){
 		}//수정완료 버튼 클릭시
 		else{
 			let info = getRequestInfo();
-			
+			console.log(info);
 			$.ajax('/request/update',{
 				type:"post",
 				contentType:"application/json",

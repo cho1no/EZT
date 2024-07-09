@@ -3,7 +3,7 @@ package com.yedam.app.wkr.service;
 import lombok.Data;
 
 @Data
-public class WorkerRvwCriteria {
+public class WorkerReqCriteria {
 	//페이징
 	private int pageNum;
 	private int amount;
@@ -13,19 +13,16 @@ public class WorkerRvwCriteria {
 	private String type;
 	private String keyword;
 	
-	public WorkerRvwCriteria() {
-		this(1,5);
+	public WorkerReqCriteria() {
+		this(1,9);
 	}
-	public WorkerRvwCriteria(int pageNum, int amount) {
+	public WorkerReqCriteria(int pageNum, int amount) {
 		this.pageNum = pageNum;
 		this.amount = amount;
 	}
 	
 	public String[] getTypeArr() {
 		return type == null? new String[] {} : type.split("");
-	}
-	public int getPage() {
-		return pageNum;
 	}
 	
 	

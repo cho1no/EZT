@@ -107,3 +107,4 @@ function fileDownload(fileList) {
 		$('#fileDownload').append(`<p><a href="download?fileName=${path}/${name}_${orgname}.${ext}">${orgname}.${ext}</a></p> `)
 	}
 }
+
