@@ -41,7 +41,6 @@ const PRODUCT_COLOR = [
 ];
 
 // ----------------------------------------------------------------------
-
 export const products = [...Array(24)].map((_, index) => {
   const setIndex = index + 1;
 

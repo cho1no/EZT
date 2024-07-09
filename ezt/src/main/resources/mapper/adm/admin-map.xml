@@ -31,6 +31,31 @@
 		GROUP BY region_code
 	</select>
 	
+	<!-- 의뢰 관련 -->
+	<select id="selectRequests" resultType="RequestVO">
+		SELECT r.request_no
+              ,r.requester
+              ,FIND_COMMONCODE(r.ctt_place) as ctt_place
+              ,r.title
+              ,r.content
+              ,r.write_dt
+              ,r.request_state as request_state
+              ,FIND_COMMONCODE(r.request_state) as request_state_nm
+              ,f.save_path
+              ,f.save_name
+              ,f.original_file_name
+              ,f.ext
+              ,FIND_COMMONCODE(r.category_code) as category_code
+              ,FIND_COMMONCODE(r.region_code) as region_code
+              ,(SELECT users_name
+              	FROM users
+              	WHERE users_no = r.requester) users_name
+        FROM request r
+	        LEFT OUTER JOIN file_detail_info f
+	        ON r.file_id = f.file_id AND f.boss_tf = 'Y'
+        ORDER BY write_dt DESC
+	</select>
+	
 	<!-- 유저관련 -->
 	<select id="selectUsers" resultType="UserVO">
 		SELECT users_no

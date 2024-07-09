@@ -8,7 +8,6 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 
 import Iconify from 'src/components/iconify';
-
 // ----------------------------------------------------------------------
 
 export default function ContractTableToolbar({ filterName, onFilterName, onNewContract }) {

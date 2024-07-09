@@ -9,7 +9,7 @@ export default function CareerPage() {
   return (
     <>
       <Helmet>
-        <title> Career | Minimal UI </title>
+        <title> 경력 인증 관리 </title>
       </Helmet>
 
       <CareerView />
