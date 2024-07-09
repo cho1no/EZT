@@ -77,7 +77,8 @@ canvas {
 					<div class="row form-group">
 						<div class="col">
 							<h3 class="text-black mb-5 border-bottom pb-2">
-									<b>계약서 상세</b>
+									<b th:if="${leaderCode == null}">계약서 상세</b>
+									<b th:unless="${leaderCode == null}">동업 계약서 상세</b>
 						<th:block th:if="${con.contractState == 'G01'}">
 							<span class="fs-6 fw-light text-success">[ 서명 중 ]</span>
 						</th:block>
@@ -205,10 +206,11 @@ canvas {
 
 
 							<div class="row form-group">
-							
+								
 								<div class="col-6 info_req" style="padding-top: 60px">
 									<div class="p-4 mb-3 bg-white border p-4 rounded">
-										<h3 class="mt-3 h5 pl-3 mb-3 ">발주자(시행자) "갑"</h3>
+										<h3 th:if="${leaderCode == null}" class="mt-3 h5 pl-3 mb-3 ">발주자(시행자) "갑"</h3>
+										<h3 th:unless="${leaderCode == null}" class="mt-3 h5 pl-3 mb-3 ">동업자 "갑"</h3>
 										<ul class="list-unstyled pl-3 mb-0 con_ul">
 
 											<li class="mb-2 row form-group"><div class="col-4">
@@ -221,52 +223,59 @@ canvas {
 													<strong class="text-black">전화번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${requester.usersPhone}]]</p>
+													<p class="text-black" style="margin: 5px 0" th:if="${leaderCode != null} or ${user == requester.usersNo} or ${con.contractState == 'G02'}">[[${requester.usersPhone}]]</p>
+												</div></li>
+												<li class="mb-2 row form-group" th:unless="${leaderCode == null}"><div class="col-4">
+													<strong class="text-black">공사 담당 분야</strong>
+												</div>
+												<div class="col">
+													<p class="text-black m-0 mt-1">[[${leaderCode}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">우편번호</strong>
 												</div>
 												<div class="col-3">
 													<p class="text-black" style="margin: 5px 0"
-														id="input_postcode"></p>
+														id="input_postcode" th:if="${leaderCode != null} or ${user == requester.usersNo} or ${con.contractState == 'G02'}"></p>
 												</div>
 												<div class="col"></div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주소</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0" id="input_addr"></p>
+													<p class="text-black" style="margin: 5px 0" id="input_addr" th:if="${leaderCode != null} or ${user == requester.usersNo} or ${con.contractState == 'G02'}"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">상세주소</strong>
 												</div>
 												<div class="col">
 													<p class="text-black" style="margin: 5px 0"
-														id="input_detailAddr"></p>
+														id="input_detailAddr" th:if="${leaderCode != null} or ${user == requester.usersNo} or ${con.contractState == 'G02'}"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주민등록번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${requester.usersRnn}]]</p>
+													<p class="text-black" style="margin: 5px 0" th:if="${leaderCode != null} or ${user == requester.usersNo} or ${con.contractState == 'G02'}">[[${requester.usersRnn}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${con.requesterBankcode}]]</p>
+													<p class="text-black" style="margin: 5px 0" th:if="${leaderCode != null} or ${user == requester.usersNo} or ${con.contractState == 'G02'}">[[${con.requesterBankcode}]]</p>
 												</div></li>
 												<li class="mb-2 row form-group"><div class="col-4">
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${con.requesterAccount}]]</p>
+													<p class="text-black" style="margin: 5px 0" th:if="${leaderCode != null} or ${user == requester.usersNo} or ${con.contractState == 'G02'}">[[${con.requesterAccount}]]</p>
 												</div></li>
-											<li class="mb-2 row form-group"><div class="col-4">
+											<li class="mb-2 row form-group"><div class="col-3">
 													<strong class="text-black">서명</strong>
 												</div>
 												<div class="col h-75">
-												<div id="input_sign_req" class="text-center mt-2">
-												<canvas id="signatureCanvas_req"></canvas></div>
+													<div id="input_sign_req" class="text-center">
+														<canvas id="signatureCanvas_req"></canvas>
+													</div>
 												</div></li>
 										</ul>
 									</div>
@@ -275,7 +284,8 @@ canvas {
 
 								<div class="col-6 info_worker" style="padding-top: 60px">
 									<div class="p-4 mb-3 bg-white border p-4 rounded">
-										<h3 class="mt-3 h5 pl-3 mb-3 ">수급자(시공자) "을"</h3>
+										<h3 class="mt-3 h5 pl-3 mb-3 " th:if="${leaderCode == null}">수급자(시공자) "을"</h3>
+										<h3 class="mt-3 h5 pl-3 mb-3 " th:unless="${leaderCode == null}">동업자 "을"</h3>
 										<ul class="list-unstyled pl-3 mb-0 con_ul">
 
 											<li class="mb-2 row form-group"><div class="col-4">
@@ -288,61 +298,74 @@ canvas {
 													<strong class="text-black">전화번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${worker.usersPhone}]]</p>
+													<p class="text-black" style="margin: 5px 0"
+														th:if="${leaderCode == null} or ${user == worker.usersNo} or ${con.contractState == 'G02'}">[[${worker.usersPhone}]]</p>
+												</div></li>
+												<li class="mb-2 row form-group" th:unless="${leaderCode == null}"><div class="col-4">
+													<strong class="text-black">공사 담당 분야</strong>
+												</div>
+												<div class="col">
+													<p class="text-black m-0 mt-1">[[${memberCode}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">우편번호</strong>
 												</div>
 												<div class="col-3">
 													<p class="text-black" style="margin: 5px 0"
-														id="input_postcode"></p>
+														id="input_postcode" th:if="${leaderCode == null} or ${user == worker.usersNo} or ${con.contractState == 'G02'}"></p>
 												</div>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주소</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0" id="input_addr"></p>
+													<p class="text-black" style="margin: 5px 0" id="input_addr" th:if="${leaderCode == null} or ${user == worker.usersNo} or ${con.contractState == 'G02'}"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">상세주소</strong>
 												</div>
 												<div class="col">
 													<p class="text-black" style="margin: 5px 0"
-														id="input_detailAddr"></p>
+														id="input_detailAddr" th:if="${leaderCode == null} or ${user == worker.usersNo} or ${con.contractState == 'G02'}"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">주민등록번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${worker.usersRnn}]]</p>
+													<p class="text-black" style="margin: 5px 0"
+														th:if="${leaderCode == null} or ${user == worker.usersNo} or ${con.contractState == 'G02'}">[[${worker.usersRnn}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${con.workerBankcode}]]</p>
+													<p class="text-black" style="margin: 5px 0" th:if="${leaderCode == null} or ${user == worker.usersNo} or ${con.contractState == 'G02'}">[[${con.workerBankcode}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${con.workerAccount}]]</p>
+													<p class="text-black" style="margin: 5px 0" th:if="${leaderCode == null} or ${user == worker.usersNo} or ${con.contractState == 'G02'}">[[${con.workerAccount}]]</p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-3">
 													<strong class="text-black">서명</strong>
 												</div>
 												<div class="col h-75">
-													<div id="input_sign_work" class="text-center mt-2">
+													<div id="input_sign_work" class="text-center">
 														<canvas id="signatureCanvas_work"></canvas>
 													</div>
 												</div></li>
 										</ul>
 									</div>
 								</div>
-								
 
 								<p class="text-center text-black mt-5">
+								<th:block th:if="${leaderCode == null}">
 									<b>"갑"과 "을"은 상호 신의와 성실을 원칙으로 이 계약서에 의하여 공사계약을 체결하고 계약서 2부를
 										작성하여 각각 1부씩 보관한다.</b>
+								</th:block>
+								<th:block th:unless="${leaderCode == null}">
+									<b>"갑"과 "을"은 상호 신의와 성실을 원칙으로 이 계약서에 의하여 동업계약을 체결하고 계약서 2부를
+										작성하여 각각 1부씩 보관한다.</b>
+								</th:block>
 								</p>
 								<p class="text-center" style="letter-spacing: 3px">
 									<b><span class="me-5 cur_year">2024년</span><span
@@ -360,27 +383,53 @@ canvas {
 					<div class="row">
 					
 					
-						<th:block th:if="${#authentication.principal.userNo == con.workerInfo} and ${con.contractState == null}">
+						<th:block th:if="${#authentication.principal.userNo == con.workerInfo} and ${con.contractState == null} and ${leaderCode == null}">
 						<div class="col-6">
 									
 									<button type="submit" class="btn btn-block btn-light btn-md"
-								th:onClick="|location.href='@{/conUpdate(proposalNo=${con.proposalNo})}'|">수정</button>
+								th:onClick="|location.href='@{/conUpdate(contractNo=${con.contractNo})}'|">수정</button>
 						</div>
 						<div class="col-6">
 							<button type="button" class="btn btn-block btn-primary btn-md"
-								th:onClick="|location.href='@{/sendCon(proposalNo=${con.proposalNo}, type=0)}'|">보내기</button>
+								th:onClick="|location.href='@{/sendCon(contractNo=${con.contractNo}, type=0)}'|">보내기</button>
 						</div>
 						</th:block>
+						
+						
+						<th:block th:if="${#authentication.principal.userNo == con.workerInfo} and ${con.contractState == 'G01'} and ${leaderCode != null}">
+						<div class="col-6">
+									
+									<button type="submit" class="btn btn-block btn-light btn-md"
+								th:onClick="|location.href='@{/ptnconWrite(contractNo=${con.contractNo})}'|">수정</button>
+						</div>
+						<div class="col-6">
+							<button type="button" class="btn btn-block btn-primary btn-md"
+								th:onClick="|location.href='@{/sendCon(contractNo=${con.contractNo}, type=1)}'|">서명하기</button>
+						</div>
+						</th:block>
+						
 					
-						<th:block th:if="${#authentication.principal.userNo == con.requesterInfo} and ${con.contractState == 'G01'}">
+						<th:block th:if="${#authentication.principal.userNo == con.requesterInfo} and ${con.contractState == 'G01'} and ${leaderCode == null}">
 						<div class="col-6">
 							<button type="submit" class="btn btn-block btn-light btn-md"
-								th:onClick="|location.href='@{/conWrite(proposalNo=${con.proposalNo})}'|">수정</button>
+								th:onClick="|location.href='@{/conWrite(contractNo=${con.contractNo})}'|">수정</button>
 						</div>
 						
 						<div class="col-6">
 									<button type="button" class="btn btn-block btn-primary btn-md"
-								th:onClick="|location.href='@{/sendCon(proposalNo=${con.proposalNo}, type=1)}'|">서명 완료</button>
+								th:onClick="|location.href='@{/sendCon(contractNo=${con.contractNo}, type=1)}'|">서명 완료</button>
+						</div>
+						</th:block>
+						
+						<th:block th:if="${#authentication.principal.userNo == con.requesterInfo} and ${con.contractState == null} and ${leaderCode != null}">
+						<div class="col-6">
+							<button type="submit" class="btn btn-block btn-light btn-md"
+								th:onClick="|location.href='@{/conWrite(contractNo=${con.contractNo})}'|">수정</button>
+						</div>
+						
+						<div class="col-6">
+									<button type="button" class="btn btn-block btn-primary btn-md"
+								th:onClick="|location.href='@{/sendCon(contractNo=${con.contractNo}, type=0)}'|">보내기</button>
 						</div>
 						</th:block>
 					</div>
@@ -439,22 +488,30 @@ canvas {
 		//console.log(path+'/'+name);
 		$('#fileDownload').append(`<p><a href="download?fileName=${path}/${name}_${orgname}.${ext}">${orgname}.${ext}</a></p> `)
 	}
-	
+		
+ 		var leaderCode = /*[[${leaderCode}]]*/"";
+ 		var contractState = /*[[${con.contractState}]]*/"";
+ 		var user = /*[[${user}]]*/"";
+ 		var workerNo = /*[[${worker.usersNo}]]*/"";
+ 		var reqNo = /*[[${requester.usersNo}]]*/"";
+ 	
 		// 서명 표기
-		var workSign = /*[[${con.worSign.signsContent}]]*/"";
-
 		
-		if(workSign != null){
-		 signView(workSign, 0);
+		if(leaderCode == null || user == workerNo || (leaderCode != null && contractState == 'G02')){
+			var workSign = /*[[${con.worSign.signsContent}]]*/"";
+		
+			if(workSign != null){
+		 	signView(workSign, 0);
+			}
 		}
 		
-		var reqSign = /*[[${con.reqSign.signsContent}]]*/"";
-
+		if(leaderCode != null || user == reqNo || (leaderCode == null && contractState == 'G02')){
+			var reqSign = /*[[${con.reqSign.signsContent}]]*/"";
 		
-		if(reqSign != null){
-		 signView(reqSign, 1);
+			if(reqSign != null){
+		 	signView(reqSign, 1);
+			}
 		}
-		
     function signView(compressedSignatureData, num) {
         //console.log("compressedSignatureData = " + compressedSignatureData);
         
