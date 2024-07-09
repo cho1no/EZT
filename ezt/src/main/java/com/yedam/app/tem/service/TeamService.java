@@ -31,4 +31,7 @@ public interface TeamService {
 	public boolean updateCategory(TeamWorkCategoryVO twcVO);
 	//팀 신청 상세 삭제
 	public int deleteCategory(TeamWorkCategoryVO twcVO);
+	
+	//카테고리 별 신청자 조회
+	public List<MemberEnrollVO> volunteerList(MemberEnrollVO memberEnrollVO);
 }

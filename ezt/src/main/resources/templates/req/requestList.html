@@ -24,7 +24,7 @@ img{
 </head>
 <body>
 
-<section class="site-section">
+
 <h2>의뢰 신청 목록</h2>
 <form id="searchForm" th:action="@{/request/list}" method="get">
 	<div>
@@ -78,7 +78,7 @@ img{
        </div>
      </div>
  <p>[[${#authentication.principal}]]</p>
-</section>
+
 <script th:inline="javascript">
     var login = /*[[${#authentication.principal}]]*/ "";
 </script>

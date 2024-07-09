@@ -10,6 +10,7 @@
 <body>
 <form name="insertTeam">
     <h4>팀원 모집 글 작성</h4>
+    <input type="hidden" name="workCategoryVO[0].contractNo" th:value="${team.contractNo}">
     <table class="table">
         <tbody>
             <tr>
@@ -38,7 +39,6 @@
                     </select>
                 </td>
                 <td><input type="text" name="workCategoryVO[0].headcount">명</td>
-                <input type="hidden" name="workCategoryVO[0].teamNo">
                 <input type="hidden" name="workCategoryVO[0].hireCompleteTf" value="F">
             </tr>
         </tbody>

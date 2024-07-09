@@ -1,73 +1,121 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
-		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-		layout:decorate="~{common/layouts/default_layout}"
-		layout:fragment="Content">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layouts/default_layout}"
+      layout:fragment="Content">
 <head>
-<meta charset="UTF-8">
-<title>팀 모집 상세</title>
+    <meta charset="UTF-8">
+    <title>팀 모집 상세</title>
+
 </head>
 <style>
-.btnn{
-    background: transparent;
-	border:none;
-    font-size:14px;
-    margin:1px;
-    width:80px;
-}
+    .btnn {
+        background: transparent;
+        border: none;
+        font-size: 14px;
+        margin: 1px;
+        width: 80px;
+    }
+
+    .modal-backdrop {
+        /* bug fix - no overlay */
+        display: none;
+    }
 </style>
 <body>
 <form name="infoForm" th:object="${team}">
-<h4>팀 신청 상세보기</h4>
-			<input type="hidden" th:field="*{teamNo}">
-	<table class="table team">
-		<tr>
-			<th>제목</th>
-			<td colspan="3"><input class="border border-light" th:field="*{workTitle}" readonly></td>
-		</tr>
-		<tr>
-			<th>내용</th>
-			<td colspan="3"><textarea class=" w-75 p-3 h-100 d-inline-bl
-				ock border border-light" name="workContent" th:text="${team.workContent}" readonly></textarea></td>
-		</tr>
-		<tr>
-			<th></th>
-			<td colspan="3"><a>의뢰 상세보기</a></td>
-		</tr>
-	</table>
+
+
+    <h4>팀 신청 상세보기</h4>
+    <input type="hidden" th:field="*{teamNo}">
+    <table class="table team">
+        <tr>
+            <th>제목</th>
+            <td colspan="3"><input class="border border-light" th:field="*{workTitle}" readonly></td>
+        </tr>
+        <tr>
+            <th>내용</th>
+            <td colspan="3"><textarea class=" w-75 p-3 h-100 d-inline-block border border-light"
+                                     name="workContent" th:text="${team.workContent}" readonly></textarea></td>
+        </tr>
+        <tr>
+            <th></th>
+            <td colspan="3"><a>의뢰 상세보기</a></td>
+        </tr>
+    </table>
 </form>
 <form name="detailInfoForm" th:object="${team}">
-	<table class="table">
-	    <tr>
-	        <th colspan="4">모집분야/인원</th>
-	    </tr>
-	    <th:block th:each="twc :${team.workCategoryVO}">
-	        <tr id="detail">
-	            <th></th>
-	            <input type="hidden" th:value="${twc.teamNo}" name="teamNo">
-	            <input type="hidden" th:value="${twc.categoryCode}" name="categoryCode">
-				<input type="hidden" th:value="${twc.hireCompleteTf}" name="hireCompleteTf">
-	            <td>
-	                <select th:value="${twc.categoryCode}" name="workCode" disabled  >
-						<option th:each="category :${categoryCode}" 
-	                            th:value="${category.codeNo}" 
-	                            th:text="${category.codeName}"
-	                            th:selected="${category.codeNo} == ${twc.categoryCode}">
-	                    </option>
-	               </select>
-	            </td>
-	            <td> [[${twc.partCount}]] / <input class="border border-light" th:value="${twc.headcount}" name="headcount" readonly></td>
-	            <td>
-	                <button type="button" class="btnn">신청자 확인하기</button> 
-	                <button type="button" class="btnn deUpdate deUpBtn">수정</button> 
-	                <button type="button" class="btnn" th:onclick="|location.href='@{/team/teamDetailDelete(teamNo=${twc.teamNo},workCode=${twc.categoryCode})}'|">삭제</button>
-	            </td>
-	        </tr>
-	    </th:block>
-	</table>
+    <table class="table">
+        <tr>
+            <th colspan="4">모집분야/인원</th>
+        </tr>
+        <th:block th:each="twc :${team.workCategoryVO}">
+            <tr id="detail">
+                <th></th>
+                <input type="hidden" th:value="${twc.teamNo}" name="teamNo">
+                <input type="hidden" th:value="${twc.categoryCode}" name="categoryCode">
+                <input type="hidden" th:value="${twc.hireCompleteTf}" name="hireCompleteTf">
+                <td>
+                    <select th:value="${twc.categoryCode}" name="workCode" disabled>
+                        <option th:each="category :${categoryCode}"
+                                th:value="${category.codeNo}"
+                                th:text="${category.codeName}"
+                                th:selected="${category.codeNo} == ${twc.categoryCode}">
+                        </option>
+                    </select>
+                </td>
+                <td> [[${twc.partCount}]] / <input class="border border-light" th:value="${twc.headcount}"
+                                                   name="headcount" readonly></td>
+                <td>
+                    <button type="button" class="btnn"
+                            data-bs-toggle="modal" data-bs-target="#volunteer"
+                            th:attr="data-meteamNo=${twc.teamNo}, data-meWorkCode=${twc.categoryCode}">
+                        신청자 확인하기
+                    </button>
+                    <button type="button" class="btnn deUpdate deUpBtn">수정</button>
+                    <button type="button" class="btnn"
+                            th:onclick="|location.href='@{/team/teamDetailDelete(teamNo=${twc.teamNo},workCode=${twc.categoryCode})}'|">
+                        삭제
+                    </button>
+                </td>
+            </tr>
+        </th:block>
+    </table>
 </form>
-	<button type="button" class="btn btn-primary upBtn update" >수정</button>
-	<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/team/requestDelete(teamNo=${team.teamNo})}'|">삭제</button>
-<script src="/js/tem/teamRequestUpdate.js"></script>
+<button type="button" class="btn btn-primary upBtn update">수정</button>
+<button type="button" class="btn btn-primary"
+        th:onclick="|location.href='@{/team/requestDelete(teamNo=${team.teamNo})}'|">삭제
+</button>
+<!-- Modal -->
+<div class="modal fade" id="volunteer" tabindex="-1" aria-labelledby="volunteerLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="volunteerLabel">신청 목록</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>순번</th>
+                            <th>신청인명</th>
+                            <th>경력</th>
+                            <th colspan="2"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="volunteerBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/tem/temModal.js"></script>
+<script src="/js/tem/temRequestUpdate.js"></script>
 </body>
 </html>

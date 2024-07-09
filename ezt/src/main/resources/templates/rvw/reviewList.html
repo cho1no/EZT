@@ -4,9 +4,7 @@
 		layout:decorate="~{common/layouts/default_layout}"
 		layout:fragment="Content">
 <style>
-.margin{
-	margin:30px 10px;
-}
+
 .search{
 	text-align:center;
 	margin:50px;
@@ -38,8 +36,8 @@ img{
 </head>
 <body>
 
-<section class="site-section">
-<h2 class="margin">후기 목록</h2>
+
+<h2 >후기 목록</h2>
 <form id="searchForm" th:action="@{/review/List}" method="get">
 	<div>
 		<div class="search">
@@ -96,7 +94,7 @@ img{
         </div>
 
       </div>
-    </section>
+</form>
 <script>
 	for(let i=0; i<$(".star").length; i++){
 		for(let j=0; j<parseInt($(".star:eq("+i+")").text()); j++){

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.tem.service.MemberEnrollVO;
 import com.yedam.app.tem.service.TeamService;
 import com.yedam.app.tem.service.TeamVO;
 import com.yedam.app.tem.service.TeamWorkCategoryVO;
@@ -42,13 +43,18 @@ public class TeamController {
 
     // 팀 신청 단건 조회
     @GetMapping("/requestInfo")
-    public String teamRequestInfo(Model model, TeamVO teamVO) {
+    public String teamRequestInfo(Model model, TeamVO teamVO, MemberEnrollVO memberEnrollVO) {
         // 팀 신청 단건 조회
         TeamVO findVO = teamService.teamInfo(teamVO);
         model.addAttribute("team", findVO);
-
+        
+        //카테고리별 지원자 조회
+        List<MemberEnrollVO> enrollList = teamService.volunteerList(memberEnrollVO);
+        model.addAttribute("enrollList", enrollList);
+        
         // 공통 코드
         model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
+        
         return "tem/teamRequestInfo";
     }
 
@@ -69,20 +75,23 @@ public class TeamController {
     public boolean teamRequestInsert(@RequestBody TeamVO teamVO) {
         
             // 팀 정보 삽입
-            teamService.insertTeam(teamVO);
-
+           int number =  teamService.insertTeam(teamVO);
+           System.out.println(teamVO);
+           System.out.println(number);
             // 카테고리 정보 삽입
             List<TeamWorkCategoryVO> workCategoryVOList = teamVO.getWorkCategoryVO();
             if (workCategoryVOList != null) {
                 for (TeamWorkCategoryVO twcVO : workCategoryVOList) {
-                    twcVO.setTwcTeamNo(teamVO.getTeamNo());
+                    twcVO.setTwcTeamNo(number);
+                    System.out.println(twcVO);
                     teamService.insertCategory(twcVO);
+                    
                 }
             }
 
             return true;
         } 
-
+    
     // 팀 신청 수정
     @PostMapping("/requestUpdate")
     @ResponseBody
