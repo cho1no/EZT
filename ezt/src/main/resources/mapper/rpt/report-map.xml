@@ -49,5 +49,26 @@
 		WHERE CTT_REPORT_NO = #{cttReportNo}
 	</select>
 	<!-- 공사 보고 조회 -->
+	
+	<!-- 공사 보고 수정 -->
+	<update id="updateCttInfo" parameterType="CttReportVO">
+		UPDATE CTT_REPORT
+		SET
+			TITLE = #{title}
+			, DETAIL_CONTENT = #{detailContent}
+			, CTT_DIVISION = #{cttDivision}
+			, CTT_REPORT_DT	= #{cttReportDt}
+		WHERE CTT_REPORT_NO = #{cttReportNo}
+	</update>
+	<!-- 공사 보고 수정 -->
+	
+	<!-- 공사 보고 삭제 -->
+	<delete id="deleteCttInfo" parameterType="int">
+		{CALL
+			delete_report_and_file(#{fileId})
+		}
+	</delete>
+	<!-- 공사 보고 삭제 -->
+	
 
 </mapper>

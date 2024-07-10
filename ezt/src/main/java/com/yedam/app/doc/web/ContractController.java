@@ -185,7 +185,7 @@ public class ContractController {
 		}
 		conService.conUpdate(contractVO);
 
-		return new ResponseEntity<>("String", HttpStatus.OK);
+		return new ResponseEntity<>("update", HttpStatus.OK);
 	}
 
 	// 계약서 수정

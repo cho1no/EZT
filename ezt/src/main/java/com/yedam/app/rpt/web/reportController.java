@@ -21,6 +21,7 @@ import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.service.ContractDetailVO;
 import com.yedam.app.doc.service.ContractVO;
+import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.fie.service.FileService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rpt.service.CttReportVO;
@@ -47,6 +48,7 @@ public class reportController {
 		List<String> diviList = reportService.reportDiviSelect(contractVO.getContractNo());
 		map.put("divi", diviList);
 		map.put("contractNo", contractVO.getContractNo());
+		model.addAttribute("dd", diviList);
 		
 		return map;
 	}
@@ -75,6 +77,41 @@ public class reportController {
 		return cvo;
 	}
 	
+	// 공사 보고 수정
+	@PostMapping("rptUpdate")
+	public ResponseEntity<String> rptUpdate(MultipartFile[] uploadFile, CttReportVO cttReportVO) {
+		// DB 파일 삭제
+		List<FileVO> fileList = reportService.fileSelect(cttReportVO);
+		if(!fileList.isEmpty()) {
+			try {
+				fileService.deleteFile(fileList);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// 수정
+		if (uploadFile != null  && uploadFile.length > 0) {
+			List<FileVO> list = fileService.uploadFiles(uploadFile);
+			if (!list.isEmpty()) {
+				cttReportVO.setFileList(list);
+			}
+		}
+		reportService.reportUpdate(cttReportVO);
+		
+		return new ResponseEntity<>("update", HttpStatus.OK);
+	}
+	
+	
+	// 공사 보고 삭제
+	@PostMapping("rptDelete")
+	@ResponseBody
+	public ResponseEntity<String> rtpDelete(@RequestBody List<FileVO> fileVO) 
+			throws UnsupportedEncodingException { 
+		fileService.deleteFile(fileVO);
+		reportService.reportDelete(fileVO.get(0).getFileId());
+		return new ResponseEntity<String>("deleted", HttpStatus.OK);
+	}
 	
 	
 	// 첨부 파일 업로드

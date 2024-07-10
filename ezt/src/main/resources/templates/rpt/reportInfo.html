@@ -12,6 +12,8 @@
 	<form name="reportInfoForm">
 		<ul class="list-unstyled pl-3 mb-0">
 			<li class="mb-2 row form-group">
+			<input type="hidden" name="cttReportNo">
+			<input type="hidden" name="contractNo">
 			<div class="col-2 p-0 pl-3">
 					<strong class="text-black">제목</strong>
 				</div>
@@ -58,8 +60,8 @@
 	</form>
 </div>
       <div class="modal-footer">
-		<button type="button" class="btn btn-primary" id="rpt_updateBtn">수정</button>
-		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">삭제</button>
+		<button type="button" class="btn btn-primary" id="rpt_updateBtn" data-bs-toggle="modal" data-bs-target="#reportModal">수정</button>
+		<button type="button" class="btn btn-outline-danger" id="rpt_deleteBtn">삭제</button>
 		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
 	  </div>
 
