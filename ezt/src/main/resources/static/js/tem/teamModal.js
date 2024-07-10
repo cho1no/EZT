@@ -1,6 +1,41 @@
 /**
  * teamModal.js
  */
+
+
+$(document).ready(function() {
+    $('#denyBtn').click(function() {
+        let enrollNo = $('#enrollNo').val();
+        let writer = $('#writer').val();
+        let content = $('textarea[name="content"]').val();
+
+        let data = {
+            enrollNo: enrollNo,
+            writer: writer,
+            content: content
+        };
+
+        $.ajax({
+            url: '/team/memberDeny',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                if (response) {
+                    alert("반려 처리되었습니다.");
+                    $('#deny').modal('hide');
+                } else {
+                    alert("반려 처리에 실패했습니다.");
+                }
+            },
+            error: function(error) {
+                console.log(error);
+                alert("오류가 발생했습니다.");
+            }
+        });
+    });
+});
+
  function openModal(teamNo, workCode){
 		$.ajax('/team/volunteerList',{
 			data : {teamNo, workCode}
@@ -33,10 +68,3 @@
 		$('#worker').text($(event.currentTarget).data("worker"));
 	}
 
-/* $('denyBtn').click(function(e){
-	$.ajax('/team/memberDeny'),{
-		type:"post",
-		contentType:"application/json",
-		data:
-	}
- })*/
