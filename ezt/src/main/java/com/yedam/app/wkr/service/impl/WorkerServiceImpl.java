@@ -29,12 +29,12 @@ public class WorkerServiceImpl implements WorkerService{
 	
 	//작업자 정보 조회
 	@Override
-	public List<Map<String, String>> selectCategoryInfo(int id) {
+	public List<String> selectCategoryInfo(int id) {
 		return workerMapper.selectCategoryInfo(id);
 	}
 
 	@Override
-	public List<Map<String, String>> selectRegionInfo(int id) {
+	public List<String> selectRegionInfo(int id) {
 		return workerMapper.selectRegionInfo(id);
 	}
 
@@ -98,8 +98,8 @@ public class WorkerServiceImpl implements WorkerService{
 	}
 	//작업자 팀의뢰 목록
 	@Override
-	public List<ReviewVO> selectWorkerTeamRequestList(UserVO userVO) {
-		return workerMapper.selectWorkerTeamRequestList(userVO);
+	public List<ReviewVO> selectWorkerTeamRequestList(WorkerReqCriteria cri) {
+		return workerMapper.selectWorkerTeamRequestList(cri);
 	}
 	//작업자 견적서 목록
 	@Override
@@ -158,6 +158,11 @@ public class WorkerServiceImpl implements WorkerService{
 	//의뢰목록 페이징
 	@Override
 	public int workerRequestGetTotal(WorkerReqCriteria cri) {
+		return workerMapper.getWorkerTotalRequestCount(cri);
+	}
+	//팀의뢰목록 페이징
+	@Override
+	public int workerTeamRequestGetTotal(WorkerReqCriteria cri) {
 		return workerMapper.getWorkerTotalRequestCount(cri);
 	}
 	

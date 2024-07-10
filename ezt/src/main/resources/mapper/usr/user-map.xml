@@ -100,12 +100,14 @@
 		SET users_pw = #{usersNewPw}
 		WHERE users_id = #{usersId}
 	</update>
-	
+	<!-- 후기목록 -->
 	<select id="selectUserRvwList" resultType="ReviewVO">
 		SELECT c.*
 		FROM (	SELECT ROWNUM as rn
 					, a.*	
-				FROM (SELECT re.request_no
+				FROM (SELECT re.review_no 
+					   , re.request_no
+					   , re.write_dt
 					   , re.star
 					   , re.content 
 					   , USERNAME(re.worker) as worker_name
@@ -116,7 +118,7 @@
 					      JOIN request rq
 				  	      ON re.request_no = rq.request_no
 					  WHERE re.writer = #{writer}
-					  ORDER BY re.request_no desc 
+					  ORDER BY re.write_dt desc 
 					  ) a 
 			  ) c
 		 <![CDATA[
@@ -124,7 +126,7 @@
 		 	   c.rn > (${pageNum} -1 ) * #{amount}
 		 ]]>
 	</select>
-	
+	<!-- 의뢰목록 -->
 	<select id="selectUserReqList" resultType="RequestVO">
 	   SELECT c.*		  
 	   FROM ( 

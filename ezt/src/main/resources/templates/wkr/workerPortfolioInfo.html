@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>작업자 포트폴리오 상세</title>
+<!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.css">
+<style>
+      .slide-container{
+        width: 80%;
+        padding: 40px 0;
+      }
+      .slide-content{
+        margin: 0 40px;
+        overflow: hidden;
+      }
+      .image-content,
+      .card-content{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .image-content{
+        position: relative;
+      }
+      .card-image{
+        position: relative;
+        background: #FFF;
+      }
+      .card-image .card-img{
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+      .name{
+        font-size: 18px;
+        font-weight: 500;
+        color: #333;
+      }
+      .description{
+        font-size: 14px;
+        color: #707070;
+        text-align: center;
+      }
+      .swiper-navBtn{
+        color: #89ba16;
+        transition: color 0.3s ease;
+      }
+      .swiper-navBtn:hover{
+        color: #7ba714;
+      }
+      .swiper-navBtn::before,
+      .swiper-navBtn::after{
+        font-size: 38px;
+      }
+      .swiper-button-next{
+        right: 0;
+      }
+      .swiper-button-prev{
+        left: 0;
+      }
+      .swiper-pagination-bullet{
+        background-color: #89ba16;
+        opacity: 1;
+      }
+      .swiper-pagination-bullet-active{
+        background-color: #7ba714;
+      }
+
+      @media screen and (max-width: 768px) {
+        .slide-content{
+          margin: 0 10px;
+        }
+        .swiper-navBtn{
+          display: none;
+        }
+      }
+</style>
+
+</head>
+<body>
+
+<div class="row">
+        <div class="slide-container swiper">
+          <div class="slide-content">
+            <div class="card-wrapper swiper-wrapper">
+              <th:block th:each="pf : ${portFiles}">
+               <div  class="card swiper-slide">
+                   <div class="card-image">
+                     <img src="/images/interior.jpg" class="card-img-top" alt="...">
+                   </div>
+               </div>
+            </div>
+            <div class="swiper-button-next swiper-navBtn"></div>
+            <div class="swiper-button-prev swiper-navBtn"></div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+      </th:block>
+    </div>
+    <span>작업기간:</span>
+    <span>[[${portfolioInfo.workTime}]]</span><br>
+    <span>작업분야:</span>
+    <th:block th:each="category : ${categories}">
+    <span>[[${category.CATEGORY_CODE}]]</span><br>
+    </th:block>
+    <span>내용:</span>
+    <span>[[${portfolioInfo.content}]]</span>
+ <!-- Swiper JS -->
+      <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.js"></script>
+
+      <!-- JavaScript -->
+      <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/script.js"></script>
+      <script th:inline="javascript">
+
+      var swiper = new Swiper(".slide-content", {
+        slidesPerView: 1,
+        spaceBetween: 25,
+        loop: false,
+        centerSlide: 'true',
+        fade: 'true',
+        grabCursor: 'true',
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+          dynamicBullets: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+
+        breakpoints:{
+            0: {
+                slidesPerView: 1,
+            },
+            
+        },
+      });
+
+    </script>
+</body>
+</html>

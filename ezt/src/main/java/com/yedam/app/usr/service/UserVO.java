@@ -63,9 +63,9 @@ public class UserVO {
 	
 	
 	//활동지역
-	private List<Map<String, String>> regionCode;
+	private List<String> regionCode;
 	//작업분야(카테고리)
-	private List<Map<String, String>> categoryCode;
+	private List<String> categoryCode;
 	
 	private LicenseVO licenseVO;
 	

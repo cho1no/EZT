@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.usr.mapper.FindWorkerMapper">
+	<select id="selectCareers" parameterType="int" resultType="CareerVO">
+		SELECT *
+		FROM career
+		WHERE users_no = #{no}
+		ORDER BY career_no DESC
+	</select>
+	
+	<select id="selectLicenes" parameterType="int" resultType="LicenseVO">
+		SELECT *
+		FROM license
+		WHERE users_no = #{no}
+		ORDER BY license_no DESC
+	</select>
+	
+	<select id="avgReview" parameterType="int" resultType="float">
+		SELECT ROUND(NVL(AVG(star),0), 1)
+		FROM review
+		WHERE worker = #{no}
+	</select>
+	
+	<select id="countReview" parameterType="int" resultType="int">
+		SELECT NVL(COUNT(*), 0)
+		FROM review
+		WHERE worker = #{no}
+	</select>
+	
+	<select id="selectPortFiles" parameterType="int" resultType="PortfolioVO">
+		SELECT p.*
+		        , f.*
+		FROM portfolio p
+		JOIN (SELECT *
+		      FROM file_detail_info
+		      WHERE boss_tf = 'Y') f
+		ON p.file_id = f.file_id
+		WHERE p.users_no = #{no}
+		ORDER BY p.portfolio_no DESC
+	</select>
+	
+	<select id="selectReviews" parameterType="int" resultType="ReviewVO">
+		SELECT r.review_no
+		        ,r.request_no
+		        ,FIND_COMMONCODE(q.region_code) as region_code
+		        ,FIND_COMMONCODE(q.category_code) as category_code
+		        ,r.writer
+		        ,r.worker
+		        ,USERNAME(r.writer) as writer_name
+		        ,USERNAME(r.worker) as worker_name
+		        ,r.star
+		        ,r.content
+		        ,r.write_dt
+		        ,r.review_division
+		        ,r.file_id
+		        ,f.save_name
+		        ,f.ext
+		FROM review r
+		JOIN request q 	ON r.request_no = q.request_no
+		LEFT OUTER JOIN file_detail_info f ON( r.file_id = f.file_id and f.boss_tf = 'Y')
+		WHERE r.worker = #{no}
+		ORDER BY review_no DESC
+	</select>
+	
+	<select id="selectPortfolioInfo" resultType="PortfolioVO">
+		SELECT *
+		FROM portfolio
+		WHERE portfolio_no = #{pno}
+	</select>
+	<select id="selectPortInfoFiles" parameterType="int" resultType="FileVO">
+		SELECT *
+		FROM file_detail_info
+		WHERE file_id = #{fid}
+	</select> 
+	
+	
+</mapper>

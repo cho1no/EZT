@@ -11,21 +11,10 @@
 		<mobile th:insert="common/fragments/default_mobile :: mobileFragment"></mobile>
 		<header class="site-navbar mt-3"
 			th:insert="common/fragments/default_header :: headerFragment"></header>
-		<section class="section-hero overlay inner-page bg-image"
-			style="background-image: url('/images/hero_1.jpg')" id="home-section">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-7">
-						<h1 class="text-white font-weight-bold page-title">Our Blog</h1>
-						<div class="custom-breadcrumbs">
-							<a href="#">Home</a> <span class="mx-2 slash">/</span> <span
-								class="text-white"><strong class="page-desc">About
-									Us</strong></span>
-						</div>
-					</div>
-				</div>
-			</div>
+		<section class="section-hero inner-page"
+			style="background-color: white" id="home-section">
 		</section>
+		<section class="back-smooth"></section>
 	<section class="site-section">
 	<div class="container">
 		<div class="row">
@@ -191,11 +180,11 @@
 					<div class="accordion-item">
 						<h2 class="accordion-header">
 							<button class="accordion-button collapsed" type="button"
-								data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven"
-								aria-expanded="false" aria-controls="flush-collapseSeven">
+								data-bs-toggle="collapse" data-bs-target="#flush-collapseEight"
+								aria-expanded="false" aria-controls="flush-collapseEight">
 								회원탈퇴</button>
 						</h2>
-						<div id="flush-collapseSeven" class="accordion-collapse collapse"
+						<div id="flush-collapseEight" class="accordion-collapse collapse"
 							data-bs-parent="#accordionFlushExample">
 							<div class="accordion-body">
 								<strong><a class="nav-link" href="/worker/quit">회원탈퇴</a></strong>

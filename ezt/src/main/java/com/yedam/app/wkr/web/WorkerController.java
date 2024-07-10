@@ -178,18 +178,18 @@ public class WorkerController {
    }
    
    //작업자 팀의뢰 목록조회
-//   @GetMapping("/teamRequestList")
-//   public String workerTeamRequestList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerReqCriteria cri) {
-//	   model.addAttribute("userVO", vo.getUserVO());
-//	   cri.setUsersNo(vo.getUserVO().getUsersNo());
-//	   List<ReviewVO> list = workerService.selectWorkerTeamRequestList(cri);
-//	   model.addAttribute("teamRequestList", list);
-//	   //팀목록
-//	   //페이징
-//	   int total = workerService.workerTeamRequestGetTotal(cri);
-//	   model.addAttribute("page", new WorkerReqPageDTO(cri, total));
-//	   return "wkr/workerTeamRequestList";
-//   }
+   @GetMapping("/teamRequestList")
+   public String workerTeamRequestList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerReqCriteria cri) {
+	   model.addAttribute("userVO", vo.getUserVO());
+	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   List<ReviewVO> list = workerService.selectWorkerTeamRequestList(cri);
+	   model.addAttribute("teamRequestList", list);
+	   //팀목록
+	   //페이징
+	   int total = workerService.workerTeamRequestGetTotal(cri);
+	   model.addAttribute("page", new WorkerReqPageDTO(cri, total));
+	   return "wkr/workerTeamRequestList";
+   }
    
    //작업자 견적서 목록조회
    @GetMapping("/proposalList")

@@ -85,6 +85,7 @@
 		                                  		   WHERE users_no = #{usersNo}
 		                                  		   )
 		        				)
+		        ORDER BY write_dt desc
 		        ) a 
 		  ) c
 		<![CDATA[
@@ -109,24 +110,25 @@
 	
 	<!--  의뢰 목록 조회 -->
 	<select id="selectWorkerRequestList" resultType="RequestVO">
-	SELECT c.*
-	FROM (SELECT ROWNUM as rn
-		  		, a.*
-  		  FROM (SELECT title
-  		  			   , request_no
-			   	 	   , write_dt
-			   		   , FIND_COMMONCODE(request_state) as request_state_nm
-			    FROM request
-				WHERE request_no IN (SELECT request_no
-		                     		 FROM proposal
-		                     		 WHERE proposal_state = 'A02'
-		                     		 AND worker = #{usersNo})
-		        )  a 
-		  ) c
-		<![CDATA[
-		WHERE c.rn <= #{pageNum} * #{amount} AND
-			  c.rn > (#{pageNum} -1 ) * #{amount}
-		]]>    		                     		
+		SELECT c.*
+		FROM (SELECT ROWNUM as rn
+			  		, a.*
+	  		  FROM (SELECT title
+	  		  			   , request_no
+				   	 	   , write_dt
+				   		   , FIND_COMMONCODE(request_state) as request_state_nm
+				    FROM request
+					WHERE request_no IN (SELECT request_no
+			                     		 FROM proposal
+			                     		 WHERE proposal_state = 'A02'
+			                     		 AND worker = #{usersNo})
+			        ORDER BY write_dt desc
+			        )  a 
+			  ) c
+			<![CDATA[
+			WHERE c.rn <= #{pageNum} * #{amount} AND
+				  c.rn > (#{pageNum} -1 ) * #{amount}
+			]]>    		                     		
 	</select>
 	
 	<select id="getWorkerTotalRequestCount" resultType="int">
@@ -144,12 +146,35 @@
 	</select>
 	
 	<!--  팀 의뢰 목록 조회 -->
-<!-- 	<select id="selectWorkerTeamRequestList"> -->
-	
-<!-- 	</select> -->
-<!-- 	<select id="selectWorkerTeamRequestCount" resultType="int"> -->
-		
-<!-- 	</select> -->
+	<select id="selectWorkerTeamRequestList" resultType="RequestVO">
+		SELECT c.*
+		FROM (SELECT ROWNUM as rn
+			  		, a.*
+	  		  FROM ( SELECT r.*
+					 FROM request r
+					 JOIN proposal p ON r.request_no = p.request_no
+					 JOIN team t ON p.worker = t.writer
+					 JOIN member m ON t.team_no = m.team_no
+					 WHERE m.users_no = #{usersNo}
+					 AND p.proposal_state = 'S02'
+					 ORDER BY r.request_no DESC)  a 
+			  ) c
+			<![CDATA[
+			WHERE c.rn <= #{pageNum} * #{amount} AND
+				  c.rn > (#{pageNum} -1 ) * #{amount}
+			]]>    
+	</select>
+	<select id="selectWorkerTeamRequestCount" resultType="int">
+		SELECT COUNT(*)
+		FROM ( SELECT r.*
+			   FROM request r
+			   JOIN proposal p ON r.request_no = p.request_no
+			   JOIN team t ON p.worker = t.writer
+			   JOIN member m ON t.team_no = m.team_no
+			   WHERE m.users_no = #{usersNo}
+			   AND p.proposal_state = 'S02'
+			   ORDER BY r.request_no DESC)
+	</select>
 
 	<!-- 견적서 목록 조회 -->
 	<select id="selectWorkerProposalList" resultType="ProposalVO">
@@ -191,7 +216,8 @@
 			  		, a.*
 			  FROM (SELECT c.*, FIND_COMMONCODE(c.contract_state) as contract_state_nm
 					FROM contract c
-					WHERE worker_info = #{usersNo})  a 
+					WHERE worker_info = #{usersNo}
+					ORDER BY update_dt desc)  a 
 			  ) c
 			<![CDATA[
 			WHERE c.rn <= #{pageNum} * #{amount} AND
@@ -214,7 +240,8 @@
 			  		, a.*
 			  FROM (SELECT *
 					FROM portfolio
-					WHERE users_no = #{usersNo})  a 
+					WHERE users_no = #{usersNo}
+					ORDER BY write_dt desc)  a 
 			  ) c
 			<![CDATA[
 			WHERE c.rn <= #{pageNum} * #{amount} AND
@@ -331,6 +358,7 @@
 		FROM dual
 	</insert>
 
+	<!--경력증명서 등록 -->
 	<insert id="insertCareer" parameterType="CareerVO">
 		INSERT INTO career( career_no
 							, users_no

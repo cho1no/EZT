@@ -28,4 +28,8 @@ public class PageDTO {
 		this.next = this.endPage < realEnd;
 	}
 	
+	public PageDTO(int pageNum, int amount, int total) {
+		this(new Criteria(pageNum, amount), total);
+	}
+	
 }
