@@ -10,20 +10,7 @@
     ></th:block>
     <scr th:insert="common/fragments/default_scr :: scrFragment"></scr>
     <style>
-      .back-smooth {
-        position: absolute;
-        top: 0;
-        z-index: -5;
-        width: 100%;
-        height: 576px;
-        background: black !important;
-        background: linear-gradient(
-          0deg,
-          rgba(255, 255, 255, 1) 0%,
-          rgba(250, 250, 250, 1) 90%,
-          rgba(244, 244, 244, 1) 100%
-        ) !important;
-      }
+
     </style>
   </head>
   <body id="top">
@@ -40,7 +27,7 @@
         id="home-section"
         style="background-color: white"
       ></section>
-      <sectoin class="back-smooth"></sectoin>
+      <section class="back-smooth"></section>
       <section class="site-section">
         <div class="container">
           <main layout:fragment="Content"></main>

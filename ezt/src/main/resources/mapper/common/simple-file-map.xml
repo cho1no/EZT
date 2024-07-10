@@ -27,7 +27,7 @@
 		, #{originalFileName}
 		, #{ext}
 		, #{fileSize}
-		, 'Y'
+		, #{bossTf}
 		)
 	</insert>
 	<!-- 파일 정보 조회 -->

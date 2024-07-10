@@ -11,7 +11,7 @@
 <h1>후기 목록</h1>
   <th:block th:each="review : ${reviewList}">
     <div class="list-group">
-	  <a href="#" class="list-group-item list-group-item-action m-2" aria-current="true">
+	  <a th:href="@{/review/info(reviewNo=${review.reviewNo})}" class="list-group-item list-group-item-action m-2" aria-current="true">
 	    <div class="d-flex w-100 justify-content-between">
 		  <h5 class="mb-1">지역 : [[${review.regionCode}]]
 		  	, 분야 : [[${review.categoryCode}]]</h5>

@@ -14,9 +14,9 @@ import com.yedam.app.usr.service.UserVO;
 @Service
 public interface WorkerService {
 	//작업자 정보조회
-	public List<Map<String, String>> selectCategoryInfo(int id);
+	public List<String> selectCategoryInfo(int id);
 	
-	public List<Map<String, String>> selectRegionInfo(int id);
+	public List<String> selectRegionInfo(int id);
 	
 	//작업자 정보수정
 	public Map<String, Object> updateWorker(UserVO userVO);
@@ -40,7 +40,7 @@ public interface WorkerService {
 	//작업자 의뢰 목록
 	public List<ReviewVO> selectWorkerRequestList(WorkerReqCriteria cri);
 	//작업자 팀 의뢰목록
-	public List<ReviewVO> selectWorkerTeamRequestList(UserVO userVO);
+	public List<ReviewVO> selectWorkerTeamRequestList(WorkerReqCriteria cri);
 	
 	//작업자 견적서 목록
 	public List<ProposalVO> selectWorkerProposalList(WorkerRvwCriteria cri);
@@ -74,6 +74,7 @@ public interface WorkerService {
 	//전체 의뢰 데이터 갯수
 	public int workerRequestGetTotal(WorkerReqCriteria cri);
 	//전체 팀의뢰 데이터 갯수
+	public int workerTeamRequestGetTotal(WorkerReqCriteria cri);
 	
 	//전체 견적서 갯수
 	public int workerProposalGetTotal(WorkerRvwCriteria cri);

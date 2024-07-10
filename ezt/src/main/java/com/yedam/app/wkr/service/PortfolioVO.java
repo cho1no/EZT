@@ -26,4 +26,9 @@ public class PortfolioVO {
 	private String workTime; //작업시간(기간)
 	
 	private String categoryCode; //작업분야(카테고리)
+	
+	private String savePath;
+	private String saveName;
+	private String originalFileName;
+	private String ext;
 }

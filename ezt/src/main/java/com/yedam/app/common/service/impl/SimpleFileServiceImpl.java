@@ -50,11 +50,29 @@ public class SimpleFileServiceImpl implements SimpleFileService {
 		sfm.insertFileAttrInfo(vo);
 		List<FileVO> list = uploadFile(uploadFile);
 		log.info(list.toString());
-		list.forEach(e -> {
+		int i = 0;
+//		list.forEach(e -> {
+//			log.info(e.toString());
+//			e.setFileId(vo.getFileId());
+//			if (i == 0) {
+//				e.setBossTf("Y");
+//			} else {
+//				e.setBossTf("N");
+//			}
+//			i += 1;
+//			sfm.insertFileInfo(e);
+//		});
+		for (FileVO e : list) {
 			log.info(e.toString());
 			e.setFileId(vo.getFileId());
+			if (i == 0) {
+				e.setBossTf("Y");
+			} else {
+				e.setBossTf("N");
+			}
+			i += 1;
 			sfm.insertFileInfo(e);
-		});
+		}
 		return vo.getFileId();
 	}
 	

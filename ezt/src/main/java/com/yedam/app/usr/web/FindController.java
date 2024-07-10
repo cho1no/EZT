@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.yedam.app.adm.service.AdminService;
 import com.yedam.app.common.service.CommonCodeService;
-import com.yedam.app.rvw.service.ReviewVO;
+import com.yedam.app.usr.mapper.FindWorkerMapper;
 import com.yedam.app.usr.service.FindWorkerCriteria;
 import com.yedam.app.usr.service.FindWorkerPageDTO;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.PortfolioVO;
-import com.yedam.app.wkr.service.WorkerPFCriteria;
-import com.yedam.app.wkr.service.WorkerRvwCriteria;
 import com.yedam.app.wkr.service.WorkerService;
 
 @Controller
@@ -35,6 +33,9 @@ public class FindController {
 	
 	@Autowired
 	AdminService adminService;
+	
+	@Autowired
+	FindWorkerMapper fwMap;
 	
 	//작업자 찾기
 	@GetMapping("/workerList")
@@ -59,16 +60,32 @@ public class FindController {
 	//작업자 상세
 	@GetMapping("/workerMoreInfo")
 	public String workerInfo(@RequestParam int usersNo, Model model) {
+		// 유저찾기
 		UserVO vo =  adminService.getUser(usersNo);
-		WorkerPFCriteria wpc = new WorkerPFCriteria();
-		wpc.setUsersNo(usersNo);
-		List<PortfolioVO> pvo = workerService.selectWorkerPortfolioList(wpc);
-		WorkerRvwCriteria wrc = new WorkerRvwCriteria();
-		wrc.setUsersNo(usersNo);
-		List<ReviewVO> rev = workerService.selectWorkerReviewList(wrc);
+		
+		// 카테고리, 지역 코드
+		model.addAttribute("categories", workerService.selectCategoryInfo(vo.getUsersNo()));
+		model.addAttribute("regions", workerService.selectRegionInfo(vo.getUsersNo()));
+		// 작업자 정보
 		model.addAttribute("userInfo", vo);
-		model.addAttribute("revList", rev);
-		model.addAttribute("pfList", pvo);
+		
+		model.addAttribute("careers", fwMap.selectCareers(usersNo));
+		model.addAttribute("licenses", fwMap.selectLicenes(usersNo));
+		model.addAttribute("avgReview", fwMap.avgReview(usersNo));
+		model.addAttribute("cntReview", fwMap.countReview(usersNo));
+		model.addAttribute("portfolioList", fwMap.selectPortFiles(usersNo));
+		model.addAttribute("reviewList", fwMap.selectReviews(usersNo));
+		
 		return "usr/findWorkerMoreInfo"; 
+	}
+	
+	//작업자 포트폴리오 상세
+	@GetMapping("/workerPortfolio")
+	public String workerPortfolio(@RequestParam int portfolioNo, Model model) {
+		PortfolioVO vo = fwMap.selectPortfolioInfo(portfolioNo);
+		model.addAttribute("portfolioInfo", vo);
+		model.addAttribute("categories", workerService.selectCategoryInfo(vo.getUsersNo()));
+		model.addAttribute("portFiles", fwMap.selectPortInfoFiles(vo.getFileId()));
+		return "wkr/workerPortfolioInfo";
 	}
 }
