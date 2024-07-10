@@ -33,10 +33,10 @@
 		$('#worker').text($(event.currentTarget).data("worker"));
 	}
 
- /*$('denyBtn').click(function(e){
+/* $('denyBtn').click(function(e){
 	$.ajax('/team/memberDeny'),{
 		type:"post",
 		contentType:"application/json",
-		
+		data:
 	}
  })*/
