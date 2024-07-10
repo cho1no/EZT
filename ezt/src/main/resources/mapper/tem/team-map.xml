@@ -39,6 +39,7 @@
 			,t.contract_no
 			,FIND_COMMONCODE(r.region_code) as region_code
 			,r.request_no
+			,t.writer
 			
 	FROM team t
 		JOIN contract c

@@ -66,7 +66,7 @@
                 </td>
                 <td> [[${twc.partCount}]] / <input class="border border-light" th:value="${twc.headcount}"
                                                    name="headcount" readonly></td>
-                <td>
+                <td th:if="${#authentication.principal.userVO.usersNo == team.writer}">
                     <button type="button" class="btnn"
                             data-bs-toggle="modal" data-bs-target="#volunteer"
                             th:attr="onclick=|openModal('${twc.teamNo}', '${twc.categoryCode}' )|">
@@ -78,9 +78,13 @@
                         삭제
                     </button>
                 </td>
+                <td th:unless="${#authentication.principal.userVO.usersNo == team.writer}">
+                	<button type="button" class="btnn" data-bs-toggle="modal" data-bs-target="#apply">신청하기</button>
+                </td>
             </tr>
         </th:block>
     </table>
+    
 </form>
 <button type="button" class="btn btn-primary upBtn update">수정</button>
 <button type="button" class="btn btn-primary"
@@ -151,7 +155,7 @@
       </div>
       <div class="modal-body">
         	<input type="hidden"  id="enrollNo" name="enrollNo">
-        	<input id="writer" name="writer" th:value="${#authentication.principal.userVO.usersNo}">
+        	<input type="hidden" id="writer" name="writer" th:value="${#authentication.principal.userVO.usersNo}">
         	
         <table class="table">
         	<tbody>
@@ -176,7 +180,38 @@
   </div>
 </div>
 
-
+<!-- 팀원 신청하기 Modal -->
+<div class="modal fade" id="apply" tabindex="-1" aria-labelledby="applyLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="applyLabel">신청 목록</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            	<table>
+            		<tbody>
+            			<tr>
+            				<th>신청인</th>
+            				<td><input type="text" readonly></td>
+            			</tr>
+            			<tr>
+            				<th>카테고리</th>
+            				<td><input type="text" readonly></td>
+            			</tr>
+            			<tr>
+            				<th>소개 작성</th>
+            				<td><textarea></textarea></td>
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="/js/tem/temRequestUpdate.js"></script>
 <script src="/js/tem/teamModal.js"></script>
