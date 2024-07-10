@@ -178,7 +178,7 @@
                     <th>단가</th>
                     <th>금액</th>
                     <th>비고</th>
-                    <th><button class="btnn">상세보기</button></th>
+                    <th><button class="btnn" th:onclick="|location.href='@{/ppsInfo(proposalNo=${proposal.proposalNo})}'|">상세보기</button></th>
                     
                     
                 </tr>
@@ -241,7 +241,6 @@
                 <tr>
                     <th>하자보수기간</th>
                     <td><input type="text" readonly /></td>
-                    <td><button class="btnn">신청하기</button></td>
                 </tr>
             </table>
     </div>
@@ -251,7 +250,6 @@
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="/js/doc/postcode.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/req/requestUpdate.js"></script>
 </body>
 </html>

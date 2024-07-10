@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.tem.mapper.TeamMapper;
+import com.yedam.app.tem.service.MemberDenyVO;
 import com.yedam.app.tem.service.MemberEnrollVO;
 import com.yedam.app.tem.service.TeamService;
 import com.yedam.app.tem.service.TeamVO;
@@ -38,25 +39,6 @@ public class TeamServiceImpl implements TeamService {
 		int result = teamMapper.insertTeam(teamVO);
 		return result == 1 ? teamVO.getTeamNo() : -1;
 	}
-
-//	//팀신청 수정 & 팀상세 삭제 및 등록
-//	@Override
-//	public int updateTeam(TeamVO teamVO) {
-//		//팀신청 수정
-//		
-//		int result = teamMapper.updateTeam(teamVO);
-//		System.out.println("------>"+teamVO);
-//		//팀상세 삭제 후 등록
-//		if(teamVO.getWorkCategoryVO() != null) {
-//			teamMapper.deleteCategory(teamVO.getTeamNo());
-//			teamVO.getWorkCategoryVO().forEach(e -> {
-//				e.setTeamNo(teamVO.getTeamNo());
-//				teamMapper.insertCategory(e);
-//			});
-//		}
-//		
-//		return result == 1 ? teamVO.getTeamNo() : -1;
-//	}
 
 	//팀 수정
 	@Override
@@ -99,11 +81,19 @@ public class TeamServiceImpl implements TeamService {
 		
 		return teamMapper.deleteCategory(twcVO);
 	}
-
+	
+	//팀 
 	@Override
 	public List<MemberEnrollVO> volunteerList(MemberEnrollVO memberEnrollVO) {
 		
 		return teamMapper.volunteerList(memberEnrollVO);
+	}
+
+	//팀원 신청 반려(프로시저 이용)
+	@Override
+	public boolean updateMemberEnroll(MemberDenyVO memberDenyVO) {
+		
+		return teamMapper.updateMemberEnroll(memberDenyVO) == 1;
 	}
 
 

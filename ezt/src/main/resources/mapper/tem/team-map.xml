@@ -168,8 +168,16 @@
 		ON u.users_no = m.worker
 		LEFT OUTER JOIN career c
 		ON u.users_no = c.users_no
-	WHERE team_no = #{meTeamNo} and work_code = #{meWorkCode}
+	WHERE team_no = #{teamNo} 
+		and work_code = #{workCode}
+		and process_result = 'A01'
 	ORDER BY process_result		
 </select>
+<!-- 지원자 반려 -->
+<update id="updateMemberEnroll" statementType="CALLABLE" parameterType="MemberDenyVO">
+	{CALL
+		memberdeny(#{enrollNo},#{content},#{writer})
+	}
+</update>
 
 </mapper>
