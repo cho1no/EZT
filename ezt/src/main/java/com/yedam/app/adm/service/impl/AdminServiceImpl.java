@@ -129,5 +129,10 @@ public class AdminServiceImpl implements AdminService{
 		return admMapper.insertCareerDeny(map);
 	}
 
+	@Override
+	public List<Map<String, Object>> getPayManages() {
+		return admMapper.selectPayManages();
+	}
+
 	
 }

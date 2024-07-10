@@ -55,4 +55,7 @@ public interface AdminService {
 	// 경력 인증 반려 사유 등록
 	public int postCareerDeny(Map<String, String> map);
 	
+	// 결제 대금 관리 전체 조회
+	public List<Map<String, Object>> getPayManages();
+	
 }

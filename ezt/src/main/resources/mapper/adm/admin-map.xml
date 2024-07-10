@@ -221,4 +221,10 @@
 		DELETE FROM career_deny
 		WHERE career_no = #{no}
 	</delete>
+	<select id="selectPayManages" statementType="CALLABLE" resultType="java.util.HashMap">
+		{CALL
+			pl_get_adm_payment_info()
+		}
+		
+	</select>
 </mapper>

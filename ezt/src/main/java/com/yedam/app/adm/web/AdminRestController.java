@@ -183,4 +183,9 @@ public class AdminRestController {
 	public int postCareerDeny(@RequestBody Map<String, String> map) {
 		return admSvc.postCareerDeny(map);
 	}
+	
+	@GetMapping("/testThis")
+	public List<Map<String, Object>> testThis(){
+		return admSvc.getPayManages();
+	}
 }
