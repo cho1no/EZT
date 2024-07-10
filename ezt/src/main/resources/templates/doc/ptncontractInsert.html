@@ -95,13 +95,14 @@ canvas {
 									<b>동업 계약서 작성</b>
 							</h3>
 							<input type="hidden" name="requesterInfo"
-								th:value="${ppsInfo.requester}"> <input type="hidden"
-								name="workerInfo" th:value="${ppsInfo.worker}"> <input
-								type="hidden" name="workerAddress"> <input type="hidden"
+								th:value="${userNo}"> <input type="hidden"
+								name="workerInfo" th:value="${memberNo}"> <input
+								type="hidden" name="requesterAddress"> <input type="hidden"
 								name="proposalNo" th:value="${ppsInfo.proposalNo}"> <input
-								type="hidden" name="workerBankcode"> <input
+								type="hidden" name="requesterBankcode"> <input
 								type="hidden" name="unityContractNo"
 								th:value="${unity.unityContractNo}">
+								<input type="hidden" name="type" value=1>
 								
 							<p class="hr-sect">
 								<b>공사개요</b>
@@ -183,17 +184,30 @@ canvas {
 									<tbody class="content">
 										<th:block th:each=" list : ${con.dList}">
 											<tr class="text-center">
-												<td th:text="${list.round}" />
+												<td th:text="${list.round}">
+												</td>
 												<td
-													th:text="${#numbers.formatInteger(list.price,1,'COMMA')} + 원" />
+													th:text="${#numbers.formatInteger(list.price,1,'COMMA')} + 원">
+													</td>
 												<td
 													th:text="${#dates.format(list.paymentDt,
-											'yyyy-MM-dd')}" />
-												<td th:text="${list.history}" />
+											'yyyy-MM-dd')}" ></td>
+												<td th:text="${list.history}"></td>
 											</tr>
 										</th:block>
 									</tbody>
 								</table>
+								<div id="dList">
+								<th:block th:each=" list : ${con.dList}">
+											<div>
+												<input type="hidden" th:value="${list.round}">
+												<input type="hidden" th:value="${list.price}">
+												<input type="hidden" th:value="${#dates.format(list.paymentDt,
+											'yyyy-MM-dd')}">
+												<input type="hidden" th:value="${list.history}">
+											</div>
+										</th:block>
+								</div>
 							</div>
 
 
@@ -297,7 +311,7 @@ canvas {
 												</div>
 												<div class="col">
 													<input type="text" class="form-control"
-														th:field="*{workerAccount}">
+														th:field="*{requesterAccount}">
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
@@ -329,7 +343,7 @@ canvas {
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">전화번호</strong>
 												</div>
-												<div class="col"><p class="text-black m-0 mt-1">[[${memberPhone}]]</p></div></li>
+												<div class="col"><p class="text-black m-0 mt-1"></p></div></li>
 												<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">공사 담당 분야</strong>
 												</div>
@@ -497,24 +511,31 @@ canvas {
 		
 		
 		// 폼 데이터 처리
-		$('input[name="workerAddress"]').val($('#input_postcode').val() + '_' 
+		$('input[name="requesterAddress"]').val($('#input_postcode').val() + '_' 
 				+ $('#input_addr').val() + '_' + $('#input_detailAddr').val());
 				
 		var bankcode = $('select').val();
 		var bank_num1 = bankcode.indexOf('(');
 		if(bankcode != '은행 선택'){
-		$('input[name="workerBankcode"]').val(bankcode.substring(bank_num1+1).replace(')', ''));
+		$('input[name="requesterBankcode"]').val(bankcode.substring(bank_num1+1).replace(')', ''));
 		}else{
-			$('input[name="workerBankcode"]').val(null);
+			$('input[name="requesterBankcode"]').val(null);
 		}
     	
+		for(i=0; i < $('#dList div').length; i++){
+    		$('#dList div:eq('+i+') input:eq(0)').attr('name', 'dList['+i+'].round');
+    		$('#dList div:eq('+i+') input:eq(1)').attr('name', 'dList['+i+'].price');
+    		$('#dList div:eq('+i+') input:eq(2)').attr('name', 'dList['+i+'].paymentDt');
+    		$('#dList div:eq('+i+') input:eq(3)').attr('name', 'dList['+i+'].history');
+    	}
+		
 		
 		// 폼 데이터 전송
 		var formData = new FormData(document.conInsertForm);
-		formData.append("worSign.signsContent", compressedData);
+		formData.append("reqSign.signsContent", compressedData);
 		
 			formData.append("leaderCategoryCode", /*[[${leaderCode.codeNo}]]*/"");
-    		formData.append("memberCategoryCode", /*[[${leaderCode.codeNo}]]*/"");
+    		formData.append("memberCategoryCode", /*[[${memberCode.codeNo}]]*/"");
     		formData.append("teamNo", /*[[${teamNo}]]*/"");
     		
     		for (const pair of formData.entries()) {
@@ -530,8 +551,8 @@ canvas {
 				dataType:'JSON'
 					
 					,success : function(result){
-						console.log(result);
-						//location.href='/ptnconInfo?contractNo='+result;
+						//console.log(result);
+						location.href='/conInfo?contractNo='+result;
 					}
 			})
     		

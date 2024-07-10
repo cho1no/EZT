@@ -46,12 +46,12 @@ canvas {
 		Launch static backdrop modal</button>
 
 	<!-- Modal -->
-	<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
+	<div class="z-3 modal fade" id="staticBackdrop" data-bs-backdrop="static"
 		tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div
 			class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
-				<scr th:insert="doc/report :: reportFragment"></scr>
+				<scr th:insert="rpt/report :: reportFragment"></scr>
 			</div>
 		</div>
 	</div>

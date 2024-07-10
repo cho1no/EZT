@@ -536,7 +536,7 @@ canvas {
 	    addRound();
 	});
 	
-	var proposalNo = /*[[${con.proposalNo}]]*/"";
+	var contractNo = /*[[${con.contractNo}]]*/"";
 	
 	// 업데이트
 	$('#updateBtn').on('click', insertAjax );
@@ -611,7 +611,7 @@ canvas {
 			
 		})
 			
-		location.href='/conInfo?proposalNo='+proposalNo;
+		location.href='/conInfo?contractNo='+contractNo;
 	}
 
 	
@@ -621,14 +621,14 @@ canvas {
 
 	
 	if(workSign != null){
-	 signView(workSign, 0);
+	 signView(workSign, 1);
 	}
 	
 	var reqSign = /*[[${con.reqSign.signsContent}]]*/"";
 
 	
 	if(reqSign != null){
-	 signView(reqSign, 1);
+	 signView(reqSign, 0);
 	}
 	
 function signView(compressedSignatureData, num) {
@@ -650,9 +650,9 @@ function drawSignature(data, num) {
     let canvas;
     
     if(num == 0){
-    	canvas = document.getElementById('signatureCanvas_work');
-    }else{
     	canvas = document.getElementById('signatureCanvas_req');
+    }else{
+    	canvas = document.getElementById('signatureCanvas_work');
     }
     
     let ctx = canvas.getContext('2d');
@@ -666,7 +666,9 @@ function drawSignature(data, num) {
         ctx.lineTo(point.lx, point.ly);
     }
     ctx.stroke();
-    $('#sendModal').modal('hide');
+    if(num == 3){
+        $('#sendModal').modal('hide');
+    }
     
 }
 	
@@ -689,7 +691,7 @@ $('#saveModal').click(function(e) {
    
 
     workNewSign = compressedData;
-    signView(compressedData, 0);
+    signView(compressedData, 3);
     
 });
 

@@ -61,10 +61,10 @@ public class ContractController {
 		// 의뢰 정보 조회
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
-		
+
 		UserVO requester = ppsSerivce.userInfo(ppsVO.getRequester());
 		model.addAttribute("reqName", requester.getUsersName());
-		
+
 		// 은행 코드 조회
 		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
 		model.addAttribute("code", codeVO);
@@ -78,7 +78,7 @@ public class ContractController {
 	@PostMapping(value = "/conInsert", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public int uploadAjaxPost(MultipartFile[] uploadFile
-												, ContractVO contractVO) {
+							  , ContractVO contractVO) {
 
 		List<FileVO> list = fileService.uploadFiles(uploadFile);
 		if (!list.isEmpty()) {
@@ -104,17 +104,26 @@ public class ContractController {
 		model.addAttribute("worker", worker);
 		UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
 		model.addAttribute("requester", requester);
+		model.addAttribute("user", user.getUserNo());
 
 		ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
 
 		// 의뢰 정보 조회
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
-		
+
 		// 통일 계약서 조회
 		UnityContractVO unityVO = conService.IncludeUnityCon(findVO.getContractNo());
 		model.addAttribute("unity", unityVO);
+		
 
+		// 분야 코드 조회
+		if(conService.ptnConSelect(findVO.getContractNo()) != null) {
+			PartnershipContractVO workCode = conService.ptnConSelect(findVO.getContractNo());
+			model.addAttribute("leaderCode", workCode.getLeaderCategoryCode());
+			model.addAttribute("memberCode", workCode.getMemberCategoryCode());
+		}
+		
 		return "doc/contractInfo";
 
 	}
@@ -141,7 +150,7 @@ public class ContractController {
 		// 의뢰 정보 조회
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
-		
+
 		// 은행 코드 조회
 		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
 		model.addAttribute("code", codeVO);
@@ -154,20 +163,20 @@ public class ContractController {
 	}
 
 	@PostMapping(value = "/conUpdate", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> uploadAjaxPostUpdate(MultipartFile[] uploadFile
-													   , ContractVO contractVO) {
+	public ResponseEntity<String> uploadAjaxPostUpdate(MultipartFile[] uploadFile, ContractVO contractVO) {
 		// 파일 삭제
 		List<FileVO> fileList = conService.fileSelect(contractVO);
-		if(!fileList.isEmpty()) {
+		if (!fileList.isEmpty()) {
 			try {
 				fileService.deleteFile(fileList);
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
-			}}
-		
+			}
+		}
+
 		// 수정
 		if (uploadFile != null) {
-			
+
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
 			if (!list.isEmpty()) {
 				contractVO.setFileList(list);
@@ -200,7 +209,7 @@ public class ContractController {
 		// 의뢰 정보 조회
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
-		
+
 		// 은행 코드 조회
 		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
 		model.addAttribute("code", codeVO);
@@ -208,6 +217,13 @@ public class ContractController {
 		UnityContractVO unityVO = conService.IncludeUnityCon(findVO.getContractNo());
 		model.addAttribute("unity", unityVO);
 
+		// 분야 코드 조회
+		if(conService.ptnConSelect(findVO.getContractNo()) != null) {
+			PartnershipContractVO workCode = conService.ptnConSelect(findVO.getContractNo());
+			model.addAttribute("leaderCode", workCode.getLeaderCategoryCode());
+			model.addAttribute("memberCode", workCode.getMemberCategoryCode());
+		}
+		
 		return "doc/contractWrite";
 
 	}
@@ -218,82 +234,84 @@ public class ContractController {
 		int no = conService.conSend(contractVO);
 		return "redirect:conInfo?contractNo=" + no;
 	}
-	
-	
-		// 동업 계약서 등록
-		@GetMapping("ptnconInsert")
-		public String ptnconInsert(ContractVO contractVO
-								, int teamNo
-								, int userNo
-								, Model model
-								, @AuthenticationPrincipal LoginUserVO user) {
 
-			model.addAttribute("contractVO", new ContractVO());
-			
-			// 계약서 정보 조회
-			ContractVO findVO = conService.conInfo(contractVO);
-			model.addAttribute("con", findVO);
+	// 동업 계약서 등록
+	@GetMapping("ptnconInsert")
+	public String ptnconInsert(ContractVO contractVO
+							   , int teamNo
+							   , int userNo
+							   , Model model,
+			@AuthenticationPrincipal LoginUserVO user) {
 
-			// 유저 정보
-			model.addAttribute("userName", user.getUserVO().getUsersName());
-			model.addAttribute("userPhone", user.getUserVO().getUsersPhone());
-			model.addAttribute("userRnn", user.getUserVO().getUsersRnn());
-			
-			UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
-			model.addAttribute("memberName", requester.getUsersName());
-			model.addAttribute("memberPhone", requester.getUsersPhone());
-			
-			// 분야 코드 조회
-			CommonCodeVO workCode = conService.workCodeSelect(teamNo, user.getUserNo());
-			model.addAttribute("leaderCode", workCode);
-			CommonCodeVO m_workCode = conService.workCodeSelect(teamNo, userNo);
-			model.addAttribute("memberCode", m_workCode);
+		model.addAttribute("contractVO", new ContractVO());
 
-			// 견적서 정보 조회
-			ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
-			model.addAttribute("ppsInfo", ppsVO);
+		// 계약서 정보 조회
+		ContractVO findVO = conService.conInfo(contractVO);
+		model.addAttribute("con", findVO);
 
-			// 의뢰 정보 조회
-			RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
-			model.addAttribute("reqInfo", reqVO);
-			
-			// 은행 코드 조회
-			List<CommonCodeVO> codeVO = conService.bankcodeSelect();
-			model.addAttribute("code", codeVO);
-			// 통일 계약서 조회
-			UnityContractVO unityVO = conService.unityConSelect();
-			model.addAttribute("unity", unityVO);
+		// 유저 정보
+		model.addAttribute("userName", user.getUserVO().getUsersName());
+		model.addAttribute("userPhone", user.getUserVO().getUsersPhone());
+		model.addAttribute("userRnn", user.getUserVO().getUsersRnn());
+		model.addAttribute("userNo", user.getUserVO().getUsersNo());
 
-			// 팀 코드
-			model.addAttribute("teamNo", teamNo);
+		UserVO requester = ppsSerivce.userInfo(userNo);
+		model.addAttribute("memberName", requester.getUsersName());
+		model.addAttribute("memberNo", requester.getUsersNo());
 
-			return "doc/ptncontractInsert";
+		// 분야 코드 조회
+		CommonCodeVO workCode = conService.workCodeSelect(teamNo, user.getUserNo());
+		model.addAttribute("leaderCode", workCode);
+		CommonCodeVO m_workCode = conService.workCodeSelect(teamNo, userNo);
+		model.addAttribute("memberCode", m_workCode);
+
+		// 견적서 정보 조회
+		ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
+		model.addAttribute("ppsInfo", ppsVO);
+
+		// 의뢰 정보 조회
+		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
+		model.addAttribute("reqInfo", reqVO);
+
+		// 은행 코드 조회
+		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
+		model.addAttribute("code", codeVO);
+		// 통일 계약서 조회
+		UnityContractVO unityVO = conService.unityConSelect();
+		model.addAttribute("unity", unityVO);
+
+		// 팀 코드
+		model.addAttribute("teamNo", teamNo);
+
+		return "doc/ptncontractInsert";
+	}
+
+	@PostMapping(value = "/ptnconInsert", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public int ptnconInsert(MultipartFile[] uploadFile
+							, ContractVO contractVO
+							, TeamVO teamVO
+							, PartnershipContractVO partnershipContractVO) {
+
+		List<FileVO> list = fileService.uploadFiles(uploadFile);
+		if (!list.isEmpty()) {
+			contractVO.setFileList(list);
 		}
-		
-		@PostMapping(value = "/ptnconInsert", produces = MediaType.APPLICATION_JSON_VALUE)
-		@ResponseBody
-		public int ptnconInsert(MultipartFile[] uploadFile
-													, ContractVO contractVO
-													, TeamVO teamVO
-													, PartnershipContractVO partnershipContractVO) {
+		int no = conService.conInsert(contractVO);
+		partnershipContractVO.setContractNo(no);
+		partnershipContractVO.setTeamNo(teamVO.getTeamNo());
+		partnershipContractVO.setLeaderNo(contractVO.getRequesterInfo());
+		partnershipContractVO.setMemberNo(contractVO.getWorkerInfo());
+		conService.ptnConInsert(partnershipContractVO);
 
-			List<FileVO> list = fileService.uploadFiles(uploadFile);
-			if (!list.isEmpty()) {
-				contractVO.setFileList(list);
-			}
-			int no = conService.conInsert(contractVO);
-			partnershipContractVO.setContractNo(no);
-			partnershipContractVO.setTeamNo(teamVO.getTeamNo());
-			conService.ptnConInsert(partnershipContractVO);
-
-			return no;
-		}
-		
-		// 계약서 상세
-		@GetMapping("ptnconInfo")
-		public String ptnConInfo(ContractVO contractVO
-							  , Model model
-							  , @AuthenticationPrincipal LoginUserVO user) {
+		return no;
+	}
+	
+		// 동업 계약서 수정(멤버)
+		@GetMapping("ptnconWrite")
+		public String ptnconWrite(ContractVO contractVO
+							   , Model model
+							   , @AuthenticationPrincipal LoginUserVO user) {
 
 			// 계약서 정보 조회
 			ContractVO findVO = conService.conInfo(contractVO);
@@ -304,26 +322,29 @@ public class ContractController {
 			model.addAttribute("worker", worker);
 			UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
 			model.addAttribute("requester", requester);
+			model.addAttribute("user", user.getUserNo());
 
 			ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
 
 			// 의뢰 정보 조회
 			RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 			model.addAttribute("reqInfo", reqVO);
-			
+
+			// 은행 코드 조회
+			List<CommonCodeVO> codeVO = conService.bankcodeSelect();
+			model.addAttribute("code", codeVO);
 			// 통일 계약서 조회
 			UnityContractVO unityVO = conService.IncludeUnityCon(findVO.getContractNo());
 			model.addAttribute("unity", unityVO);
-			
+
 			// 분야 코드 조회
-			PartnershipContractVO workCode = conService.ptnConSelect(findVO.getContractNo());
-			model.addAttribute("leaderCode", workCode.getLeaderCategoryCode());
-			model.addAttribute("memberCode", workCode.getMemberCategoryCode());
+			if(conService.ptnConSelect(findVO.getContractNo()) != null) {
+				PartnershipContractVO workCode = conService.ptnConSelect(findVO.getContractNo());
+				model.addAttribute("leaderCode", workCode.getLeaderCategoryCode());
+				model.addAttribute("memberCode", workCode.getMemberCategoryCode());
+			}
 			
-
-			return "doc/ptncontractInfo";
-
+			return "doc/ptncontractWrite";
 		}
-		
-		
+
 }
