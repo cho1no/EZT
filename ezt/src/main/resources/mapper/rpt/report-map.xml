@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.rpt.mapper.ReportMapper">
+
+	<!-- 공사 보고 유형 조회 -->
+	<select id="selectCttDivision" resultType="String">
+		SELECT HISTORY
+		FROM contract_detail
+		WHERE contract_no = #{contractNo}
+		AND PAYMENT_TF = 'N'
+	</select>
+	<!-- 공사 보고 유형 조회 -->
+	
+	<!-- 공사 보고 등록 -->
+	<insert id="insertCttReportInfo" parameterType="CttReportVO">
+		<selectKey keyProperty="cttReportNo" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_CTTREPORT.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO CTT_REPORT(
+		CTT_REPORT_NO
+		, TITLE
+		, DETAIL_CONTENT
+		, CTT_DIVISION
+		, CONTRACT_NO
+		)VALUES(
+		#{cttReportNo}
+		, #{title}
+		, #{detailContent}
+		, #{cttDivision}
+		, #{contractNo}
+		)
+	</insert>
+	<!-- 공사 보고 등록 -->
+
+	<!-- 공사 보고 조회 -->
+	<select id="selectCttInfo" resultType="CttReportVO">
+		SELECT 
+		CTT_REPORT_NO
+		, TITLE
+		, DETAIL_CONTENT
+		, CTT_DIVISION
+		, ACCESS_STATE
+		, CTT_REPORT_DT
+		, FILE_ID
+		, CONTRACT_NO
+		FROM CTT_REPORT
+		WHERE CTT_REPORT_NO = #{cttReportNo}
+	</select>
+	<!-- 공사 보고 조회 -->
+
+</mapper>

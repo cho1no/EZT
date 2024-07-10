@@ -79,10 +79,11 @@ public class ContractController {
 	@ResponseBody
 	public int uploadAjaxPost(MultipartFile[] uploadFile
 							  , ContractVO contractVO) {
-
-		List<FileVO> list = fileService.uploadFiles(uploadFile);
-		if (!list.isEmpty()) {
-			contractVO.setFileList(list);
+		if(uploadFile != null && uploadFile.length > 0) {
+			List<FileVO> list = fileService.uploadFiles(uploadFile);
+			if (!list.isEmpty()) {
+				contractVO.setFileList(list);
+			}
 		}
 		int no = conService.conInsert(contractVO);
 
@@ -175,7 +176,7 @@ public class ContractController {
 		}
 
 		// 수정
-		if (uploadFile != null) {
+		if (uploadFile != null  && uploadFile.length > 0) {
 
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
 			if (!list.isEmpty()) {
@@ -240,8 +241,8 @@ public class ContractController {
 	public String ptnconInsert(ContractVO contractVO
 							   , int teamNo
 							   , int userNo
-							   , Model model,
-			@AuthenticationPrincipal LoginUserVO user) {
+							   , Model model
+							   , @AuthenticationPrincipal LoginUserVO user) {
 
 		model.addAttribute("contractVO", new ContractVO());
 
@@ -292,10 +293,11 @@ public class ContractController {
 							, ContractVO contractVO
 							, TeamVO teamVO
 							, PartnershipContractVO partnershipContractVO) {
-
-		List<FileVO> list = fileService.uploadFiles(uploadFile);
-		if (!list.isEmpty()) {
-			contractVO.setFileList(list);
+		if(uploadFile != null && uploadFile.length > 0) {
+			List<FileVO> list = fileService.uploadFiles(uploadFile);
+			if (!list.isEmpty()) {
+				contractVO.setFileList(list);
+			}
 		}
 		int no = conService.conInsert(contractVO);
 		partnershipContractVO.setContractNo(no);

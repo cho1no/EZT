@@ -497,9 +497,9 @@ canvas {
     }
     
     // 은행 표기
-   if(/*[[${con.requesterBankcode}]]*/"" != null){
+   if(/*[[${con.workerBankcode}]]*/"" != null){
     	for(i=0; i<$('option').length ; i++){
-   			if( $('option:eq('+i+')').val().includes(/*[[${con.requesterBankcode}]]*/"")){
+   			if( $('option:eq('+i+')').val().includes(/*[[${con.workerBankcode}]]*/"")){
    			 $('option:eq('+i+')').prop("selected",true);
     		}
     	}

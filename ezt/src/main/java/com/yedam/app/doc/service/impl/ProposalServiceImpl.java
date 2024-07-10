@@ -3,15 +3,14 @@ package com.yedam.app.doc.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.common.service.FileVO;
-import com.yedam.app.doc.mapper.FileMapper;
 import com.yedam.app.doc.mapper.ProposalMapper;
 import com.yedam.app.doc.service.ProposalDetailVO;
 import com.yedam.app.doc.service.ProposalService;
 import com.yedam.app.doc.service.ProposalVO;
+import com.yedam.app.fie.mapper.FileMapper;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.usr.service.UserVO;
 
