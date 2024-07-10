@@ -16,11 +16,15 @@ import RequestFilters from '../request-filters';
 
 export default function ProductsView() {
   const [requests, setRequests] = useState([]);
-
+  const [filteredData, setFilterdData] = useState([]);
   const [openFilter, setOpenFilter] = useState(false);
 
+  // const [order, setOrder] = useState('asc');
+
+  // const [orderBy, setOrderBy] = useState('');
+
   useEffect(() => {
-    // console.log(requests);
+    setFilterdData(requests);
   }, [requests]);
 
   useEffect(() => {
@@ -56,6 +60,8 @@ export default function ProductsView() {
             openFilter={openFilter}
             onOpenFilter={handleOpenFilter}
             onCloseFilter={handleCloseFilter}
+            datas={requests}
+            filterDatas={setFilterdData}
           />
 
           <RequestSort />
@@ -63,7 +69,7 @@ export default function ProductsView() {
       </Stack>
 
       <Grid container spacing={3}>
-        {requests.map((request) => (
+        {filteredData.map((request) => (
           <Grid key={request.requestNo} xs={12} sm={6} md={3}>
             <RequestCard request={request} />
           </Grid>

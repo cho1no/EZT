@@ -75,10 +75,11 @@ export default function RequestCard({ request }) {
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="body2">{request.usersName}</Typography>
+          <Typography variant="body2">{request.cttPlace}</Typography>
+          <Typography variant="body2">{request.categoryCode}</Typography>
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="body2">{request.cttPlace}</Typography>
+          <Typography variant="body2">{request.usersName}</Typography>
           <Typography variant="body2">{fDateTime(request.writeDt, 'yy/MM/dd')}</Typography>
         </Stack>
       </Stack>
