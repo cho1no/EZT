@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.adm.mapper.AdminMapper;
 import com.yedam.app.adm.service.AdminService;
 import com.yedam.app.doc.service.UnityContractVO;
+import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
 
@@ -35,6 +36,23 @@ public class AdminServiceImpl implements AdminService{
 		return admMapper.selectReqRegionStatistics();
 	}
 
+
+	// 의뢰 관련
+	@Override
+	public List<RequestVO> getRequests() {
+		return admMapper.selectRequests();
+	}
+
+	@Override
+	public RequestVO getRequest() {
+		return null;
+	}
+
+	@Override
+	public int deleteRequest() {
+		return 0;
+	}
+	
 	
 	// 유저관련
 	@Override
@@ -110,5 +128,6 @@ public class AdminServiceImpl implements AdminService{
 		admMapper.updateCareerDeny(Integer.parseInt(map.get("careerNo")));
 		return admMapper.insertCareerDeny(map);
 	}
+
 	
 }

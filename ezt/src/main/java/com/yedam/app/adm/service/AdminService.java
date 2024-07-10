@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.yedam.app.doc.service.UnityContractVO;
+import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
 
@@ -15,6 +16,14 @@ public interface AdminService {
 	// 의뢰 지역별 통계
 	public List<Map<String, Object>> getReqRegionStatistics();
 
+	
+	// 의뢰 전체 조회
+	public List<RequestVO> getRequests();
+	// 의뢰 단건 조회
+	public RequestVO getRequest();
+	// 의뢰 작제
+	public int deleteRequest();
+	
 	
 	// 회원 전체 조회
 	public List<UserVO> getUsers();

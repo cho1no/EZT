@@ -44,8 +44,11 @@ public class RequestVO {
 	
 	//조인 컬럼
 	private String usersName;			  //유저이름
-	private String saveName;
-	private String ext;
+	
+	private String savePath;			// 파일경로
+	private String saveName;			// 파일이름
+	private String originalFileName;	// 원 파일 명
+	private String ext;					// 파일 확장자
 	
 
 	private String usersPhone;

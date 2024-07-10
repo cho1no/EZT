@@ -8,7 +8,7 @@ export default function ContractPage() {
   return (
     <>
       <Helmet>
-        <title> Contract | Minimal UI </title>
+        <title> 통일 계약서 관리 </title>
       </Helmet>
 
       <ContractView />
