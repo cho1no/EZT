@@ -20,7 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yedam.app.adm.security.CheckToken;
 import com.yedam.app.adm.security.JwtProvider;
 import com.yedam.app.adm.service.AdminService;
+import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.doc.service.UnityContractVO;
+import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
@@ -32,6 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin("http://localhost:3000")
 @Slf4j
 public class AdminRestController {
+	@Autowired
+	CommonCodeService ccSvc;
 	@Autowired
 	AdminService admSvc;
 	@Autowired
@@ -47,13 +52,13 @@ public class AdminRestController {
 		}
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("접근 권한이 없습니다.");
 	}
-
+	// 토큰 확인
 	@CheckToken
 	@GetMapping("/checkJwt")
 	public ResponseEntity<?> isOk() {
 		return ResponseEntity.ok().build();
 	}
-
+	// 본인 정보 토큰 변환
 	@CheckToken
 	@GetMapping("/getMyInfo")
 	public UserVO getMyInfo(@RequestHeader("Authorization") String authHeader) {
@@ -100,7 +105,22 @@ public class AdminRestController {
 	public int setUserActive(@PathVariable int usersNo) {
 		return admSvc.setUserActive(usersNo);
 	}
-
+	
+	// 공통 코드 가져오기
+	@CheckToken
+	@GetMapping("/getCommonCodes/{codeType}")
+	public List<CommonCodeVO> getCommonCodesByType(@PathVariable String codeType){
+		return ccSvc.selectCommonCodeAll(codeType);
+	}
+	
+	
+	// 의뢰 전체 조회
+	@CheckToken
+	@GetMapping("/requestsInfo")
+	public List<RequestVO> getRequests(){
+		return admSvc.getRequests();
+	}
+	
 	// 통일 계약서 전체 조회
 	@CheckToken
 	@GetMapping("/unityContractsInfo")

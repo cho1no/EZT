@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.yedam.app.doc.service.UnityContractVO;
+import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
 
@@ -25,6 +26,13 @@ public interface AdminMapper {
 	// 회원 정지 해제
 	public int updateUsersStateActive(int uno);
 	
+	
+	// 의뢰 전체 가져오기
+	public List<RequestVO> selectRequests();
+	// 의뢰 단건 조회
+	public RequestVO selectRequest();
+	// 의뢰 삭제
+	public int deleteRequest();
 	
 	// 통일 계약서 전체 가져오기
 	public List<UnityContractVO> selectUnityContracts();

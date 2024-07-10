@@ -21,8 +21,8 @@
       <div class="right-cta-menu text-right d-flex align-self-center">
         <div class="ml-auto">
           <th:block sec:authorize="!isAnonymous()">
-            <span class="d-lg-inline-block me-2"
-              >[[${#authentication.principal.username}]]님
+            <span class="d-lg-inline-block me-2 mt-2">
+              [[${#authentication.principal.username}]]님
             </span>
             <div class="d-none d-lg-inline-block me-2">
               <div class="alarm-menu cpointer opened">

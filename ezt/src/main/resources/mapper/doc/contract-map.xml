@@ -54,11 +54,19 @@
 		, CTT_END_DT
 		, REQUESTER_INFO
 		, WORKER_INFO
+		<if test="type == 0">
 		, WORKER_ADDRESS
 		, WORKER_ACCOUNT
+		, WORKER_BANKCODE
+		</if>
+		<if test="type == 1">
+		, REQUESTER_ADDRESS
+		, REQUESTER_ACCOUNT
+		, REQUESTER_BANKCODE
+		</if>
 		, UNITY_CONTRACT_NO
 		, PROPOSAL_NO
-		, WORKER_BANKCODE
+		
 		)
 		VALUES (
 		#{contractNo}
@@ -68,11 +76,19 @@
 		, #{cttEndDt}
 		, #{requesterInfo}
 		, #{workerInfo}
+		<if test="type == 0">
 		, #{workerAddress}
 		, #{workerAccount}
+		, #{workerBankcode}
+		</if>
+		<if test="type == 1">
+		, #{requesterAddress}
+		, #{requesterAccount}
+		, #{requesterBankcode}
+		</if>
 		, #{unityContractNo}
 		, #{proposalNo}
-		, #{workerBankcode}
+		
 		)
 	</insert>
 	<!-- 계약서 등록 -->
@@ -204,6 +220,11 @@
 		, REQUESTER_ACCOUNT = #{requesterAccount}
 		, REQUESTER_BANKCODE = #{requesterBankcode}
 		</if>
+		<if test="type == 2">
+		, WORKER_ADDRESS = #{workerAddress}
+		, WORKER_ACCOUNT = #{workerAccount}
+		, WORKER_BANKCODE = #{workerBankcode}
+		</if>
 		WHERE contract_no = #{contractNo}
 	</update>
 	<!-- 계약서 수정 -->
@@ -265,15 +286,17 @@
 		, #{contractNo}
 		, #{leaderCategoryCode}
 		, #{memberCategoryCode}
-		, #{teamNo})
+		, #{teamNo}
+		, #{leaderNo}
+		, #{memberNo})
 		}
 	</insert>
 	<!-- 동업 계약서 등록 -->
 	
 	<!-- 동업 계약서 조회 -->
-	<select id="PartnershipContractVO" resultType="PartnershipContractVO">
+	<select id="selectPtnSelect" resultType="PartnershipContractVO">
 		SELECT
-			, FIND_COMMONCODE(LEADER_CATEGORY_CODE) as leaderCategoryCode
+			FIND_COMMONCODE(LEADER_CATEGORY_CODE) as leaderCategoryCode
 			, FIND_COMMONCODE(MEMBER_CATEGORY_CODE) as memberCategoryCode
 		FROM PARTNERSHIP_CONTRACT
 		WHERE CONTRACT_NO = #{contractNo}

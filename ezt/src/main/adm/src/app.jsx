@@ -1,7 +1,6 @@
 /* eslint-disable perfectionist/sort-imports */
 import 'src/global.css';
-
-import { useState, useEffect, createContext } from 'react';
+import { lazy, useState, useEffect, createContext } from 'react';
 
 import { useScrollToTop } from 'src/hooks/use-scroll-to-top';
 
@@ -13,30 +12,28 @@ import axios from 'axios';
 // ----------------------------------------------------------------------
 export const MyContext = createContext();
 
+export const Page404 = lazy(() => import('src/pages/page-not-found'));
+
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [myInfo, setMyInfo] = useState({ usersNo: 0, usersName: 'admin', usersRole: '' });
+  const [isError, setIsError] = useState(false);
+  const [myInfo, setMyInfo] = useState({ usersNo: 0, usersName: '', usersRole: '' });
   useEffect(() => {
     checkAuthentication();
   }, []);
-  useEffect(() => {
-    console.log(myInfo);
-  }, [myInfo]);
+  useEffect(() => {}, [myInfo]);
   const checkAuthentication = async () => {
     try {
       // token get
       const token = await axios.get('/adm/jwt');
-      console.log(token);
-
       axios.defaults.headers.common.Authorization = `Bearer ${token.data}`;
       // token 확인
       const response = await axios.get('/adm/checkJwt');
-      console.log(response);
       if (response.status === 200) {
         setIsAuthenticated(true);
       } else {
+        setIsError(true);
         alert('만료된 토큰입니다.');
-        window.location.href = 'http://localhost:8080/main';
       }
       // token 기반 유저 정보 받기
       const info = await axios.get(`/adm/getMyInfo`);
@@ -49,16 +46,18 @@ export default function App() {
         setMyInfo(info.data);
       }
     } catch (error) {
+      setIsError(true);
       alert('접근권한이 없습니다.', error);
-      window.location.href = 'http://localhost:8080/main';
     }
   };
   useScrollToTop();
 
+  if (isError) {
+    return <Page404 />;
+  }
   if (!isAuthenticated) {
     return <div>인증중 ...</div>;
   }
-
   return (
     <MyContext.Provider value={myInfo}>
       <ThemeProvider>

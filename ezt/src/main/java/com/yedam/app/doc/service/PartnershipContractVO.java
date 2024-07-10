@@ -10,4 +10,6 @@ public class PartnershipContractVO {
 	private String memberCategoryCode; // 팀원 분야 코드
 	
 	private int teamNo; // 팀 번호
+	private int leaderNo; // 리더 유저 번호
+	private int memberNo; // 멤버 유저 번호
 }

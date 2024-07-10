@@ -1,21 +1,37 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 
-import { products } from 'src/_mock/products';
+// import { products } from 'src/_mock/products';
 
-import ProductCard from '../product-card';
-import ProductSort from '../product-sort';
-import ProductFilters from '../product-filters';
-import ProductCartWidget from '../product-cart-widget';
-
+// import ProductCard from '../product-card';
+import RequestCard from '../request-card';
+import RequestSort from '../request-sort';
+import RequestFilters from '../request-filters';
 // ----------------------------------------------------------------------
 
 export default function ProductsView() {
+  const [requests, setRequests] = useState([]);
+
   const [openFilter, setOpenFilter] = useState(false);
+
+  useEffect(() => {
+    // console.log(requests);
+  }, [requests]);
+
+  useEffect(() => {
+    getRequests();
+  }, []);
+
+  const getRequests = async () => {
+    await axios.get('/adm/requestsInfo').then((resp) => {
+      setRequests([...resp.data]);
+    });
+  };
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -27,37 +43,32 @@ export default function ProductsView() {
 
   return (
     <Container>
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        Products
-      </Typography>
-
       <Stack
         direction="row"
         alignItems="center"
         flexWrap="wrap-reverse"
-        justifyContent="flex-end"
-        sx={{ mb: 5 }}
+        justifyContent="space-between"
+        sx={{ mb: 3 }}
       >
+        <Typography variant="h4">의뢰 관리</Typography>
         <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-          <ProductFilters
+          <RequestFilters
             openFilter={openFilter}
             onOpenFilter={handleOpenFilter}
             onCloseFilter={handleCloseFilter}
           />
 
-          <ProductSort />
+          <RequestSort />
         </Stack>
       </Stack>
 
       <Grid container spacing={3}>
-        {products.map((product) => (
-          <Grid key={product.id} xs={12} sm={6} md={3}>
-            <ProductCard product={product} />
+        {requests.map((request) => (
+          <Grid key={request.requestNo} xs={12} sm={6} md={3}>
+            <RequestCard request={request} />
           </Grid>
         ))}
       </Grid>
-
-      <ProductCartWidget />
     </Container>
   );
 }
