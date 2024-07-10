@@ -4,11 +4,9 @@ import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-// import Radio from '@mui/material/Radio';
 import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
-// import RadioGroup from '@mui/material/RadioGroup';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
@@ -19,16 +17,17 @@ import RequestOpts from './request-filters-option';
 
 // ----------------------------------------------------------------------
 
-// export const GENDER_OPTIONS = ['Men', 'Women', 'Kids'];
-// export const CATEGORY_OPTIONS = ['All', 'Shose', 'Apparel', 'Accessories'];
-
-// ----------------------------------------------------------------------
-
-export default function RequestFilters({ openFilter, onOpenFilter, onCloseFilter }) {
+export default function RequestFilters({
+  openFilter,
+  onOpenFilter,
+  onCloseFilter,
+  datas,
+  filterDatas,
+}) {
   const [regionOpt, setRegionOpt] = useState([]);
   const [reqStateOpt, setReqStateOpt] = useState([]);
   const [categoryOpt, setCategoryOpt] = useState([]);
-
+  const [cttPlaceOpt, setCttPlaceOpt] = useState([]);
   const [isAllChecked, setIsAllChecked] = useState(true);
 
   useEffect(() => {
@@ -38,9 +37,14 @@ export default function RequestFilters({ openFilter, onOpenFilter, onCloseFilter
 
   useEffect(() => {
     // 모든 옵션의 checked 상태를 확인하여 allUnchecked 상태를 업데이트
-    const allChecked = [...regionOpt, ...reqStateOpt, ...categoryOpt].every((opt) => !opt.checked);
+    const allChecked = [...regionOpt, ...reqStateOpt, ...categoryOpt, ...cttPlaceOpt].every(
+      (opt) => !opt.checked
+    );
     setIsAllChecked(allChecked);
-  }, [regionOpt, reqStateOpt, categoryOpt]);
+    filterDatas(filteredData);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [regionOpt, reqStateOpt, categoryOpt, cttPlaceOpt]);
 
   // 시작시 all true 세팅
   const setData = (data) =>
@@ -50,19 +54,43 @@ export default function RequestFilters({ openFilter, onOpenFilter, onCloseFilter
     const regions = await axios.get('/adm/getCommonCodes/0B'); // 지역
     const reqState = await axios.get('/adm/getCommonCodes/0R'); // 상태
     const categories = await axios.get('/adm/getCommonCodes/0C'); // 분야
+    const cttPlace = await axios.get('adm/getCommonCodes/0P'); // 주거공간
     setRegionOpt(setData(regions.data));
     setReqStateOpt(setData(reqState.data));
     setCategoryOpt(setData(categories.data));
+    setCttPlaceOpt(setData(cttPlace.data));
   };
   // 입력 값에 따라 전체 체크 속성 바꾸기
   const checkAllByState = (state) => {
     setRegionOpt(regionOpt.map((_) => ({ ..._, checked: state })));
     setReqStateOpt(reqStateOpt.map((_) => ({ ..._, checked: state })));
     setCategoryOpt(categoryOpt.map((_) => ({ ..._, checked: state })));
+    setCttPlaceOpt(cttPlaceOpt.map((_) => ({ ..._, checked: state })));
   };
   // 체크 상태 변경
   const handleCheckboxChange = (codeNo, list, setList) => {
     setList(list.map((opt) => (opt.codeNo === codeNo ? { ...opt, checked: !opt.checked } : opt)));
+  };
+
+  const filteredData = () => {
+    const checkedRegionOpt = regionOpt.filter((opt) => opt.checked);
+    const checkedCateOpt = categoryOpt.filter((opt) => opt.checked);
+    const checkedReqStateOpt = reqStateOpt.filter((opt) => opt.checked);
+    const checkedCttPlaceOpt = cttPlaceOpt.filter((opt) => opt.checked);
+    console.log(checkedCttPlaceOpt);
+    let filter = datas.filter((data) =>
+      checkedRegionOpt.some((opt) => opt.codeName === data.regionCode)
+    );
+    filter = filter.filter((data) =>
+      checkedReqStateOpt.some((opt) => opt.codeName === data.requestStateNm)
+    );
+    filter = filter.filter((data) =>
+      checkedCateOpt.some((opt) => opt.codeName === data.categoryCode)
+    );
+    filter = filter.filter((data) =>
+      checkedCttPlaceOpt.some((opt) => opt.codeName === data.cttPlace)
+    );
+    return filter;
   };
   return (
     <>
@@ -101,6 +129,12 @@ export default function RequestFilters({ openFilter, onOpenFilter, onCloseFilter
 
         <Scrollbar>
           <Stack spacing={3} sx={{ p: 3 }}>
+            <RequestOpts
+              title="의뢰 공간"
+              options={cttPlaceOpt}
+              onChange={handleCheckboxChange}
+              setOptions={setCttPlaceOpt}
+            />
             <RequestOpts
               title="의뢰 분야"
               options={categoryOpt}
@@ -147,4 +181,6 @@ RequestFilters.propTypes = {
   openFilter: PropTypes.bool,
   onOpenFilter: PropTypes.func,
   onCloseFilter: PropTypes.func,
+  datas: PropTypes.any,
+  filterDatas: PropTypes.func,
 };
