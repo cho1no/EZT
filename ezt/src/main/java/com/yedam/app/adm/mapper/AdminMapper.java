@@ -57,4 +57,8 @@ public interface AdminMapper {
 	public int insertCareerDeny(Map<String, String> map);
 	// 경력 인증 반려 사유 삭제
 	public int deleteCareerDeny(int no);
+	
+	
+	// 결제 대금 관리 전체 조회
+	public List<Map<String, Object>> selectPayManages();
 }
