@@ -69,5 +69,6 @@
 	SET PAYMENT_TF = 'Y' 
 	WHERE CONTRACT_DETAIL_NO = #{contractDetailNo}
 	</update>
+	<!-- 대금 지급 여부 수정 -->
 	
 </mapper>

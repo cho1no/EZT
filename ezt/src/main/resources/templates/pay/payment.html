@@ -5,7 +5,7 @@
 	layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
-<title>결제 명세서</title>
+<title>결제 작성</title>
 <style>
 .hr-sect {
 	display: flex;
@@ -33,13 +33,20 @@
 
 		<div class="container">
 
-			<div class="row mx-5">
+			<div class="row mb-5 mt-5">
 
-				<div class="col mx-5">
-					<form class="p-4 p-md-5 border rounded">
+				<div class="col-lg-8">
+					<form class="p-4 p-md-5 border rounded" name="payment">
+						<input type="hidden" name="price" th:value="${con.cttPrice}">
+						<input type="hidden" name="contractNo"
+							th:value="${con.contractNo}"> <input type="hidden"
+							name="virtualAccount">
+						<input type="hidden" name="requester"
+							th:value="${con.requesterInfo}">
+
 						<div class="row form-group">
 							<h3 class="text-black mb-3 border-bottom pb-2">
-								<b>결제 명세서</b>
+								<b>결제 상세</b>
 							</h3>
 
 							<p class="hr-sect px-3 fs-6">
@@ -52,17 +59,17 @@
 									<input type="text" readonly class="form-control-plaintext"
 										th:value="${requester.usersName}">
 								</div>
-								<label class="col-3 col-form-label"><b>전화번호</b></label>
+								<label class="col-2 col-form-label"><b>전화번호</b></label>
 								<div class="col">
 									<input type="text" readonly class="form-control-plaintext"
 										th:value="${requester.usersPhone}">
 								</div>
 							</div>
 							<div class="row form-group">
-								<label class="col-3 col-form-label"><b>계좌번호</b></label>
+								<label class="col-2 col-form-label"><b>계좌번호</b></label>
 								<div class="col">
 									<input type="text" readonly class="form-control-plaintext"
-										name="requester" th:value="${con.requesterAccount}">
+									 th:value="${'[' + con.requesterBankcode + '] ' + con.requesterAccount}">
 								</div>
 							</div>
 
@@ -108,12 +115,12 @@
 							</p>
 
 							<div class="row form-group">
-								<label class="col-3 col-form-label"><b>성명</b></label>
+								<label class="col-2 col-form-label"><b>성명</b></label>
 								<div class="col-3">
 									<input type="text" readonly class="form-control-plaintext"
 										th:value="${worker.usersName}">
 								</div>
-								<label class="col-3 col-form-label"><b>전화번호</b></label>
+								<label class="col-2 col-form-label"><b>전화번호</b></label>
 								<div class="col-3">
 									<input type="text" readonly class="form-control-plaintext"
 										th:value="${worker.usersPhone}">
@@ -158,26 +165,84 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="row form-group mt-4">
-						<div class="col-5"></div>
-						<div class="col-3">
-						<h4 class="text-black mt-1">
-							<b> 총 결제금액 :</b>
-						</h4>
-						</div>
-						<div class="col">
-						<h4 class="text-black text-right">
-							<b>[[${#numbers.formatInteger(pay.price,1,'COMMA')}]] 원</b>
-						</h4>
-						</div>
-						</div>
 					</form>
+				</div>
+				<div class="col-lg-4 ml-auto h-100 jm-sticky-top">
+					<div class="block__87154 mb-0">
+						<blockquote>
+							<h5 class="text-black mb-5 border-bottom pb-2">
+								<b>결제 정보</b>
+							</h5>
+							<table class="table table-hover">
+								<thead>
+									<tr class="text-center">
+										<th>품목</th>
+										<th>금액</th>
+									</tr>
+								</thead>
+								<tbody class="pay_list">
+									<th:block th:each=" list : ${ppsInfo.list}">
+										<tr class="text-center">
+											<td th:text="${list.product}" />
+											<td
+												th:text="${#numbers.formatInteger(list.unitprice,1,'COMMA')} + 원" />
+										</tr>
+									</th:block>
+								</tbody>
+							</table>
+						</blockquote>
+
+						<h5 class="text-black mt-1">
+							<b> 총 결제금액 :</b>
+						</h5>
+						<h5 class="text-black text-right">
+							<b>[[${#numbers.formatInteger(con.cttPrice,1,'COMMA')}]] 원</b>
+						</h5>
+
+						<div class="text-center mt-4">
+							<button type="button"
+								class="btn btn-block btn btn-outline-info btn-md" >결제하기</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	
 
 	<script th:inline="javascript">
+		
+	$('button[type="button"]').on('click', function(e) {
+		$.ajax({
+			url: "/api/getVirtualAc",
+			type: "GET",
+			success : function(result){	
+				
+				$('input[name="virtualAccount"]').val(result);
+				Payment();
+			},
+			error : function(){alert("통신실패")}
+		})
+		
+	})
+	
+	function Payment(){
+		var formData = new FormData(document.payment);
+		for (const pair of formData.entries()) {
+			  console.log(pair[0], pair[1]);
+			}
+		
+		$.ajax({
+			url: '/payment',
+			processData : false,
+			contentType : false,
+			data : formData,
+			type :'Post',
+			async : false,
+			success : function(result){	
+				location.href='/payInfo?payNo='+result;
+			}
+		})
+	}
 	
 	</script>
 </body>

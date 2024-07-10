@@ -2,16 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="reportFragment">
 
 <style>
-
-.uploadResult img{
-display: block;
-  width: 100px;
-  height: 80px;
-
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+.uploadResult img {
+	display: block;
+	width: 100px;
+	height: 80px;
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
-
-
 </style>
 
 <div class="modal-header">
@@ -22,164 +18,177 @@ display: block;
 		aria-label="Close"></button>
 </div>
 <div class="modal-body mx-3 my-3">
-	<form>
-		<ul class="list-unstyled pl-3 mb-0">
+	<form name="reportInsertForm">
+		<ul class="list-unstyled mb-0">
 			<li class="mb-2 row form-group"><div class="col-4">
+					<input type="hidden" class="form-control" name="contractNo">
 					<strong class="text-black">제목</strong>
 				</div>
 				<div class="col">
-					<input type="text" class="form-control">
+					<input type="text" class="form-control" name="title">
 				</div></li>
-				<li class="mb-2 row form-group"><div class="col-4">
-					<strong class="text-black">시공분야</strong>
-				</div>
-				<div class="col">
-					<input type="text" class="form-control">
-				</div></li>
-				<li class="mb-2 row form-group"><div class="col-4">
+			<li class="mb-2 row form-group"><div class="col-4">
 					<strong class="text-black">공사 보고 유형</strong>
 				</div>
 				<div class="col">
-					<input type="text" class="form-control">
+					<input type="hidden" name="cttDivision">
+					<select class="form-select" id="rpt_divi">
+					<option selected>유형 선택</option>
+					</select>
 				</div></li>
-				<li class="mb-2 row form-group"><div class="col-4">
+			<li class="mb-2 row form-group"><div class="col-4">
 					<strong class="text-black">공사 보고 일시</strong>
 				</div>
 				<div class="col">
-					<input type="text" class="form-control">
+					<b><span class="cur_year">2024-</span><span
+									class="cur_month">06-</span><span class="cur_day">28</span></b>
 				</div></li>
-				
-				<li>
-				<div class="form-floating" style="margin-top: 30px; margin-bottom: 30px">
-								<textarea class="form-control" placeholder="Leave a comment here"  style="height: 100px" id="floatingTextarea"></textarea>
-								<label for="floatingTextarea"><b>상세 내용</b></label>
-							</div></li>
-				<li>			
+
+			<li>
+				<div class="form-floating"
+					style="margin-top: 30px; margin-bottom: 30px">
+					<textarea class="form-control" placeholder="Leave a comment here"
+						style="height: 100px" id="floatingTextarea" name="detailContent"></textarea>
+					<label for="floatingTextarea"><b>상세 내용</b></label>
+				</div>
+			</li>
+			<li>
 				<p class="uploadTitle mt-5">첨부 이미지 업로드(최대 5장)</p>
-								<div class="uploadDiv">
-									<label for="multiFile">파일찾기</label> 
-									<input type="file"
-										multiple="multiple" name="uploadFile" id="multiFile"
-										onChange="fileList()" onClick="fileUploadClick()">
-								</div>
-								<div class="uploadResult bg-light">
-									<div class="row">
-										
-									</div>
-								</div></li>
+				<div class="uploadDiv">
+					<label for="multiFile">파일찾기</label> <input type="file"
+						multiple="multiple" name="uploadFile" id="multiFile"
+						onChange="fileList()" onClick="fileUploadClick()">
+				</div>
+				<div class="uploadResult bg-light">
+					<div class="row"></div>
+				</div>
+			</li>
 		</ul>
 	</form>
 </div>
 <div class="modal-footer">
+	<button type="button" class="btn btn-primary" id="rpt_insertBtn" data-bs-toggle="modal" data-bs-target="#reportInfoModal">등록</button>
 	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-	<button type="button" class="btn btn-primary">등록</button>
 </div>
 
 <script>
-var uploadFiles = '';
+	var uploadFiles = '';
 
-function fileUploadClick() {   
+	function fileUploadClick() {
 
-	$('input[name="uploadFile"]').val('');
-	$('.uploadResult .row div').remove();
-};
+		$('input[name="uploadFile"]').val('');
+		$('.uploadResult .row div').remove();
+	};
 
-function fileList(){
-	
-	console.log(uploadFiles);
-	
-	if(uploadFiles != '' ){
-	$.ajax({
-		url: '/rptFileDelete',
-		type : 'post',
-		contentType : 'application/json',
-		data : JSON.stringify(uploadFiles),
-		async : false
+	function fileList() {
 		
-	})
-	}
-	
-	
-	
-	//console.log("file");
-	
-	var formData = new FormData();
-	
-	var inputFile = $("input[name='uploadFile']");
-	
-	var files = inputFile[0].files;
-	
-	
-	// formData에 데이터 넣기
-	for(var i = 0; i < files.length; i++){
-	
-		formData.append("uploadFile", files[i]);
 		
-	}
-	
+		var x = document.getElementById("multiFile");
+		var txt = "";
+		if ('files' in x) {
+		    if (x.files.length > 5) {
+		        alert("파일 개수가 초과되었습니다.");
+		        document.getElementById("multiFile").value = "";
+		        return;
+		    }
+		}
 		
-	// Ajax
-	$.ajax({
-		url: '/rptFileInsert',
-		processData : false,
-		contentType : false,
-		data : formData,
-		type :'Post',
-		dataType:'JSON'
 		
-		,success : function(result){
-			//console.log(result);
-			showUpFile(result);
-			uploadFiles = result;
+
+		console.log(uploadFiles);
+
+		if (uploadFiles != '') {
+			$.ajax({
+				url : '/rptFileDelete',
+				type : 'post',
+				contentType : 'application/json',
+				data : JSON.stringify(uploadFiles),
+				async : false
+
+			})
+		}
+
+		//console.log("file");
+
+		var formData = new FormData();
+
+		var inputFile = $("input[name='uploadFile']");
+
+		var files = inputFile[0].files;
+
+		// formData에 데이터 넣기
+		for (var i = 0; i < files.length; i++) {
+
+			formData.append("uploadFile", files[i]);
 
 		}
-	})		
-	
-			//console.log(files);
-			//location.reload();
-	
-};
 
+		// Ajax
+		$.ajax({
+			url : '/rptFileInsert',
+			processData : false,
+			contentType : false,
+			data : formData,
+			type : 'Post',
+			dataType : 'JSON'
 
-function showUpFile(uploadResultArr){
-	
-	console.log(uploadResultArr);
-	
-	if(!uploadResultArr || uploadResultArr.length == 0) return;
-	
-	var uploadUL = $('.uploadResult .row');
-	
-	var str = "";
-	
-	
-	
-	$(uploadResultArr).each(function(i, obj){
-		
-		var savePath = obj.savePath.replaceAll("\\", "/")
-	
-		var fileCallPath = encodeURIComponent(savePath+"/s_"+obj.saveName+"_"+obj.originalFileName + "." + obj.ext);
-		
-		str += `<div class="col-4 col-lg-4 item pl-4 my-3">`;
-		
-		var originPath = fileCallPath;
-		
-		originPath = originPath.replace(new RegExp(/\\/g), "/");
-		
-		str += `<img src='/display?fileName=${originPath}' class="img-fluid">`;
-		str += `</div>`;
+			,
+			success : function(result) {
+				//console.log(result);
+				showUpFile(result);
+				uploadFiles = result;
 
-		/*
-		str += `<li><a href=\"javascript:showImage(\'"+originPath+"\')\">
-			<img src='/display?fileName="+ fileCallPath+ "'></a></li>`;*/
-		
-	});
-	
-	uploadUL.append(str);
-}
+			}
+		})
 
-function showImage(fileCallPath){
-	alert(fileCallPath);
-}
+		//console.log(files);
+		//location.reload();
+
+	};
+
+	function showUpFile(uploadResultArr) {
+
+		console.log(uploadResultArr);
+
+		if (!uploadResultArr || uploadResultArr.length == 0)
+			return;
+
+		var uploadUL = $('.uploadResult .row');
+
+		var str = "";
+
+		$(uploadResultArr)
+				.each(
+						function(i, obj) {
+
+							var savePath = obj.savePath.replaceAll("\\", "/")
+
+							var fileCallPath = encodeURIComponent(savePath
+									+ "/s_" + obj.saveName + "_"
+									+ obj.originalFileName + "." + obj.ext);
+
+							str += `<div class="col-4 col-lg-4 item pl-4 my-3">`;
+
+							var originPath = fileCallPath;
+
+							originPath = originPath.replace(new RegExp(/\\/g),
+									"/");
+
+							str += `<img src='/display?fileName=${originPath}' class="img-fluid">`;
+							str += `</div>`;
+
+							/*
+							str += `<li><a href=\"javascript:showImage(\'"+originPath+"\')\">
+								<img src='/display?fileName="+ fileCallPath+ "'></a></li>`;*/
+
+						});
+
+		uploadUL.append(str);
+	}
+
+	function showImage(fileCallPath) {
+		alert(fileCallPath);
+	}
 
 </script>
 

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="reportInfoFragment">
+
+<div class="modal-header">
+	<h1 class="modal-title fs-5 text-center" id="staticBackdropLabel">
+		<b>공사 보고 상세</b>
+	</h1>
+	<button type="button" class="btn-close" data-bs-dismiss="modal"
+		aria-label="Close"></button>
+</div>
+<div class="modal-body mx-3 my-3">
+	<form name="reportInfoForm">
+		<ul class="list-unstyled pl-3 mb-0">
+			<li class="mb-2 row form-group">
+			<div class="col-2 p-0 pl-3">
+					<strong class="text-black">제목</strong>
+				</div>
+				<div class="col p-0">
+					<p id="title"></p>
+				</div>
+				<div class="col-2 p-0">
+					<strong class="text-black">승인상태</strong>
+				</div>
+				<div class="col-2 p-0">
+					<p id="accessState"></p>
+				</div>
+				</li>
+				<li class="mb-2 row form-group">
+				
+				</li>
+			<li class="mb-2 row form-group"><div class="col-4 p-0 pl-3">
+					<strong class="text-black">공사 보고 유형</strong>
+				</div>
+				<div class="col p-0">
+					<p id="cttDivision"></p>
+				</div></li>
+			<li class="mb-2 row form-group"><div class="col-4 p-0 pl-3">
+					<strong class="text-black">공사 보고 일시</strong>
+				</div>
+				<div class="col p-0">
+					<p id="cttReportDt"></p>
+				</div></li>
+			<li>
+				<div class="form-floating pr-3"
+					style="margin-top: 30px; margin-bottom: 30px">
+					<textarea class="form-control" placeholder="Leave a comment here"
+						style="height: 100px" id="floatingTextarea" name="detailContent" readonly></textarea>
+					<label for="floatingTextarea"><b>상세 내용</b></label>
+				</div>
+			</li>
+			<li>
+				<p class="uploadTitle mt-5">첨부 이미지</p>
+				<div class="uploadResult bg-light">
+					<div class="row"></div>
+				</div>
+			</li>
+		</ul>
+	</form>
+</div>
+      <div class="modal-footer">
+		<button type="button" class="btn btn-primary" id="rpt_updateBtn">수정</button>
+		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">삭제</button>
+		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	  </div>
+
+
+</html>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yedam.app.doc.mapper.FileMapper">
+<mapper namespace="com.yedam.app.fie.mapper.FileMapper">
 
 	<!--파일 정보 DB 등록 -->
 	<insert id="insertFileInfo" parameterType="FileVO">
@@ -99,6 +99,40 @@
 	</select>
 	<!-- 파일 정보 조회 -->
 	
+	
+	<!-- 파일 정보 DB 등록 attr : 공사보고-->
+	<insert id="insertFileAttrRptInfo" statementType="CALLABLE"
+		parameterType="CttReportVO">
+		<selectKey keyProperty="fileId" resultType="Integer"
+			order="BEFORE">
+			SELECT SEQ_FILEID.NEXTVAL
+			FROM dual
+		</selectKey>
+		{CALL
+		insert_report_file(#{fileId}, #{cttReportNo})
+		}
+	</insert>
+	<!-- 파일 정보 DB 등록 attr -->
+	
+	
+	
+	<!-- 파일 정보 조회 : 공사보고 -->
+	<select id="selectRptFileList" resultType="FileVO">
+		SELECT
+		f.FILE_ID
+		, f.FILE_NO
+		, f.SAVE_PATH
+		, f.SAVE_NAME
+		, f.ORIGINAL_FILE_NAME
+		, f.EXT
+		, f.FILE_SIZE
+		, f.BOSS_TF
+		FROM file_detail_info f
+		join CTT_REPORT c
+		on c.file_id = f.file_id
+		WHERE c.CTT_REPORT_NO = #{cttReportNo}
+	</select>
+	<!-- 파일 정보 조회 -->
 	
 	
 	

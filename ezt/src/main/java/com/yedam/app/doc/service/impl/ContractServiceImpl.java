@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.mapper.ContractMapper;
-import com.yedam.app.doc.mapper.FileMapper;
 import com.yedam.app.doc.mapper.ProposalMapper;
 import com.yedam.app.doc.service.ContractDetailVO;
 import com.yedam.app.doc.service.ContractService;
@@ -16,6 +15,7 @@ import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.PartnershipContractVO;
 import com.yedam.app.doc.service.SignsVO;
 import com.yedam.app.doc.service.UnityContractVO;
+import com.yedam.app.fie.mapper.FileMapper;
 
 @Service
 public class ContractServiceImpl implements ContractService {

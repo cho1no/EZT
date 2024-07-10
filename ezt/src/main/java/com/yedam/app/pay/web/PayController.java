@@ -51,7 +51,7 @@ public class PayController {
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
 
-		return "doc/payment";
+		return "pay/payment";
 	}
 
 	@PostMapping("payment")
@@ -69,7 +69,7 @@ public class PayController {
 		PayVO pno = payService.payInfo(payVO);
 		model.addAttribute("pay", pno);
 		ContractVO contractVO = new ContractVO();
-		contractVO.setProposalNo(pno.getProposalNo());
+		contractVO.setContractNo(pno.getContractNo());
 		
 		// 계약서 정보 조회
 		ContractVO findVO = conService.conInfo(contractVO);
@@ -89,6 +89,6 @@ public class PayController {
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
 
-		return "doc/payInfo";
+		return "pay/payInfo";
 	}
 }

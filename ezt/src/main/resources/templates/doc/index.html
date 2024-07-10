@@ -21,9 +21,45 @@ canvas {
 	display: none;
 }
 
+.bigPictureWrapper{
+	position: absolute;
+	display: none;
+	justify-content : center;
+	align-items: center;
+	right:41%;
+	width:300px;
+	height:300px;
+	background-color:gray;
+	z-index:100;
+	background:rgba(233, 236, 239, 1);
+}
+
+.bigPicture{
+	position:relative;
+	display:flex;
+	justify-content : center;
+	align-items: center;
+}
+
+.bigPicture img{
+	width: 200px;
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+
+
+
+
 </style>
 </head>
 <body>
+<div class="bigPictureWrapper">
+	<div class="bigPicture">
+	
+	</div>
+</div>
+
+
 	<form method="post" action="" class="sigPad">
 
 		<ul class="sigNav">
@@ -41,13 +77,13 @@ canvas {
 	</form>
 
 	<!-- Button trigger modal -->
-	<button type="button" id="modalBtn" class="btn btn-primary"
-		data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-		Launch static backdrop modal</button>
+	<button type="button" id="reportBtn" class="btn btn-primary"
+		data-bs-toggle="modal" data-bs-target="#reportModal" >
+		modal</button>
 
 	<!-- Modal -->
-	<div class="z-3 modal fade" id="staticBackdrop" data-bs-backdrop="static"
-		tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="z-3 modal fade" id="reportModal" data-bs-backdrop="static"
+		tabindex="-1" aria-hidden="true">
 		<div
 			class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
@@ -56,6 +92,18 @@ canvas {
 		</div>
 	</div>
 
+<!-- Button trigger modal -->
+	<button type="button" id="reportInfoBtn" class="btn btn-primary"
+		data-bs-toggle="modal" data-bs-target="#reportInfoModal" >
+		modal</button>
+
+	<div class="z-3 modal fade" id="reportInfoModal" aria-hidden="true" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      	<scr th:insert="rpt/reportInfo :: reportInfoFragment"></scr>
+    </div>
+  </div>
+</div>
 
 
 	<script src="js/doc/jquery.signaturepad.js"></script>
@@ -123,12 +171,210 @@ canvas {
 
 				});
 		
-		$('#staticBackdrop').on('shown.bs.modal', function (e) {     
+		
+		// 모달
+		$('#reportModal').on('show.bs.modal', function (e) {     
 			$('.smoothscroll.scroll-top').attr('style', 'display:none');
+			$(this).find('form')[0].reset();
+			$('#reportModal select option').remove();
+			$('#reportModal select').append(`<option selected>유형 선택</option>`);
+			$('#reportModal input[name="uploadFile"]').val('');
+			$('#reportModal .uploadResult .row div').remove();
 		})
-		$('#staticBackdrop').on('hidden.bs.modal', function (e) {
+		$('#reportModal').on('hidden.bs.modal', function (e) {
 			$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
 		})
+		$('#reportInfoModal').on('show.bs.modal', function (e) {     
+			$('.smoothscroll.scroll-top').attr('style', 'display:none');
+		})
+		$('#reportInfoModal').on('hidden.bs.modal', function (e) {
+			$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
+			$(this).find('form')[0].reset();
+			$('#reportInfoModal .uploadResult .row div').remove();
+		})
+		
+		$('#reportBtn').on('click', function(e){
+			
+			
+			// 현재 년월일 표시
+			date = new Date();
+		    year = date.getFullYear();
+		    month = date.getMonth() + 1;
+		    day = date.getDate();
+			
+		    $('.cur_year').html(year + '-');
+		    $('.cur_month').html(month + '-');
+		    $('.cur_day').html(day);
+			
+			
+			
+			
+			
+			$.ajax({
+				url: '/rptInsert?contractNo=26',
+				type :'Get',
+					
+				success : function(result){
+				
+					for(i=0; i<result.divi.length; i++){
+						$('select').append(`<option>${result.divi[i]}</option>`);
+						
+						$('input[name="contractNo"]').val(result.contractNo);
+					}
+				}
+						
+			})
+		})
+		
+		
+			
+		$('#rpt_insertBtn').on('click', function(e){
+			console.log('rtp');
+			
+			
+			if($('select').val() !== '유형 선택'){
+				$('input[name=cttDivision]').val($('select').val());
+			}else{ 
+				$('input[name=cttDivision]').val(null);
+				}
+			
+			
+			
+			
+			// 폼 데이터 전송
+			var formData = new FormData(document.reportInsertForm);
+				
+			for (const pair of formData.entries()) {
+				console.log(pair[0], pair[1]);
+			}
+				
+			$.ajax({
+				url: '/rptInsertInfo',
+				processData : false,
+				contentType : false,
+				data : formData,
+				type :'Post',
+				dataType:'JSON'
+						
+				,success : function(result){
+					rptInfo(result)
+					
+				}
+			
+			})
+			
+		})
+		
+		function rptInfo(no){
+			
+			$.ajax({
+				url: '/rptInfo?CttReportNo=' + no,
+				type :'Get'
+						
+				,success : function(result){
+					
+					$('#reportModal').modal('hide');
+					
+					
+					
+					
+					console.log(result);
+					$('input[name="title"]').val(result.title);
+					if(result.accessState == 'N'){
+					$('input[name="accessState"]').val('미승인');
+					}else{
+						$('input[name="accessState"]').val('승인');
+					}
+					$('input[name="cttDivision"]').val(result.cttDivision);
+					$('textarea[name="detailContent"]').val(result.detailContent);
+
+					
+				}
+			
+			})
+			
+		}
+		
+		$('#reportInfoBtn').on('click', function(e){
+
+			
+			$.ajax({
+				url: '/rptInfo?CttReportNo=' + 6,
+				type :'Get'
+						
+				,success : function(result){
+					
+					$('#reportModal').modal('hide');
+					console.log(result);
+					$('#title').html(result.title);
+					if(result.accessState == 'N'){
+					$('#accessState').html('미승인');
+					}else{
+						$('#accessState').html('승인');
+					}
+					$('#cttDivision').html(result.cttDivision);
+					$('textarea[name="detailContent"]').val(result.detailContent);
+					$('#cttReportDt').html(result.cttReportDt.substring(0, 10));
+						var uploadUL = $('#reportInfoModal .uploadResult .row');
+
+						var str = "";
+					
+					result.fileList.forEach(e => {
+						console.log(e)
+						
+						
+						var savePath = e.savePath.replaceAll("\\", "/")
+
+						var fileCallPath = encodeURIComponent(savePath
+								+ "/s_" + e.saveName + "_"
+								+ e.originalFileName + "." + e.ext);
+
+						str += `<div class="col-4 col-lg-4 item pl-4 my-3">`;
+
+						var originPath = fileCallPath;
+
+						originPath = originPath.replace(new RegExp(/\\/g),
+								"/");
+
+						str += `<img src='/display?fileName=${originPath}' class="img-fluid">`;
+						str += `</div>`;
+						
+						
+					})
+					uploadUL.append(str);	
+					
+
+					
+				}
+			
+			})
+		})
+		
+
+		$('.uploadResult').on("click", "img", function(e){
+			var obj = e.target;
+			
+			console.log(e.target);
+			
+			showImage(e.target);
+			
+		})
+		
+		function showImage(img){
+			
+			$('.bigPictureWrapper').css("display", "flex").show();
+			$('.bigPicture').html(img);
+		}
+		
+		$('.bigPictureWrapper').on("click", function(e){
+			$('.bigPictureWrapper').hide();
+			$('#reportInfoModal .uploadResult .row div').append(e.target);
+		})
+		
+		/*
+		$('.modal').on('hidden.bs.modal', function (e) {
+                $(this).find('form')[0].reset();
+            });*/
 		
 	</script>
 	<script src="/js/doc/json2.min.js"></script>
