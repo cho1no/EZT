@@ -38,4 +38,7 @@ public interface TeamService {
 	
 	//신청자 반려하기(프로시저 이용)
 	public boolean updateMemberEnroll(MemberDenyVO memberDenyVO);
+	
+	//팀원 신청하기
+	public int insertMember(MemberEnrollVO memberEnrollVO);
 }

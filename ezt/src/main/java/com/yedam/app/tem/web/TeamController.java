@@ -158,4 +158,19 @@ public class TeamController {
     	return teamService.updateMemberEnroll(memberDenyVO);
     }
     
+
+    // 팀원 신청 등록 (GET)
+    @GetMapping("/memberInsert")
+    public String memberInsert(Model model) {
+        model.addAttribute("memberEnrollVO", new MemberEnrollVO());
+        return "team/teamRequestInfo";
+    }
+
+    // 팀원 신청 등록 (POST)
+    @PostMapping("/memberInsert")
+    public String memberInsert(MemberEnrollVO memberEnrollVO) {
+        teamService.insertMember(memberEnrollVO);
+        return "redirect:/team/requestInfo";
+    }
 }
+

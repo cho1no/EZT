@@ -96,6 +96,14 @@ public class TeamServiceImpl implements TeamService {
 		return teamMapper.updateMemberEnroll(memberDenyVO) == 1;
 	}
 
+	//팀원 신청하기
+	@Override
+	public int insertMember(MemberEnrollVO memberEnrollVO) {
+		int result = teamMapper.insertMember(memberEnrollVO);
+		return result == 1 ? memberEnrollVO.getTeamNo() : -1;
+		
+	}
+
 
 
 

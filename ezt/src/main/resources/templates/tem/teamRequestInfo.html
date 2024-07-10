@@ -79,7 +79,7 @@
                     </button>
                 </td>
                 <td th:unless="${#authentication.principal.userVO.usersNo == team.writer}">
-                	<button type="button" class="btnn" data-bs-toggle="modal" data-bs-target="#apply">신청하기</button>
+                	<button type="button" class="btnn" data-bs-toggle="modal" data-bs-target="#apply" onclick="openApplyModal('${twc.categoryCode}')">>신청하기</button>
                 </td>
             </tr>
         </th:block>
@@ -147,38 +147,38 @@
 
 <!-- 반려하기 Modal -->
 <div class="modal fade" id="deny" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalToggleLabel2">반려 사유 작성</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        	<input type="hidden"  id="enrollNo" name="enrollNo">
-        	<input type="hidden" id="writer" name="writer" th:value="${#authentication.principal.userVO.usersNo}">
-        	
-        <table class="table">
-        	<tbody>
-        		<tr>
-	        		<th>신청인</th>
-    	    		<td><input id="denyUser" class="border border-light" type="text" readonly ></td>
-        		</tr>
-        		<tr>
-	        		<th>반려사유</th>
-    	    		<td><textarea name="content"></textarea></td>
-        		</tr>
-        		<tr>
-        			<td colspan="2"><button id="denyBtn" class="btn btn-primary" >반려하기</button></td>
-        		</tr>
-        	</tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" data-bs-target="#volunteer" data-bs-toggle="modal" data-bs-dismiss="modal">뒤로가기</button>
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel2">반려 사유 작성</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="enrollNo" name="enrollNo">
+                <input type="hidden" id="writer" name="writer" th:value="${#authentication.principal.userVO.usersNo}">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>신청인</th>
+                            <td><input id="denyUser" class="border border-light" type="text" readonly></td>
+                        </tr>
+                        <tr>
+                            <th>반려사유</th>
+                            <td><textarea name="content"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><button id="denyBtn" class="btn btn-primary">반려하기</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-bs-target="#volunteer" data-bs-toggle="modal" data-bs-dismiss="modal">뒤로가기</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+
 
 <!-- 팀원 신청하기 Modal -->
 <div class="modal fade" id="apply" tabindex="-1" aria-labelledby="applyLabel" aria-hidden="true">
@@ -189,22 +189,28 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            	<table>
-            		<tbody>
-            			<tr>
-            				<th>신청인</th>
-            				<td><input type="text" readonly></td>
-            			</tr>
-            			<tr>
-            				<th>카테고리</th>
-            				<td><input type="text" readonly></td>
-            			</tr>
-            			<tr>
-            				<th>소개 작성</th>
-            				<td><textarea></textarea></td>
-            			</tr>
-            		</tbody>
-            	</table>
+                <form name="memberInsertForm" th:action="@{/memberInsert}" th:object="${memberEnrollVO}" method="post">
+                    <input type="hidden" th:field="*{teamNo}" th:value="${team.teamNo}">
+                    <input type="hidden" th:field="*{worker}" th:value="${#authentication.principal.userVO.usersNo}">
+
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>신청인</th>
+                                <td><input type="text" th:name="writer" th:value="${#authentication.principal.userVO.usersNo}" readonly></td>
+                            </tr>
+                            <tr>
+                                <th>카테고리</th>
+                                <td><input type="text" th:field="*{workCode}" readonly></td>
+                            </tr>
+                            <tr>
+                                <th>소개 작성</th>
+                                <td><textarea th:field="*{content}"></textarea></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="submit">신청하기</button>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

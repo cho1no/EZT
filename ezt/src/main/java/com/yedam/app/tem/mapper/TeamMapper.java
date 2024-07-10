@@ -45,4 +45,8 @@ public interface TeamMapper {
 	
 	//신청자 반려하기(프로시저 이용)
 	public int updateMemberEnroll(MemberDenyVO memberDenyVO);
+	
+	//팀원 신청하기
+	public int insertMember(MemberEnrollVO memberEnrollVO);
+	
 }

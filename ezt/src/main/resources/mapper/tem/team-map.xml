@@ -180,5 +180,33 @@
 		memberdeny(#{enrollNo},#{content},#{writer})
 	}
 </update>
+<!-- 팀원 신청하기 -->
+<insert id="insertMember" parameterType="MemberEnrollVO">
+	<selectKey keyProperty="enroll_no"
+				resultType="Integer"
+				order="BEFORE">
+	
+		SELECT seq_enroll.NEXTVAL
+		FROM dual			
+	</selectKey>
+	INSERT INTO memberEnroll
+		(
+			enroll_no
+			,worker
+			,content
+			,process_result
+			,work_code
+			,team_no
+		)
+	VALUES
+		(
+			#{enrollNo}
+			,#{worker}
+			,#{content}
+			,'A01'
+			,#{workCode}
+			,#{teamNo}
+		)
+</insert>
 
 </mapper>
