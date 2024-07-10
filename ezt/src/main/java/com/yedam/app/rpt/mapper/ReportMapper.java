@@ -16,5 +16,13 @@ public interface ReportMapper {
 	
 	// 공사 보고 조회
 	public CttReportVO selectCttInfo(@Param("cttReportNo")int cttReportNo);
+	
+	// 공사 보고 수정
+	public int updateCttInfo(CttReportVO cttReportVO);
+	
+	// 공사 보고 삭제
+	public int deleteCttInfo(@Param("fileId")int fileId);
+	
+	// 공사 보고 승인
 
 }

@@ -26,12 +26,12 @@ canvas {
 	display: none;
 	justify-content : center;
 	align-items: center;
-	right:41%;
-	width:300px;
-	height:300px;
-	background-color:gray;
+	right:38%;
+	width:400px;
+	height:400px;
 	z-index:100;
 	background:rgba(233, 236, 239, 1);
+	border:2px solid gray;
 }
 
 .bigPicture{
@@ -42,7 +42,8 @@ canvas {
 }
 
 .bigPicture img{
-	width: 200px;
+	width: 300px;
+	
 	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -172,6 +173,8 @@ canvas {
 				});
 		
 		
+		var modalData='';
+		
 		// 모달
 		$('#reportModal').on('show.bs.modal', function (e) {     
 			$('.smoothscroll.scroll-top').attr('style', 'display:none');
@@ -179,10 +182,12 @@ canvas {
 			$('#reportModal select option').remove();
 			$('#reportModal select').append(`<option selected>유형 선택</option>`);
 			$('#reportModal input[name="uploadFile"]').val('');
-			$('#reportModal .uploadResult .row div').remove();
+			$('.uploadResult .row div').remove();
 		})
 		$('#reportModal').on('hidden.bs.modal', function (e) {
 			$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
+			$('#reportModal .uploadResult .row div').remove();
+
 		})
 		$('#reportInfoModal').on('show.bs.modal', function (e) {     
 			$('.smoothscroll.scroll-top').attr('style', 'display:none');
@@ -190,7 +195,7 @@ canvas {
 		$('#reportInfoModal').on('hidden.bs.modal', function (e) {
 			$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
 			$(this).find('form')[0].reset();
-			$('#reportInfoModal .uploadResult .row div').remove();
+			$('.uploadResult .row div').remove();
 		})
 		
 		$('#reportBtn').on('click', function(e){
@@ -279,14 +284,44 @@ canvas {
 					
 					
 					console.log(result);
-					$('input[name="title"]').val(result.title);
+					$('#title').html(result.title);
 					if(result.accessState == 'N'){
-					$('input[name="accessState"]').val('미승인');
+					$('#accessState').html('미승인');
 					}else{
-						$('input[name="accessState"]').val('승인');
+						$('#accessState').html('승인');
 					}
-					$('input[name="cttDivision"]').val(result.cttDivision);
+					$('#cttDivision').html(result.cttDivision);
 					$('textarea[name="detailContent"]').val(result.detailContent);
+					$('#cttReportDt').html(result.cttReportDt.substring(0, 10));
+					
+					
+					var uploadUL = $('#reportInfoModal .uploadResult .row');
+
+					var str = "";
+				
+				result.fileList.forEach(e => {
+					console.log(e)
+					
+					
+					var savePath = e.savePath.replaceAll("\\", "/")
+
+					var fileCallPath = encodeURIComponent(savePath
+							+ "/s_" + e.saveName + "_"
+							+ e.originalFileName + "." + e.ext);
+
+					str += `<div class="col-4 col-lg-4 item pl-4 my-3">`;
+
+					var originPath = fileCallPath;
+
+					originPath = originPath.replace(new RegExp(/\\/g),
+							"/");
+
+					str += `<img src='/display?fileName=${originPath}' class="img-fluid">`;
+					str += `</div>`;
+					
+					
+				})
+				uploadUL.append(str);
 
 					
 				}
@@ -299,13 +334,19 @@ canvas {
 
 			
 			$.ajax({
-				url: '/rptInfo?CttReportNo=' + 6,
+				url: '/rptInfo?CttReportNo=' + 7,
 				type :'Get'
 						
 				,success : function(result){
 					
+					modalData = result;
+					
 					$('#reportModal').modal('hide');
 					console.log(result);
+					
+					$('input[name="cttReportNo"]').val(result.cttReportNo);
+					$('input[name="contractNo"]').val(result.contractNo);
+					
 					$('#title').html(result.title);
 					if(result.accessState == 'N'){
 					$('#accessState').html('미승인');
@@ -353,23 +394,109 @@ canvas {
 
 		$('.uploadResult').on("click", "img", function(e){
 			var obj = e.target;
-			
-			console.log(e.target);
-			
-			showImage(e.target);
+
+			var newobj = '';
+			newobj = obj.src.replace("s_", '');
+
+			showImage(newobj);
 			
 		})
 		
 		function showImage(img){
 			
 			$('.bigPictureWrapper').css("display", "flex").show();
-			$('.bigPicture').html(img);
+			$('.bigPicture').html(`<img src=${img}>`);
 		}
 		
 		$('.bigPictureWrapper').on("click", function(e){
 			$('.bigPictureWrapper').hide();
-			$('#reportInfoModal .uploadResult .row div').append(e.target);
 		})
+		
+		
+		$('#rpt_deleteBtn').on("click", function(e){
+	
+		$.ajax({
+			url: '/rptDelete',
+			type : 'post',
+			contentType : 'application/json',
+			data : JSON.stringify(modalData.fileList),
+			async : false
+		
+		})
+			location.href='/test';
+		})
+		
+		
+		$('#rpt_updateBtn').on('click', function(e){
+			
+			$.ajax({
+				url: '/rptInsert?contractNo=26',
+				type :'Get',
+					
+				success : function(result){
+				
+					for(i=0; i<result.divi.length; i++){
+						$('select').append(`<option>${result.divi[i]}</option>`);
+						
+						$('input[name="contractNo"]').val(result.contractNo);
+					}
+				}
+						
+			})
+			
+		})
+			$.ajax({
+				url: '/rptInfo?CttReportNo=' + 8,
+				type :'Get'
+						
+				,success : function(result){
+					
+					modalData = result;
+					
+					$('#reportModal').modal('hide');
+					console.log(result);
+					$('#title').html(result.title);
+					if(result.accessState == 'N'){
+					$('#accessState').html('미승인');
+					}else{
+						$('#accessState').html('승인');
+					}
+					$('#cttDivision').html(result.cttDivision);
+					$('textarea[name="detailContent"]').val(result.detailContent);
+					$('#cttReportDt').html(result.cttReportDt.substring(0, 10));
+						var uploadUL = $('#reportInfoModal .uploadResult .row');
+
+						var str = "";
+					
+					result.fileList.forEach(e => {
+						console.log(e)
+						
+						
+						var savePath = e.savePath.replaceAll("\\", "/")
+
+						var fileCallPath = encodeURIComponent(savePath
+								+ "/s_" + e.saveName + "_"
+								+ e.originalFileName + "." + e.ext);
+
+						str += `<div class="col-4 col-lg-4 item pl-4 my-3">`;
+
+						var originPath = fileCallPath;
+
+						originPath = originPath.replace(new RegExp(/\\/g),
+								"/");
+
+						str += `<img src='/display?fileName=${originPath}' class="img-fluid">`;
+						str += `</div>`;
+						
+						
+					})
+					uploadUL.append(str);	
+			
+			
+			
+				}
+			})
+		
 		
 		/*
 		$('.modal').on('hidden.bs.modal', function (e) {
