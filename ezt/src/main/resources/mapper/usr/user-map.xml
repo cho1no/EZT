@@ -148,10 +148,10 @@
 			  c.rn > (#{pageNum} -1 ) * #{amount}
 		]]>
 	</select>
-	
+	<!-- 회원 탈퇴 -->
 	<update id="updateUserState" parameterType="UserVO">
 		UPDATE users
-		SET users_state = quit
+		SET users_state = 'quit'
 		WHERE users_id = #{usersId}
 	</update>
 	

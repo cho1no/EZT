@@ -64,8 +64,10 @@ form span{
 			console.log(re);
 			Swal.fire({
 				text:'변경완료!',
-				icon: 'success'
+				icon: 'success',
+				showConfirmButton: false,
 			})
+			setTimeout(()=>window.location.href="/user/info", 1000);
 		})
 		.fail(err => console.log(err));
 	};

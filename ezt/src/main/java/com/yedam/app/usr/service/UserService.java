@@ -24,7 +24,7 @@ public interface UserService {
 	public List<RequestVO> userReqList(UserReqCriteria cri);
 
 	//회원탈퇴 (상태 수정)
-	public boolean userStateUpdate(UserVO userVO);
+	public int userStateUpdate(UserVO userVO);
 	
 	
 	//전체 리뷰 데이터 갯수
