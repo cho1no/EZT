@@ -34,4 +34,8 @@ public interface TeamService {
 	
 	//카테고리 별 신청자 조회
 	public List<MemberEnrollVO> volunteerList(MemberEnrollVO memberEnrollVO);
+	
+	
+	//신청자 반려하기(프로시저 이용)
+	public boolean updateMemberEnroll(MemberDenyVO memberDenyVO);
 }

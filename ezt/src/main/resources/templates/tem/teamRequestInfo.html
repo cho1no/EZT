@@ -69,7 +69,7 @@
                 <td>
                     <button type="button" class="btnn"
                             data-bs-toggle="modal" data-bs-target="#volunteer"
-                            th:attr="data-meteamNo=${twc.teamNo}, data-meWorkCode=${twc.categoryCode}">
+                            th:attr="onclick=|openModal('${twc.teamNo}', '${twc.categoryCode}' )|">
                         신청자 확인하기
                     </button>
                     <button type="button" class="btnn deUpdate deUpBtn">수정</button>
@@ -86,7 +86,7 @@
 <button type="button" class="btn btn-primary"
         th:onclick="|location.href='@{/team/requestDelete(teamNo=${team.teamNo})}'|">삭제
 </button>
-<!-- Modal -->
+<!-- 카테고리 별 신청자 확인 Modal -->
 <div class="modal fade" id="volunteer" tabindex="-1" aria-labelledby="volunteerLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -95,18 +95,44 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+            	<p>카테고리  : </p>
+            <div class="row">
+            	<div class="col">
                 <table class="table">
                     <thead>
                         <tr>
                             <th>순번</th>
                             <th>신청인명</th>
                             <th>경력</th>
-                            <th colspan="2"></th>
                         </tr>
                     </thead>
                     <tbody id="volunteerBody">
+                    	
                     </tbody>
                 </table>
+            	</div>
+            	<div class="col">
+            		<table class="table">
+            		<tbody>
+            			<tr>
+            				<th>신청인</th>
+            				<td id="worker"></td>
+            			</tr>
+            			<tr>
+            				<th>내용</th>
+            				<td id="content"></td>
+            			</tr>
+            			<tr>
+	            			<td colspan="2">
+	            				<button class="btn btn-primary" >정보보기</button>
+	            				<button class="btn btn-primary">추가하기</button>
+	            				<button data-bs-toggle="modal" data-bs-target="#deny" class="btn btn-primary">반려하기</button>
+	            			</td>
+            			</tr>
+            		</tbody>
+            		</table>
+            	</div>
+            </div>	
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -115,7 +141,44 @@
     </div>
 </div>
 
-<script src="/js/tem/temModal.js"></script>
+<!-- 반려하기 Modal -->
+<div class="modal fade" id="deny" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel2">반려 사유 작성</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        	<input type="hidden"  id="enrollNo" name="enrollNo">
+        	<input id="writer" name="writer" th:value="${#authentication.principal.userVO.usersNo}">
+        	
+        <table class="table">
+        	<tbody>
+        		<tr>
+	        		<th>신청인</th>
+    	    		<td><input id="denyUser" class="border border-light" type="text" readonly ></td>
+        		</tr>
+        		<tr>
+	        		<th>반려사유</th>
+    	    		<td><textarea name="content"></textarea></td>
+        		</tr>
+        		<tr>
+        			<td colspan="2"><button id="denyBtn" class="btn btn-primary" >반려하기</button></td>
+        		</tr>
+        	</tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-target="#volunteer" data-bs-toggle="modal" data-bs-dismiss="modal">뒤로가기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <script src="/js/tem/temRequestUpdate.js"></script>
+<script src="/js/tem/teamModal.js"></script>
 </body>
 </html>

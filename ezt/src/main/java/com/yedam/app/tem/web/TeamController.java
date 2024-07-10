@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.tem.service.MemberDenyVO;
 import com.yedam.app.tem.service.MemberEnrollVO;
 import com.yedam.app.tem.service.TeamService;
 import com.yedam.app.tem.service.TeamVO;
@@ -48,21 +49,26 @@ public class TeamController {
         TeamVO findVO = teamService.teamInfo(teamVO);
         model.addAttribute("team", findVO);
         
-        //카테고리별 지원자 조회
-        List<MemberEnrollVO> enrollList = teamService.volunteerList(memberEnrollVO);
-        model.addAttribute("enrollList", enrollList);
-        
         // 공통 코드
         model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
         
         return "tem/teamRequestInfo";
     }
 
+    //카테고리별 지원자 전체조회
+    @GetMapping("/volunteerList")
+    @ResponseBody
+    public List<MemberEnrollVO> volunteerList(Model model, MemberEnrollVO meVO) {
+    	return teamService.volunteerList(meVO);
+    }
     // 팀 신청 등록 페이지
     @GetMapping("/requestInsert")
-    public String teamRequestInsert(Model model) {
+    public String teamRequestInsert(Model model, TeamVO teamVO) {
         model.addAttribute("team", new TeamVO());
         model.addAttribute("twc", new TeamWorkCategoryVO());
+        
+        model.addAttribute("contractNo",teamVO.getContractNo()) ;
+        
         // 공통 코드
         model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
 
@@ -138,4 +144,18 @@ public class TeamController {
         teamService.deleteCategory(twcVO);
         return "tem/teamRequestInfo";
     }
+    //신청자 반려
+    @GetMapping("/memberDeny")
+    public String memberDeny(Model model) {
+    	model.addAttribute("deny", new MemberDenyVO());
+    	
+    	return "team/teamRequestInfo";
+    }
+    
+    @PostMapping("/memberDeny")
+    @ResponseBody
+    public boolean memberDeny(MemberDenyVO memberDenyVO) {
+    	return teamService.updateMemberEnroll(memberDenyVO);
+    }
+    
 }

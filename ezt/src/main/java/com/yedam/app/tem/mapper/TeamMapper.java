@@ -3,6 +3,7 @@ package com.yedam.app.tem.mapper;
 import java.util.List;
 
 import com.yedam.app.req.service.Criteria;
+import com.yedam.app.tem.service.MemberDenyVO;
 import com.yedam.app.tem.service.MemberEnrollVO;
 import com.yedam.app.tem.service.TeamVO;
 import com.yedam.app.tem.service.TeamWorkCategoryVO;
@@ -40,4 +41,8 @@ public interface TeamMapper {
 	
 	//카테고리별 신청자 조회
 	public List<MemberEnrollVO> volunteerList(MemberEnrollVO memberEnrollVO);
+	
+	
+	//신청자 반려하기(프로시저 이용)
+	public int updateMemberEnroll(MemberDenyVO memberDenyVO);
 }
