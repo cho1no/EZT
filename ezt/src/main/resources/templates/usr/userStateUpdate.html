@@ -9,37 +9,65 @@
 
 </head>
 <body>
-<div >
-<h1>EZT 회원 탈퇴약관</h1>
-<h5>
-EZT 회원(이하 "회원")을 탈퇴하기 전에 반드시 읽어 주십시오.
-<hr>
+<div>
+  <h3>EZT 회원 탈퇴약관</h3>
+  <h5>이지테리어 회원(이하 "회원")을 탈퇴하기 전에 반드시 읽어 주십시오.</h5>
 
-본 약관은 EAZY INTERIOR(이하 “당사”)가 EZT 회원(이하 “회원”)의 탈퇴에 관한 모든 조건을 규정한 것입니다.<hr>
-회원탈퇴를 하실 경우에는 아래의 내용에 동의하신 것으로 간주됩니다.<hr>
+  <h5>본 약관은 이지테리어(이하 “당사”)가 당사 회원(이하 “회원”)의 탈퇴에 관한 모든 조건을 규정한 것입니다.</h5>
+  <h5>회원탈퇴를 하실 경우에는 아래의 내용에 동의하신 것으로 간주됩니다.</h5>
 
-탈퇴 후에는 당사가 운영하는 모든 웹사이트에서 제공하는 회원 대상 서비스를 이용하실 수 없습니다.<hr>
+  <h5>탈퇴 후에는 당사가 운영하는 모든 웹사이트에서 제공하는 회원 대상 서비스를 이용하실 수 없습니다.</h5>
 
-탈퇴 후에도 카드결제 등으로 발생한 이용요금 지불책임은 이행해야 합니다.<hr>
+  <h5>탈퇴 후에도 카드결제 등으로 발생한 이용요금 지불책임은 이행해야 합니다.</h5>
 
-회원 탈퇴 수속이 수리된 후에도 회원정보에 대해서는 당사가 관리하게 됩니다.<hr>
+  <h5>회원 탈퇴 수속이 수리된 후에도 회원정보에 대해서는 당사가 관리하게 됩니다.</h5>
 
-탈퇴 후에 회원정보를 삭제하는 경우도 있으므로 양해해 주십시오.</h5>
-<h3><strong>
-<input style="width:25px; height:25px;"type="checkBox">회원탈퇴 시 유의사항을 모두 확인하였으며, 모두 동의합니다.
-</strong></h3>
-<div class="col-md-12">
-	<input type="button" value="탈퇴하기" id="userQuitBtn"
-		class="btn px-8 btn-primary text-white" style="float: right">
-</div>
+  <h5>탈퇴 후에 회원정보를 삭제하는 경우도 있으므로 양해해 주십시오.</h5>
+
+  <h4><strong>
+    <input style="width:25px; height:25px;"type="checkBox" id="checking">
+    <label for="checking">회원탈퇴 시 유의사항을 모두 확인하였으며, 모두 동의합니다.</label>
+  </strong></h4>
+  <div class="col-md-12">
+    <form th:action="@{/user/quit}" th:object="${userVO}" method="post" name="userStateUpdate">
+      <input type="hidden" th:field="${userVO.usersId}">
+      <input type="button" value="탈퇴하기" id="userQuitBtn"
+        class="btn px-8 btn-primary text-white" style="float: right">
+    </form>
+  </div>
 </div>
 </body>
 <script>
 	$('#userQuitBtn').on('click', function(){
+		if($('#checking').is(':checked') == false){
+			Swal.fire({
+				text:'체크항목은 필수사항입니다.',
+				icon:'warning'
+			})
+			return ;
+		}
+			
 		Swal.fire({
-			text: '되겠냐?',
-			icon: 'warning'
-		})
+			text: '탈퇴하시겠습니까?',
+			icon: 'warning',
+			showCancelButton : true,
+			confirmButtonText: '예',
+			cancelButtonText: '아니오'
+		}).then(result => {
+            if (result.isConfirmed) {
+  				$(userStateUpdate).submit();
+            	Swal.fire({
+            		text:'탈퇴되었습니다.',
+            		showConfirmButton : false
+            	})
+            	setTimeout(()=>
+                location.href = "/main", 1200
+            			)
+            } else if (result.isDismissed) {
+                return;
+            }
+
+        })
 	})
 </script>
 

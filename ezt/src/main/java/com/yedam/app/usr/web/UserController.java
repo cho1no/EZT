@@ -62,11 +62,11 @@ public class UserController {
 	//정보수정 기능 
 	@PostMapping("/update")
 	@ResponseBody
-	public Map<String, Object> userUpdate(@RequestBody UserVO userVO, @AuthenticationPrincipal LoginUserVO vo){
-		Map<String, Object> result = userService.updateUser(userVO);
+	public String userUpdate(@RequestBody UserVO userVO, @AuthenticationPrincipal LoginUserVO vo){
+		userService.updateUser(userVO);
 		UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
 		vo.setUserVO(uvo);
-		return result;
+		return "redirect: /user/info";
 	}
 
 	//비밀번호 변경 -페이지
@@ -122,15 +122,19 @@ public class UserController {
 	//사용자 탈퇴 (상태 수정) 페이지
 	@GetMapping("/quit")
 	public String userStateUpdateForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
-		model.addAttribute("userId", vo.getUserVO());
+		model.addAttribute("userVO", vo.getUserVO());
 		return "usr/userStateUpdate";
 	}
 	
 	//사용자 탈퇴 기능 (상태 수정)
 	@PostMapping("/quit")
-	@ResponseBody
-	public boolean userStateUpdate(@RequestBody UserVO userVO) {
-		//userService.userStateUpdate(userVO);
-		return userService.userStateUpdate(userVO);
+	public String userStateUpdate(UserVO userVO,  @AuthenticationPrincipal LoginUserVO vo, Model model) {
+		userService.userStateUpdate(userVO);
+		
+		UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
+		vo.setUserVO(uvo);
+		model.addAttribute("msg", "탈퇴됨!");
+	    model.addAttribute("url", "/main");
+		return "gongtong/message";
 	}
 }

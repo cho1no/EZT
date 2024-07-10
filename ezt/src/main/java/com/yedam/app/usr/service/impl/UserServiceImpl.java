@@ -66,8 +66,8 @@ public class UserServiceImpl implements UserService{
 
 	//회원탈퇴(상태 수정)
 	@Override
-	public boolean userStateUpdate(UserVO userVO) {
-		return userMapper.updateUserState(userVO) == 1;
+	public int userStateUpdate(UserVO userVO) {
+		return userMapper.updateUserState(userVO);
 	}
 	
 	//후기 목록 페이징()
