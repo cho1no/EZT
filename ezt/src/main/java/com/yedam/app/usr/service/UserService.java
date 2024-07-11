@@ -8,6 +8,7 @@ import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 
 public interface UserService {
+	
 	//사용자 정보조회
 	public UserVO userInfo(String id);
 	

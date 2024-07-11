@@ -350,24 +350,24 @@ form span {
 		var uploadFile = $('#uploadFile').val();
 		
 		if(lName == ''){
-			$('#juminChk').text('자격증이름을 입력해주세요.');
-			$('#juminChk').addClass('error');
+			$('#lName').text('자격증이름을 입력해주세요.');
+			$('#lName').addClass('error');
 			return false;
 		}
 		if(lNo == ''){
-			$('#juminChk').text('자격증번호를 입력해주세요.');
-			$('#juminChk').addClass('error');
+			$('#lNo').text('자격증번호를 입력해주세요.');
+			$('#lNo').addClass('error');
 			return false;
 		}
 		if(getDt == ''){
-			$('#juminChk').text('취득일자를 입력해주세요.');
-			$('#juminChk').addClass('error');
+			$('#getDt').text('취득일자를 입력해주세요.');
+			$('#getDt').addClass('error');
 			return false;
 		}
 		
 		if(ChkCenter == ''){
-			$('#juminChk').text('발급기관을 입력해주세요.');
-			$('#juminChk').addClass('error');
+			$('#lChkCenter').text('발급기관을 입력해주세요.');
+			$('#lChkCenter').addClass('error');
 			return false;
 		}
 		
@@ -375,13 +375,11 @@ form span {
 		    url: "/api/techCheck/" + lNo,
 		    type: "GET",
 		    success: function (response) {
-		    	body: 
-			    {
-			      items: {
-			        result: false
-			      }
-			      totalCount: 1
-			    }
+		    	if(response.items.result == true){
+		    		console.log("어케했노");
+		    	} else {
+		    		console.log("ㅋㅋ");
+		    	}
 			  header: {
 			    resultCode: "00"
 			    resultMsg: "NORMAL SERICE"
