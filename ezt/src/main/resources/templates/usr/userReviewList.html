@@ -8,7 +8,27 @@
 <title>사용자 마이페이지</title>
 </head>
 <body>
-<h1>후기 목록</h1>
+  <div class="d-flex mb-3">
+  <div class="me-auto p-2">
+  <h1>후기 목록</h1>
+  </div>
+  <div class="p-2">
+    <select id="categoryCategory">
+    	<option value="">전체</option>
+		<option th:each="cate : ${categoryCode}" th:value="${cate.codeName}">
+			[[${cate.codeName}]]
+		</option>    
+    </select>
+  </div>
+  <div class="p-2">
+     <select id="regionCategory">
+    	<option value="">전체</option>
+		<option th:each="region : ${regionCode}" th:value="${region.codeName}">
+			[[${region.codeName}]]
+		</option>    
+    </select>
+  </div>
+  </div>
   <th:block th:each="review : ${reviewList}">
     <div class="list-group">
 	  <a th:href="@{/review/info(reviewNo=${review.reviewNo})}" class="list-group-item list-group-item-action m-2" aria-current="true">
@@ -46,7 +66,21 @@
 // });
 // var position = $('#pagination').position();
 // $(window).scrollTop(position.top - 10);
-
+	const urlParams = new URL(location.href).searchParams;
+	
+	const cate =  urlParams.get('type') == null ? '' : urlParams.get('type');
+	const region =  urlParams.get('keyword') == null ? '' : urlParams.get('keyword');
+	const pageNum = urlParams.get('pageNum') == null ? '1' : urlParams.get('pageNum');
+	$('#categoryCategory').val(cate);
+	$('#regionCategory').val(region);
+	
+	$('#categoryCategory').on('change', (ev)=>{
+		location.href="/user/revList?pageNum=" + pageNum + "&type=" + ev.target.value + "&keyword=" + region; 
+	});
+	$('#regionCategory').on('change', (ev)=>{
+		location.href="/user/revList?pageNum=" + pageNum + "&type=" + cate + "&keyword=" + ev.target.value; 
+	});
+	
 </script>  
 </body>
 </html>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.alm.web.StompAlarmController;
 import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewService;
@@ -93,6 +94,12 @@ public class UserController {
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
 		model.addAttribute("regionCode", commonCodeService.selectCommonCodeAll("0B"));		
 		cri.setWriter(vo.getUserVO().getUsersNo());
+		if (cri.getKeyword() == null) {
+			cri.setKeyword("");
+		}
+		if (cri.getType() == null) {
+			cri.setType("");
+		}
 		List<ReviewVO> list = userService.userReviewList(cri);
 		model.addAttribute("reviewList", list);
 		//페이징

@@ -120,6 +120,14 @@
 					  WHERE re.writer = #{writer}
 					  ORDER BY re.write_dt desc 
 					  ) a 
+			<where>
+				<if test="type != ''.toString">
+					AND category_code = #{type}
+				</if>
+				<if test="keyword != ''.toString">
+					AND region_code = #{keyword}
+				</if>
+			</where>
 			  ) c
 		 <![CDATA[
 		 WHERE c.rn <= #{pageNum} * #{amount} AND
