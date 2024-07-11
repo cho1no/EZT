@@ -79,7 +79,8 @@ public class reportController {
 	
 	// 공사 보고 수정
 	@PostMapping("rptUpdate")
-	public ResponseEntity<String> rptUpdate(MultipartFile[] uploadFile, CttReportVO cttReportVO) {
+	@ResponseBody
+	public CttReportVO rptUpdate(MultipartFile[] uploadFile, CttReportVO cttReportVO) {
 		// DB 파일 삭제
 		List<FileVO> fileList = reportService.fileSelect(cttReportVO);
 		if(!fileList.isEmpty()) {
@@ -97,9 +98,16 @@ public class reportController {
 				cttReportVO.setFileList(list);
 			}
 		}
-		reportService.reportUpdate(cttReportVO);
+		int no = reportService.reportUpdate(cttReportVO);
 		
-		return new ResponseEntity<>("update", HttpStatus.OK);
+		CttReportVO cvo = new CttReportVO();
+		
+		if(no > -1 ) {
+			cvo = reportService.reportSelect(cttReportVO.getCttReportNo());
+		}
+		
+		
+		return cvo;
 	}
 	
 	
