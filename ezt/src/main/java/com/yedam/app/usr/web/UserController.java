@@ -1,7 +1,6 @@
 package com.yedam.app.usr.web;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.alm.web.StompAlarmController;
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
@@ -44,6 +44,8 @@ public class UserController {
 	
 	@Autowired
 	UserMapper userMapper;
+	
+	@Autowired StompAlarmController sac;
 	
 	//정보조회
 	@GetMapping("/info")
