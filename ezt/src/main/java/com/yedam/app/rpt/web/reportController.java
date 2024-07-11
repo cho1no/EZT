@@ -39,7 +39,7 @@ public class reportController {
 	ReportService reportService;
 	
 	// 공사 보고 유형 값 조회
-	@GetMapping("rptInsert")
+	@GetMapping("rptDivi")
 	@ResponseBody
 	public HashMap<String, Object> rptInsert(ContractVO contractVO, Model model
 			   , @AuthenticationPrincipal LoginUserVO user) {

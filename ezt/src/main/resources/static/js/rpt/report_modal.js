@@ -17,6 +17,20 @@ function checkExtentsion(fileName, fileSize) {
 	return true;
 }
 
+
+// 현재 년월일 표시
+
+function currentDay() {
+	date = new Date();
+	year = date.getFullYear();
+	month = date.getMonth() + 1;
+	day = date.getDate();
+
+	$('.cur_year').html(year + '-');
+	$('.cur_month').html(month + '-');
+	$('.cur_day').html(day);
+}
+
 // 모달
 $('#reportModal').on('show.bs.modal', function(e) {
 	$('.smoothscroll.scroll-top').attr('style', 'display:none');
@@ -24,20 +38,18 @@ $('#reportModal').on('show.bs.modal', function(e) {
 	$('#reportModal select option').remove();
 	$('#reportModal select').append(`<option selected>유형 선택</option>`);
 	$('#reportModal input[name="uploadFile"]').val('');
-	$('.uploadResult .row div').remove();
 })
-$('#reportModal').on('hidden.bs.modal', function(e) {
+$('#reportModal').on('hide.bs.modal', function(e) {
 	$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
 	$('#reportModal .uploadResult .row div').remove();
-
 })
 $('#reportInfoModal').on('show.bs.modal', function(e) {
 	$('.smoothscroll.scroll-top').attr('style', 'display:none');
 })
-$('#reportInfoModal').on('hidden.bs.modal', function(e) {
+$('#reportInfoModal').on('hide.bs.modal', function(e) {
 	$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
 	$(this).find('form')[0].reset();
-	$('.uploadResult .row div').remove();
+	$('#reportInfoModal .uploadResult .row div').remove();
 })
 
 var modalData = '';
@@ -156,28 +168,22 @@ function showUpFile(uploadResultArr) {
 
 
 function reportInsertForm(no) {
-	// 현재 년월일 표시
-	date = new Date();
-	year = date.getFullYear();
-	month = date.getMonth() + 1;
-	day = date.getDate();
 
-	$('.cur_year').html(year + '-');
-	$('.cur_month').html(month + '-');
-	$('.cur_day').html(day);
+	$('#reportModal').modal('show');
+
+	currentDay();
 
 
 	$.ajax({
-		url: '/rptInsert?contractNo=' + no,
+		url: '/rptDivi?contractNo=' + no,
 		type: 'Get',
 
 		success: function(result) {
 
 			for (i = 0; i < result.divi.length; i++) {
 				$('select').append(`<option>${result.divi[i]}</option>`);
-
-				$('input[name="contractNo"]').val(result.contractNo);
 			}
+				$('input[name="contractNo"]').val(result.contractNo);
 		}
 
 	})
@@ -265,7 +271,7 @@ function rptInfo(no) {
 
 function reportInfoForm(no) {
 
-console.log('lor');
+	$('#reportInfoModal').modal('show')
 
 	$.ajax({
 		url: '/rptInfo?CttReportNo=' + no,
@@ -280,6 +286,7 @@ console.log('lor');
 
 			$('input[name="cttReportNo"]').val(result.cttReportNo);
 			$('input[name="contractNo"]').val(result.contractNo);
+			$('input[name="fileId"]').val(result.fileId);
 
 			$('#title').html(result.title);
 
@@ -362,7 +369,7 @@ $('#rpt_deleteBtn').on("click", function(e) {
 $('#rpt_updateBtn').on('click', function(e) {
 
 	$.ajax({
-		url: '/rptInsert?contractNo=26',
+		url: '/rptDivi?contractNo=' + $('input[name="contractNo"]').val(),
 		type: 'Get',
 
 		success: function(result) {
@@ -370,58 +377,98 @@ $('#rpt_updateBtn').on('click', function(e) {
 			for (i = 0; i < result.divi.length; i++) {
 				$('select').append(`<option>${result.divi[i]}</option>`);
 
-				$('input[name="contractNo"]').val(result.contractNo);
 			}
-		}
+				$('input[name="contractNo"]').val(result.contractNo);
 
+			$.ajax({
+				url: '/rptInfo?CttReportNo=' + $('input[name="cttReportNo"]').val(),
+				type: 'Get'
+
+				, success: function(result) {
+
+					modalData = result;
+
+					currentDay();
+
+					$('#reportInfoModal').modal('hide');
+					$('input[name="cttReportNo"]').val(result.cttReportNo);
+					$('input[name="fileId"]').val(result.fileId);
+					$('input[name="title"]').val(result.title);
+					$('textarea[name="detailContent"]').val(result.detailContent);
+					$('input[name="cttReportDt"]').html(result.cttReportDt.substring(0, 10));
+					
+					$('select option:eq(0)').removeAttr('selected');
+					
+					for(i=0; i<$('option').length; i++){
+						if($('option:eq('+i+')').html() === result.cttDivision){
+							$('option:eq('+i+')').attr('selected', 'selected');
+						}
+					}
+
+					var uploadUL = $('#reportModal .uploadResult .row');
+
+					var str = "";
+
+					result.fileList.forEach(e => {
+
+						var savePath = e.savePath.replaceAll("\\", "/")
+
+						var fileCallPath = encodeURIComponent(savePath
+							+ "/s_" + e.saveName + "_"
+							+ e.originalFileName + "." + e.ext);
+
+						str += `<div class="col-4 col-lg-4 item pl-4 my-3">`;
+
+						var originPath = fileCallPath;
+
+						originPath = originPath.replace(new RegExp(/\\/g),
+							"/");
+
+						str += `<img src='/display?fileName=${originPath}' class="img-fluid">`;
+						str += `</div>`;
+
+					})
+					uploadUL.append(str);
+					
+					$('.modal-footer button:eq(0)').html('수정');
+					$('.modal-footer button:eq(0)').removeAttr('onClick');
+					$('.modal-footer button:eq(0)').attr('onClick', 'reportUpdateAction()');
+					$('h1 b').html('공사 보고 수정');
+					
+				}
+
+			})
+		}
 	})
-
+	
 })
-$.ajax({
-	url: '/rptInfo?CttReportNo=' + 8,
-	type: 'Get'
 
-	, success: function(result) {
-
-		modalData = result;
-
-		$('#reportModal').modal('hide');
-		console.log(result);
-		$('#title').html(result.title);
-		if (result.accessState == 'N') {
-			$('#accessState').html('미승인');
-		} else {
-			$('#accessState').html('승인');
-		}
-		$('#cttDivision').html(result.cttDivision);
-		$('textarea[name="detailContent"]').val(result.detailContent);
-		$('#cttReportDt').html(result.cttReportDt.substring(0, 10));
-		var uploadUL = $('#reportInfoModal .uploadResult .row');
-
-		var str = "";
-
-		result.fileList.forEach(e => {
-			console.log(e)
-
-
-			var savePath = e.savePath.replaceAll("\\", "/")
-
-			var fileCallPath = encodeURIComponent(savePath
-				+ "/s_" + e.saveName + "_"
-				+ e.originalFileName + "." + e.ext);
-
-			str += `<div class="col-4 col-lg-4 item pl-4 my-3">`;
-
-			var originPath = fileCallPath;
-
-			originPath = originPath.replace(new RegExp(/\\/g),
-				"/");
-
-			str += `<img src='/display?fileName=${originPath}' class="img-fluid">`;
-			str += `</div>`;
-
-		})
-		uploadUL.append(str);
-
+function reportUpdateAction(){
+	if ($('select').val() !== '유형 선택') {
+		$('input[name=cttDivision]').val($('select').val());
+	} else {
+		$('input[name=cttDivision]').val(null);
 	}
-})
+
+	// 폼 데이터 전송
+	var formData = new FormData(document.reportInsertForm);
+
+	for (const pair of formData.entries()) {
+		console.log(pair[0], pair[1]);
+	}
+
+	$.ajax({
+		url: '/rptUpdate',
+		processData: false,
+		contentType: false,
+		data: formData,
+		type: 'Post',
+		dataType: 'JSON'
+
+		, success: function(result) {
+			rptInfo($('input[name="cttReportNo"]').val());
+
+		}
+	})
+	
+}

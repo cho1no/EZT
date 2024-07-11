@@ -57,7 +57,7 @@
 			TITLE = #{title}
 			, DETAIL_CONTENT = #{detailContent}
 			, CTT_DIVISION = #{cttDivision}
-			, CTT_REPORT_DT	= #{cttReportDt}
+			, CTT_REPORT_DT	= sysdate
 		WHERE CTT_REPORT_NO = #{cttReportNo}
 	</update>
 	<!-- 공사 보고 수정 -->
