@@ -78,9 +78,8 @@ canvas {
 	</form>
 
 	<!-- Button trigger modal -->
-	<button type="button" id="reportBtn" class="btn btn-primary"
-		data-bs-toggle="modal" data-bs-target="#reportModal" onClick="reportInsertForm(26)">
-		modal</button>
+	<button type="button" id="reportBtn" class="btn btn-primary" onClick="window.reportInsertForm(26)">
+		등록 modal</button>
 
 	<!-- Modal -->
 	<div class="z-3 modal fade" id="reportModal" data-bs-backdrop="static"
@@ -94,9 +93,8 @@ canvas {
 	</div>
 
 <!-- Button trigger modal -->
-	<button type="button" id="reportInfoBtn" class="btn btn-primary"
-		data-bs-toggle="modal" data-bs-target="#reportInfoModal" onClick="reportInfoForm(7)">
-		modal</button>
+	<button type="button" id="reportInfoBtn" class="btn btn-primary" onClick="window.reportInfoForm(7)">
+		상세 modal</button>
 
 	<div class="z-3 modal fade" id="reportInfoModal" aria-hidden="true" tabindex="-1" data-bs-backdrop="static">
   <div class="modal-dialog modal-dialog-centered">
@@ -173,7 +171,10 @@ canvas {
 				});
 		
 		
-		
+		function reportInfoForm(no) {
+
+				
+			}
 		
 		
 		
@@ -195,11 +196,6 @@ canvas {
 		
 		
 		
-		$('#reportInfoBtn').on('click', function(e){
-
-			
-			
-		})
 		
 
 		

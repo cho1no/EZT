@@ -20,7 +20,9 @@
 	<form name="reportInsertForm">
 		<ul class="list-unstyled mb-0">
 			<li class="mb-2 row form-group"><div class="col-4">
-					<input type="hidden" class="form-control" name="contractNo">
+					<input type="hidden" name="cttReportNo">
+					<input type="hidden" name="contractNo">
+					<input type="hidden" name="fileId">
 					<strong class="text-black">제목</strong>
 				</div>
 				<div class="col">
@@ -52,13 +54,13 @@
 				</div>
 			</li>
 			<li>
-				<p class="uploadTitle mt-5">첨부 이미지 업로드(최대 5장)</p>
+				<p class="uploadTitle mt-3">첨부 이미지 업로드(최대 5장)</p>
 				<div class="uploadDiv">
 					<label for="multiFile">파일찾기</label> <input type="file"
 						multiple="multiple" name="uploadFile" id="multiFile"
 						onChange="fileList()" onClick="fileUploadClick()">
 				</div>
-				<div class="uploadResult bg-light">
+				<div class="uploadResult bg-light mt-3">
 					<div class="row"></div>
 				</div>
 			</li>
