@@ -19,6 +19,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { fDateTime } from 'src/utils/format-time';
 
 import Scrollbar from 'src/components/scrollbar';
+import Spinner from 'src/components/spinner/spinner';
 
 import ContractTableRow from '../contract-table-row';
 import ContractTableHead from '../contract-table-head';
@@ -48,6 +49,8 @@ export default function ContractPage() {
 
   const [contractInfo, setContractInfo] = useState({});
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {}, [contractInfo]);
 
   useEffect(() => {
@@ -69,6 +72,7 @@ export default function ContractPage() {
             basicContractTf: _.basicContractTf,
           }))
         );
+        setLoading(false);
       })
       .catch(() => {});
   };
@@ -158,6 +162,10 @@ export default function ContractPage() {
     position: 'relative',
     display: contractInfo.contractsState === '회원 탈퇴' ? 'none' : '',
   };
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <>

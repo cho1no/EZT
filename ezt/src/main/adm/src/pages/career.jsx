@@ -9,7 +9,7 @@ export default function CareerPage() {
   return (
     <>
       <Helmet>
-        <title> 경력 인증 관리 </title>
+        <title> 경력 인증 관리 | EZT </title>
       </Helmet>
 
       <CareerView />

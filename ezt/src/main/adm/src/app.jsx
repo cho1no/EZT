@@ -1,7 +1,7 @@
 /* eslint-disable perfectionist/sort-imports */
 import 'src/global.css';
 import { lazy, useState, useEffect, createContext } from 'react';
-
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { useScrollToTop } from 'src/hooks/use-scroll-to-top';
 
 // eslint-disable-next-line import/no-cycle
@@ -56,8 +56,9 @@ export default function App() {
     return <Page404 />;
   }
   if (!isAuthenticated) {
-    return <div>인증중 ...</div>;
+    return <div>인증 중 ...</div>;
   }
+
   return (
     <MyContext.Provider value={myInfo}>
       <ThemeProvider>

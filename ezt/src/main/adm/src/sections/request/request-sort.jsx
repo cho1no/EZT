@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
@@ -15,9 +16,9 @@ const SORT_OPTIONS = [
   { value: 'oldest', label: '오래된순' },
 ];
 
-export default function ShopProductSort() {
+export default function ShopProductSort({ data, setData }) {
   const [open, setOpen] = useState(null);
-
+  const [selectedSort, setSelectedSort] = useState('newest');
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -25,7 +26,17 @@ export default function ShopProductSort() {
   const handleClose = () => {
     setOpen(null);
   };
-
+  const handleSortChange = (value) => {
+    setSelectedSort(value);
+    setOpen(null);
+    let sortedData;
+    if (value === 'newest') {
+      sortedData = [...data].sort((a, b) => new Date(b.writeDt) - new Date(a.writeDt));
+    } else if (value === 'oldest') {
+      sortedData = [...data].sort((a, b) => new Date(a.writeDt) - new Date(b.writeDt));
+    }
+    setData(sortedData);
+  };
   return (
     <>
       <Button
@@ -36,7 +47,7 @@ export default function ShopProductSort() {
       >
         정렬 :&nbsp;
         <Typography component="span" variant="subtitle2" sx={{ color: 'text.secondary' }}>
-          최신순
+          {SORT_OPTIONS.find((option) => option.value === selectedSort).label}
         </Typography>
       </Button>
 
@@ -57,7 +68,11 @@ export default function ShopProductSort() {
         }}
       >
         {SORT_OPTIONS.map((option) => (
-          <MenuItem key={option.value} selected={option.value === 'newest'} onClick={handleClose}>
+          <MenuItem
+            key={option.value}
+            selected={option.value === selectedSort}
+            onClick={() => handleSortChange(option.value)}
+          >
             {option.label}
           </MenuItem>
         ))}
@@ -65,3 +80,7 @@ export default function ShopProductSort() {
     </>
   );
 }
+ShopProductSort.propTypes = {
+  data: PropTypes.any,
+  setData: PropTypes.func,
+};

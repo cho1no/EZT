@@ -16,6 +16,7 @@ import TablePagination from '@mui/material/TablePagination';
 import { fDateTime } from 'src/utils/format-time';
 
 import Scrollbar from 'src/components/scrollbar';
+import Spinner from 'src/components/spinner/spinner';
 
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
@@ -42,7 +43,11 @@ export default function UserPage() {
   const [open, setOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
+
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {}, [userInfo]);
+
   useEffect(() => {
     getUsers();
   }, []);
@@ -63,9 +68,11 @@ export default function UserPage() {
             usersStateNm: _.usersStateNm,
           }))
         );
+        setLoading(false);
       })
       .catch(() => {});
   };
+
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -73,19 +80,23 @@ export default function UserPage() {
       setOrderBy(id);
     }
   };
+
   // modal open
   const handleOpen = async (userNo) => {
     setOpen(true);
     const resp = await axios.get(`/adm/userInfo/${userNo}`);
     setUserInfo(resp.data);
   };
+
   // modal close
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
   const setUserPause = async (uno) => {
     await axios
       .get(`adm/userPause/${uno}`)
@@ -95,6 +106,7 @@ export default function UserPage() {
       })
       .catch();
   };
+
   const setUserActive = async (uno) => {
     await axios
       .get(`adm/userActive/${uno}`)
@@ -104,6 +116,7 @@ export default function UserPage() {
       })
       .catch();
   };
+
   const handleChangeRowsPerPage = (event) => {
     setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -135,6 +148,11 @@ export default function UserPage() {
     }
     return '관리자';
   }
+
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
     <>
       <Container>

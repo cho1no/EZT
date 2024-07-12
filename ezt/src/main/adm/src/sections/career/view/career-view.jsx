@@ -20,6 +20,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { fDateTime } from 'src/utils/format-time';
 
 import Scrollbar from 'src/components/scrollbar';
+import Spinner from 'src/components/spinner/spinner';
 
 // eslint-disable-next-line import/no-cycle
 import { MyContext } from '../../../app';
@@ -53,6 +54,8 @@ export default function CareerPage() {
 
   const [denyReason, setDenyReason] = useState('');
 
+  const [loading, setLoading] = useState(true);
+
   const myInfo = useContext(MyContext);
 
   useEffect(() => {}, [careerInfo]);
@@ -79,6 +82,7 @@ export default function CareerPage() {
             writeDt: _.writeDt,
           }))
         );
+        setLoading(false);
       })
       .catch(() => {});
   };
@@ -189,6 +193,11 @@ export default function CareerPage() {
       </Grid>
     );
   }
+
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
     <>
       <Container>
