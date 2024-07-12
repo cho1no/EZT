@@ -40,9 +40,7 @@ export default function UserTableRow({
       <TableCell>{phone}</TableCell>
       <TableCell>{fDateTime(joinDt, 'yy/MM/dd hh:mm')}</TableCell>
 
-      <TableCell>
-        {{ ROLE_USER: '일반 유저', ROLE_WORKER: '작업자', ROLE_ADMIN: '관리자' }[role]}
-      </TableCell>
+      <TableCell>{role}</TableCell>
 
       <TableCell align="center">
         <Label color={{ active: 'success', pause: 'warning', quit: 'error' }[state]}>

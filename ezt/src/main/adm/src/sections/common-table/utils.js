@@ -38,7 +38,7 @@ export function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export function applyFilter({ inputData, comparator, filterName }) {
+export function applyFilter({ inputData, comparator, filterName, filters }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -50,8 +50,21 @@ export function applyFilter({ inputData, comparator, filterName }) {
   inputData = stabilizedThis.map((el) => el[0]);
 
   if (filterName) {
-    inputData = inputData.filter(
-      (user) => user.title.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+    inputData = inputData.filter((data) =>
+      filters.some((key) => {
+        if (!data[key]) return false;
+        if (typeof data[key] === 'number') {
+          return data[key] === parseFloat(filterName); // 숫자로 검색
+        }
+        // eslint-disable-next-line no-restricted-globals
+        if (typeof value === 'string' && !isNaN(Date.parse(data[key]))) {
+          // Date comparison
+          const filterDate = new Date(filterName);
+          const dataDate = new Date(data[key]);
+          return dataDate.getTime() === filterDate.getTime();
+        }
+        return data[key].toLowerCase().includes(filterName.toLowerCase());
+      })
     );
   }
 

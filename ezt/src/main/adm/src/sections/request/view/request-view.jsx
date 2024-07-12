@@ -16,12 +16,12 @@ import RequestFilters from '../request-filters';
 // ----------------------------------------------------------------------
 
 export const NoData = () => (
-  <Grid xs="12">
+  <Grid mt={5}>
     <Typography align="center" variant="h5" paragraph>
       필터 결과 없음
     </Typography>
     <Typography align="center" variant="body1" paragraph>
-      조건에 해당하는 결과가 없습니다. 다른 검색 조건을 시도해 보세요.
+      조건에 해당하는 결과가 없습니다. 다른 조건을 시도해 보세요.
     </Typography>
   </Grid>
 );
@@ -89,8 +89,8 @@ export default function RequestView() {
             <RequestCard request={request} />
           </Grid>
         ))}
-        {notFound && <NoData />}
       </Grid>
+      {notFound && <NoData />}
     </Container>
   );
 }

@@ -25,6 +25,7 @@ import TableNoData from '../../common-table/table-no-data';
 import TableEmptyRows from '../../common-table/table-empty-rows';
 import { style, boxStyle, contentStyle } from '../../common-table/css';
 import { emptyRows, applyFilter, getComparator } from '../../common-table/utils';
+
 // ----------------------------------------------------------------------
 
 export default function UserPage() {
@@ -51,23 +52,12 @@ export default function UserPage() {
   useEffect(() => {
     getUsers();
   }, []);
+
   const getUsers = async () => {
     await axios
       .get('/adm/usersInfo')
       .then((resp) => {
-        setUsers(
-          [...resp.data].map((_, index) => ({
-            usersNo: _.usersNo,
-            usersName: _.usersName ? _.usersName : '이름 없음',
-            usersEmail: _.usersEmail ? _.usersEmail : '이메일 없음',
-            usersId: _.usersId,
-            usersPhone: _.usersPhone ? _.usersPhone : '전화번호 없음',
-            usersJoinDt: _.usersJoinDt,
-            usersRole: _.usersRole,
-            usersState: _.usersState,
-            usersStateNm: _.usersStateNm,
-          }))
-        );
+        setUsers(resp.data);
         setLoading(false);
       })
       .catch(() => {});
@@ -131,6 +121,7 @@ export default function UserPage() {
     inputData: users,
     comparator: getComparator(order, orderBy),
     filterName,
+    filters: ['usersName', 'usersEmail', 'usersId', 'usersStateNm', 'usersRole', 'usersPhone'],
   });
 
   const notFound = !dataFiltered.length && !!filterName;
@@ -201,7 +192,7 @@ export default function UserPage() {
                     emptyRows={emptyRows(page, rowsPerPage, users.length)}
                   />
 
-                  {notFound && <TableNoData query={filterName} />}
+                  {notFound && <TableNoData query={filterName} colSpan={7} />}
                 </TableBody>
               </Table>
             </TableContainer>

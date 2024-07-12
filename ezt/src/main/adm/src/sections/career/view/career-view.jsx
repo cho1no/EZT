@@ -59,6 +59,9 @@ export default function CareerPage() {
   const myInfo = useContext(MyContext);
 
   useEffect(() => {}, [careerInfo]);
+  useEffect(() => {
+    console.log('second', career);
+  }, [career]);
 
   useEffect(() => {
     getCareer();
@@ -68,18 +71,11 @@ export default function CareerPage() {
     await axios
       .get('/adm/careersInfo')
       .then((resp) => {
+        console.log('first', resp.data);
         setCareer(
           [...resp.data].map((_, index) => ({
-            careerNo: _.careerNo,
-            usersNo: _.usersNo,
-            usersName: _.usersName,
-            careerInfo: _.careerInfo,
-            careerStartDt: _.careerStartDt,
-            careerEndDt: _.careerEndDt,
-            fileId: _.fileId,
-            careerAccessTf: _.careerAccessTf,
-            careerAccessTfNm: _.careerAccessTfNm,
-            writeDt: _.writeDt,
+            no: resp.data.length - index,
+            ..._,
           }))
         );
         setLoading(false);
@@ -171,6 +167,7 @@ export default function CareerPage() {
     inputData: career,
     comparator: getComparator(order, orderBy),
     filterName,
+    filters: ['careerNo', 'usersName', 'careerInfo', 'careerAccessTfNm'],
   });
   const notFound = !dataFiltered.length && !!filterName;
   // eslint-disable-next-line react/no-unstable-nested-components
@@ -226,7 +223,7 @@ export default function CareerPage() {
                     .map((row) => (
                       <CareerTableRow
                         key={row.careerNo}
-                        careerNo={row.careerNo}
+                        careerNo={row.no}
                         usersName={row.usersName}
                         careerInfo={row.careerInfo}
                         careerAccessTf={row.careerAccessTf}
@@ -241,7 +238,7 @@ export default function CareerPage() {
                     emptyRows={emptyRows(page, rowsPerPage, career.length)}
                   />
 
-                  {notFound && <TableNoData query={filterName} />}
+                  {notFound && <TableNoData query={filterName} colSpan={5} />}
                 </TableBody>
               </Table>
             </TableContainer>
