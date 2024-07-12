@@ -1,6 +1,7 @@
 package com.yedam.app.usr.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -32,8 +33,10 @@ public interface UserMapper {
 	//사용자정보 수정
 	public int updateUserInfo(UserVO userVO);
 	
+	//비밀번호 조회
+	public String selectEncPw(int usersNo);
 	//비밀번호 변경
-	public int updateUserPw(UserVO userVO);
+	public int updatePw(Map<String, Object> paramMap);
 	
 	//사용자 후기목록
 	public List<ReviewVO> selectUserRvwList(UserRvwCriteria cri);

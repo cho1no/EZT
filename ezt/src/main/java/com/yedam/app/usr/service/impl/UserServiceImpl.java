@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.yedam.app.alm.web.StompAlarmController;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.usr.mapper.UserMapper;
@@ -26,6 +26,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	UserMapper userMapper;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder; 
 
 	@Override
 	public UserVO userInfo(String id) {
@@ -47,10 +50,26 @@ public class UserServiceImpl implements UserService{
 		return map;
 	}
 
+	//비밀번호 조회
+	@Override
+	public String selectEncPw(int usersNo) {
+		return userMapper.selectEncPw(usersNo);
+	}
+	
 	//비밀번호 변경
 	@Override
-	public boolean updateUserPw(UserVO userVO) {
-		return userMapper.updateUserPw(userVO) == 1;
+	public int updatePw(Map<String, Object> paramMap) {
+		// DB의 현재회원 비밀번호 조회
+		String encPw = userMapper.selectEncPw((int)paramMap.get("usersNo"));
+		
+		//현재 비밀번호 검증
+		if(passwordEncoder.matches((String)paramMap.get("currentPw"), encPw)){
+			//새로운 비밀번호 암호화
+			paramMap.put("usersNewPw", passwordEncoder.encode((String)paramMap.get("usersNewPw") ));
+			return userMapper.updatePw(paramMap);
+		}
+		//비밀번호가 일치하지 않는경우
+		return 0;
 	}
 
 	//후기목록
