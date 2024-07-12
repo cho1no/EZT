@@ -86,11 +86,16 @@ public class reportController {
 		if(!fileList.isEmpty()) {
 			try {
 				fileService.deleteFile(fileList);
+				List<FileVO> sFileVO = new ArrayList<FileVO>();
+				for(FileVO file : fileList) {
+					file.setSaveName("s_" + file.getSaveName());
+					sFileVO.add(file);
+				}
+				fileService.deleteFile(sFileVO);
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
 		}
-		
 		// 수정
 		if (uploadFile != null  && uploadFile.length > 0) {
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
@@ -99,7 +104,6 @@ public class reportController {
 			}
 		}
 		int no = reportService.reportUpdate(cttReportVO);
-		
 		CttReportVO cvo = new CttReportVO();
 		
 		if(no > -1 ) {
