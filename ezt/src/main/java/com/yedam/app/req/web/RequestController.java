@@ -3,6 +3,7 @@ package com.yedam.app.req.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.PageDTO;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
+import com.yedam.app.sgi.service.LoginUserVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,7 +52,8 @@ public class RequestController {
 	public String requestInfo(RequestVO requestVO,
 			                  ContractVO contractVO,
 			                  ProposalVO proposalVO,
-			                  Model model) {
+			                  Model model,
+			                  @AuthenticationPrincipal LoginUserVO user) {
 
 		//의뢰 단건조회
 		RequestVO findVO = requestService.requestInfo(requestVO);
@@ -74,6 +77,11 @@ public class RequestController {
 		model.addAttribute("cttReports", requestService.cttReportList(requestVO.getRequestNo()));
 		// 팀원 조회
 		model.addAttribute("members", requestService.memberList(requestVO.getRequestNo()));
+		
+		// 로그인 중 유저 번호
+		if(user != null) {
+		model.addAttribute("userNo", user.getUserNo());
+		}
 		return "req/requestInfo";
 	}
 

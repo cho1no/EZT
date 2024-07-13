@@ -7,6 +7,10 @@
 >
   <head>
     <meta charset="UTF-8" />
+    
+    <!-- 공사 보고  -->
+    <link rel="stylesheet" href="/css/rpt/reportModal.css">
+    
     <style>
       form input:read-only,
       form select:read-only {
@@ -46,6 +50,14 @@
           display: none;
         }
       }
+      
+      
+      .input_warning{
+		position:absolute;
+		display:flex;
+		font-size: 14px;
+		color: red;
+	  }
     </style>
     <title>의뢰 상세페이지</title>
   </head>
@@ -418,7 +430,7 @@
           <h4>공사보고</h4>
         </div>
         <div>
-          <button type="button" class="btn btn-secondary">
+          <button type="button" class="btn btn-secondary" th:onClick="'window.reportInsertForm(' + ${contract.contractNo} + ')'">
             공사 보고 작성
           </button>
         </div>
@@ -432,7 +444,7 @@
           <th>승인상태</th>
         </tr>
         <th:block th:each="cttReport : ${cttReports}">
-          <tr>
+          <tr th:onClick="'window.reportInfoForm(' + ${cttReport.cttReportNo} + ')'">
             <td>[[${cttReport.cttReportNo}]]</td>
             <td>[[${cttReport.title}]]</td>
             <td>[[${cttReport.cttDivision}]]</td>
@@ -453,10 +465,41 @@
         뒤로가기
       </button>
     </div>
+    
+    
+    <!-- 공사 보고 원본 이미지 -->
+    <div class="bigPictureWrapper">
+		<div class="bigPicture img-thumbnail" ></div>
+	</div>
+    
+    <!-- 공사 보고 Modal -->
+	<div class="z-3 modal fade" id="reportModal" data-bs-backdrop="static"
+		tabindex="-1" aria-hidden="true">
+		<div
+			class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<scr th:insert="rpt/report :: reportFragment"></scr>
+			</div>
+		</div>
+	</div>
+
+	<div class="z-3 modal fade" id="reportInfoModal" aria-hidden="true" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      	<scr th:insert="rpt/reportInfo :: reportInfoFragment"></scr>
+    </div>
+  </div>
+</div>
+    
+    
     <!-- 계약서 -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script src="/js/doc/postcode.js"></script>
     <script src="/js/req/requestUpdate.js"></script>
+    
+    <!-- 공사 보고  -->
+    <script type="text/javascript" th:src="@{/js/rpt/report_modal.js}"></script>
+     
     <script th:inline="javascript">
       var swiper = new Swiper(".slide-content", {
         slidesPerView: 1,
@@ -481,6 +524,12 @@
           },
         },
       });
+      
+      // 공사 보고에 넘겨야 하는 변수
+      if(/*[[${userNo}]]*/"" != null){
+      var user = /*[[${userNo}]]*/"";
+      }
+      var rno = /*[[${request.requestNo}]]*/"";
     </script>
   </body>
 </html>
