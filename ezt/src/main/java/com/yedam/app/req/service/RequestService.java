@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
+import com.yedam.app.rpt.service.CttReportVO;
+import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.usr.service.UserVO;
 
 public interface RequestService {
@@ -23,6 +25,10 @@ public interface RequestService {
 	public List<ProposalVO> proposalList(ProposalVO proposalVO);
 	//계약서 조회
 	public ContractVO contractInfo(ContractVO contractVO);
+	// 공사 보고 조회
+	public List<CttReportVO> cttReportList(int requestNo);
+	// 팀원 조회
+	public List<MemberVO> memberList(int requestNo);
 	//전체 데이터 갯수
 	public int getTotal(Criteria cri);
 }

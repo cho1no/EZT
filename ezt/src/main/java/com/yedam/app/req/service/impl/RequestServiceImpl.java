@@ -11,6 +11,8 @@ import com.yedam.app.req.mapper.RequestMapper;
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
+import com.yedam.app.rpt.service.CttReportVO;
+import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.usr.service.UserVO;
 
 @Service
@@ -77,12 +79,21 @@ public class RequestServiceImpl implements RequestService {
 		
 		return requestMapper.selectContract(contractVO);
 	}
-	
+	// 공사보고 전체조회
+	@Override
+	public List<CttReportVO> cttReportList(int requestNo) {
+		return requestMapper.selectCttReport(requestNo);
+	}
+	@Override
+	public List<MemberVO> memberList(int requestNo) {
+		return requestMapper.selectMembers(requestNo);
+	}
 	//전체 페이지 수
 	@Override
 	public int getTotal(Criteria cri) {
 		return requestMapper.getTotalCount(cri);
 	}
+
 
 	
 

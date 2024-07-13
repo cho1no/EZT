@@ -1,255 +1,486 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
-
-<head>
-<style>
-    input, textarea {
-        background-color: #eee;
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{common/layouts/default_layout}"
+  layout:fragment="Content"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      form input:read-only,
+      form select:read-only {
         border: none;
-    }
-    .input {
-        width: 400px;
-    }
-    .img {
-        width: 130px;
-        height: 130px;
-        margin: 5px 5px 0 5px;
-    }
-    .col {
-        margin: 10px 20px 0 20px;
-        background-color: #eee;
-    }
-    .table {
-        margin: 20px;
-    }
-    .table td{
-        background-color: #eee;
-    }
-    .table th{
-   		background-color: #eee;
-    	width:150px;
-    }
-    h4 {
-        margin: 10px;
-    }
-    h3 {
-        margin-top: 20px;
-    }
-    .btnn {
-        background: transparent;
-        border: none;
-        font-size: 15px;
-        margin: 3px;
-        width: 80px;
-    }
-</style>
-<script src="https://kit.fontawesome.com/fdebdddca5.js" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<meta charset="UTF-8">
-<title>의뢰 상세페이지</title>
-</head>
-<body>
+        background-color: rgba(255, 255, 255, 255) !important;
+      }
 
+      .slide-container {
+        width: 100%;
+      }
 
-<form name="infoForm" th:object="${request}">
+      .swiper-navBtn {
+        color: #89ba16;
+        transition: color 0.3s ease;
+      }
+      .swiper-navBtn:hover {
+        color: #7ba714;
+      }
+      .swiper-navBtn::before,
+      .swiper-navBtn::after {
+        font-size: 38px;
+      }
+
+      .swiper-pagination-bullet {
+        background-color: #89ba16;
+        opacity: 1;
+      }
+      .swiper-pagination-bullet-active {
+        background-color: #7ba714;
+      }
+
+      @media screen and (max-width: 768px) {
+        .slide-content {
+          margin: 0 10px;
+        }
+        .swiper-navBtn {
+          display: none;
+        }
+      }
+    </style>
+    <title>의뢰 상세페이지</title>
+  </head>
+  <body>
+    <!-- 의뢰상세 -->
     <div class="row">
-        <div class="col-lg-6 col-md-12">
-            <h3>의뢰 상세 정보</h3>
-            
-            <table id="info" class="table">
-                <tr style="display:none">
-                    <th>글 번호</th>
-                    <td><input type="hidden" th:value="${request.requestNo}" name="requestNo"/></td>
-                </tr>
-                <tr>
-                    <td><h4>의뢰 내용</h4></td>
-                    <td><button type="button" class="btn btn-secondary upBtn update">수정</button></td>
-                    <td><button type="button" class="btn btn-secondary delBtn" th:onclick="|location.href='@{/request/delete(requestNo=${request.requestNo})}'|">삭제</button></td>
-                </tr>
-                <tr>
-                    <th>의뢰자명</th>
-                    <td colspan="2">[[${request.usersName}]]</td>
-                </tr>    
-                <tr>
-                    <th>시공분야</th>
-                    <td colspan="2">
-                    <select th:field="*{categoryCode}" disabled>
-                        <option th:each="category :${categoryCode}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
-                    </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>희망 공사일정</th>
-                    <td colspan="2"><input type="text" style="width:90px" readonly name="hopeCttStartDt" placeholder="yyyy-MM-dd" th:value="${#dates.format(request.hopeCttStartDt, 'yyyy-MM-dd')}" /> ~
-                    <input type="text" name="hopeCttEndDt" placeholder="yyyy-MM-dd" th:value="${#dates.format(request.hopeCttEndDt, 'yyyy-MM-dd')}" readonly /></td>
-                </tr>
-                <tr>
-                    <th>희망 시공예산</th>
-                    <td colspan="2"><input type="text" name="hopeCttBudget" th:value="${request.hopeCttBudget}" readonly /></td>
-                </tr>
-                <tr>
-                    <th>시공 공간</th>
-                    <td colspan="2">
-                    <select th:field="*{cttPlace}" disabled>
-                        <option th:each="category :${cttPlace}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
-                    </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>시공 공간상황</th>
-                    <td colspan="2">
-                    <select th:field="*{cttPlaceSituation}" disabled>
-                        <option th:each="category :${cttPlaceSituation}" th:value="${category.codeNo}" th:text="${category.codeName}"></option>
-                    </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>시공 공간면적</th>
-                    <td colspan="2"><input type="text" style="text-align:right; width:50px;" name="cttPlaceArea" th:value="|${request.cttPlaceArea}|" readonly />평</td>
-                </tr>
-                <tr>
-                    <th>상세내용</th>
-                    <td colspan="2"> <textarea class="input" name="content" th:text="${request.content}" readonly></textarea> </td>
-                </tr>
-            </table>
+      <form name="infoForm" th:object="${request}" class="row">
+        <div class="d-flex mb-3">
+          <h3 class="me-auto p-2">의뢰 상세 정보</h3>
+          <div class="p-2">
+            <button type="button" class="btn btn-secondary upBtn update">
+              수정
+            </button>
+          </div>
+          <div class="p-2">
+            <button
+              type="button"
+              class="btn btn-secondary delBtn"
+              th:onclick="|location.href='@{/request/delete(requestNo=${request.requestNo})}'|"
+            >
+              삭제
+            </button>
+          </div>
         </div>
         <div class="col-lg-6 col-md-12">
-            <h4>주소</h4>
-            <table class="table">
-	            <tr>
-	                <th>우편번호</th>
-	                <td><input name="postcode" type="text" id="input_postcode" th:value="${request.postcode}" readonly ></td>
-	                <td><button type="button" style="display:none" class="btn btn-secondary postcode" onclick="input_execDaumPostcode()">우편번호 찾기</button></td>
-	            </tr>
-	            <tr>
-	                <th>주소</th>
-	                <td colspan="2"><input name="address" class="input" type="text" id="input_addr" th:value="${request.address}" readonly ></td>
-	            </tr>
-	            <tr>
-	                <th>상세주소</th>    
-	                <td colspan="2"><input name="detailAddress" class="input" type="text" id="input_detailAddr" th:value="${request.detailAddress}" readonly ></td>
-	            </tr>    
-            </table>
-           	<h4>첨부파일</h4>
-           		<img class="img" th:each="img :${request.fileVO}" th:src="@{'/images/req/' + ${img.saveName} + '.' + ${img.ext}}">
+          <div class="slide-container swiper">
+            <div class="slide-content">
+              <div class="card-wrapper swiper-wrapper">
+                <th:block th:each="img :${request.fileVO}">
+                  <div class="card swiper-slide">
+                    <img
+                      class="img"
+                      th:src="@{'/images/req/' + ${img.saveName} + '.' + ${img.ext}}"
+                    />
+                  </div>
+                </th:block>
+              </div>
+              <div class="swiper-button-next swiper-navBtn"></div>
+              <div class="swiper-button-prev swiper-navBtn"></div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
         </div>
-    </div>
-</form>
-<div>
-    <table class="table">
-        <tr>
-            <td colspan="6"><h4>견적서</h4></td>
-            <td>
-                <select style="float: right">
-                    <option value="price">총금액 낮은 순</option>
-                    <option value="period">공사기간 짧은 순</option>
+        <div class="col-lg-6 col-md-12">
+          <table id="info" class="table">
+            <tr style="display: none">
+              <th>글 번호</th>
+              <td>
+                <input
+                  class="form-control"
+                  type="hidden"
+                  th:value="${request.requestNo}"
+                  name="requestNo"
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <th>의뢰자명</th>
+              <td>[[${request.usersName}]]</td>
+            </tr>
+            <tr>
+              <th>시공분야</th>
+              <td>
+                <select class="form-select" th:field="*{categoryCode}" disabled>
+                  <option
+                    th:each="category :${categoryCode}"
+                    th:value="${category.codeNo}"
+                    th:text="${category.codeName}"
+                  ></option>
                 </select>
-            </td>
-        </tr>
+              </td>
+            </tr>
+            <tr>
+              <th>희망 공사일정</th>
+              <td class="align-items-center">
+                <input
+                  class="form-control col-5"
+                  type="text"
+                  readonly
+                  name="hopeCttStartDt"
+                  placeholder="yyyy-MM-dd"
+                  th:value="${#dates.format(request.hopeCttStartDt, 'yyyy-MM-dd')}"
+                />
+                <span>~</span>
+                <input
+                  class="form-control col-5"
+                  type="text"
+                  name="hopeCttEndDt"
+                  placeholder="yyyy-MM-dd"
+                  th:value="${#dates.format(request.hopeCttEndDt, 'yyyy-MM-dd')}"
+                  readonly
+                />
+              </td>
+            </tr>
+            <tr>
+              <th>희망 시공예산</th>
+              <td>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="hopeCttBudget"
+                  th:value="${request.hopeCttBudget}"
+                  readonly
+                />
+              </td>
+            </tr>
+            <tr>
+              <th>우편번호</th>
+              <td>
+                <input
+                  class="form-control"
+                  name="postcode"
+                  type="text"
+                  id="input_postcode"
+                  th:value="${request.postcode}"
+                  readonly
+                />
+                <button
+                  type="button"
+                  style="display: none"
+                  class="btn btn-secondary postcode"
+                  onclick="input_execDaumPostcode()"
+                >
+                  우편번호 찾기
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <th>주소</th>
+              <td>
+                <input
+                  name="address"
+                  class="input form-control"
+                  type="text"
+                  id="input_addr"
+                  th:value="${request.address}"
+                  readonly
+                />
+              </td>
+            </tr>
+            <tr>
+              <th>상세주소</th>
+              <td>
+                <input
+                  name="detailAddress"
+                  class="input form-control"
+                  type="text"
+                  id="input_detailAddr"
+                  th:value="${request.detailAddress}"
+                  readonly
+                />
+              </td>
+            </tr>
+            <tr>
+              <th>시공 공간</th>
+              <td>
+                <select class="form-select" th:field="*{cttPlace}" disabled>
+                  <option
+                    th:each="category :${cttPlace}"
+                    th:value="${category.codeNo}"
+                    th:text="${category.codeName}"
+                  ></option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>시공 공간상황</th>
+              <td>
+                <select
+                  class="form-select"
+                  th:field="*{cttPlaceSituation}"
+                  disabled
+                >
+                  <option
+                    th:each="category :${cttPlaceSituation}"
+                    th:value="${category.codeNo}"
+                    th:text="${category.codeName}"
+                  ></option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>시공 공간면적</th>
+              <td>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="cttPlaceArea"
+                  th:value="|${request.cttPlaceArea}|"
+                  readonly
+                />평
+              </td>
+            </tr>
+            <tr>
+              <th>상세내용</th>
+              <td>
+                <textarea
+                  class="input form-control"
+                  name="content"
+                  th:text="${request.content}"
+                  readonly
+                ></textarea>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </form>
+    </div>
+    <!-- 의뢰상세 -->
+    <!-- 견적서 -->
+    <div class="row gap-2">
+      <div class="d-flex justify-content-between">
+        <div>
+          <h4>견적서</h4>
+        </div>
+        <div>
+          <select class="form-select">
+            <option value="price">총금액 낮은 순</option>
+            <option value="period">공사기간 짧은 순</option>
+          </select>
+        </div>
+      </div>
+      <table class="table">
         <tr>
-            <th>담당자명</th>
-            <th colspan="2">공사기간</th>
-            <th>공사총금액</th>
-            <th>전화번호</th>
-            <th>비고</th>
-            <th/>
-            
+          <th>담당자명</th>
+          <th colspan="2">공사기간</th>
+          <th>공사총금액</th>
+          <th>전화번호</th>
+          <th colspan="2">비고</th>
         </tr>
         <th:block th:each="proposal : ${proposalList}">
-        <tr th:class="${proposal.contractNo>0}? 'active' : ''">
-        	<td style="display:none" th:text="${proposal.requestNo}"/> 
-        	<td th:text="${proposal.usersName}"/>
-            <td colspan="2" th:text="|${#dates.format(proposal.cttStartDt, 'yyyy/MM/dd')} ~ ${#dates.format(proposal.cttEndDt, 'yyyy/MM/dd')}|"/>
+          <tr
+            th:class="${proposal.contractNo>0}? 'active' : ''"
+            data-bs-toggle="collapse"
+            th:data-bs-target="'#collapse' + ${proposal.proposalNo}"
+            aria-expanded="false"
+            aria-controls="collapseExample"
+          >
+            <td style="display: none" th:text="${proposal.requestNo}" />
+            <td th:text="${proposal.usersName}" />
+            <td
+              colspan="2"
+              th:text="|${#dates.format(proposal.cttStartDt, 'yyyy/MM/dd')} ~ ${#dates.format(proposal.cttEndDt, 'yyyy/MM/dd')}|"
+            />
             <td>ddd</td>
-         	<td th:text="${proposal.usersPhone}"/>
-            <td th:text="${proposal.comments}"/>
-            <td><i class="fa-solid fa-caret-down fa-xl down"></i></td>
-        </tr>
-        <tr>
-        <td colspan="7">
-            <table class="table innerT" style="display:none">
-                <tr>
+            <td th:text="${proposal.usersPhone}" />
+            <td th:text="${proposal.comments}" />
+            <td>
+              <i class="fa-solid fa-caret-down fa-xl down"></i>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="7" class="pt-0 pb-0">
+              <div class="collapse" th:id="'collapse' + ${proposal.proposalNo}">
+                <button
+                  class="btn btn-sm mt-2 float-end"
+                  th:onclick="|location.href='@{/ppsInfo(proposalNo=${proposal.proposalNo})}'|"
+                >
+                  상세보기
+                </button>
+                <table class="table mb-2">
+                  <tr>
                     <th>품명</th>
                     <th>단위</th>
                     <th>수량</th>
                     <th>단가</th>
                     <th>금액</th>
                     <th>비고</th>
-                    <th><button class="btnn" th:onclick="|location.href='@{/ppsInfo(proposalNo=${proposal.proposalNo})}'|">상세보기</button></th>
-                    
-                    
-                </tr>
-         <th:block th:each="ppd : ${proposal.list}">
-                <tr>
-                    <td th:text="${ppd.product}" ></td>
-                    <td th:text="${ppd.unit}"></td>
-                    <td th:text="${ppd.qty}"></td>
-                    <td th:text="${ppd.unitprice}"></td>
-                    <td th:text="${ppd.qty} * ${ppd.unitprice}"></td>
-                    <td th:text="${ppd.comments}"></td>
-                    <td></td>
-                </tr>
-          </th:block>
-            </table></td>
-        </tr>
-	</th:block>
-    </table>
-</div>
-<div>
-	<div class="row" th:if="${contract ==null}">
-	 <p>체결 된 계약건이 아직 없습니다.</p>
-	</div>
-    <div class="row" th:unless="${contract ==null}">
-        <table class="table col" >
-            <tr>
-            <td><h4>계약서</h4><td>
-            <td><button class="btnn">상세보기</button></td>
-            </tr>
-            <tr>
-            	<td style="display:hidden"></td>
-                <th>시공자 성명</th>
-                <td>[[${contract.usersName}]]</td>
-                <th>결제상태</th>
-                <td></td>
-            </tr>
-            <tr>
-                <th colspan="2">공사기간</th>
-                <td colspan="2" th:text="|${#dates.format(contract.cttStartDt, 'yyyy/MM/dd')} ~ ${#dates.format(contract.cttEndDt, 'yyyy/MM/dd')}|"/>
-            </tr>
-            <tr>
-                <th colspan="2">공사금액</th>
-                <td colspan="2">[[${contract.cttPrice}]]</td>
-            </tr>
-            <tr>
-                <th colspan="2">공사상태</th>
-                <td colspan="2">[[${contract.contractState}]]</td>
-            </tr>
-            </table>
-            <table class="table col">
-
-                <tr>
-                    <th>전화번호</th>
-                    <td>[[${contract.usersPhone}]]</td>
-                </tr>
-                <tr>
-                    <th>주소</th>
-                    <td>[[${contract.workerAddress}]]</td>
-                </tr>
-                <tr>
-                    <th>하자보수기간</th>
-                    <td><input type="text" readonly /></td>
-                </tr>
-            </table>
+                  </tr>
+                  <th:block th:each="ppd : ${proposal.list}">
+                    <tr>
+                      <td th:text="${ppd.product}"></td>
+                      <td th:text="${ppd.unit}"></td>
+                      <td th:text="${ppd.qty}"></td>
+                      <td th:text="${ppd.unitprice}"></td>
+                      <td th:text="${ppd.qty} * ${ppd.unitprice}"></td>
+                      <td th:text="${ppd.comments}"></td>
+                    </tr>
+                  </th:block>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </th:block>
+      </table>
     </div>
-    <button type="button" class="btn btn-secondary delBtn"  onclick="history.back()">뒤로가기</button>
-</div>
+    <!-- 견적서 -->
+    <!-- 계약서 -->
+    <div class="row">
+      <div th:if="${contract == null}">
+        <p>체결 된 계약건이 아직 없습니다.</p>
+      </div>
+      <div class="row" th:unless="${contract == null}">
+        <table class="table col">
+          <tr>
+            <td><h4>계약서</h4></td>
+            <td></td>
+            <td><button class="btnn">상세보기</button></td>
+          </tr>
+          <tr>
+            <td style="display: hidden"></td>
+            <th>시공자 성명</th>
+            <td>[[${contract.usersName}]]</td>
+            <th>결제상태</th>
+            <td></td>
+          </tr>
+          <tr>
+            <th colspan="2">공사기간</th>
+            <td
+              colspan="2"
+              th:text="|${#dates.format(contract.cttStartDt, 'yyyy/MM/dd')} ~ ${#dates.format(contract.cttEndDt, 'yyyy/MM/dd')}|"
+            />
+          </tr>
+          <tr>
+            <th colspan="2">공사금액</th>
+            <td colspan="2">[[${contract.cttPrice}]]</td>
+          </tr>
+          <tr>
+            <th colspan="2">공사상태</th>
+            <td colspan="2">[[${contract.contractState}]]</td>
+          </tr>
+        </table>
+        <table class="table col">
+          <tr>
+            <th>전화번호</th>
+            <td>[[${contract.usersPhone}]]</td>
+          </tr>
+          <tr>
+            <th>주소</th>
+            <td>[[${contract.workerAddress}]]</td>
+          </tr>
+          <tr>
+            <th>하자보수기간</th>
+            <td><input type="text" readonly /></td>
+          </tr>
+        </table>
+      </div>
+      <div class="row">
+        <div>
+          <h4>팀</h4>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>담당자명</th>
+              <th>소재지</th>
+              <th>공사분야</th>
+              <th>전화번호</th>
+              <th>구분</th>
+            </tr>
+          </thead>
+          <tbody>
+            <th:block th:each="mem : ${members}">
+              <tr>
+                <td>[[${mem.usersName}]]</td>
+                <td></td>
+                <td>[[${mem.workCodeNm}]]</td>
+                <td>[[${mem.usersPhone}]]</td>
+                <td>[[${mem.memberDivision} == 'B' ? '팀장' : '팀원']]</td>
+              </tr>
+            </th:block>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d-flex justify-content-between mb-2">
+        <div>
+          <h4>공사보고</h4>
+        </div>
+        <div>
+          <button type="button" class="btn btn-secondary">
+            공사 보고 작성
+          </button>
+        </div>
+      </div>
+      <table class="table mb-2">
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>구분</th>
+          <th>작성일시</th>
+          <th>승인상태</th>
+        </tr>
+        <th:block th:each="cttReport : ${cttReports}">
+          <tr>
+            <td>[[${cttReport.cttReportNo}]]</td>
+            <td>[[${cttReport.title}]]</td>
+            <td>[[${cttReport.cttDivision}]]</td>
+            <td>[[${#dates.format(cttReport.cttReportDt, 'yyyy/MM/dd')}]]</td>
+            <td
+              th:text="${cttReport.accessState} == 'Y' ? '승인' : '미승인'"
+            ></td>
+          </tr>
+        </th:block>
+      </table>
+    </div>
+    <div class="row">
+      <button
+        type="button"
+        class="btn btn-secondary delBtn"
+        onclick="history.back()"
+      >
+        뒤로가기
+      </button>
+    </div>
+    <!-- 계약서 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/js/doc/postcode.js"></script>
+    <script src="/js/req/requestUpdate.js"></script>
+    <script th:inline="javascript">
+      var swiper = new Swiper(".slide-content", {
+        slidesPerView: 1,
+        spaceBetween: 25,
+        loop: false,
+        centerSlide: "true",
+        fade: "true",
+        grabCursor: "true",
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+          dynamicBullets: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
 
-
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script src="/js/doc/postcode.js"></script>
-<script src="/js/req/requestUpdate.js"></script>
-</body>
+        breakpoints: {
+          0: {
+            slidesPerView: 1,
+          },
+        },
+      });
+    </script>
+  </body>
 </html>
