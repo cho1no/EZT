@@ -15,7 +15,8 @@ public interface AdminMapper {
 	public List<Map<String, Object>> selectReqCategoryStatistics();
 	// 의뢰 지역별 통계
 	public List<Map<String, Object>> selectReqRegionStatistics();
-	
+	// 경력인증 승인대기 개수
+	public int selectCrrAcptWaitCnt();
 	
 	// 회원 정보 가져오기
 	public List<UserVO> selectUsers();

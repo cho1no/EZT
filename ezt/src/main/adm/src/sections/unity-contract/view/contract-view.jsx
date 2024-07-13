@@ -19,6 +19,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { fDateTime } from 'src/utils/format-time';
 
 import Scrollbar from 'src/components/scrollbar';
+import Spinner from 'src/components/spinner/spinner';
 
 import ContractTableRow from '../contract-table-row';
 import ContractTableHead from '../contract-table-head';
@@ -48,6 +49,8 @@ export default function ContractPage() {
 
   const [contractInfo, setContractInfo] = useState({});
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {}, [contractInfo]);
 
   useEffect(() => {
@@ -60,15 +63,11 @@ export default function ContractPage() {
       .then((resp) => {
         setContracts(
           [...resp.data].map((_, index) => ({
-            unityContractNo: _.unityContractNo,
-            title: _.title,
-            changes: _.changes,
-            contractTermsContent: _.contractTermsContent,
-            writeDt: _.writeDt,
-            useTf: _.useTf,
-            basicContractTf: _.basicContractTf,
+            no: resp.data.length - index,
+            ..._,
           }))
         );
+        setLoading(false);
       })
       .catch(() => {});
   };
@@ -150,6 +149,7 @@ export default function ContractPage() {
     inputData: contracts,
     comparator: getComparator(order, orderBy),
     filterName,
+    filters: ['unityContractNo', 'title', 'changes', 'basicContractTf'],
   });
 
   const notFound = !dataFiltered.length && !!filterName;
@@ -158,6 +158,10 @@ export default function ContractPage() {
     position: 'relative',
     display: contractInfo.contractsState === '회원 탈퇴' ? 'none' : '',
   };
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <>
@@ -189,10 +193,10 @@ export default function ContractPage() {
                 <TableBody>
                   {dataFiltered
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => (
+                    .map((row, idx) => (
                       <ContractTableRow
                         key={row.unityContractNo}
-                        unityContractNo={row.unityContractNo}
+                        unityContractNo={row.no}
                         title={row.title}
                         changes={row.changes}
                         contractTermsContent={row.contractTermsContent}
@@ -208,7 +212,7 @@ export default function ContractPage() {
                     emptyRows={emptyRows(page, rowsPerPage, contracts.length)}
                   />
 
-                  {notFound && <TableNoData query={filterName} />}
+                  {notFound && <TableNoData query={filterName} colSpan={6} />}
                 </TableBody>
               </Table>
             </TableContainer>

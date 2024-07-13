@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { UserView } from 'src/sections/user/view';
+import { RequestView } from 'src/sections/request/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function RequestPage() {
   return (
     <>
       <Helmet>
-        <title> 사용자 관리 | EZT </title>
+        <title> 의뢰 관리 | EZT </title>
       </Helmet>
 
-      <UserView />
+      <RequestView />
     </>
   );
 }

@@ -9,7 +9,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function CareerTableToolbar({ filterName, onFilterName }) {
+export default function PayTableToolbar({ filterName, onFilterName }) {
   return (
     <Toolbar
       sx={{
@@ -18,12 +18,12 @@ export default function CareerTableToolbar({ filterName, onFilterName }) {
         justifyContent: 'space-between',
       }}
     >
-      <Typography variant="h4">경력 인증 관리</Typography>
+      <Typography variant="h4">결제된 계약</Typography>
 
       <OutlinedInput
         value={filterName}
         onChange={onFilterName}
-        placeholder="이름으로 검색"
+        placeholder="검색할 이름 입력"
         startAdornment={
           <InputAdornment position="start">
             <Iconify
@@ -37,7 +37,7 @@ export default function CareerTableToolbar({ filterName, onFilterName }) {
   );
 }
 
-CareerTableToolbar.propTypes = {
+PayTableToolbar.propTypes = {
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
 };

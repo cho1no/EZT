@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { UserView } from 'src/sections/user/view';
+import { PayView } from 'src/sections/payment/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function PayPage() {
   return (
     <>
       <Helmet>
-        <title> 사용자 관리 | EZT </title>
+        <title> 결제 관리 | EZT </title>
       </Helmet>
 
-      <UserView />
+      <PayView />
     </>
   );
 }

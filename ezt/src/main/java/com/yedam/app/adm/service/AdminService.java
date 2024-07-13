@@ -9,19 +9,16 @@ import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
 
 public interface AdminService {
-	// 일별 가입자 통계
-	public List<Map<String, Object>> getJoinStatistics();
-	// 의뢰 작업 분야별 통계
-	public List<Map<String, Object>> getReqCategoryStatistics();
-	// 의뢰 지역별 통계
-	public List<Map<String, Object>> getReqRegionStatistics();
+	
+	// dashboard main
+	public Map<String, Object> getStatistic();
 
 	
 	// 의뢰 전체 조회
 	public List<RequestVO> getRequests();
 	// 의뢰 단건 조회
 	public RequestVO getRequest();
-	// 의뢰 작제
+	// 의뢰 삭제
 	public int deleteRequest();
 	
 	

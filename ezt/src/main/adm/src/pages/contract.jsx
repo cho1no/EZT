@@ -8,7 +8,7 @@ export default function ContractPage() {
   return (
     <>
       <Helmet>
-        <title> 통일 계약서 관리 </title>
+        <title> 통일 계약서 관리 | EZT </title>
       </Helmet>
 
       <ContractView />

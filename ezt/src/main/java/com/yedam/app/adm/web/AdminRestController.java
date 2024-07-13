@@ -70,12 +70,7 @@ public class AdminRestController {
 	@CheckToken
 	@GetMapping("/getStatistic")
 	public Map<String, Object> getStatistic() {
-		Map<String, Object> map = new HashMap<>();
-		log.info(admSvc.getReqCategoryStatistics().toString());
-		map.put("newJoin", admSvc.getJoinStatistics()); // 일별 가입자 현황
-		map.put("reqCategory", admSvc.getReqCategoryStatistics()); // 의뢰 분야별 통계
-		map.put("reqRegion", admSvc.getReqRegionStatistics()); // 의뢰 지역별 통계
-		return map;
+		return admSvc.getStatistic();
 	}
 
 	// 회원 전체 조회
@@ -184,8 +179,10 @@ public class AdminRestController {
 		return admSvc.postCareerDeny(map);
 	}
 	
-	@GetMapping("/testThis")
-	public List<Map<String, Object>> testThis(){
+	// 결제 관리 리스트
+	@CheckToken
+	@GetMapping("/payment")
+	public List<Map<String, Object>> payment(){
 		return admSvc.getPayManages();
 	}
 }

@@ -1,5 +1,6 @@
 package com.yedam.app.adm.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,20 +23,15 @@ public class AdminServiceImpl implements AdminService{
 	
 	// 통계관련
 	@Override
-	public List<Map<String, Object>> getJoinStatistics() {
-		return admMapper.selectJoinStatistics();
+	public Map<String, Object> getStatistic(){
+		Map<String, Object> map = new HashMap<>();
+		map.put("newJoin", admMapper.selectJoinStatistics()); // 일별 가입자 현황
+		map.put("reqCategory", admMapper.selectReqCategoryStatistics()); // 의뢰 분야별 통계
+		map.put("reqRegion", admMapper.selectReqRegionStatistics()); // 의뢰 지역별 통계
+		map.put("crrWaitCnt", admMapper.selectCrrAcptWaitCnt());
+		return map;
 	}
 	
-	@Override
-	public List<Map<String, Object>> getReqCategoryStatistics() {
-		return admMapper.selectReqCategoryStatistics();
-	}
-	
-	@Override
-	public List<Map<String, Object>> getReqRegionStatistics() {
-		return admMapper.selectReqRegionStatistics();
-	}
-
 
 	// 의뢰 관련
 	@Override

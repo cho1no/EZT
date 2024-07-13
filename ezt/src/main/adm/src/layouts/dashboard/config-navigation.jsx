@@ -20,12 +20,22 @@ const navConfig = [
   {
     title: '통일 계약서 관리',
     path: '/contract',
-    icon: icon('ic_cart'),
+    icon: icon('ic_file'),
   },
   {
     title: '경력 인증 관리',
     path: '/career',
-    icon: icon('ic_cart'),
+    icon: icon('ic_userCheck'),
+  },
+  {
+    title: '결제 관리',
+    path: '/payment',
+    icon: icon('ic_card'),
+  },
+  {
+    title: '의뢰 관리',
+    path: '/request',
+    icon: icon('ic_data'),
   },
   {
     title: 'product',
@@ -37,16 +47,16 @@ const navConfig = [
     path: '/blog',
     icon: icon('ic_blog'),
   },
-  // {
-  //   title: 'login',
-  //   path: '/login',
-  //   icon: icon('ic_lock'),
-  // },
-  // {
-  //   title: 'Not found',
-  //   path: '/404',
-  //   icon: icon('ic_disabled'),
-  // },
+  {
+    title: 'login',
+    path: '/login',
+    icon: icon('ic_lock'),
+  },
+  {
+    title: 'Not found',
+    path: '/404',
+    icon: icon('ic_disabled'),
+  },
 ];
 
 export default navConfig;

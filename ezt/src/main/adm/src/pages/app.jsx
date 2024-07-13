@@ -8,7 +8,7 @@ export default function AppPage() {
   return (
     <>
       <Helmet>
-        <title> 관리자 페이지 </title>
+        <title> 관리자 페이지 | EZT </title>
       </Helmet>
 
       <AppView />

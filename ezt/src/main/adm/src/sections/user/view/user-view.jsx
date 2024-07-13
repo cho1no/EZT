@@ -16,6 +16,7 @@ import TablePagination from '@mui/material/TablePagination';
 import { fDateTime } from 'src/utils/format-time';
 
 import Scrollbar from 'src/components/scrollbar';
+import Spinner from 'src/components/spinner/spinner';
 
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
@@ -24,6 +25,7 @@ import TableNoData from '../../common-table/table-no-data';
 import TableEmptyRows from '../../common-table/table-empty-rows';
 import { style, boxStyle, contentStyle } from '../../common-table/css';
 import { emptyRows, applyFilter, getComparator } from '../../common-table/utils';
+
 // ----------------------------------------------------------------------
 
 export default function UserPage() {
@@ -42,30 +44,25 @@ export default function UserPage() {
   const [open, setOpen] = useState(false);
 
   const [userInfo, setUserInfo] = useState({});
+
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {}, [userInfo]);
+
   useEffect(() => {
     getUsers();
   }, []);
+
   const getUsers = async () => {
     await axios
       .get('/adm/usersInfo')
       .then((resp) => {
-        setUsers(
-          [...resp.data].map((_, index) => ({
-            usersNo: _.usersNo,
-            usersName: _.usersName ? _.usersName : '이름 없음',
-            usersEmail: _.usersEmail ? _.usersEmail : '이메일 없음',
-            usersId: _.usersId,
-            usersPhone: _.usersPhone ? _.usersPhone : '전화번호 없음',
-            usersJoinDt: _.usersJoinDt,
-            usersRole: _.usersRole,
-            usersState: _.usersState,
-            usersStateNm: _.usersStateNm,
-          }))
-        );
+        setUsers(resp.data);
+        setLoading(false);
       })
       .catch(() => {});
   };
+
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -73,19 +70,23 @@ export default function UserPage() {
       setOrderBy(id);
     }
   };
+
   // modal open
   const handleOpen = async (userNo) => {
     setOpen(true);
     const resp = await axios.get(`/adm/userInfo/${userNo}`);
     setUserInfo(resp.data);
   };
+
   // modal close
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
   const setUserPause = async (uno) => {
     await axios
       .get(`adm/userPause/${uno}`)
@@ -95,6 +96,7 @@ export default function UserPage() {
       })
       .catch();
   };
+
   const setUserActive = async (uno) => {
     await axios
       .get(`adm/userActive/${uno}`)
@@ -104,6 +106,7 @@ export default function UserPage() {
       })
       .catch();
   };
+
   const handleChangeRowsPerPage = (event) => {
     setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -118,6 +121,7 @@ export default function UserPage() {
     inputData: users,
     comparator: getComparator(order, orderBy),
     filterName,
+    filters: ['usersName', 'usersEmail', 'usersId', 'usersStateNm', 'usersRole', 'usersPhone'],
   });
 
   const notFound = !dataFiltered.length && !!filterName;
@@ -135,6 +139,11 @@ export default function UserPage() {
     }
     return '관리자';
   }
+
+  if (loading) {
+    return <Spinner />;
+  }
+
   return (
     <>
       <Container>
@@ -183,7 +192,7 @@ export default function UserPage() {
                     emptyRows={emptyRows(page, rowsPerPage, users.length)}
                   />
 
-                  {notFound && <TableNoData query={filterName} />}
+                  {notFound && <TableNoData query={filterName} colSpan={7} />}
                 </TableBody>
               </Table>
             </TableContainer>
