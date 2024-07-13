@@ -7,7 +7,7 @@ import com.yedam.app.req.service.Criteria;
 public interface TeamService {
 	
 	//팀신청 전체조회
-	public List<TeamVO> teamList();
+	public List<TeamVO> teamList(Criteria cri);
 	
 	//팀신청 단건조회
 	public TeamVO teamInfo(TeamVO teamVO);

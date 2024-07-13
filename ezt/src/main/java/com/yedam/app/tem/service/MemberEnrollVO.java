@@ -14,5 +14,6 @@ public class MemberEnrollVO {
 	private int meTeamNo;
 	private String categoryCode;
 	private int usersNo;
-	private int career;
+	private int career; //지원자 경력계산
+	private int headcount; //카테고리별 지원자 수 
 }

@@ -11,7 +11,7 @@ import com.yedam.app.tem.service.TeamWorkCategoryVO;
 public interface TeamMapper {
 
 	//팀신청 전체조회
-	public List<TeamVO> teamList();
+	public List<TeamVO> teamList(Criteria cri);
 	
 	//팀신청 단건조회
 	public TeamVO teamInfo(TeamVO teamVO);
