@@ -21,9 +21,9 @@ import Spinner from 'src/components/spinner/spinner';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import UserTableToolbar from '../user-table-toolbar';
+import { style, boxStyle } from '../../common-table/css';
 import TableNoData from '../../common-table/table-no-data';
 import TableEmptyRows from '../../common-table/table-empty-rows';
-import { style, boxStyle, contentStyle } from '../../common-table/css';
 import { emptyRows, applyFilter, getComparator } from '../../common-table/utils';
 
 // ----------------------------------------------------------------------
@@ -128,6 +128,7 @@ export default function UserPage() {
 
   const buttonStyle = {
     position: 'relative',
+
     display: userInfo.usersState === '회원 탈퇴' ? 'none' : '',
   };
   function getRole(role) {
@@ -219,85 +220,88 @@ export default function UserPage() {
           <Typography variant="h6" component="h2">
             회원정보
           </Typography>
-          <CardContent sx={contentStyle}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">이름</Typography>
-                <Typography style={boxStyle} variant="body1">
-                  {userInfo.usersName}
-                </Typography>
+
+          <Scrollbar sx={{ height: '90%' }}>
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">이름</Typography>
+                  <Typography style={boxStyle} variant="body1">
+                    {userInfo.usersName}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">닉네임</Typography>
+                  <Typography style={boxStyle} variant="body1">
+                    {userInfo.usersNick ? userInfo.usersNick : '닉네임 없음'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">이메일</Typography>
+                  <Typography style={boxStyle} variant="body1">
+                    {userInfo.usersEmail}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">구분</Typography>
+                  <Typography style={boxStyle} variant="body1">
+                    {getRole(userInfo.usersRole)}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">아이디</Typography>
+                  <Typography style={boxStyle} variant="body1">
+                    {userInfo.usersId}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">생년월일</Typography>
+                  <Typography style={boxStyle} variant="body1">
+                    {userInfo.usersBirth ? userInfo.usersBirth : '생년월일 없음'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">성별</Typography>
+                  <Typography style={boxStyle} variant="body1">
+                    {userInfo.usersGender ? userInfo.usersGender : '성별 없음'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">전화번호</Typography>
+                  <Typography style={boxStyle} variant="body1">
+                    {userInfo.usersPhone ? userInfo.usersPhone : '전화번호 없음'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">가입일</Typography>
+                  <Typography style={boxStyle} variant="body1">
+                    {userInfo.usersJoinDt
+                      ? fDateTime(userInfo.usersJoinDt, 'yy/MM/dd hh:mm')
+                      : '가입일 없음'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">상태 변경일</Typography>
+                  <Typography style={boxStyle} variant="body1">
+                    {userInfo.usersStateChangeDt
+                      ? fDateTime(userInfo.usersStateChangeDt, 'yy/MM/dd hh:mm')
+                      : '없음'}
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">상태</Typography>
+                  <Typography style={boxStyle} variant="body1">
+                    {userInfo.usersState}
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">닉네임</Typography>
-                <Typography style={boxStyle} variant="body1">
-                  {userInfo.usersNick ? userInfo.usersNick : '닉네임 없음'}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">이메일</Typography>
-                <Typography style={boxStyle} variant="body1">
-                  {userInfo.usersEmail}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">구분</Typography>
-                <Typography style={boxStyle} variant="body1">
-                  {getRole(userInfo.usersRole)}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">아이디</Typography>
-                <Typography style={boxStyle} variant="body1">
-                  {userInfo.usersId}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">생년월일</Typography>
-                <Typography style={boxStyle} variant="body1">
-                  {userInfo.usersBirth ? userInfo.usersBirth : '생년월일 없음'}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">성별</Typography>
-                <Typography style={boxStyle} variant="body1">
-                  {userInfo.usersGender ? userInfo.usersGender : '성별 없음'}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">전화번호</Typography>
-                <Typography style={boxStyle} variant="body1">
-                  {userInfo.usersPhone ? userInfo.usersPhone : '전화번호 없음'}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">가입일</Typography>
-                <Typography style={boxStyle} variant="body1">
-                  {userInfo.usersJoinDt
-                    ? fDateTime(userInfo.usersJoinDt, 'yy/MM/dd hh:mm')
-                    : '가입일 없음'}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">상태 변경일</Typography>
-                <Typography style={boxStyle} variant="body1">
-                  {userInfo.usersStateChangeDt
-                    ? fDateTime(userInfo.usersStateChangeDt, 'yy/MM/dd hh:mm')
-                    : '없음'}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">상태</Typography>
-                <Typography style={boxStyle} variant="body1">
-                  {userInfo.usersState}
-                </Typography>
-              </Grid>
-            </Grid>
-          </CardContent>
+            </CardContent>
+          </Scrollbar>
           <Button
             variant="contained"
             fullWidth
             color={userInfo.usersState === '활동 중' ? 'error' : 'success'}
-            sx={buttonStyle}
+            sx={{ ...buttonStyle, top: -60 }}
             onClick={() =>
               userInfo.usersState === '활동 중'
                 ? setUserPause(userInfo.usersNo)

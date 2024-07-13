@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -62,7 +62,11 @@ export default function RequestCard({ request }) {
     />
   );
   return (
-    <Card>
+    <Card
+      onClick={() => {
+        console.log(request.requestNo);
+      }}
+    >
       <Box sx={{ pt: '100%', position: 'relative' }}>
         {request.requestState && renderStatus}
 
@@ -70,9 +74,9 @@ export default function RequestCard({ request }) {
       </Box>
 
       <Stack sx={{ p: 3 }}>
-        <Link color="inherit" underline="hover" variant="subtitle2" noWrap>
+        <Typography color="inherit" variant="subtitle1" noWrap>
           {request.title}
-        </Link>
+        </Typography>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="body2">{request.cttPlace}</Typography>

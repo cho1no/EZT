@@ -19,7 +19,7 @@ import { fNumber } from 'src/utils/format-number';
 import Scrollbar from 'src/components/scrollbar';
 import Spinner from 'src/components/spinner/spinner';
 
-import { style, boxStyle, contentStyle } from '../common-table/css';
+import { style, boxStyle } from '../common-table/css';
 
 export default function PayModal({ payNo, open, onClose }) {
   const [info, setInfo] = useState({});
@@ -64,7 +64,7 @@ export default function PayModal({ payNo, open, onClose }) {
           <Spinner />
         ) : (
           <Scrollbar>
-            <CardContent sx={contentStyle}>
+            <CardContent>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <Card sx={styleColBox}>
