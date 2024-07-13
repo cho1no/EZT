@@ -70,7 +70,7 @@
                     <button type="button" class="btnn"
                             data-bs-toggle="modal" data-bs-target="#volunteer"
                             th:attr="onclick=|openModal('${twc.teamNo}', '${twc.categoryCode}' )|">
-                        신청자 확인하기
+                        신청자 확인하기()
                     </button>
                     <button type="button" class="btnn deUpdate deUpBtn">수정</button>
                     <button type="button" class="btnn"
@@ -79,7 +79,7 @@
                     </button>
                 </td>
                 <td th:unless="${#authentication.principal.userVO.usersNo == team.writer}">
-                	<button type="button" class="btnn" data-bs-toggle="modal" data-bs-target="#apply" onclick="openApplyModal('${twc.categoryCode}')">>신청하기</button>
+                	<button type="button" class="btnn" data-bs-toggle="modal" data-bs-target="#apply" th:attr="onclick=|openApplyModal('${twc.teamNo}','${twc.categoryCode}','${twc.workCode}')|">신청하기</button>
                 </td>
             </tr>
         </th:block>
@@ -189,28 +189,35 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form name="memberInsertForm" th:action="@{/memberInsert}" th:object="${memberEnrollVO}" method="post">
-                    <input type="hidden" th:field="*{teamNo}" th:value="${team.teamNo}">
-                    <input type="hidden" th:field="*{worker}" th:value="${#authentication.principal.userVO.usersNo}">
+				<form name="memberInsertForm" th:action="@{/team/memberInsert}" th:object="${memberEnrollVO}" method="post">
+				    <!-- teamNo hidden input -->
+				    <input type="hidden" name="teamNo" th:value="${team.teamNo}">
+				    
+				    <!-- worker hidden input (assuming it's user's ID) -->
+				    <input type="hidden" name="worker" th:value="${#authentication.principal.userVO.usersNo}">
+				    
+				    <!-- categoryCode hidden input (assuming it's dynamically set in JavaScript) -->
+				    <input type="hidden" id="categoryCode" name="workCode">
+				    
+				    <table>
+				        <tbody>
+				            <tr>
+				                <th>신청인</th>
+				                <td><input type="text" name="writer" th:value="${#authentication.principal.userVO.usersName}" readonly></td>
+				            </tr>
+				            <tr>
+				                <th>카테고리</th>
+				                <td><input type="text" id="workCode" readonly></td>
+				            </tr>
+				            <tr>
+				                <th>소개 작성</th>
+				                <td><textarea name="content" th:field="*{content}"></textarea></td>
+				            </tr>
+				        </tbody>
+				    </table>
+				    <button type="submit">신청하기</button>
+				</form>
 
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th>신청인</th>
-                                <td><input type="text" th:name="writer" th:value="${#authentication.principal.userVO.usersNo}" readonly></td>
-                            </tr>
-                            <tr>
-                                <th>카테고리</th>
-                                <td><input type="text" th:field="*{workCode}" readonly></td>
-                            </tr>
-                            <tr>
-                                <th>소개 작성</th>
-                                <td><textarea th:field="*{content}"></textarea></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button type="submit">신청하기</button>
-                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

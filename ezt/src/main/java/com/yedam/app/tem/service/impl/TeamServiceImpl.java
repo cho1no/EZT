@@ -21,9 +21,9 @@ public class TeamServiceImpl implements TeamService {
 	
 	//팀신청 전체조회
 	@Override
-	public List<TeamVO> teamList() {
+	public List<TeamVO> teamList(Criteria cri) {
 
-		return teamMapper.teamList();
+		return teamMapper.teamList(cri);
 	}
 
 	//팀신청 단건조회

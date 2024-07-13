@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.req.service.Criteria;
+import com.yedam.app.req.service.PageDTO;
 import com.yedam.app.tem.service.MemberDenyVO;
 import com.yedam.app.tem.service.MemberEnrollVO;
 import com.yedam.app.tem.service.TeamService;
@@ -34,11 +37,14 @@ public class TeamController {
 
     // 팀 신청 전체 조회
     @GetMapping("/requestList")
-    public String teamRequestList(Model model) {
-        List<TeamVO> teamList = teamService.teamList();
+    public String teamRequestList(Criteria cri, Model model) {
+        List<TeamVO> teamList = teamService.teamList(cri);
         model.addAttribute("teamList", teamList);
-        log.info(teamList.toString());
 
+        //페이징
+  		int total = teamService.getTotal(cri);
+  		model.addAttribute("page", new PageDTO(cri, total));
+  		
         return "tem/teamRequestList";
     }
 
@@ -59,6 +65,7 @@ public class TeamController {
     @GetMapping("/volunteerList")
     @ResponseBody
     public List<MemberEnrollVO> volunteerList(Model model, MemberEnrollVO meVO) {
+        
     	return teamService.volunteerList(meVO);
     }
     // 팀 신청 등록 페이지
@@ -159,7 +166,7 @@ public class TeamController {
     }
     
 
-    // 팀원 신청 등록 (GET)
+ // 팀원 신청 등록 (GET)
     @GetMapping("/memberInsert")
     public String memberInsert(Model model) {
         model.addAttribute("memberEnrollVO", new MemberEnrollVO());
@@ -168,7 +175,8 @@ public class TeamController {
 
     // 팀원 신청 등록 (POST)
     @PostMapping("/memberInsert")
-    public String memberInsert(MemberEnrollVO memberEnrollVO) {
+    public String memberInsert(MemberEnrollVO memberEnrollVO, @RequestParam("teamNo") int teamNo) {
+        memberEnrollVO.setTeamNo(teamNo);
         teamService.insertMember(memberEnrollVO);
         return "redirect:/team/requestInfo";
     }

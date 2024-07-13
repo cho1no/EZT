@@ -8,6 +8,12 @@ $(document).ready(function() {
         let enrollNo = $('#enrollNo').val();
         let writer = $('#writer').val();
         let content = $('textarea[name="content"]').val();
+        
+         // content가 null이면 alert
+        if (content == null ) {
+            alert("반려 사유를 입력해주세요.");
+            return;
+        }
 
         let data = {
             enrollNo: enrollNo,
@@ -67,4 +73,12 @@ $(document).ready(function() {
 		$('#enrollNo').val($(event.currentTarget).data("eno"));
 		$('#worker').text($(event.currentTarget).data("worker"));
 	}
+	
+	function openApplyModal(teamNo, categoryCode, workCode) {
+    // 모달이 열릴 때 categoryCode를 설정하는 부분
+    $('#apply').on('shown.bs.modal', function () {
+        $('#categoryCode').val(categoryCode);  // 모달 내의 입력 필드에 카테고리 코드 설정
+        $('#workCode').val(workCode);  
+            });
 
+}
