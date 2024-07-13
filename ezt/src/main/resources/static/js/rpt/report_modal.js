@@ -31,27 +31,42 @@ function currentDay() {
 }
 
 // 모달 초기화
-$('#reportModal').on('show.bs.modal', function(e) {
+$('#reportModal').on('show.bs.modal', function() {
 	$('.smoothscroll.scroll-top').attr('style', 'display:none');
 	$(this).find('form')[0].reset();
 	$('#reportModal select option').remove();
 	$('#reportModal select').append(`<option selected>유형 선택</option>`);
 	$('#reportModal input[name="uploadFile"]').val('');
-})
-$('#reportModal').on('hide.bs.modal', function(e) {
-	$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
 	$('#reportModal .uploadResult .row div').remove();
 })
-$('#reportInfoModal').on('show.bs.modal', function(e) {
-	$('.smoothscroll.scroll-top').attr('style', 'display:none');
+$('#reportModal').on('hide.bs.modal', function() {
+	$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
+	
+	$('#reportModal .uploadResult .row div').remove();
+	
 })
-$('#reportInfoModal').on('hide.bs.modal', function(e) {
+$('#reportInfoModal').on('show.bs.modal', function() {
+	$('.smoothscroll.scroll-top').attr('style', 'display:none');
+	$('#reportInfoModal .uploadResult .row div').remove();
+})
+$('#reportInfoModal').on('hide.bs.modal', function() {
 	$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
 	$(this).find('form')[0].reset();
 	$('#reportInfoModal .uploadResult .row div').remove();
 })
 
+function reportCloseAction(){
+	console.log('close');
+if(uploadFiles != ''){
+	fileDelete(uploadFiles);
+	uploadFiles = '';
+	}
+}
+
+// 등록된 공사 보고 정보
 var modalData = '';
+// 첨부 이미지 정보
+var uploadFiles = '';
 
 // 파일 첨부 초기화
 function fileUploadClick() {
@@ -60,14 +75,23 @@ function fileUploadClick() {
 	$('.uploadResult .row div').remove();
 };
 
-// 첨부 이미지 업로드
-var uploadFiles = '';
+
+
+// 파일 삭제
+function fileDelete(uploadFiles) {
+	$.ajax({
+		url: '/rptFileDelete',
+		type: 'post',
+		contentType: 'application/json',
+		data: JSON.stringify(uploadFiles),
+		async: false
+	})
+}
 
 function fileList() {
 
-
 	var x = document.getElementById("multiFile");
-	var txt = "";
+
 	if ('files' in x) {
 		if (x.files.length > 5) {
 			alert("파일 개수가 초과되었습니다.");
@@ -76,25 +100,18 @@ function fileList() {
 		}
 	}
 
-	console.log(uploadFiles);
-
-	if (uploadFiles != '') {
-		$.ajax({
-			url: '/rptFileDelete',
-			type: 'post',
-			contentType: 'application/json',
-			data: JSON.stringify(uploadFiles),
-			async: false
-
-		})
-	}
-
 	var formData = new FormData();
 
 	var inputFile = $("input[name='uploadFile']");
 
 	var files = inputFile[0].files;
 
+	if (uploadFiles != '') {
+		console.log('del');
+		fileDelete(uploadFiles);
+		uploadFiles = '';
+	}
+	
 	// formData에 데이터 넣기
 	for (var i = 0; i < files.length; i++) {
 
@@ -117,13 +134,12 @@ function fileList() {
 		data: formData,
 		type: 'Post',
 		dataType: 'JSON'
-
-		,
-		success: function(result) {
+		, success: function(result) {
 			//console.log(result);
 			showUpFile(result);
-			uploadFiles = result;
-
+			if (result != null) {
+				uploadFiles = result;
+			}
 		}
 	})
 };
@@ -140,18 +156,21 @@ function showUpFile(uploadResultArr) {
 	$(uploadResultArr)
 		.each(
 			function(i, obj) {
-				imageshow(obj);
+				str = imageshow(obj);
 			});
 
 	uploadUL.append(str);
 }
 
 
+// 등록 모달 열기
 function reportInsertForm(no) {
+	
+	uploadFiles = '';
 
 	$('#reportModal').modal('show');
 
-	currentDay();
+	currentDay(); // 현재 날짜 표시
 
 	$('#reportModal .modal-footer button:eq(0)').html('등록');
 	$('#reportModal .modal-footer button:eq(0)').removeAttr('onClick');
@@ -164,14 +183,16 @@ function reportInsertForm(no) {
 
 		success: function(result) {
 			$('input[name="contractNo"]').val(result.contractNo);
-			selectOption(result);
+			selectOption(result); // 공사 유형 표시
 		}
 
 	})
 }
 
+// 등록
 function reportInsertAction() {
-	selectData();
+
+	selectData(); // 공사 유형 선택 값 넣기
 
 	// 폼 데이터 전송
 	var formData = new FormData(document.reportInsertForm);
@@ -189,13 +210,12 @@ function reportInsertAction() {
 		dataType: 'JSON'
 
 		, success: function(result) {
-			rptInfo(result);
-
-
+			rptInfo(result); // 상세 정보 가져오기
+			fileDelete(uploadFiles);
 		}
 	})
 }
-
+// 상세 정보 가져오기
 function rptInfo(no) {
 
 	$.ajax({
@@ -203,12 +223,11 @@ function rptInfo(no) {
 		type: 'Get'
 
 		, success: function(result) {
-			modalInfo(result);
-
+			modalInfo(result); // 상세 내역 표시
 		}
 	})
 }
-
+// 상세 모달 열기
 function reportInfoForm(no) {
 
 	$('#reportInfoModal').modal('show');
@@ -218,7 +237,7 @@ function reportInfoForm(no) {
 		type: 'Get'
 
 		, success: function(result) {
-
+			console.log(result);
 			modalData = result;
 
 			$('#reportModal').modal('hide');
@@ -228,29 +247,18 @@ function reportInfoForm(no) {
 	})
 }
 
-
+// 섬네일 이미지 명 가져오기
 $('.uploadResult').on("click", "img", function(e) {
 	var obj = e.target;
 
 	var newobj = '';
 	newobj = obj.src.replace("s_", '');
 
-	showImage(newobj);
+	showImage(newobj); // 원본 이미지 표시
 
 })
-
-function showImage(img) {
-
-	$('.bigPictureWrapper').css("display", "flex").show();
-	$('.bigPicture').html(`<img src=${img}>`);
-}
-
-$('.bigPictureWrapper').on("click", function(e) {
-	$('.bigPictureWrapper').hide();
-})
-
-
-$('#rpt_deleteBtn').on("click", function(e) {
+// 삭제
+$('#rpt_deleteBtn').on("click", function() {
 
 	$.ajax({
 		url: '/rptDelete',
@@ -262,8 +270,10 @@ $('#rpt_deleteBtn').on("click", function(e) {
 	})
 	location.href = '/test';
 })
-
-$('#rpt_updateBtn').on('click', function(e) {
+// 수정 모달 열기
+$('#rpt_updateBtn').on('click', function() {
+	
+	uploadFiles = '';
 
 	$.ajax({
 		url: '/rptDivi?contractNo=' + $('input[name="contractNo"]').val(),
@@ -281,8 +291,9 @@ $('#rpt_updateBtn').on('click', function(e) {
 				, success: function(result) {
 
 					modalData = result;
-					$('#reportModal').modal('show');
 					currentDay();
+					modalInsertInfo(result);
+					$('#reportModal').modal('show');
 
 				}
 
@@ -292,6 +303,18 @@ $('#rpt_updateBtn').on('click', function(e) {
 
 })
 
+// 원본 이미지 확인
+function showImage(img) {
+
+	$('.bigPictureWrapper').css("display", "flex").show();
+	$('.bigPicture').html(`<img src=${img}>`);
+}
+
+$('.bigPictureWrapper').on("click", function() {
+	$('.bigPictureWrapper').hide();
+})
+
+// 수정
 function reportUpdateAction() {
 
 	selectData();
@@ -312,17 +335,16 @@ function reportUpdateAction() {
 		dataType: 'JSON'
 
 		, success: function(result) {
-
-			$('#reportInfoModal').modal('show');
-			console.log(result);
+			fileDelete(uploadFiles);
 			modalInfo(result);
+			$('#reportInfoModal').modal('show');
 		}
 	})
 
 }
 
 // 셀렉트 데이터 선택
-function selectData(){
+function selectData() {
 	if ($('select').val() !== '유형 선택') {
 		$('input[name=cttDivision]').val($('select').val());
 	} else {
@@ -363,7 +385,7 @@ function modalInfo(result) {
 
 	result.fileList.forEach(e => {
 
-		imageshow(e);
+		str = imageshow(e);
 
 	})
 	uploadUL.append(str);
@@ -391,7 +413,7 @@ function modalInsertInfo(result) {
 
 	result.fileList.forEach(e => {
 
-		imageshow(e);
+		str = imageshow(e);
 
 	})
 	uploadUL.append(str);
@@ -404,6 +426,8 @@ function modalInsertInfo(result) {
 
 // 첨부 파일 이미지 표시
 function imageshow(obj) {
+	var str = "";
+
 	var savePath = obj.savePath.replaceAll("\\", "/")
 
 	var fileCallPath = encodeURIComponent(savePath
@@ -417,6 +441,8 @@ function imageshow(obj) {
 	originPath = originPath.replace(new RegExp(/\\/g),
 		"/");
 
-	str += `<img src='/display?fileName=${originPath}' class="img-fluid">`;
+	str += `<img src='/display?fileName=${originPath}' class="img-fluid img-thumbnail">`;
 	str += `</div>`;
+	
+	return str;
 }

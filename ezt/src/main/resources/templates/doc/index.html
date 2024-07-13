@@ -26,7 +26,9 @@ canvas {
 	display: none;
 	justify-content : center;
 	align-items: center;
-	right:38%;
+	top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 	width:400px;
 	height:400px;
 	z-index:100;
@@ -43,8 +45,6 @@ canvas {
 
 .bigPicture img{
 	width: 300px;
-	
-	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
 
@@ -55,7 +55,7 @@ canvas {
 </head>
 <body>
 <div class="bigPictureWrapper">
-	<div class="bigPicture">
+	<div class="bigPicture img-thumbnail" >
 	
 	</div>
 </div>
@@ -169,46 +169,6 @@ canvas {
 					}
 
 				});
-		
-		
-		function reportInfoForm(no) {
-
-				
-			}
-		
-		
-		
-		$('#reportBtn').on('click', function(e){
-			
-			
-			
-		})
-		
-		
-			
-		$('#rpt_insertBtn').on('click', function(e){
-			console.log('rtp');
-			
-			
-			
-			
-		})
-		
-		
-		
-		
-
-		
-		
-		
-		
-		
-		
-		/*
-		$('.modal').on('hidden.bs.modal', function (e) {
-                $(this).find('form')[0].reset();
-            });*/
-		
 	</script>
 	<script src="/js/doc/json2.min.js"></script>
 	

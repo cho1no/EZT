@@ -14,7 +14,7 @@
 		<b>공사 보고 작성</b>
 	</h1>
 	<button type="button" class="btn-close" data-bs-dismiss="modal"
-		aria-label="Close"></button>
+		aria-label="Close" name="closeBtn" onClick="reportCloseAction()"></button>
 </div>
 <div class="modal-body mx-3 my-3">
 	<form name="reportInsertForm">
@@ -69,7 +69,7 @@
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-primary" onClick="reportInsertAction()" data-bs-toggle="modal" data-bs-target="#reportInfoModal">등록</button>
-	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" name="closeBtn" onClick="reportCloseAction()">닫기</button>
 </div>
 
 </html>
