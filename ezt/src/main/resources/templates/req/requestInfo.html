@@ -424,6 +424,7 @@
         </table>
       </div>
     </div>
+   <th:block th:if="${contract != null}">
     <div class="row">
       <div class="d-flex justify-content-between mb-2">
         <div>
@@ -465,12 +466,8 @@
         뒤로가기
       </button>
     </div>
+    </th:block>
     
-    
-    <!-- 공사 보고 원본 이미지 -->
-    <div class="bigPictureWrapper">
-		<div class="bigPicture img-thumbnail" ></div>
-	</div>
     
     <!-- 공사 보고 Modal -->
 	<div class="z-3 modal fade" id="reportModal" data-bs-backdrop="static"
@@ -479,6 +476,10 @@
 			class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<scr th:insert="rpt/report :: reportFragment"></scr>
+				<!-- 공사 보고 원본 이미지 -->
+   				 <div class="bigPictureWrapper">
+					<div class="bigPicture img-thumbnail" ></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -487,10 +488,14 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       	<scr th:insert="rpt/reportInfo :: reportInfoFragment"></scr>
+      	<!-- 공사 보고 원본 이미지 -->
+    	<div class="bigPictureWrapper">
+			<div class="bigPicture img-thumbnail" ></div>
+		</div>
     </div>
   </div>
 </div>
-    
+   
     
     <!-- 계약서 -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -529,7 +534,11 @@
       if(/*[[${userNo}]]*/"" != null){
       var user = /*[[${userNo}]]*/"";
       }
-      var rno = /*[[${request.requestNo}]]*/"";
+
+      var rno = /*[[${request.requester}]]*/"";
+      if(/*[[${workerNo}]]*/"" != null){
+      var workerNo = /*[[${workerNo}]]*/"";
+      }
     </script>
   </body>
 </html>

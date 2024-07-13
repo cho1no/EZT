@@ -224,7 +224,7 @@ function reportInsertAction() {
 	var formData = new FormData(document.reportInsertForm);
 
 	for (const pair of formData.entries()) {
-		console.log(pair[0], pair[1]);
+		//console.log(pair[0], pair[1]);
 	}
 
 	$.ajax({
@@ -259,7 +259,6 @@ function rptInfo(no) {
 }
 // 상세 모달 열기
 function reportInfoForm(no) {
-	console.log(user);
 
 	$.ajax({
 		url: '/rptInfo?CttReportNo=' + no,
@@ -303,7 +302,6 @@ $('#rpt_updateBtn').on('click', function() {
 	uploadFiles = '';
 	$('#reportModal .modal-footer button:eq(0)').removeAttr('data-bs-toggle');
 	$('#reportModal .modal-footer button:eq(0)').removeAttr('data-bs-target');
-
 
 	$.ajax({
 		url: '/rptDivi?contractNo=' + $('input[name="contractNo"]').val(),
@@ -367,7 +365,7 @@ function reportUpdateAction() {
 	}
 
 	for (const pair of formData.entries()) {
-		console.log(pair[0], pair[1]);
+		//console.log(pair[0], pair[1]);
 	}
 
 	$.ajax({
@@ -394,12 +392,11 @@ function reportUpdateAction() {
 // 공사 보고 승인
 $('#rpt_approveBtn').on("click", function() {
 	$.ajax({
-		url: '/rptApprove?cttReportNo=' + modalData.cttReportNo + '&requestNo=' + rno,
+		url: '/rptApprove?cttReportNo=' + modalData.cttReportNo + '&workerNo=' + workerNo,
 		type: 'Get'
 		, success: function() {
 			alert("승인 되었습니다.")
-			$('#accessState').html('승인');
-			$('#rpt_approveBtn').remove();
+			location.reload();
 		}
 	})
 })
