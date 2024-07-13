@@ -55,4 +55,7 @@ public interface AdminService {
 	// 결제 대금 관리 전체 조회
 	public List<Map<String, Object>> getPayManages();
 	
+	// 결제 대금 관리 상세 조회
+	public Map<String,Object> getPayManage(int payNo);
+	
 }

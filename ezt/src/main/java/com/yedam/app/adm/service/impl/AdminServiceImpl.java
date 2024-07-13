@@ -130,5 +130,14 @@ public class AdminServiceImpl implements AdminService{
 		return admMapper.selectPayManages();
 	}
 
+
+	@Override
+	public Map<String, Object> getPayManage(int payNo) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("info", admMapper.selectPayManage(payNo));
+		map.put("details", admMapper.selectContractDetails(payNo));
+		return map;
+	}
+
 	
 }

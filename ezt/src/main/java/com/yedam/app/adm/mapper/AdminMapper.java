@@ -3,6 +3,7 @@ package com.yedam.app.adm.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.yedam.app.doc.service.ContractDetailVO;
 import com.yedam.app.doc.service.UnityContractVO;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.usr.service.UserVO;
@@ -62,4 +63,8 @@ public interface AdminMapper {
 	
 	// 결제 대금 관리 전체 조회
 	public List<Map<String, Object>> selectPayManages();
+	// 결제 대금 관리 상세 조회
+	public Map<String, Object> selectPayManage(int payNo);
+	// 계약서 상세 조회
+	public List<ContractDetailVO> selectContractDetails(int payNo);
 }
