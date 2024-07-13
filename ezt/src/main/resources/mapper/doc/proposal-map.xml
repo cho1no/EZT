@@ -24,6 +24,7 @@
 		, postcode
 		, address
 		, detail_address
+		, TITLE
 		, hope_ctt_budget
 		, hope_ctt_start_dt
 		, hope_ctt_end_dt

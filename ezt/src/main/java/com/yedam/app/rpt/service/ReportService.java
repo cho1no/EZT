@@ -3,6 +3,7 @@ package com.yedam.app.rpt.service;
 import java.util.List;
 
 import com.yedam.app.common.service.FileVO;
+import com.yedam.app.doc.service.ContractDetailVO;
 
 
 public interface ReportService {
@@ -24,4 +25,7 @@ public interface ReportService {
 	
 	// 공사 보고 파일 조회
 	public List<FileVO> fileSelect(CttReportVO cttReportVO);
+	
+	// 공사 보고 승인
+	public int reportApprove(int cttReportNo);
 }
