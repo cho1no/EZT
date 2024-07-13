@@ -236,10 +236,11 @@ function reportInsertAction() {
 		dataType: 'JSON'
 
 		, success: function(result) {
-			rptInfo(result); // 상세 정보 가져오기
+			//rptInfo(result); // 상세 정보 가져오기
 			if (uploadFiles != '') {
 				fileDelete(uploadFiles);
 			}
+			location.reload();
 		}
 	})
 }
@@ -294,7 +295,7 @@ $('#rpt_deleteBtn').on("click", function() {
 		async: false
 
 	})
-	location.href = '/test';
+	location.reload();
 })
 // 수정 모달 열기
 $('#rpt_updateBtn').on('click', function() {
@@ -331,7 +332,6 @@ $('#rpt_updateBtn').on('click', function() {
 
 // 원본 이미지 확인
 function showImage(img) {
-
 	$('.bigPictureWrapper').css("display", "flex").show();
 	$('.bigPicture').html(`<img src=${img}>`);
 }
@@ -394,9 +394,10 @@ function reportUpdateAction() {
 // 공사 보고 승인
 $('#rpt_approveBtn').on("click", function() {
 	$.ajax({
-		url: '/rptApprove?cttReportNo=' + modalData.cttReportNo,
+		url: '/rptApprove?cttReportNo=' + modalData.cttReportNo + '&requestNo=' + rno,
 		type: 'Get'
 		, success: function() {
+			alert("승인 되었습니다.")
 			$('#accessState').html('승인');
 			$('#rpt_approveBtn').remove();
 		}
@@ -409,7 +410,7 @@ $('#rpt_requestBtn').on("click", function() {
 		url: '/rptRequest?requestNo=' + rno,
 		type: 'Get'
 		, success: function() {
-			alert("승인 요청 되었습니다.")
+			alert("승인 요청 되었습니다.");
 		}
 	})
 })
@@ -534,4 +535,37 @@ function imageshow(obj) {
 	str += `</div>`;
 
 	return str;
+}
+
+function chkword(obj, maxlength) {
+
+	var str = obj.value; // 이벤트가 일어난 컨트롤의 value 값
+	var str_length = str.length; // 전체길이
+
+	// 변수초기화
+	var max_length = maxlength; // 제한할 글자수 길이
+	var i = 0; // for문에 사용
+	var ko_byte = 0; // 총 글자 길이
+	var li_len = 0; // substring하기 위해서 사용
+	var one_char = ""; // 한글자씩 검사한다
+
+	for (i = 0; i < str_length; i++) {
+		// 한글자추출
+		one_char = str.charAt(i);
+		ko_byte += 1;
+	}
+
+	// 전체 크기가 max_length를 넘지않으면
+	if (ko_byte <= max_length) {
+		li_len = i + 1;
+	}
+
+	// 전체길이를 초과하면
+	if (ko_byte > max_length) {
+		$(obj).next().html('&emsp;' + max_length + '글자 초과하여 등록할 수 없습니다.');
+	} else {
+		$(obj).next().html('');
+	}
+	obj.focus();
+
 }
