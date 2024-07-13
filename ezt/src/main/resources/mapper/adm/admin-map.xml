@@ -230,7 +230,7 @@
 	
 	
 	<!-- 결제 대금 관리 전체 조회 -->
-	<select id="selectPayManages" resultType="java.util.HashMap">
+	<sql id="selectPay">
 		WITH unpaid_sum AS (
 		    SELECT contract_no, SUM(price) as total_unpaid
 		    FROM contract_detail
@@ -244,6 +244,11 @@
 		    FIND_COMMONCODE(rq.category_code) category_code_nm,
 		    p.pay_no,
 		    p.requester,
+		    username(p.requester) requester_name,
+		    c.requester_account,
+		    pp.worker,
+		    username(pp.worker) worker_name,
+		    c.worker_account,
 		    p.price,
 		    p.pay_dt,
 		    cd.payment_dt,
@@ -262,5 +267,25 @@
 		    WHERE cd_inner.contract_no = cd.contract_no
 		      AND cd_inner.payment_tf = 'N'
 		)
+	</sql>
+	<select id="selectPayManages" resultType="java.util.HashMap">
+		<include refid="selectPay"></include>
+	</select>
+	<select id="selectPayManage" resultType="java.util.HashMap">
+		<include refid="selectPay"></include> AND p.pay_no = #{payNo}
+	</select>
+	<select id="selectContractDetails" resultType="ContractDetailVO">
+		SELECT cd.contract_detail_no
+		       , cd.contract_no
+		       , cd.price
+		       , cd.payment_dt
+		       , cd.history
+		       , cd.payment_tf
+		       , cd.round
+		FROM contract_detail cd
+		JOIN pay p
+		ON cd.contract_no = p.contract_no
+		WHERE p.pay_no = #{payNo}
+		ORDER BY cd.round
 	</select>
 </mapper>

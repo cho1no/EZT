@@ -185,4 +185,9 @@ public class AdminRestController {
 	public List<Map<String, Object>> payment(){
 		return admSvc.getPayManages();
 	}
+	@CheckToken
+	@GetMapping("/paymentInfo/{payNo}")
+	public Map<String, Object> paymentInfo(@PathVariable int payNo){
+		return admSvc.getPayManage(payNo);
+	}
 }

@@ -11,9 +11,10 @@ import TablePagination from '@mui/material/TablePagination';
 import Scrollbar from 'src/components/scrollbar';
 import Spinner from 'src/components/spinner/spinner';
 
-import UserTableRow from '../pay-table-row';
-import UserTableHead from '../pay-table-head';
-import UserTableToolbar from '../pay-table-toolbar';
+import PayModal from '../pay-modal';
+import PayTableRow from '../pay-table-row';
+import PayTableHead from '../pay-table-head';
+import PayTableToolbar from '../pay-table-toolbar';
 import TableNoData from '../../common-table/table-no-data';
 import TableEmptyRows from '../../common-table/table-empty-rows';
 import { emptyRows, applyFilter, getComparator } from '../../common-table/utils';
@@ -35,6 +36,10 @@ export default function PayPage() {
 
   const [loading, setLoading] = useState(true);
 
+  const [open, setOpen] = useState(false);
+
+  const [payNo, setPayNo] = useState(-1);
+
   useEffect(() => {
     getPayment();
   }, []);
@@ -53,6 +58,16 @@ export default function PayPage() {
         setLoading(false);
       })
       .catch(() => {});
+  };
+
+  // modal open
+  const handleOpen = (pno) => {
+    setOpen(true);
+    setPayNo(pno);
+  };
+  // modal close
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const handleSort = (event, id) => {
@@ -81,7 +96,6 @@ export default function PayPage() {
     inputData: payment,
     comparator: getComparator(order, orderBy),
     filterName,
-    // filters: ['TITLE', 'CATEGORY_CODE_NM', 'PRICE', 'HISTORY', 'PAYMENT_TF'],
     filters: [...Object.keys(payment[0])],
   });
 
@@ -92,58 +106,61 @@ export default function PayPage() {
   }
 
   return (
-    <Container>
-      <Card>
-        <UserTableToolbar filterName={filterName} onFilterName={handleFilterByName} />
+    <>
+      <Container>
+        <Card>
+          <PayTableToolbar filterName={filterName} onFilterName={handleFilterByName} />
 
-        <Scrollbar>
-          <TableContainer sx={{ overflow: 'unset' }}>
-            <Table sx={{ minWidth: 800 }}>
-              <UserTableHead
-                order={order}
-                orderBy={orderBy}
-                rowCount={payment.length}
-                onRequestSort={handleSort}
-                headLabel={[
-                  { id: 'no', label: '번호' },
-                  { id: 'TITLE', label: '의뢰 제목' },
-                  { id: 'CATEGORY_CODE_NM', label: '구분' },
-                  { id: 'PAY_DT', label: '계약일' },
-                  { id: 'UNPAID_SUM', label: '잔여금액' },
-                  { id: 'PRICE', label: '전체결제금액' },
-                  { id: 'HISTORY', label: '진행단계' },
-                  { id: 'PAYMENT_DT', label: '지급일' },
-                  { id: 'PAYMENT_TF', label: '상태' },
-                ]}
-              />
-              <TableBody>
-                {dataFiltered
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, idx) => (
-                    <UserTableRow key={idx} data={row} />
-                  ))}
-
-                <TableEmptyRows
-                  height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, payment.length)}
+          <Scrollbar>
+            <TableContainer sx={{ overflow: 'unset' }}>
+              <Table sx={{ minWidth: 800 }}>
+                <PayTableHead
+                  order={order}
+                  orderBy={orderBy}
+                  rowCount={payment.length}
+                  onRequestSort={handleSort}
+                  headLabel={[
+                    { id: 'no', label: '번호', align: 'center' },
+                    { id: 'TITLE', label: '의뢰 제목' },
+                    { id: 'CATEGORY_CODE_NM', label: '구분' },
+                    { id: 'PAY_DT', label: '계약일' },
+                    { id: 'UNPAID_SUM', label: '잔여금액' },
+                    { id: 'PRICE', label: '전체결제금액' },
+                    { id: 'HISTORY', label: '진행단계' },
+                    { id: 'PAYMENT_DT', label: '지급일' },
+                    { id: 'PAYMENT_TF', label: '상태' },
+                  ]}
                 />
+                <TableBody>
+                  {dataFiltered
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row, idx) => (
+                      <PayTableRow key={idx} data={row} onClick={handleOpen} />
+                    ))}
 
-                {notFound && <TableNoData query={filterName} colSpan={9} />}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
+                  <TableEmptyRows
+                    height={77}
+                    emptyRows={emptyRows(page, rowsPerPage, payment.length)}
+                  />
 
-        <TablePagination
-          page={page}
-          component="div"
-          count={payment.length}
-          rowsPerPage={rowsPerPage}
-          onPageChange={handleChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Card>
-    </Container>
+                  {notFound && <TableNoData query={filterName} colSpan={9} />}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Scrollbar>
+
+          <TablePagination
+            page={page}
+            component="div"
+            count={payment.length}
+            rowsPerPage={rowsPerPage}
+            onPageChange={handleChangePage}
+            rowsPerPageOptions={[5, 10, 25]}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Card>
+      </Container>
+      <PayModal payNo={payNo} open={open} onClose={handleClose} />
+    </>
   );
 }

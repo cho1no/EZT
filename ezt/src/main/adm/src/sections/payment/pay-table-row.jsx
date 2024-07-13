@@ -9,10 +9,10 @@ import { fNumber } from 'src/utils/format-number';
 import Label from 'src/components/label';
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({ data, onClick }) {
+export default function PayTableRow({ data, onClick }) {
   return (
-    <TableRow hover tabIndex={-1} onClick={onClick}>
-      <TableCell>{data.no}</TableCell>
+    <TableRow hover tabIndex={-1} onClick={() => onClick(data.PAY_NO)}>
+      <TableCell align="center">{data.no}</TableCell>
       <TableCell>{data.TITLE}</TableCell>
       <TableCell>{data.CATEGORY_CODE_NM}</TableCell>
       <TableCell>{fDateTime(data.PAY_DT, 'yyyy/MM/dd')}</TableCell>
@@ -22,14 +22,16 @@ export default function UserTableRow({ data, onClick }) {
       <TableCell>{data.HISTORY}</TableCell>
       <TableCell>{fDateTime(data.PAYMENT_DT, 'yyyy/MM/dd')}</TableCell>
 
-      <TableCell align="center">
-        <Label color={{ N: 'error', Y: 'success' }[data.PAYMENT_TF]}>{data.PAYMENT_TF}</Label>
+      <TableCell>
+        <Label color={{ N: 'error', Y: 'success' }[data.PAYMENT_TF]}>
+          {{ N: '미지급', Y: '지급' }[data.PAYMENT_TF]}
+        </Label>
       </TableCell>
     </TableRow>
   );
 }
 
-UserTableRow.propTypes = {
+PayTableRow.propTypes = {
   data: PropTypes.object,
   onClick: PropTypes.func,
 };
