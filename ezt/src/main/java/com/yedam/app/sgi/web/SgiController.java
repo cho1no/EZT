@@ -36,16 +36,10 @@ public class SgiController {
 		return "sgi/login";
 	}
 	
-//	@GetMapping("/loginForm")
-//    public String loginForm(@RequestParam(value = "error", required = false) String error,
-//                            @RequestParam(value = "exception", required = false) String exception, Model model) {
-//		log.info(exception);
-//        model.addAttribute("error", error);
-//        model.addAttribute("exception", exception);
-//        return "sgi/login";
-//    }
-	
-	
+	@GetMapping("/")
+	public String main() {
+		return "redirect:/main";
+	}
     
     @GetMapping("findIdPw")
     public String findIdPw() {
