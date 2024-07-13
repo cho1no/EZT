@@ -178,17 +178,15 @@ public class reportController {
 	// 공사 보고 승인
 	@GetMapping("rptApprove")
 	@ResponseBody
-	public int rtpApprove(int cttReportNo, int requestNo) {
-		int no = reportService.reportApprove(cttReportNo);
-		
-		RequestVO reqVO = ppsService.reqInfo(requestNo);
+	public int rtpApprove(int cttReportNo, int workerNo) {
+		CttReportVO cvo = reportService.reportSelect(cttReportNo);
 		
 		AlarmVO alarm = new AlarmVO();
-		alarm.setUsersNo(reqVO.getRequester());
+		alarm.setUsersNo(workerNo);
 		alarm.setTitle("공사 보고 승인 완료");
-		alarm.setContent("["+ reqVO.getTitle() + "] 에 등록한 공사 보고가 승인 되었습니다.");
+		alarm.setContent("["+ cvo.getTitle() + "]가 승인 되었습니다.");
 		sac.message(alarm);
-		return no;
+		return 1;
 	}
 	
 	// 공사 보고 요청

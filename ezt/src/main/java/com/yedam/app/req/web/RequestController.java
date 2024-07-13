@@ -82,6 +82,10 @@ public class RequestController {
 		if(user != null) {
 		model.addAttribute("userNo", user.getUserNo());
 		}
+		// 계약한 작업자 번호
+		if(findContractVO != null) {
+			model.addAttribute("workerNo", findContractVO.getWorkerInfo());
+		}
 		return "req/requestInfo";
 	}
 

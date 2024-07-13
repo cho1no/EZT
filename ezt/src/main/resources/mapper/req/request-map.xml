@@ -280,6 +280,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 			,c.requester_address
 			,c.requester_account
 			,USERNAME(c.worker_info) as users_name
+			,c.worker_info
 			,c.worker_address
 			,c.worker_account
 			,c.contract_division
