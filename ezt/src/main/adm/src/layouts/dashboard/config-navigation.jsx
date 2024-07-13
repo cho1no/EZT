@@ -37,6 +37,11 @@ const navConfig = [
     path: '/request',
     icon: icon('ic_data'),
   },
+  {
+    title: '메인으로',
+    path: 'http://localhost:8080/main',
+    icon: icon('ic_home'),
+  },
 ];
 
 export default navConfig;

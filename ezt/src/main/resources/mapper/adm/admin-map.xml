@@ -35,7 +35,11 @@
 		FROM career
 		WHERE career_access_tf = 'A01'
 	</select>
-	
+	<select id="selectUsersCnt" resultType="int">
+		SELECT COUNT(*) num
+		FROM users
+		WHERE users_role IN ('ROLE_USER', 'ROLE_WORKER')
+	</select>
 	
 	<!-- 의뢰 관련 -->
 	<select id="selectRequests" resultType="RequestVO">
@@ -61,6 +65,12 @@
 	        ON r.file_id = f.file_id AND f.boss_tf = 'Y'
         ORDER BY write_dt DESC
 	</select>
+	<select id="selectRequest" parameterType="int" resultType="RequestVO">
+		SELECT *
+		FROM request
+		WHERE request_no = #{requestNo}
+	</select>
+	
 	
 	<!-- 유저관련 -->
 	<select id="selectUsers" resultType="UserVO">

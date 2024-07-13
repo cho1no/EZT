@@ -25,8 +25,8 @@ import ContractTableRow from '../contract-table-row';
 import ContractTableHead from '../contract-table-head';
 import TableNoData from '../../common-table/table-no-data';
 import ContractTableToolbar from '../contract-table-toolbar';
+import { style, textareaStyle } from '../../common-table/css';
 import TableEmptyRows from '../../common-table/table-empty-rows';
-import { style, contentStyle, textareaStyle } from '../../common-table/css';
 import { emptyRows, showAlert, applyFilter, getComparator } from '../../common-table/utils';
 // ----------------------------------------------------------------------
 
@@ -234,7 +234,7 @@ export default function ContractPage() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Card sx={{ ...style, width: '50%' }}>
+        <Card sx={{ ...style }}>
           <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="h6" component="h2">
               통일 계약서 정보
@@ -245,72 +245,74 @@ export default function ContractPage() {
               </Button>
             )}
           </Grid>
-          <CardContent sx={contentStyle}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">제목</Typography>
-                <TextField
-                  variant="outlined"
-                  id="title"
-                  value={contractInfo.title || ''}
-                  onChange={setInputValue}
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">내용</Typography>
-                <TextareaAutosize
-                  id="contractTermsContent"
-                  style={{ ...textareaStyle, overflow: 'hidden' }}
-                  value={contractInfo.contractTermsContent || ''}
-                  onChange={setInputValue}
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">변경사항</Typography>
-                <TextareaAutosize
-                  id="changes"
-                  style={{ ...textareaStyle, overflow: 'hidden' }}
-                  value={contractInfo.changes || ''}
-                  onChange={setInputValue}
-                  required
-                />
-              </Grid>
-              {!isEdit && (
-                <>
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle1">작성일</Typography>
-                    <TextField
-                      variant="outlined"
-                      value={fDateTime(contractInfo.writeDt, 'yyyy/MM/dd hh:mm')}
-                      fullWidth
-                    />
-                  </Grid>
-                  <Grid item container spacing={2} xs={12}>
-                    <Grid item xs={6}>
-                      <Typography variant="subtitle1">기본 계약서 여부</Typography>
+          <Scrollbar sx={{ height: '90%' }}>
+            <CardContent>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">제목</Typography>
+                  <TextField
+                    variant="outlined"
+                    id="title"
+                    value={contractInfo.title || ''}
+                    onChange={setInputValue}
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">내용</Typography>
+                  <TextareaAutosize
+                    id="contractTermsContent"
+                    style={{ ...textareaStyle, overflow: 'hidden' }}
+                    value={contractInfo.contractTermsContent || ''}
+                    onChange={setInputValue}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="subtitle1">변경사항</Typography>
+                  <TextareaAutosize
+                    id="changes"
+                    style={{ ...textareaStyle, overflow: 'hidden' }}
+                    value={contractInfo.changes || ''}
+                    onChange={setInputValue}
+                    required
+                  />
+                </Grid>
+                {!isEdit && (
+                  <>
+                    <Grid item xs={12}>
+                      <Typography variant="subtitle1">작성일</Typography>
                       <TextField
                         variant="outlined"
-                        value={contractInfo.basicContractTf || ''}
+                        value={fDateTime(contractInfo.writeDt, 'yyyy/MM/dd hh:mm')}
                         fullWidth
                       />
                     </Grid>
-                    <Grid item xs={6}>
-                      <Typography variant="subtitle1">사용 여부</Typography>
-                      <TextField variant="outlined" value={contractInfo.useTf || ''} fullWidth />
+                    <Grid item container spacing={2} xs={12}>
+                      <Grid item xs={6}>
+                        <Typography variant="subtitle1">기본 계약서 여부</Typography>
+                        <TextField
+                          variant="outlined"
+                          value={contractInfo.basicContractTf || ''}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="subtitle1">사용 여부</Typography>
+                        <TextField variant="outlined" value={contractInfo.useTf || ''} fullWidth />
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </>
-              )}
-            </Grid>
-          </CardContent>
+                  </>
+                )}
+              </Grid>
+            </CardContent>
+          </Scrollbar>
           <Button
             variant="contained"
             fullWidth
             color={isEdit ? 'success' : 'primary'}
-            sx={buttonStyle}
+            sx={{ ...buttonStyle, top: -60 }}
             onClick={async () => {
               if (isEdit) {
                 postConstract();

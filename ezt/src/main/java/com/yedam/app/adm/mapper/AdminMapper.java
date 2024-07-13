@@ -18,6 +18,8 @@ public interface AdminMapper {
 	public List<Map<String, Object>> selectReqRegionStatistics();
 	// 경력인증 승인대기 개수
 	public int selectCrrAcptWaitCnt();
+	// 전체 유저 수 ( 일반유저, 작업자 )
+	public int selectUsersCnt();
 	
 	// 회원 정보 가져오기
 	public List<UserVO> selectUsers();
@@ -32,7 +34,7 @@ public interface AdminMapper {
 	// 의뢰 전체 가져오기
 	public List<RequestVO> selectRequests();
 	// 의뢰 단건 조회
-	public RequestVO selectRequest();
+	public RequestVO selectRequest(int requestNo);
 	// 의뢰 삭제
 	public int deleteRequest();
 	

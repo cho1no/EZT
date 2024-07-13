@@ -17,11 +17,14 @@ export const style = {
     xl: '50%', // 1536px 이상
   },
 };
-export const contentStyle = {
-  position: 'relative',
-  overflowY: 'auto',
-  height: '90%',
-  paddingRight: 2,
+export const subStyle = {
+  width: {
+    xs: '95%', // 0px 이상
+    sm: '95%', // 600px 이상
+    md: '80%', // 900px 이상
+    lg: '60%', // 1200px 이상
+    xl: '40%', // 1536px 이상
+  },
 };
 export const boxStyle = {
   border: '1px solid #eee',

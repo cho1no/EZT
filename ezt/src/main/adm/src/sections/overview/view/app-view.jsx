@@ -22,10 +22,15 @@ import AppConversionRates from '../app-conversion-rates';
 // ----------------------------------------------------------------------
 export default function AppView() {
   const [statistic, setStatistic] = useState([]);
+
   const [joinData, setJoinData] = useState({ dates: [], group: { user: [], worker: [] } });
+
   const [reqCategoryData, setReqCategoryData] = useState([{ label: [], value: [] }]);
+
   const [reqRegionData, setReqRegionData] = useState([{ label: [], value: [] }]);
+
   const [loading, setLoading] = useState(true);
+
   const getStatistic = async () => {
     const resp = await axios.get('/adm/getStatistic');
     setStatistic(resp.data);
@@ -121,15 +126,17 @@ export default function AppView() {
           <Grid xs={12}>
             <AppWidgetSummary
               title="전체 유저"
-              total={1352831}
+              total={statistic.totalUsersCnt}
+              addText="명"
               color="info"
               icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
             />
           </Grid>
           <Grid xs={12}>
             <AppWidgetSummary
-              title="Bug Reports"
-              total={234}
+              title="경력 인증 대기"
+              total={statistic.crrWaitCnt}
+              addText="건"
               color="error"
               icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
             />
