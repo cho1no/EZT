@@ -2,7 +2,6 @@ package com.yedam.app.rpt.service.impl;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -88,5 +87,11 @@ public class ReportServiceImpl implements ReportService {
 	public List<FileVO> fileSelect(CttReportVO cttReportVO) {
 		return fileMapper.selectRptFileList(cttReportVO.getCttReportNo());
 	}
-
+	
+	// 공사 보고 승인
+	@Override
+	public int reportApprove(int cttReportNo) {
+		int result = reportMapper.updateApprove(cttReportNo);
+		return result == 1 ? 1 : -1;
+	}
 }

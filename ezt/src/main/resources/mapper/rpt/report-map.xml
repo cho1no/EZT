@@ -37,16 +37,20 @@
 	<!-- 공사 보고 조회 -->
 	<select id="selectCttInfo" resultType="CttReportVO">
 		SELECT 
-		CTT_REPORT_NO
-		, TITLE
-		, DETAIL_CONTENT
-		, CTT_DIVISION
-		, ACCESS_STATE
-		, CTT_REPORT_DT
-		, FILE_ID
-		, CONTRACT_NO
-		FROM CTT_REPORT
-		WHERE CTT_REPORT_NO = #{cttReportNo}
+		r.CTT_REPORT_NO
+		, r.TITLE
+		, r.DETAIL_CONTENT
+		, r.CTT_DIVISION
+		, r.ACCESS_STATE
+		, r.CTT_REPORT_DT
+		, r.FILE_ID
+		, r.CONTRACT_NO
+        , c.worker_info
+        , c.requester_info
+		FROM CTT_REPORT r
+        JOIN contract c
+        ON c.contract_no = r.contract_no
+		WHERE r.CTT_REPORT_NO = #{cttReportNo}
 	</select>
 	<!-- 공사 보고 조회 -->
 	
@@ -69,6 +73,16 @@
 		}
 	</delete>
 	<!-- 공사 보고 삭제 -->
+	
+	<!-- 공사 보고 승인 -->
+	<update id="updateApprove" parameterType="int">
+		UPDATE CTT_REPORT
+		SET
+			ACCESS_STATE = 'Y'
+		WHERE CTT_REPORT_NO = #{cttReportNo}
+	</update>
+	<!-- 공사 보고 승인 -->
+	
 	
 
 </mapper>

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.sgi.service.LoginUserVO;
 
 
@@ -14,8 +15,10 @@ import com.yedam.app.sgi.service.LoginUserVO;
 public class docController {
 
 	@GetMapping("test")
-	public String test(Model model, @AuthenticationPrincipal LoginUserVO user) {
-		model.addAttribute("userId", user.getUserVO());
+	public String test(Model model, @AuthenticationPrincipal LoginUserVO user, RequestVO requestVO) {
+		model.addAttribute("userId", user.getUserNo());
+		model.addAttribute("requestNo", requestVO.getRequestNo());
+		
 		return "doc/index";
 	}
 	

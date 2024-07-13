@@ -2,11 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="reportFragment">
 
 <style>
-.uploadResult img {
-	display: block;
-	width: 100px;
-	height: 80px;
-	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+
+
+.input_warning{
+	position:absolute;
+	display:flex;
+	font-size: 14px;
+	color: red;
+
 }
 </style>
 <div class="modal-header">
@@ -19,16 +22,16 @@
 <div class="modal-body mx-3 my-3">
 	<form name="reportInsertForm">
 		<ul class="list-unstyled mb-0">
-			<li class="mb-2 row form-group"><div class="col-4">
+			<li class="mb-2 row form-group pb-3"><div class="col-4">
 					<input type="hidden" name="cttReportNo">
 					<input type="hidden" name="contractNo">
-					<input type="hidden" name="fileId">
 					<strong class="text-black">제목</strong>
 				</div>
 				<div class="col">
-					<input type="text" class="form-control" name="title">
+					<input type="text" class="form-control" name="title" onkeyup="chkword(this,30);">
+					<p class="input_warning fw-medium"></p>
 				</div></li>
-			<li class="mb-2 row form-group"><div class="col-4">
+			<li class="mb-2 row form-group pb-3"><div class="col-4">
 					<strong class="text-black">공사 보고 유형</strong>
 				</div>
 				<div class="col">
@@ -46,10 +49,11 @@
 				</div></li>
 
 			<li>
-				<div class="form-floating"
+				<div class="form-floating pb-2"
 					style="margin-top: 30px; margin-bottom: 30px">
 					<textarea class="form-control" placeholder="Leave a comment here"
-						style="height: 100px" id="floatingTextarea" name="detailContent"></textarea>
+						style="height: 100px" id="floatingTextarea" name="detailContent" onkeyup="chkword(this,2000);"></textarea>
+					<p class="input_warning fw-medium"></p>
 					<label for="floatingTextarea"><b>상세 내용</b></label>
 				</div>
 			</li>
@@ -68,7 +72,7 @@
 	</form>
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-primary" onClick="reportInsertAction()" data-bs-toggle="modal" data-bs-target="#reportInfoModal">등록</button>
+	<button type="button" class="btn btn-primary" onClick="reportInsertAction()">등록</button>
 	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" name="closeBtn" onClick="reportCloseAction()">닫기</button>
 </div>
 

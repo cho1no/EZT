@@ -1,0 +1,40 @@
+
+.modal-backdrop {
+	/* bug fix - no overlay */
+	display: none;
+}
+
+.bigPictureWrapper{
+	position: absolute;
+	display: none;
+	justify-content : center;
+	align-items: center;
+	top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin-left:7px;
+	width:400px;
+	height:400px;
+	z-index:100;
+	background:rgba(233, 236, 239, 1);
+	border:2px solid gray;
+}
+
+.bigPicture{
+	position:relative;
+	display:flex;
+	justify-content : center;
+	align-items: center;
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.6);
+}
+
+.bigPicture img{
+	width: 300px;
+}
+
+.uploadResult img {
+	display: block;
+	width: 100px;
+	height: 80px;
+	box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+}

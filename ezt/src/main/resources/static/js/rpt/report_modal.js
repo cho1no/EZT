@@ -1,5 +1,17 @@
+// 엔터 막기
+$(document).ready(function() {
+	//공통 enter 막기
+	$('#reportModal input').keydown(function(event) {
+		if (event.keyCode === 13) {
+			event.preventDefault();
+		}
+	});
+
+});
 
 // 크기&확장자 제한
+$('input[name="uploadFile"]').attr('accept', '.jpeg, .png, .gif, .jpg, .psd, .eps, .ai, .tiff, .bmp, .svg, .jfif');
+
 var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
 
 var maxSize = 1048576; // 5MB
@@ -37,29 +49,27 @@ $('#reportModal').on('show.bs.modal', function() {
 	$('#reportModal select option').remove();
 	$('#reportModal select').append(`<option selected>유형 선택</option>`);
 	$('#reportModal input[name="uploadFile"]').val('');
-	$('#reportModal .uploadResult .row div').remove();
 })
 $('#reportModal').on('hide.bs.modal', function() {
 	$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
-	
 	$('#reportModal .uploadResult .row div').remove();
-	
+	$('.bigPictureWrapper').hide();
 })
 $('#reportInfoModal').on('show.bs.modal', function() {
 	$('.smoothscroll.scroll-top').attr('style', 'display:none');
-	$('#reportInfoModal .uploadResult .row div').remove();
 })
 $('#reportInfoModal').on('hide.bs.modal', function() {
 	$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
 	$(this).find('form')[0].reset();
 	$('#reportInfoModal .uploadResult .row div').remove();
+	$('.bigPictureWrapper').hide();
 })
 
-function reportCloseAction(){
-	console.log('close');
-if(uploadFiles != ''){
-	fileDelete(uploadFiles);
-	uploadFiles = '';
+// 모달 닫기 : 등록되지 않은 이미지 제거
+function reportCloseAction() {
+	if (uploadFiles != '') {
+		fileDelete(uploadFiles);
+		uploadFiles = '';
 	}
 }
 
@@ -75,8 +85,6 @@ function fileUploadClick() {
 	$('.uploadResult .row div').remove();
 };
 
-
-
 // 파일 삭제
 function fileDelete(uploadFiles) {
 	$.ajax({
@@ -87,7 +95,7 @@ function fileDelete(uploadFiles) {
 		async: false
 	})
 }
-
+// 이미지 등록
 function fileList() {
 
 	var x = document.getElementById("multiFile");
@@ -107,11 +115,10 @@ function fileList() {
 	var files = inputFile[0].files;
 
 	if (uploadFiles != '') {
-		console.log('del');
 		fileDelete(uploadFiles);
 		uploadFiles = '';
 	}
-	
+
 	// formData에 데이터 넣기
 	for (var i = 0; i < files.length; i++) {
 
@@ -135,7 +142,6 @@ function fileList() {
 		type: 'Post',
 		dataType: 'JSON'
 		, success: function(result) {
-			//console.log(result);
 			showUpFile(result);
 			if (result != null) {
 				uploadFiles = result;
@@ -156,7 +162,7 @@ function showUpFile(uploadResultArr) {
 	$(uploadResultArr)
 		.each(
 			function(i, obj) {
-				str = imageshow(obj);
+				str += imageshow(obj);
 			});
 
 	uploadUL.append(str);
@@ -165,10 +171,12 @@ function showUpFile(uploadResultArr) {
 
 // 등록 모달 열기
 function reportInsertForm(no) {
-	
+
 	uploadFiles = '';
 
 	$('#reportModal').modal('show');
+	$('#reportModal .modal-footer button:eq(0)').removeAttr('data-bs-toggle');
+	$('#reportModal .modal-footer button:eq(0)').removeAttr('data-bs-target');
 
 	currentDay(); // 현재 날짜 표시
 
@@ -192,9 +200,27 @@ function reportInsertForm(no) {
 // 등록
 function reportInsertAction() {
 
-	selectData(); // 공사 유형 선택 값 넣기
+	// 유효성 검사
+	if (selectData() == false) {
+		return false;
+	} else if ($('input[name="title"]').val() == '') {
+		alert("제목을 입력해 주세요");
+		return false;
+	} else if ($('textarea[name="detailContent"]').val() == '') {
+		alert("내용을 입력해 주세요");
+		return false;
+	} else if (uploadFiles == '') {
+		alert("이미지를 업로드해 주세요");
+		return false;
+	} else if (maxLength() == false) {
+		alert("글자수를 초과했습니다. 다시 확인해주세요.");
+		return false;
+	}
 
 	// 폼 데이터 전송
+	$('#reportModal .modal-footer button:eq(0)').attr('data-bs-toggle', "modal");
+	$('#reportModal .modal-footer button:eq(0)').attr('data-bs-target', "#reportInfoModal");
+
 	var formData = new FormData(document.reportInsertForm);
 
 	for (const pair of formData.entries()) {
@@ -211,7 +237,9 @@ function reportInsertAction() {
 
 		, success: function(result) {
 			rptInfo(result); // 상세 정보 가져오기
-			fileDelete(uploadFiles);
+			if (uploadFiles != '') {
+				fileDelete(uploadFiles);
+			}
 		}
 	})
 }
@@ -224,25 +252,23 @@ function rptInfo(no) {
 
 		, success: function(result) {
 			modalInfo(result); // 상세 내역 표시
+			$('#reportInfoModal').modal('show');
 		}
 	})
 }
 // 상세 모달 열기
 function reportInfoForm(no) {
-
-	$('#reportInfoModal').modal('show');
+	console.log(user);
 
 	$.ajax({
 		url: '/rptInfo?CttReportNo=' + no,
 		type: 'Get'
 
 		, success: function(result) {
-			console.log(result);
 			modalData = result;
-
 			$('#reportModal').modal('hide');
-
 			modalInfo(result);
+			$('#reportInfoModal').modal('show');
 		}
 	})
 }
@@ -257,7 +283,7 @@ $('.uploadResult').on("click", "img", function(e) {
 	showImage(newobj); // 원본 이미지 표시
 
 })
-// 삭제
+// 공사 보고 삭제
 $('#rpt_deleteBtn').on("click", function() {
 
 	$.ajax({
@@ -272,8 +298,11 @@ $('#rpt_deleteBtn').on("click", function() {
 })
 // 수정 모달 열기
 $('#rpt_updateBtn').on('click', function() {
-	
+
 	uploadFiles = '';
+	$('#reportModal .modal-footer button:eq(0)').removeAttr('data-bs-toggle');
+	$('#reportModal .modal-footer button:eq(0)').removeAttr('data-bs-target');
+
 
 	$.ajax({
 		url: '/rptDivi?contractNo=' + $('input[name="contractNo"]').val(),
@@ -294,13 +323,10 @@ $('#rpt_updateBtn').on('click', function() {
 					currentDay();
 					modalInsertInfo(result);
 					$('#reportModal').modal('show');
-
 				}
-
 			})
 		}
 	})
-
 })
 
 // 원본 이미지 확인
@@ -309,7 +335,7 @@ function showImage(img) {
 	$('.bigPictureWrapper').css("display", "flex").show();
 	$('.bigPicture').html(`<img src=${img}>`);
 }
-
+// 원본 이미지 클릭 시 닫기
 $('.bigPictureWrapper').on("click", function() {
 	$('.bigPictureWrapper').hide();
 })
@@ -317,10 +343,28 @@ $('.bigPictureWrapper').on("click", function() {
 // 수정
 function reportUpdateAction() {
 
-	selectData();
+	if (selectData() == false) {
+		return false;
+	} else if ($('input[name="title"]').val() == '') {
+		alert("제목을 입력해 주세요");
+		return false;
+	} else if ($('textarea[name="detailContent"]').val() == '') {
+		alert("내용을 입력해 주세요");
+		return false;
+	} else if (maxLength() == false) {
+		alert("글자수를 초과했습니다. 다시 확인해주세요.");
+		return false;
+	}
 
 	// 폼 데이터 전송
 	var formData = new FormData(document.reportInsertForm);
+
+	if (uploadFiles == '' && modalData.fileList.length != 0) {
+		formData.append("fileName", modalData.fileList[0].saveName);
+	}
+	if (modalData.fileId != 0) {
+		formData.append("fileId", modalData.fileId);
+	}
 
 	for (const pair of formData.entries()) {
 		console.log(pair[0], pair[1]);
@@ -335,23 +379,50 @@ function reportUpdateAction() {
 		dataType: 'JSON'
 
 		, success: function(result) {
-			fileDelete(uploadFiles);
+			if (uploadFiles != '') {
+				fileDelete(uploadFiles);
+			}
 			modalInfo(result);
+			$('#reportModal .modal-footer button:eq(0)').attr('data-bs-toggle', "modal");
+			$('#reportModal .modal-footer button:eq(0)').attr('data-bs-target', "#reportInfoModal");
 			$('#reportInfoModal').modal('show');
 		}
 	})
 
 }
 
+// 공사 보고 승인
+$('#rpt_approveBtn').on("click", function() {
+	$.ajax({
+		url: '/rptApprove?cttReportNo=' + modalData.cttReportNo,
+		type: 'Get'
+		, success: function() {
+			$('#accessState').html('승인');
+			$('#rpt_approveBtn').remove();
+		}
+	})
+})
+
+// 공사 보고 요청
+$('#rpt_requestBtn').on("click", function() {
+	$.ajax({
+		url: '/rptRequest?requestNo=' + rno,
+		type: 'Get'
+		, success: function() {
+			alert("승인 요청 되었습니다.")
+		}
+	})
+})
+
 // 셀렉트 데이터 선택
 function selectData() {
 	if ($('select').val() !== '유형 선택') {
 		$('input[name=cttDivision]').val($('select').val());
 	} else {
-		$('input[name=cttDivision]').val(null);
+		alert("유형을 선택해 주세요")
+		return false;
 	}
 }
-
 
 // 셀렉트 선택
 function selectOption(result) {
@@ -359,8 +430,14 @@ function selectOption(result) {
 		$('select').append(`<option>${result.divi[i]}</option>`);
 	}
 }
-
-
+// 글자수 초과 체크
+function maxLength() {
+	for (i = 0; i < $('.input_warning').length; i++) {
+		if ($('.input_warning').html() != '') {
+			return false;
+		}
+	}
+}
 // 모달 정보 표기
 function modalInfo(result) {
 	$('#reportModal').modal('hide');
@@ -379,14 +456,26 @@ function modalInfo(result) {
 	$('textarea[name="detailContent"]').val(result.detailContent);
 	$('#cttReportDt').html(result.cttReportDt.substring(0, 10));
 
+	if (result.accessState == 'Y') {
+		$('#rpt_updateBtn').remove();
+		$('#rpt_deleteBtn').remove();
+		$('#rpt_approveBtn').remove();
+		$('#rpt_requestBtn').remove();
+	} else if (user == result.workerInfo) {
+		$('#rpt_approveBtn').remove();
+	} else if (user == result.requesterInfo) {
+		$('#rpt_updateBtn').remove();
+		$('#rpt_deleteBtn').remove();
+		$('#rpt_requestBtn').remove();
+	}
+
 	var uploadUL = $('#reportInfoModal .uploadResult .row');
 
 	var str = "";
 
 	result.fileList.forEach(e => {
 
-		str = imageshow(e);
-
+		str += imageshow(e);
 	})
 	uploadUL.append(str);
 }
@@ -413,7 +502,7 @@ function modalInsertInfo(result) {
 
 	result.fileList.forEach(e => {
 
-		str = imageshow(e);
+		str += imageshow(e);
 
 	})
 	uploadUL.append(str);
@@ -443,6 +532,6 @@ function imageshow(obj) {
 
 	str += `<img src='/display?fileName=${originPath}' class="img-fluid img-thumbnail">`;
 	str += `</div>`;
-	
+
 	return str;
 }

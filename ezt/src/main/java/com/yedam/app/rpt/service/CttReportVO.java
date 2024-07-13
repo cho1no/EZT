@@ -19,4 +19,7 @@ public class CttReportVO {
 	private int contractNo; // 계약서 번호
 	
 	private List<FileVO> fileList; // 파일 리스트
+	
+	private int requesterInfo;
+	private int workerInfo;
 }

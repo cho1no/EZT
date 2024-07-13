@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.yedam.app.doc.service.ContractDetailVO;
 import com.yedam.app.rpt.service.CttReportVO;
 
 public interface ReportMapper {
@@ -24,5 +25,5 @@ public interface ReportMapper {
 	public int deleteCttInfo(@Param("fileId")int fileId);
 	
 	// 공사 보고 승인
-
+	public int updateApprove(@Param("cttReportNo")int cttReportNo);
 }
