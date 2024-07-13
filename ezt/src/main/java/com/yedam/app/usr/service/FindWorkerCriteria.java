@@ -1,5 +1,7 @@
 package com.yedam.app.usr.service;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -8,6 +10,9 @@ public class FindWorkerCriteria {
 	private int pageNum;
 	private int amount;
 	private int usersNo;
+	
+	private List<String> regionCode;
+	private List<String> categoryCode;
 	
 	//검색
 	private String type;

@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -88,23 +90,49 @@ public class WorkerController {
       vo.setUserVO(uvo);
       
       model.addAttribute("msg", "정보수정 완료!");
+      model.addAttribute("icon", "success");
       model.addAttribute("url", "/worker/update");
       return "gongtong/message";
    }
    
-   //비밀번호 변경 -페이지
-   @GetMapping("/pwUpdate")
-   public String workerPwchangeForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
-      model.addAttribute("userId", vo.getUserVO());
-      return "wkr/workerPwUpdate";
-   }
-   
-   //비밀번호 변경 기능
-   @PostMapping("/pwUpdate")
-   @ResponseBody
-   public boolean workerPwUpdate(@RequestBody UserVO userVO) {
-      return workerService.updateWorkerPw(userVO);
-   }
+    //비밀번호 변경 -페이지
+ 	@GetMapping("/pwUpdate")
+ 	public String userPwchangeForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+ 		model.addAttribute("userId", vo.getUserVO());
+ 		return "wkr/workerPwUpdate";
+ 	}
+ 	
+ 	//비밀번호 변경 - 기능
+ 	@PostMapping("/pwUpdate")
+ 	public String pwUpdate(@RequestParam("currentPw") String currentPw,
+ 	                       @RequestParam("usersNewPw") String usersNewPw,
+ 	                       @AuthenticationPrincipal LoginUserVO loginUser,
+ 	                       Model model,
+ 	                       SessionStatus sessionStatus) {
+
+ 	    if (loginUser == null || loginUser.getUserNo() == null) {
+ 	        model.addAttribute("msg", "로그인 필요!");
+ 	        model.addAttribute("icon", "warning");
+ 	        model.addAttribute("url", "/login");
+ 	        return "gongtong/message";
+ 	    }
+
+ 	    // 비밀번호 변경
+ 	    int result = userService.updatePw(loginUser.getUserNo(), currentPw, usersNewPw);
+
+ 	    if (result > 0) {
+ 	        sessionStatus.setComplete(); // 세션 정리
+ 	        model.addAttribute("msg", "비밀번호 변경완료!");
+ 	        model.addAttribute("icon", "success");
+ 	        model.addAttribute("url", "");
+ 	        return "gongtong/message"; // 성공 페이지로 리디렉션
+ 	    } else {
+ 	        model.addAttribute("msg", "비밀번호가 맞지않습니다");
+ 	        model.addAttribute("icon", "warning");
+ 	        model.addAttribute("url", "/worker/pwUpdate"); // 다시 비밀번호 변경 페이지로
+ 	        return "gongtong/message"; 
+ 	    }
+ 	}
    
    //경력증명서 목록
    @GetMapping("/careerList")

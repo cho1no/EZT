@@ -3,7 +3,8 @@ package com.yedam.app.usr.service;
 import java.util.List;
 import java.util.Map;
 
-import com.yedam.app.req.service.Criteria;
+import org.springframework.data.repository.query.Param;
+
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 
@@ -18,7 +19,7 @@ public interface UserService {
 	//비밀번호 조회
 	public String selectEncPw(int usersNo);
 	//비밀번호 변경
-	public int updatePw(Map<String, Object> paramMap);
+	public int updatePw(int usersNo, String currentPw, String newPassword);
 
 	//후기목록 조회
 	public List<ReviewVO> userReviewList(UserRvwCriteria cri);

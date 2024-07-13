@@ -1,10 +1,10 @@
 package com.yedam.app.usr.web;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +51,8 @@ public class UserController {
 	
 	@Autowired StompAlarmController sac;
 	
+	@Autowired PasswordEncoder passworderEncoder;
+	
 	//정보조회
 	@GetMapping("/info")
 	public String userInfo(@AuthenticationPrincipal LoginUserVO vo, Model model) {
@@ -82,33 +84,37 @@ public class UserController {
 		return "usr/userPwUpdate";
 	}
 	
-	//비밀번호 변경 기능
-//	@PostMapping("/pwUpdate")
-//	@ResponseBody
-//	public boolean userPwUpdate(@RequestBody UserVO userVO) {
-//		return userService.updateUserPw(userVO);
-//	}
+	//비밀번호 변경 - 기능
 	@PostMapping("/pwUpdate")
-    public String pwUpdate(@ModelAttribute("loginUser") LoginUserVO loginUser,
-    					   @RequestParam Map<String, Object> paramMap,
-    					   Model model,
-    					   SessionStatus sessionStatus) {
-        if (loginUser == null || loginUser.getUserNo() == null) {
-            model.addAttribute("error", "로그인 정보가 없습니다.");
-            return "/main"; // 오류 페이지로 리디렉션
-        }
+	public String pwUpdate(@RequestParam("currentPw") String currentPw,
+	                       @RequestParam("usersNewPw") String usersNewPw,
+	                       @AuthenticationPrincipal LoginUserVO loginUser,
+	                       Model model,
+	                       SessionStatus sessionStatus) {
 
-        paramMap.put("usersNo", loginUser.getUserNo());
-        int result = userService.updatePw(paramMap);
-        
-        if (result > 0) {
-            sessionStatus.setComplete(); // 세션 정리
-            return "redirect:/userInfo"; // 성공 페이지로 리디렉션
-        } else {
-            model.addAttribute("error", "비밀번호 변경 실패.");
-            return "usr/userPwUpdate"; // 다시 비밀번호 변경 페이지로
-        }
-    }
+	    if (loginUser == null || loginUser.getUserNo() == null) {
+	        model.addAttribute("msg", "로그인 필요!");
+	        model.addAttribute("icon", "warning");
+	        model.addAttribute("url", "/login");
+	        return "gongtong/message";
+	    }
+
+	    // 비밀번호 변경
+	    int result = userService.updatePw(loginUser.getUserNo(), currentPw, usersNewPw);
+
+	    if (result > 0) {
+	        sessionStatus.setComplete(); // 세션 정리
+	        model.addAttribute("msg", "비밀번호 변경완료!");
+	        model.addAttribute("icon", "success");
+	        model.addAttribute("url", "/user/info");
+	        return "gongtong/message"; // 성공 페이지로 리디렉션
+	    } else {
+ 	        model.addAttribute("msg", "비밀번호가 맞지않습니다");
+ 	        model.addAttribute("icon", "warning");
+ 	        model.addAttribute("url", "/user/pwUpdate"); // 다시 비밀번호 변경 페이지로
+ 	        return "gongtong/message"; 
+	    }
+	}
 	
 	//사용자 후기목록 조회
 	@GetMapping("/revList")

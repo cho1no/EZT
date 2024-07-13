@@ -86,6 +86,8 @@
 		SELECT *
 		FROM dual
 	</insert>
+	
+	
 	<!-- 현재 로그인한 암호화된 pw조회 --> 
 	<select id="selectEncPw" resultType="String">
 		SELECT users_pw 
@@ -95,9 +97,10 @@
 	<!-- 비밀번호 변경 -->
 	<update id="updatePw">
 		UPDATE users
-		SET users_pw = #{usersNewPw}
-		WHERE users_id = #{usersId}
+		SET users_pw = #{newPassword}
+		WHERE users_no = #{usersNo}
 	</update>
+	
 	
 	<update id="updateUserInfo" parameterType="UserVO">
 		UPDATE users
@@ -196,6 +199,31 @@
 				FROM request
 				WHERE requester = #{usersNo})
 	</select>
+
+	<sql id="findWorker">
+	   WHERE users_role = 'ROLE_WORKER'
+	   <if test="categoryCode != null and categoryCode.size != 0">   
+	    AND EXISTS (SELECT 1
+                 FROM active_category ca
+                WHERE ca.users_no = users.users_no
+                AND category_code
+	    <foreach item="item" index="index" collection="categoryCode"
+	        open=" in (" separator="," close=")" >
+	          #{item}
+        </foreach>)
+      </if>
+      <if test="regionCode != null and regionCode.size != 0">
+        AND EXISTS(SELECT 1
+           FROM active_region re
+           WHERE re.users_no = users.users_no
+           AND region_code 
+        <foreach item="item" index="index" collection="regionCode"
+	        open=" in (" separator="," close=")" >
+	          #{item}
+        </foreach>)
+      </if>
+	</sql>
+	
 	<!-- 작업자 찾기 -->
 	<select id="selectFindWorkerList" parameterType="UserVO">
 		SELECT c.*		  
@@ -203,12 +231,14 @@
    	   		 		  , a.*
 			   FROM (SELECT *
 				     FROM users
-				     WHERE users_role = 'ROLE_WORKER'
-				     ORDER BY users_join_dt desc ) a 
-			 ) c
+				    
+				     <include refid="findWorker"></include>		
+				     
+				     ORDER BY users_join_dt DESC ) a 
+			  ) c
 	    <![CDATA[
-	    WHERE c.rn <= #{pageNum} * #{amount} AND
-		      c.rn > (#{pageNum} -1 ) * #{amount}
+ 	    WHERE c.rn <= #{pageNum} * #{amount} AND 
+		      c.rn > (#{pageNum} -1 ) * #{amount} 
 	    ]]>
 	</select>
 	
@@ -216,8 +246,8 @@
 		SELECT COUNT(*)
 		FROM (SELECT *
 			  FROM users
-			  WHERE users_role = 'ROLE_WORKER')
+			  <include refid="findWorker"></include>)
 	</select>
 	
-	
+
 </mapper>

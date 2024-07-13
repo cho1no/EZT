@@ -28,4 +28,7 @@ public class FindWorkerPageDTO {
 		this.next = this.endPage < realEnd;
 	}
 	
+	public FindWorkerPageDTO(int pageNum, int amount, int total) {
+		this(new FindWorkerCriteria(pageNum, amount), total);
+	}
 }
