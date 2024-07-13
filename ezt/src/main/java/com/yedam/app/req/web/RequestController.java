@@ -70,7 +70,10 @@ public class RequestController {
 //		//계약서 조회
 		ContractVO findContractVO = requestService.contractInfo(contractVO);
 		model.addAttribute("contract",findContractVO);
-		
+		// 공사 보고 조회
+		model.addAttribute("cttReports", requestService.cttReportList(requestVO.getRequestNo()));
+		// 팀원 조회
+		model.addAttribute("members", requestService.memberList(requestVO.getRequestNo()));
 		return "req/requestInfo";
 	}
 
@@ -113,4 +116,5 @@ public class RequestController {
 		
 		return "redirect:list";
 	}
+
 }

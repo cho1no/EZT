@@ -6,6 +6,8 @@ import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestVO;
+import com.yedam.app.rpt.service.CttReportVO;
+import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.usr.service.UserVO;
 
 public interface RequestMapper {
@@ -30,8 +32,10 @@ public interface RequestMapper {
 	//계약서 조회
 	public ContractVO selectContract(ContractVO contractVO);
 	
-	
-	
+	// 공사 보고 조회
+	public List<CttReportVO> selectCttReport(int requestNo);
+	// 팀원 조회
+	public List<MemberVO> selectMembers(int requestNo);
 	//전체 게시물 갯수
 	public int getTotalCount(Criteria cri);
 }

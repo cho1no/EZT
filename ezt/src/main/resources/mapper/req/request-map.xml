@@ -301,4 +301,52 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	WHERE p.request_no = #{requestNo}
 		and rownum =1
 </select>
+
+<!-- 공사보고 조회 -->
+<select id="selectCttReport" parameterType="int" resultType="CttReportVO">
+	SELECT 
+	    cr.CTT_REPORT_NO,
+	    cr.TITLE,
+	    cr.DETAIL_CONTENT,
+	    cr.CTT_DIVISION,
+	    cr.ACCESS_STATE,
+	    cr.CTT_REPORT_DT,
+	    cr.FILE_ID,
+	    cr.CONTRACT_NO
+	FROM 
+	    CTT_REPORT cr
+	JOIN 
+	    contract c ON cr.CONTRACT_NO = c.contract_no
+	JOIN 
+	    proposal p ON c.proposal_no = p.proposal_no
+	WHERE 
+	    p.request_no = #{requestNo}
+	    AND p.proposal_state = 'A02'
+</select>
+<!-- 팀원 조회 -->
+<select id="selectMembers" parameterType="int" resultType="MemberVO">
+	SELECT 
+	    m.member_no,
+	    m.users_no,
+	    u.users_name,
+	    u.users_phone,
+	    m.member_division,
+	    m.work_code,
+	    FIND_COMMONCODE(m.work_code) work_code_nm,
+	    m.partnership_contract_no,
+	    m.team_no
+	FROM 
+	    member m
+	JOIN 
+	    users u ON m.users_no = u.users_no
+	JOIN 
+	    team t ON m.team_no = t.team_no
+	JOIN 
+	    contract c ON t.contract_no = c.contract_no
+	JOIN 
+	    proposal p ON c.proposal_no = p.proposal_no
+	WHERE 
+	    p.proposal_state = 'A02' 
+	    AND p.request_no = #{requestNo}
+</select>
 </mapper>
