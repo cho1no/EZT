@@ -40,20 +40,20 @@ public class FindController {
 	//작업자 찾기
 	@GetMapping("/workerList")
 	public String findWorker(Model model, FindWorkerCriteria cri) {
-//		model.addAttribute("cate", commonCodeService.selectCommonCodeAll("0C"));
-//	    model.addAttribute("regi", commonCodeService.selectCommonCodeAll("0B"));
 		List<UserVO> list = userService.selectFindWorkerList(cri);
+		
+		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
+		model.addAttribute("regionCode", commonCodeService.selectCommonCodeAll("0B"));	
 		for (UserVO user : list) {
 			user.setCategoryCode(workerService.selectCategoryInfo(user.getUsersNo()));
 			user.setRegionCode(workerService.selectRegionInfo(user.getUsersNo()));
 		}
 		model.addAttribute("workerList", list);
-//		model.addAttribute("categories", workerService.selectCategoryInfo(cri.getUsersNo()));
-//	    model.addAttribute("regions", workerService.selectRegionInfo(cri.getUsersNo()));
 		
 		//페이징
 		int total = userService.workerListGetTotal(cri);
 		model.addAttribute("page", new FindWorkerPageDTO(cri, total));
+		
 		return "usr/findWorkerList";
 	}
 	
@@ -81,11 +81,15 @@ public class FindController {
 	
 	//작업자 포트폴리오 상세
 	@GetMapping("/workerPortfolio")
-	public String workerPortfolio(@RequestParam int portfolioNo, Model model) {
-		PortfolioVO vo = fwMap.selectPortfolioInfo(portfolioNo);
-		model.addAttribute("portfolioInfo", vo);
-		model.addAttribute("categories", workerService.selectCategoryInfo(vo.getUsersNo()));
-		model.addAttribute("portFiles", fwMap.selectPortInfoFiles(vo.getFileId()));
+	public String workerPortfolio(@RequestParam int portfolioNo,
+								  Model model) {
+		
+		PortfolioVO pvo = fwMap.selectPortfolioInfo(portfolioNo);
+		
+		model.addAttribute("portfolioInfo", pvo);
+		model.addAttribute("userInfo",adminService.getUser(pvo.getUsersNo()));
+		model.addAttribute("categories", workerService.selectCategoryInfo(pvo.getUsersNo()));
+		model.addAttribute("portFiles", fwMap.selectPortInfoFiles(pvo.getFileId()));
 		return "wkr/workerPortfolioInfo";
 	}
 }

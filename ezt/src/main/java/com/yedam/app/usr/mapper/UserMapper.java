@@ -1,9 +1,9 @@
 package com.yedam.app.usr.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.repository.query.Param;
 
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
@@ -36,7 +36,7 @@ public interface UserMapper {
 	//비밀번호 조회
 	public String selectEncPw(int usersNo);
 	//비밀번호 변경
-	public int updatePw(Map<String, Object> paramMap);
+	int updatePw(@Param("usersNo") int usersNo, @Param("newPassword") String newPassword);
 	
 	//사용자 후기목록
 	public List<ReviewVO> selectUserRvwList(UserRvwCriteria cri);

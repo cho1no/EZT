@@ -9,7 +9,7 @@
 	<script th:inline="javascript">
 	Swal.fire({
 		title:([[${msg}]]),
-		icon:'success',
+		icon: ([[${icon}]]),
 		allowOutsideClick: false,
 		}).then(result => {
 			if(result.isConfirmed){

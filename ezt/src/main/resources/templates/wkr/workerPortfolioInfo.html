@@ -82,7 +82,7 @@
 
 </head>
 <body>
-
+<h5>포트폴리오 상세</h5>
 <div class="row">
         <div class="slide-container swiper">
           <div class="slide-content">
@@ -101,14 +101,18 @@
         </div>
       </th:block>
     </div>
-    <span>작업기간:</span>
-    <span>[[${portfolioInfo.workTime}]]</span><br>
-    <span>작업분야:</span>
-    <th:block th:each="category : ${categories}">
-    <span>[[${category.CATEGORY_CODE}]]</span><br>
-    </th:block>
-    <span>내용:</span>
-    <span>[[${portfolioInfo.content}]]</span>
+
+    <ul class="list-group list-group-flush">
+  	  <li class="list-group-item">작업자: [[${userInfo.usersName}]]</li>
+	  <li class="list-group-item">작업기간: [[${portfolioInfo.workTime}]]</li>
+	  <li class="list-group-item">
+	    작업분야: 
+		<th:block th:each="category : ${categories}">
+	      <span>[[${category.CATEGORY_CODE}]]</span>
+	    </th:block>
+      </li>
+	  <li class="list-group-item">내용: [[${portfolioInfo.content}]]</li>
+	</ul>
  <!-- Swiper JS -->
       <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.js"></script>
 
