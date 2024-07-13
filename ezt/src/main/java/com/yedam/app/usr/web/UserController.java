@@ -1,20 +1,23 @@
 package com.yedam.app.usr.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.yedam.app.alm.web.StompAlarmController;
 import com.yedam.app.common.service.CommonCodeService;
-import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewService;
@@ -80,11 +83,32 @@ public class UserController {
 	}
 	
 	//비밀번호 변경 기능
+//	@PostMapping("/pwUpdate")
+//	@ResponseBody
+//	public boolean userPwUpdate(@RequestBody UserVO userVO) {
+//		return userService.updateUserPw(userVO);
+//	}
 	@PostMapping("/pwUpdate")
-	@ResponseBody
-	public boolean userPwUpdate(@RequestBody UserVO userVO) {
-		return userService.updateUserPw(userVO);
-	}
+    public String pwUpdate(@ModelAttribute("loginUser") LoginUserVO loginUser,
+    					   @RequestParam Map<String, Object> paramMap,
+    					   Model model,
+    					   SessionStatus sessionStatus) {
+        if (loginUser == null || loginUser.getUserNo() == null) {
+            model.addAttribute("error", "로그인 정보가 없습니다.");
+            return "/main"; // 오류 페이지로 리디렉션
+        }
+
+        paramMap.put("usersNo", loginUser.getUserNo());
+        int result = userService.updatePw(paramMap);
+        
+        if (result > 0) {
+            sessionStatus.setComplete(); // 세션 정리
+            return "redirect:/userInfo"; // 성공 페이지로 리디렉션
+        } else {
+            model.addAttribute("error", "비밀번호 변경 실패.");
+            return "usr/userPwUpdate"; // 다시 비밀번호 변경 페이지로
+        }
+    }
 	
 	//사용자 후기목록 조회
 	@GetMapping("/revList")
