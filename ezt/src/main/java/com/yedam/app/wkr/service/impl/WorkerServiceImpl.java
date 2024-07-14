@@ -195,8 +195,8 @@ public class WorkerServiceImpl implements WorkerService{
 
 	//작업자 탈퇴(상태 수정)
 	@Override
-	public boolean workerStateUpdate(UserVO userVO) {
-		return workerMapper.updateWorkerState(userVO) == 1;
+	public int workerStateUpdate(UserVO userVO) {
+		return workerMapper.updateWorkerState(userVO);
 	}
 
 

@@ -10,11 +10,11 @@
 <body>
   <div class="d-flex mb-3">
   <div class="me-auto p-2">
-  <h1>후기 목록</h1>
+  <h4>후기 목록</h4>
   </div>
   <div class="p-2">
     <select id="categoryCategory">
-    	<option value="">전체</option>
+    	<option value="">분야</option>
 		<option th:each="cate : ${categoryCode}" th:value="${cate.codeName}">
 			[[${cate.codeName}]]
 		</option>    
@@ -22,7 +22,7 @@
   </div>
   <div class="p-2">
      <select id="regionCategory">
-    	<option value="">전체</option>
+    	<option value="">지역</option>
 		<option th:each="region : ${regionCode}" th:value="${region.codeName}">
 			[[${region.codeName}]]
 		</option>    
@@ -47,15 +47,15 @@
   <div class="row pagination-wrap mt-5" >
    <div class="col-md-12 text-center ">
      <div class="custom-pagination ml-auto" id="page">
-       <a th:if="${page.prev}" th:href="@{/user/revList(pageNum=${page.startPage - 1})}" class="prev">Prev</a>
+       <a th:if="${page.prev}" th:href="@{/user/rvwList(pageNum=${page.startPage - 1})}" class="prev">Prev</a>
        <div class="d-inline-block" id="pagination">
        <th:block th:each="num : ${#numbers.sequence(page.startPage, page.endPage)}">
-       	<a th:class="${page.cri.pageNum == num ? 'active' : ''}" th:href="|@{/user/revList(pageNum=${num})}|" >
+       	<a th:class="${page.cri.pageNum == num ? 'active' : ''}" th:href="|@{/user/rvwList(pageNum=${num})}|" >
 			[[${num}]]</a>
 	  </th:block> 
           
         </div>
-        <a th:if="${page.next}" th:href="@{/user/revList(pageNum=${page.endPage + 1})}" class="next">Next</a>
+        <a th:if="${page.next}" th:href="@{/user/rvwList(pageNum=${page.endPage + 1})}" class="next">Next</a>
       </div>
     </div>
   </div>
@@ -75,10 +75,10 @@
 	$('#regionCategory').val(region);
 	
 	$('#categoryCategory').on('change', (ev)=>{
-		location.href="/user/revList?pageNum=" + pageNum + "&type=" + ev.target.value + "&keyword=" + region; 
+		location.href="/user/rvwList?pageNum=" + pageNum + "&type=" + ev.target.value + "&keyword=" + region; 
 	});
 	$('#regionCategory').on('change', (ev)=>{
-		location.href="/user/revList?pageNum=" + pageNum + "&type=" + cate + "&keyword=" + ev.target.value; 
+		location.href="/user/rvwList?pageNum=" + pageNum + "&type=" + cate + "&keyword=" + ev.target.value; 
 	});
 	
 </script>  

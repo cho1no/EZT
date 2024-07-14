@@ -160,7 +160,15 @@
 						   , write_dt
 					FROM request
 					WHERE requester = #{usersNo}
-					ORDER BY write_dt 	desc ) a ) c
+					ORDER BY write_dt 	desc ) a 
+			<where>
+			<if test="type != ''.toString">
+				AND category_code = #{type}
+			</if>
+			<if test="keyword != ''.toString">
+				AND request_state = #{keyword}
+			</if>
+			</where>) c
 		<![CDATA[
 		WHERE c.rn <= #{pageNum} * #{amount} AND
 			  c.rn > (#{pageNum} -1 ) * #{amount}

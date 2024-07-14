@@ -16,12 +16,24 @@ button.teamBtn {
 </style>
 </head>
 <body>
-	<h3>[[${userVO.usersName}]]님 의 계약서 목록</h3>
+	<div class="d-flex mb-3">
+		  <div class="me-auto p-2">
+		  <h4>계약서 목록</h4>
+		  </div>
+		  <div class="p-2">
+		    <select id="contractStateCategory">
+		    	<option value="">상태</option>
+				<option th:each="conSta : ${contractState}" th:value="${conSta.codeNo}">
+					[[${conSta.codeName}]]
+				</option>    
+		    </select>
+		  </div>
+		  </div>
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
 	<th:block th:each="ctt : ${contractList}">
 		<div class="list-group m-3 list-group-item-action">
-		  <a th:href="@{/conInfo(proposalNo=${ctt.proposalNo})}" class="list-group-item list-group-item-action">
+		  <a th:href="@{/conInfo(contractNo=${ctt.contractNo})}" class="list-group-item list-group-item-action">
 		    <span>공사명 : [[${ctt.cttName}]]</span>/
 		    <span>공사 일정: [[${#dates.format(ctt.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(ctt.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
 		    <span>단가 : [[${ctt.cttPrice}]]</span><span>원 / </span>
@@ -51,7 +63,15 @@ button.teamBtn {
     </div>
     
 <script th:inline="javascript">
-
+	const urlParams = new URL(location.href).searchParams;
+		
+	const contSta =  urlParams.get('type') == null ? '' : urlParams.get('type');
+	const pageNum = urlParams.get('pageNum') == null ? '1' : urlParams.get('pageNum');
+	$('#contractStateCategory').val(contSta);
+	
+	$('#contractStateCategory').on('change', (ev) => {
+		location.href="/worker/contractList?pageNum=" + pageNum + "&type=" + ev.target.value ;
+	})
 </script>    
 </body>
 </html>

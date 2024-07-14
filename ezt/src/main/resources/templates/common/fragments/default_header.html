@@ -14,10 +14,10 @@
           <th:block sec:authorize="hasRole('ROLE_WORKER')">
           	<li><a th:href="@{/team/requestList}">팀 찾기</a></li>
           </th:block>
-          <th:block sec:authorize="!isAnonymous()">
-<!--           <li class="d-lg-none"><a href="/signUp/joinUser">회원가입</a></li> -->
-<!--           <li class="d-lg-none"><a href="/signUp/joinWorker">작업자가입</a></li> -->
-<!--           <li class="d-lg-none"><a href="/login">로그인</a></li> -->
+          <th:block sec:authorize="isAnonymous()">
+			<li><a href="/signUp/joinUser">회원가입</a></li> 
+			<li><a href="/signUp/joinWorker">작업자가입</a></li> 
+			<li><a href="/login">로그인</a></li>
           </th:block>
           <li class="d-lg-none">
           <th:block sec:authorize="hasRole('ROLE_USER')">

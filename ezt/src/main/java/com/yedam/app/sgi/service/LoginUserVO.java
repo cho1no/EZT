@@ -48,7 +48,7 @@ public class LoginUserVO implements UserDetails{
 	
 	@Override
 	public boolean isAccountNonExpired() {
-		return true;
+		return !userVO.getUsersState().equals("quit");
 	}
 
 	@Override

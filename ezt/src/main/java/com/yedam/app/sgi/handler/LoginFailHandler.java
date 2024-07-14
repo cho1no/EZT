@@ -30,7 +30,7 @@ public class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
             errorMessage="존재하지 않는 아이디 입니다.";
         }
         else{
-            errorMessage="알 수 없는 이유로 로그인이 안되고 있습니다.";
+            errorMessage="탈퇴한 회원입니다.";
         }
 
         errorMessage= URLEncoder.encode(errorMessage,"UTF-8");//한글 인코딩 깨지는 문제 방지

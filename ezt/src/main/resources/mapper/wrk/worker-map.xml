@@ -29,6 +29,11 @@
 					FROM career
 					WHERE users_no = #{usersNo}
 					ORDER BY write_dt) a 
+			<where>
+			<if test="type != ''.toString">
+				AND career_access_tf = #{type}
+			</if>
+			</where>	
 			 ) c
 		<![CDATA[
 		WHERE c.rn <= #{pageNum} * #{amount} AND
@@ -191,6 +196,11 @@
 				WHERE worker = #{usersNo}
 				ORDER BY update_dt desc
 				)  a 
+			<where>
+			  <if test="type != ''.toString">
+					AND proposal_state = #{type}
+			  </if>
+			</where>		
 		  ) c
 		<![CDATA[
 		WHERE c.rn <= #{pageNum} * #{amount} AND
@@ -219,6 +229,11 @@
 					FROM contract c
 					WHERE worker_info = #{usersNo}
 					ORDER BY update_dt desc)  a 
+			<where>
+			  <if test="type != ''.toString">
+					AND contract_state = #{type}
+			  </if>
+			</where>
 			  ) c
 			<![CDATA[
 			WHERE c.rn <= #{pageNum} * #{amount} AND
@@ -399,7 +414,7 @@
 	<!-- 작업자 탈퇴 -->
 	<update id="updateWorkerState" parameterType="UserVO">
 		UPDATE users
-		SET users_state = quit
+		SET users_state = 'quit'
 		WHERE users_id = #{usersId}
 	</update>
 	
