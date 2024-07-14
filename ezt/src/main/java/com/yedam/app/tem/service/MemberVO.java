@@ -13,4 +13,5 @@ public class MemberVO {
 	private String workCodeNm; //작업코드이름
 	private int partnershipContractNo; //동업계약서 번호
 	private int teamNo;//팀번호
+	private int enrollNo;//신청번호
 }

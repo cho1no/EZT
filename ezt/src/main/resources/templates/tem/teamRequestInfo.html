@@ -86,10 +86,12 @@
     </table>
     
 </form>
+<th:block th:if="${#authentication.principal.userNo == team.writer }">
 <button type="button" class="btn btn-primary upBtn update">수정</button>
 <button type="button" class="btn btn-primary"
         th:onclick="|location.href='@{/team/requestDelete(teamNo=${team.teamNo})}'|">삭제
 </button>
+</th:block>
 <!-- 카테고리 별 신청자 확인 Modal -->
 <div class="modal fade" id="volunteer" tabindex="-1" aria-labelledby="volunteerLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -99,7 +101,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            	<p>카테고리  : <span id="categoryCode"></span> </p>
+            	<p>카테고리  : <span style="display: none" id="modalCategoryCode"/><span id="workCodeNm"></span> </p>
             <div class="row">
             	<div class="col">
                 <table class="table">
@@ -118,6 +120,7 @@
             	<div class="col">
             		<table class="table">
             		<tbody>
+						<input type="hidden" id="usersNo">
             			<tr>
             				<th>신청인</th>
             				<td id="worker"></td>
@@ -190,13 +193,8 @@
             </div>
             <div class="modal-body">
 				<form name="memberInsertForm" th:action="@{/team/memberInsert}" th:object="${memberEnrollVO}" method="post">
-				    <!-- teamNo hidden input -->
 				    <input type="hidden" name="teamNo" th:value="${team.teamNo}">
-				    
-				    <!-- worker hidden input (assuming it's user's ID) -->
 				    <input type="hidden" name="worker" th:value="${#authentication.principal.userVO.usersNo}">
-				    
-				    <!-- categoryCode hidden input (assuming it's dynamically set in JavaScript) -->
 				    <input type="hidden" id="categoryCode" name="workCode">
 				    
 				    <table>

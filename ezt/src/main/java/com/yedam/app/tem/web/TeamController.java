@@ -194,8 +194,8 @@ public class TeamController {
     @PostMapping("/approveMember")
     @ResponseBody
     public boolean approveMember(@RequestBody MemberVO memberVO) {
-    	
-    	return teamService.approveMember(memberVO);
+    	System.out.println("=====" + memberVO);
+        return teamService.approveMember(memberVO);
     }
 }
 

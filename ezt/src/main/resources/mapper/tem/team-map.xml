@@ -201,7 +201,8 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
 			,m.worker as users_no
 			,m.content
 			,m.process_result
-			,FIND_COMMONCODE(m.work_code) as work_code
+			,FIND_COMMONCODE(m.work_code) as work_code_Nm
+			,m.work_code
 			,m.team_no
 			,(SELECT
                 SUM(trunc ( ( months_between ( c.career_end_dt, c.career_start_dt ) ) / 12 ))

@@ -94,7 +94,7 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	public boolean updateMemberEnroll(MemberDenyVO memberDenyVO) {
 		
-		return teamMapper.updateMemberEnroll(memberDenyVO) == 1;
+		return teamMapper.updateMemberEnroll(memberDenyVO) == -1;
 	}
 
 	//팀원 신청하기

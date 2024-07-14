@@ -40,74 +40,77 @@ $(document).ready(function() {
         });
     });
     
-    $('.approveBtn').click(function() {
+      $('.approveBtn').click(function() {
         let enrollNo = $('#enrollNo').val();
-        let usersNo = $('#writer').val();
-        let workCode = $('textarea[name="content"]').val();
-        let teamNo = $('#writer').val();
+        let usersNo = $('#worker').data('usersNo'); 
+        let workCode = $('#modalCategoryCode').val();
+        let teamNo = $('#teamNo').val();
 
-        
-         // content가 null이면 alert
-        if (content == null ) {
-            alert("반려 사유를 입력해주세요.");
-            return;
-        }
 
-        let data = {
-            enrollNo: enrollNo,
-            writer: writer,
-            content: content
-        };
+        if (confirm('해당 작업자를 팀원으로 추가하시겠습니까?')) {
+            let data = {
+                enrollNo: enrollNo,
+                usersNo: usersNo,
+                workCode: workCode,
+                teamNo: teamNo,
 
-        $.ajax({
-            url: '/team/memberDeny',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function(response) {
-                if (response) {
-                    alert("반려 처리되었습니다.");
-                    $('#deny').modal('hide');
-					$('textarea[name="content"]').val('');
+            };
+
+            $.ajax({
+                url: '/team/approveMember',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    if (response) {
+                        alert("팀원으로 추가 되었습니다.");
+                        $('#volunteer').modal('hide');
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert("오류가 발생했습니다.");
                 }
-            },
-            error: function(error) {
-                console.log(error);
-                alert("오류가 발생했습니다.");
-            }
-        });
+            });
+        }
     });
+
 });
 
  function openModal(teamNo, workCode){
-		$.ajax('/team/volunteerList',{
-			data : {teamNo, workCode}
-		})
-		.done(result =>{
-			
-				$('#volunteerBody').html('');
-			for(i=0; i<result.length; i++){
-			
-				let table = `<tr data-eno="${result[i].enrollNo}" 
-								 data-worker="${result[i].worker}" 
-								 data-content="${result[i].content}" 
-									onClick="detail()">
-	                    		<td>${i+1}</td>
-	                    		<td>${result[i].worker}</td>
-	                    		<td>${result[i].career}</td>
-	                    	</tr>`
-				$('#volunteerBody').append(table);
+	 // span 태그에 workCode 값 설정
+    $('#modalCategoryCode').text(workCode);
+
+    // AJAX 요청 보내기
+    $.ajax({
+        url: '/team/volunteerList',
+        method: 'GET',
+        data: { teamNo: teamNo, workCode: workCode },
+        success: function(result) {
+            $('#volunteerBody').html('');
+            for (let i = 0; i < result.length; i++) {
+                let table = `<tr data-eno="${result[i].enrollNo}" 
+                                  data-worker="${result[i].worker}" 
+                                  data-usersNo="${result[i].usersNo}" 
+                                  data-content="${result[i].content}" 
+                                  onclick="detail(this)">
+                                <td>${i + 1}</td>
+                                <td>${result[i].worker}</td>
+                                <td>${result[i].career}</td>
+                            </tr>`;
+                $('#volunteerBody').append(table);
             }
-				if (result.length > 0) {
-	            $('#volunteerBody').find('tr').eq(0).find('td').click();
-	        }else{
-				$('#content').text(''); // 상세 내용 초기화
-	            $('#denyUser').val(''); // 신청인 초기화
-	            $('#enrollNo').val(''); // enrollNo 초기화
-	            $('#worker').text(''); // worker 초기화
-			}
-		})
-	}
+            if (result.length > 0) {
+                $('#volunteerBody').find('tr').eq(0).click();
+            } else {
+                $('#content').text('');
+                $('#denyUser').val('');
+                $('#enrollNo').val('');
+                $('#worker').text('');
+            }
+        }
+    });
+}
 	
 	function detail(){
 		$('#content').text($(event.currentTarget).data("content"));
