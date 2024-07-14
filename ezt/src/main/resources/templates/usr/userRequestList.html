@@ -10,7 +10,27 @@
  <link rel="stylesheet" href="/css/rvw/reviewInsert.css">
 </head>
 <body>
-  <h1>의뢰 목록</h1>
+<div class="d-flex mb-3">
+  <div class="me-auto p-2">
+  <h4>의뢰 목록</h4>
+  </div>
+  <div class="p-2">
+     <select id="categoryCategory">
+     	<option value="">분야</option>
+  	<option th:each="cate : ${categoryCode}" th:value="${cate.codeNo}">
+  		[[${cate.codeName}]]
+  	</option>    
+     </select>
+   </div>
+   <div class="p-2">
+      <select id="requestState">
+     	<option value="">상태</option>
+  	<option th:each="reqSta : ${requestState}" th:value="${reqSta.codeNo}">
+  		[[${reqSta.codeName}]]
+  	</option>    
+     </select>
+   </div>
+</div>
 <div class="row row-cols-3 row-cols-md-2 g-2">
   <th:block th:each="req : ${requestList}">
 	  <div class="col-lg-4 col-md-6 col-sm-12">
@@ -88,11 +108,7 @@
         }
       });
 
-//     document.addEventListener("DOMContentLoaded", function () {
-//     	 var closeBtn = document.getElementById("closeBtn");
-//     	  closeBtn.addEventListener("click", toggleModal);
-//     });
-    
+  
     
     
     // functions
@@ -105,5 +121,20 @@
    			toggleModal();
    		});
    	}
+	
+	const urlParams = new URL(location.href).searchParams;
+		
+	const cate =  urlParams.get('type') == null ? '' : urlParams.get('type');
+	const reqSta =  urlParams.get('keyword') == null ? '' : urlParams.get('keyword');
+	const pageNum = urlParams.get('pageNum') == null ? '1' : urlParams.get('pageNum');
+	$('#categoryCategory').val(cate);
+	$('#requestState').val(reqSta);
+	
+	$('#categoryCategory').on('change', (ev)=>{
+		location.href="/user/reqList?pageNum=" + pageNum + "&type=" + ev.target.value + "&keyword=" + reqSta; 
+	});
+	$('#requestState').on('change', (ev)=>{
+		location.href="/user/reqList?pageNum=" + pageNum + "&type=" + cate + "&keyword=" + ev.target.value; 
+	});
 </script>
 </html>

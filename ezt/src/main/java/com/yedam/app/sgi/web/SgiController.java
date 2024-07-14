@@ -41,7 +41,7 @@ public class SgiController {
 		return "redirect:/main";
 	}
     
-    @GetMapping("findIdPw")
+    @GetMapping("/find/idPw")
     public String findIdPw() {
 	    return "sgi/findIdPw";
     }

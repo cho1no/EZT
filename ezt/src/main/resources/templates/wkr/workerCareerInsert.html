@@ -10,18 +10,6 @@
 <body>
 <hr>
 <h4>경력증명서 등록</h4>
-	<div class="col-md-4 mb-3 mb-md-0 d-inline-flex">
-		<label class="text-black col-md-4" for="usersName">성명</label>
-		 <input name="usersName" type="text" id="usersName"
-		  class="form-control d-inline-flex col-md-6" th:value="${userVO.usersName}" disabled>
-	</div>
-	
-	<div class="col-md-4 mb-3 mb-md-0 d-inline-flex">
-		<label class="text-black col-md-5" for="usersBirth">생년월일</label>
-		 <input name="usersBirth" type="text" id="usersBirth"
-		  class="form-control d-inline-flex col-md-6" th:value="${userVO.usersBirth}" disabled>
-	</div>
-	
 	<form th:action="@{/worker/careerInsert}" th:object="${CareerVO}"
 		method="post" class="p-4 border rounded" name="insertCareer" enctype="multipart/form-data">
 		<input type="hidden" th:field="${userVO.usersNo}">
@@ -61,6 +49,10 @@
 			</div>
 		</div>
 	</form>
+	
+   <li><a href="/signUp/joinUser">회원가입</a></li> 
+   <li><a href="/signUp/joinWorker">작업자가입</a></li> 
+   <li><a href="/login">로그인</a></li>
 <script th:inline="javascript">
 	$('#insert-career-Btn').click(() => {checkCareer()}); 
 	function checkCareer(){

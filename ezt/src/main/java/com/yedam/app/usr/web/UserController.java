@@ -31,8 +31,11 @@ import com.yedam.app.usr.service.UserRvwPageDTO;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
 
+import groovy.util.logging.Slf4j;
+
 @Controller
 @RequestMapping("user")
+@lombok.extern.slf4j.Slf4j
 public class UserController {
 	@Autowired
 	CommonCodeService commonCodeService;
@@ -117,7 +120,7 @@ public class UserController {
 	}
 	
 	//사용자 후기목록 조회
-	@GetMapping("/revList")
+	@GetMapping("/rvwList")
 	public String userReviewList(Model model, UserRvwCriteria cri, @AuthenticationPrincipal LoginUserVO vo) {
 		model.addAttribute("userVO", vo.getUserVO());
 		
@@ -143,17 +146,24 @@ public class UserController {
 	
 	//사용자 의뢰 목록 조회
 	@GetMapping("/reqList")
-	public String userReqList(Model model,UserReqCriteria cri, RequestVO requestVO, @AuthenticationPrincipal LoginUserVO vo) {
+	public String userReqList(Model model,UserReqCriteria cri, @AuthenticationPrincipal LoginUserVO vo) {
 		model.addAttribute("userVO", vo.getUserVO());
 		
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
 		model.addAttribute("requestState", commonCodeService.selectCommonCodeAll("0R"));
 		cri.setUsersNo(vo.getUserNo());
+		if (cri.getKeyword() == null) {
+			cri.setKeyword("");
+		}
+		if (cri.getType() == null) {
+			cri.setType("");
+		}
 		List<RequestVO> list = userService.userReqList(cri);
 		model.addAttribute("requestList", list);
 		//페이징
 		int total = userService.requestGetTotal(cri);
 		model.addAttribute("page", new UserReqPageDTO(cri, total));
+		log.info(cri.toString());
 		
 		return "usr/userRequestList";
 	}

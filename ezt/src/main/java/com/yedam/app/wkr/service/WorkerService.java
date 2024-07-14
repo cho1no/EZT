@@ -60,7 +60,7 @@ public interface WorkerService {
 	public int insertWorkerLicense(LicenseVO licenseVO);
 	
 	//회원탈퇴 (상태수정)
-	public boolean workerStateUpdate(UserVO userVO);
+	public int workerStateUpdate(UserVO userVO);
 	
 	
 	//전체 경력서 갯수

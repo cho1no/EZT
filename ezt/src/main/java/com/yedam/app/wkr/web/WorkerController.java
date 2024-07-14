@@ -138,14 +138,19 @@ public class WorkerController {
    @GetMapping("/careerList")
    public String workerCareerList (@AuthenticationPrincipal LoginUserVO vo, Model model, MultipartFile[] uploadFile, WorkerPFCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
+	   
+	   model.addAttribute("careerAccessTf", commonCodeService.selectCommonCodeAll("0A"));
 	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   if (cri.getType() == null) {
+			cri.setType("");
+		}
 	   List<CareerVO> list = workerService.selectCareerList(cri);
 	   model.addAttribute("careerList", list); 
 	   
 	   //페이징
 	   int total = workerService.workerCareerGetTotal(cri);
 	   model.addAttribute("page", new WorkerPFPageDTO(cri, total));
-	   
+	   log.info(cri.toString());
 	   return "wkr/workerCareerList";
    } 
    
@@ -223,10 +228,14 @@ public class WorkerController {
    @GetMapping("/proposalList")
    public String workerProposalList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
+	   model.addAttribute("proposalState", commonCodeService.selectCommonCodeAll("0A"));
 	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   if (cri.getType() == null) {
+			cri.setType("");
+		}
 	   List<ProposalVO> pList = workerService.selectWorkerProposalList(cri);
 	   model.addAttribute("proposalList", pList);
-	 //페이징
+	   //페이징
 	   int total = workerService.workerProposalGetTotal(cri);
 	   model.addAttribute("page", new WorkerRvwPageDTO(cri, total));
 	   return "wkr/workerProposalList";
@@ -250,10 +259,12 @@ public class WorkerController {
    public String workerContractList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri, RedirectAttributes redirectAttributes) {
        // 로그인 사용자 정보 가져오기
        model.addAttribute("userVO", vo.getUserVO());
-
+       model.addAttribute("contractState", commonCodeService.selectCommonCodeAll("0E"));
        // 현재 사용자의 계약 목록 조회를 위한 조건 설정
        cri.setUsersNo(vo.getUserVO().getUsersNo());
-
+       if (cri.getType() == null) {
+			cri.setType("");
+		}
        // 계약 목록 조회
        List<ContractVO> cList = workerService.selectWorkerContractList(cri);
        model.addAttribute("contractList", cList);
@@ -271,7 +282,7 @@ public class WorkerController {
            redirectAttributes.addFlashAttribute("error", "존재하지 않는 페이지입니다. 마지막 페이지로 이동합니다.");
            return "redirect:/worker/contractList";
        }
-
+       log.info(cri.toString());
        // 계약 목록 페이지로 이동
        return "wkr/workerContractList";
    }
@@ -343,7 +354,7 @@ public class WorkerController {
    //작업자 탈퇴 (상태 수정) 페이지
    @GetMapping("/quit")
    public String workerStateUpdateForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
-      model.addAttribute("userId", vo.getUserVO());
+      model.addAttribute("userVO", vo.getUserVO());
       return "wkr/workerStateUpdate";
    }
    
@@ -351,8 +362,13 @@ public class WorkerController {
    //작업자 탈퇴 기능 (상태 수정)
    @PostMapping("/quit")
    @ResponseBody
-   public boolean workerStateUpdate(@RequestBody UserVO userVO) {
-      return workerService.workerStateUpdate(userVO);
+   public String workerStateUpdate(@RequestBody UserVO userVO, @AuthenticationPrincipal LoginUserVO vo, Model model) {
+	   workerService.workerStateUpdate(userVO);
+	   UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
+		vo.setUserVO(uvo);
+		model.addAttribute("msg", "탈퇴됨!");
+	    model.addAttribute("url", "/main");
+		return "gongtong/message"; 
    }
    
    

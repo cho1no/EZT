@@ -13,14 +13,7 @@ div.careerList {
 </style>
 </head>
 <body>
-<h3>[[${userVO.usersName}]]님 의</h3>
-<hr>
 <h4>포트폴리오 목록</h4>
-<div>
-	<label for="usersName">성명</label>
-	<input class="form-control d-inline-flex col-2"
-	  type="text" id="usersName" th:value="${userVO.usersName}" disabled readonly>
-</div>
 <div class="row row-cols-1 row-cols-md-3">
 	<th:block th:each="ptf : ${portfolioList}">
 			<div class="card col-4" style="width: 18rem;">

@@ -68,5 +68,6 @@ public class UserVO {
 	private List<String> categoryCode;
 	
 	private LicenseVO licenseVO;
+	private int fileId;
 	
 }

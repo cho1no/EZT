@@ -8,7 +8,19 @@
 <title>작업자 마이페이지</title>
 </head>
 <body>
-	<h3>[[${userVO.usersName}]]님 의 견적서 목록</h3>
+	<div class="d-flex mb-3">
+	  <div class="me-auto p-2">
+	  <h4>견적서 목록</h4>
+	  </div>
+	  <div class="p-2">
+	    <select id="proposalStateCategory">
+	    	<option value="">구분</option>
+			<option th:each="proSta : ${proposalState}" th:value="${proSta.codeNo}">
+				[[${proSta.codeName}]]
+			</option>    
+	    </select>
+	  </div>
+	  </div>
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
   	<th:block th:each="pps : ${proposalList}">
@@ -54,5 +66,15 @@
 // 	  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 // 	}
 // })
+
+const urlParams = new URL(location.href).searchParams;
+	
+	const proSta =  urlParams.get('type') == null ? '' : urlParams.get('type');
+	const pageNum = urlParams.get('pageNum') == null ? '1' : urlParams.get('pageNum');
+	$('#proposalStateCategory').val(proSta);
+	
+	$('#proposalStateCategory').on('change', (ev) => {
+		location.href="/worker/proposalList?pageNum=" + pageNum + "&type=" + ev.target.value ;
+	})
 </script>
 </html>
