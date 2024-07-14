@@ -29,8 +29,16 @@ import CareerTableHead from '../career-table-head';
 import CareerTableToolbar from '../career-table-toolbar';
 import TableNoData from '../../common-table/table-no-data';
 import TableEmptyRows from '../../common-table/table-empty-rows';
-import { style, boxStyle, subStyle, textareaStyle } from '../../common-table/css';
 import { emptyRows, showAlert, applyFilter, getComparator } from '../../common-table/utils';
+import {
+  style,
+  boxStyle,
+  subStyle,
+  buttonStyle,
+  styleColBox,
+  textareaStyle,
+  modalTitleStyle,
+} from '../../common-table/css';
 // ----------------------------------------------------------------------
 
 export default function CareerPage() {
@@ -261,54 +269,62 @@ export default function CareerPage() {
         aria-describedby="modal-modal-description"
       >
         <Card sx={style}>
-          <Typography variant="h6" component="h2">
-            경력 인증 요청 정보
-          </Typography>
+          <Grid sx={modalTitleStyle}>
+            <Typography variant="h6" component="h2">
+              경력 인증 요청 정보
+            </Typography>
+          </Grid>
           <Scrollbar sx={{ height: '90%' }}>
             <CardContent>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <Typography variant="subtitle1">이름</Typography>
-                  <Typography style={boxStyle} variant="body1">
-                    {careerInfo.usersName}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="subtitle1">경력 내용</Typography>
-                  <Typography style={boxStyle} variant="body1">
-                    {careerInfo.careerInfo}
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="subtitle1">경력 기간</Typography>
-                  <Grid item container>
-                    <Grid item xs={5}>
-                      <Typography style={boxStyle} variant="body1">
-                        {fDateTime(careerInfo.careerStartDt, 'yyyy/MM/dd')}
-                      </Typography>
+                  <Card sx={styleColBox}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <Typography variant="subtitle1">이름</Typography>
+                        <Typography style={boxStyle} variant="body1">
+                          {careerInfo.usersName}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Typography variant="subtitle1">경력 내용</Typography>
+                        <Typography style={boxStyle} variant="body1">
+                          {careerInfo.careerInfo}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Typography variant="subtitle1">경력 기간</Typography>
+                        <Grid item container>
+                          <Grid item xs={5}>
+                            <Typography style={boxStyle} variant="body1">
+                              {fDateTime(careerInfo.careerStartDt, 'yyyy/MM/dd')}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Typography lineHeight={3} align="center">
+                              ~
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={5}>
+                            <Typography style={boxStyle} variant="body1">
+                              {fDateTime(careerInfo.careerEndDt, 'yyyy/MM/dd')}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Typography variant="subtitle1">첨부 파일</Typography>
+                        <Typography style={boxStyle} variant="body1">
+                          {careerInfo.fileId}
+                        </Typography>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={2}>
-                      <Typography lineHeight={3} align="center">
-                        ~
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={5}>
-                      <Typography style={boxStyle} variant="body1">
-                        {fDateTime(careerInfo.careerEndDt, 'yyyy/MM/dd')}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="subtitle1">첨부 파일</Typography>
-                  <Typography style={boxStyle} variant="body1">
-                    {careerInfo.fileId}
-                  </Typography>
+                  </Card>
                 </Grid>
               </Grid>
             </CardContent>
           </Scrollbar>
-          <Grid container spacing={2} sx={{ position: 'relative', top: -70 }}>
+          <Grid container spacing={2} sx={buttonStyle}>
             {
               {
                 A01: (

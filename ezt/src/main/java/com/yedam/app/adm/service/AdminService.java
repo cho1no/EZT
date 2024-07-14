@@ -17,7 +17,7 @@ public interface AdminService {
 	// 의뢰 전체 조회
 	public List<RequestVO> getRequests();
 	// 의뢰 단건 조회
-	public RequestVO getRequest();
+	public Map<String, Object> getRequest(int requestNo);
 	// 의뢰 삭제
 	public int deleteRequest();
 	

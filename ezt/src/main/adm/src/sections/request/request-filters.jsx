@@ -77,7 +77,6 @@ export default function RequestFilters({
     const checkedCateOpt = categoryOpt.filter((opt) => opt.checked);
     const checkedReqStateOpt = reqStateOpt.filter((opt) => opt.checked);
     const checkedCttPlaceOpt = cttPlaceOpt.filter((opt) => opt.checked);
-    console.log(checkedCttPlaceOpt);
     let filter = datas.filter((data) =>
       checkedRegionOpt.some((opt) => opt.codeName === data.regionCode)
     );

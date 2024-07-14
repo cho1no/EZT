@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <th:block
+      th:replace="common/configs/default_config :: ConfigFragment"
+    ></th:block>
+    <scr th:insert="common/fragments/default_scr :: scrFragment"></scr>
+    <style></style>
+  </head>
+  <body id="top">
+    <div class="site-wrap">
+      <mobile
+        th:insert="common/fragments/default_mobile :: mobileFragment"
+      ></mobile>
+      <header
+        class="site-navbar mt-3"
+        th:insert="common/fragments/default_header :: headerFragment"
+      ></header>
+      <section
+        class="section-hero inner-page"
+        id="home-section"
+        style="background-color: white"
+      ></section>
+      <section class="back-smooth"></section>
+      <main layout:fragment="Content"></main>
+      <footer
+        class="site-footer"
+        th:insert="common/fragments/default_footer :: footerFragment"
+      ></footer>
+    </div>
+  </body>
+</html>

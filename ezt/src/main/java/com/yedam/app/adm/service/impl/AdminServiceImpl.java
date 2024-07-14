@@ -11,16 +11,31 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.app.adm.mapper.AdminMapper;
 import com.yedam.app.adm.service.AdminService;
+import com.yedam.app.doc.service.ContractService;
+import com.yedam.app.doc.service.ContractVO;
+import com.yedam.app.doc.service.ProposalService;
+import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.doc.service.UnityContractVO;
+import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
+import com.yedam.app.rpt.service.CttReportVO;
+import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.usr.service.UserVO;
 import com.yedam.app.wkr.service.CareerVO;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class AdminServiceImpl implements AdminService{
 	@Autowired
 	AdminMapper admMapper;
-	
+	@Autowired
+	RequestService reqSvc;
+	@Autowired
+	ContractService conSvc;
+//	@Autowired
+//	ProposalService ppsSvc;
 	// 통계관련
 	@Override
 	public Map<String, Object> getStatistic(){
@@ -41,8 +56,45 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public RequestVO getRequest() {
-		return null;
+	public Map<String, Object> getRequest(int requestNo) {
+		Map<String, Object> map = new HashMap<>();
+		// 의뢰 단건
+		RequestVO reqVO = new RequestVO();
+		reqVO.setRequestNo(requestNo);
+		map.put("reqInfo", reqSvc.requestInfo(reqVO));
+		// 견적서 관련
+		ProposalVO propVO = new ProposalVO();
+		propVO.setRequestNo(requestNo);
+		List<ProposalVO> propList = reqSvc.proposalList(propVO);
+		if (propList.size() > 0) {
+			map.put("propInfo", propList);
+		}
+		// 계약서 관련
+		ContractVO contVO = new ContractVO();
+		contVO.setRequestNo(requestNo);
+		contVO = reqSvc.contractInfo(contVO);
+		if (contVO != null) {
+			contVO = conSvc.conInfo(contVO);
+			UserVO worker = admMapper.selectUser(contVO.getWorkerInfo());
+			UserVO requester = admMapper.selectUser(contVO.getRequesterInfo());
+			Map<String, Object> m = new HashMap<>();
+			m.put("contract", contVO);
+			m.put("worker", worker);
+			m.put("requester", requester);
+			map.put("contInfo", m);
+		}
+		// 공사보고 관련
+		List<CttReportVO> cttRptList = reqSvc.cttReportList(requestNo);
+		if (cttRptList.size() > 0) {
+			map.put("cttRptInfo", cttRptList);
+		}
+		// 팀원 관련
+		List<MemberVO> memList = reqSvc.memberList(requestNo);
+		if (memList.size() > 0) {
+			map.put("memInfo", memList);
+		}
+		log.info(map.toString());
+		return map;
 	}
 
 	@Override
