@@ -5,6 +5,7 @@ import java.util.List;
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.tem.service.MemberDenyVO;
 import com.yedam.app.tem.service.MemberEnrollVO;
+import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.tem.service.TeamVO;
 import com.yedam.app.tem.service.TeamWorkCategoryVO;
 
@@ -49,4 +50,6 @@ public interface TeamMapper {
 	//팀원 신청하기
 	public int insertMember(MemberEnrollVO memberEnrollVO);
 	
+	//신청자 승인하기(프로시저 이용)
+	public int approveMember(MemberVO memberVO);	
 }

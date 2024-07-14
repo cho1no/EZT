@@ -86,10 +86,12 @@
     </table>
     
 </form>
+<th:block th:if="${#authentication.principal.userNo == team.writer }">
 <button type="button" class="btn btn-primary upBtn update">수정</button>
 <button type="button" class="btn btn-primary"
         th:onclick="|location.href='@{/team/requestDelete(teamNo=${team.teamNo})}'|">삭제
 </button>
+</th:block>
 <!-- 카테고리 별 신청자 확인 Modal -->
 <div class="modal fade" id="volunteer" tabindex="-1" aria-labelledby="volunteerLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -99,7 +101,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            	<p>카테고리  : </p>
+            	<p>카테고리  : <span style="display: none" id="modalCategoryCode"/><span id="workCodeNm"></span> </p>
             <div class="row">
             	<div class="col">
                 <table class="table">
@@ -118,6 +120,7 @@
             	<div class="col">
             		<table class="table">
             		<tbody>
+						<input type="hidden" id="usersNo">
             			<tr>
             				<th>신청인</th>
             				<td id="worker"></td>
@@ -129,7 +132,7 @@
             			<tr>
 	            			<td colspan="2">
 	            				<button class="btn btn-primary" >정보보기</button>
-	            				<button class="btn btn-primary">추가하기</button>
+	            				<button class="btn btn-primary approveBtn">추가하기</button>
 	            				<button data-bs-toggle="modal" data-bs-target="#deny" class="btn btn-primary">반려하기</button>
 	            			</td>
             			</tr>
@@ -164,7 +167,7 @@
                         </tr>
                         <tr>
                             <th>반려사유</th>
-                            <td><textarea name="content"></textarea></td>
+                            <td><textarea name="content" id="content"></textarea></td>
                         </tr>
                         <tr>
                             <td colspan="2"><button id="denyBtn" class="btn btn-primary">반려하기</button></td>
@@ -190,13 +193,8 @@
             </div>
             <div class="modal-body">
 				<form name="memberInsertForm" th:action="@{/team/memberInsert}" th:object="${memberEnrollVO}" method="post">
-				    <!-- teamNo hidden input -->
 				    <input type="hidden" name="teamNo" th:value="${team.teamNo}">
-				    
-				    <!-- worker hidden input (assuming it's user's ID) -->
 				    <input type="hidden" name="worker" th:value="${#authentication.principal.userVO.usersNo}">
-				    
-				    <!-- categoryCode hidden input (assuming it's dynamically set in JavaScript) -->
 				    <input type="hidden" id="categoryCode" name="workCode">
 				    
 				    <table>
@@ -226,7 +224,7 @@
     </div>
 </div>
 
-<script src="/js/tem/temRequestUpdate.js"></script>
+<script src="/js/tem/teamRequestUpdate.js"></script>
 <script src="/js/tem/teamModal.js"></script>
 </body>
 </html>

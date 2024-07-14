@@ -41,4 +41,7 @@ public interface TeamService {
 	
 	//팀원 신청하기
 	public int insertMember(MemberEnrollVO memberEnrollVO);
+	
+	//신청 승인하기
+	public boolean approveMember(MemberVO memberVO);
 }

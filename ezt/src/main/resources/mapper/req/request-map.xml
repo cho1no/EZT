@@ -86,6 +86,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 <resultMap id="requestMap" type="RequestVO">
 	<result property="fileId" column="file_id"></result>
 	<result property="requestNo" column="request_no"></result>
+	<result property="requester" column="requester"></result>
 	<result property="cttPlace" column="ctt_place"></result>
 	<result property="cttPlaceNm" column="ctt_place_nm"></result>
 	<result property="cttPlaceArea" column="ctt_place_Area"></result>

@@ -67,6 +67,7 @@
       <form name="infoForm" th:object="${request}" class="row">
         <div class="d-flex mb-3">
           <h3 class="me-auto p-2">의뢰 상세 정보</h3>
+		  <th:block th:if="${#authentication.principal.userNo == request.requester}">
           <div class="p-2">
             <button type="button" class="btn btn-secondary upBtn update">
               수정
@@ -76,11 +77,11 @@
             <button
               type="button"
               class="btn btn-secondary delBtn"
-              th:onclick="|location.href='@{/request/delete(requestNo=${request.requestNo})}'|"
-            >
-              삭제
+              th:onclick="|location.href='@{/request/delete(requestNo=${request.requestNo})}'|">
+			  삭제
             </button>
           </div>
+		  </th:block>
         </div>
         <div class="col-lg-6 col-md-12">
           <div class="slide-container swiper">
@@ -114,7 +115,10 @@
                 />
               </td>
             </tr>
-
+			<tr>
+              <th>제목</th>
+              <td>[[${request.title}]]</td>
+            </tr>
             <tr>
               <th>의뢰자명</th>
               <td>[[${request.usersName}]]</td>
@@ -356,7 +360,9 @@
           <tr>
             <td><h4>계약서</h4></td>
             <td></td>
-            <td><button class="btnn">상세보기</button></td>
+            <td><button class="btnn" th:onclick="|location.href='@{/conInfo(contractNo=${contract.contractNo})}'|">
+				상세보기
+			</button></td>
           </tr>
           <tr>
             <td style="display: hidden"></td>

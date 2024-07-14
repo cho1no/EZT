@@ -201,7 +201,8 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
 			,m.worker as users_no
 			,m.content
 			,m.process_result
-			,FIND_COMMONCODE(m.work_code) as work_code
+			,FIND_COMMONCODE(m.work_code) as work_code_Nm
+			,m.work_code
 			,m.team_no
 			,(SELECT
                 SUM(trunc ( ( months_between ( c.career_end_dt, c.career_start_dt ) ) / 12 ))
@@ -220,7 +221,7 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
 		and process_result = 'A01'
 	ORDER BY process_result		
 </select>
-<!-- 지원자 반려 -->
+<!-- 지원자 반려  member_deny - insert, member_enroll - update -->
 <update id="updateMemberEnroll" statementType="CALLABLE" parameterType="MemberDenyVO">
 	{CALL
 		memberdeny(#{enrollNo},#{content},#{writer})
@@ -254,4 +255,10 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
         )
 </insert>
 
+<!-- 지원자 승인 member - insert, member_enroll - update -->
+<update id="approveMember" statementType="CALLABLE" parameterType="MemberVO">
+	{CALL
+		memberinsert(#{enrollNo},#{usersNo},#{workCode},#{teamNo})
+	}
+</update>
 </mapper>
