@@ -65,11 +65,11 @@
 	        ON r.file_id = f.file_id AND f.boss_tf = 'Y'
         ORDER BY write_dt DESC
 	</select>
-	<select id="selectRequest" parameterType="int" resultType="RequestVO">
-		SELECT *
-		FROM request
-		WHERE request_no = #{requestNo}
-	</select>
+<!--	<select id="selectRequest" parameterType="int" resultType="RequestVO">-->
+<!--		SELECT *-->
+<!--		FROM request-->
+<!--		WHERE request_no = #{requestNo}-->
+<!--	</select>-->
 	
 	
 	<!-- 유저관련 -->

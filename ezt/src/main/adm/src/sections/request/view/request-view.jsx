@@ -11,6 +11,7 @@ import Spinner from 'src/components/spinner/spinner';
 
 import RequestCard from '../request-card';
 import RequestSort from '../request-sort';
+import RequestModal from '../request-modal';
 import RequestFilters from '../request-filters';
 
 // ----------------------------------------------------------------------
@@ -28,9 +29,16 @@ export const NoData = () => (
 
 export default function RequestView() {
   const [requests, setRequests] = useState([]);
+
   const [filteredData, setFilteredData] = useState([]);
+
   const [openFilter, setOpenFilter] = useState(false);
+
   const [loading, setLoading] = useState(true);
+
+  const [open, setOpen] = useState(false);
+
+  const [requestNo, setRequestNo] = useState(-1);
 
   useEffect(() => {
     setFilteredData(requests);
@@ -55,42 +63,55 @@ export default function RequestView() {
     setOpenFilter(false);
   };
 
+  // modal open
+  const handleOpen = (rno) => {
+    setOpen(true);
+    setRequestNo(rno);
+  };
+  // modal close
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const notFound = !filteredData.length;
 
   if (loading) {
     return <Spinner />;
   }
   return (
-    <Container>
-      <Stack
-        direction="row"
-        alignItems="center"
-        flexWrap="wrap-reverse"
-        justifyContent="space-between"
-        sx={{ mb: 3 }}
-      >
-        <Typography variant="h4">의뢰 관리</Typography>
-        <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-          <RequestFilters
-            openFilter={openFilter}
-            onOpenFilter={handleOpenFilter}
-            onCloseFilter={handleCloseFilter}
-            datas={requests}
-            filterDatas={setFilteredData}
-          />
+    <>
+      <Container>
+        <Stack
+          direction="row"
+          alignItems="center"
+          flexWrap="wrap-reverse"
+          justifyContent="space-between"
+          sx={{ mb: 3 }}
+        >
+          <Typography variant="h4">의뢰 관리</Typography>
+          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+            <RequestFilters
+              openFilter={openFilter}
+              onOpenFilter={handleOpenFilter}
+              onCloseFilter={handleCloseFilter}
+              datas={requests}
+              filterDatas={setFilteredData}
+            />
 
-          <RequestSort data={filteredData} setData={setFilteredData} />
+            <RequestSort data={filteredData} setData={setFilteredData} />
+          </Stack>
         </Stack>
-      </Stack>
 
-      <Grid container spacing={3}>
-        {filteredData.map((request) => (
-          <Grid key={request.requestNo} xs={12} sm={6} md={3}>
-            <RequestCard request={request} />
-          </Grid>
-        ))}
-      </Grid>
-      {notFound && <NoData />}
-    </Container>
+        <Grid container spacing={3}>
+          {filteredData.map((request) => (
+            <Grid key={request.requestNo} xs={12} sm={6} md={3}>
+              <RequestCard request={request} onClick={handleOpen} />
+            </Grid>
+          ))}
+        </Grid>
+        {notFound && <NoData />}
+      </Container>
+      <RequestModal requestNo={requestNo} open={open} onClose={handleClose} />
+    </>
   );
 }

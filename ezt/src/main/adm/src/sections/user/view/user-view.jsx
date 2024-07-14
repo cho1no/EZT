@@ -21,10 +21,10 @@ import Spinner from 'src/components/spinner/spinner';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import UserTableToolbar from '../user-table-toolbar';
-import { style, boxStyle } from '../../common-table/css';
 import TableNoData from '../../common-table/table-no-data';
 import TableEmptyRows from '../../common-table/table-empty-rows';
 import { emptyRows, applyFilter, getComparator } from '../../common-table/utils';
+import { style, boxStyle, buttonStyle, modalTitleStyle } from '../../common-table/css';
 
 // ----------------------------------------------------------------------
 
@@ -126,11 +126,6 @@ export default function UserPage() {
 
   const notFound = !dataFiltered.length && !!filterName;
 
-  const buttonStyle = {
-    position: 'relative',
-
-    display: userInfo.usersState === '회원 탈퇴' ? 'none' : '',
-  };
   function getRole(role) {
     if (role === 'ROLE_USER') {
       return '일반 유저';
@@ -217,10 +212,11 @@ export default function UserPage() {
         aria-describedby="modal-modal-description"
       >
         <Card sx={style}>
-          <Typography variant="h6" component="h2">
-            회원정보
-          </Typography>
-
+          <Grid sx={modalTitleStyle}>
+            <Typography variant="h6" component="h2">
+              회원정보
+            </Typography>
+          </Grid>
           <Scrollbar sx={{ height: '90%' }}>
             <CardContent>
               <Grid container spacing={2}>
@@ -301,7 +297,7 @@ export default function UserPage() {
             variant="contained"
             fullWidth
             color={userInfo.usersState === '활동 중' ? 'error' : 'success'}
-            sx={{ ...buttonStyle, top: -60 }}
+            sx={{ ...buttonStyle, display: userInfo.usersState === '회원 탈퇴' ? 'none' : '' }}
             onClick={() =>
               userInfo.usersState === '활동 중'
                 ? setUserPause(userInfo.usersNo)

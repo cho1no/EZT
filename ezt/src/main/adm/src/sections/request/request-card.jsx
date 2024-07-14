@@ -1,12 +1,9 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-// import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
-// import { fCurrency } from 'src/utils/format-number';
 
 import { fDateTime } from 'src/utils/format-time';
 
@@ -14,7 +11,7 @@ import Label from 'src/components/label';
 
 // ----------------------------------------------------------------------
 
-export default function RequestCard({ request }) {
+export default function RequestCard({ request, onClick }) {
   const renderStatus = (
     <Box
       sx={{
@@ -53,6 +50,7 @@ export default function RequestCard({ request }) {
       // src={`C:/${request.savePath}${request.saveName}${request.originalFileName}`}
       src="/assets/images/products/product_23.jpg"
       sx={{
+        cursor: 'pointer',
         top: 0,
         width: 1,
         height: 1,
@@ -64,7 +62,7 @@ export default function RequestCard({ request }) {
   return (
     <Card
       onClick={() => {
-        console.log(request.requestNo);
+        onClick(request.requestNo);
       }}
     >
       <Box sx={{ pt: '100%', position: 'relative' }}>
@@ -93,4 +91,5 @@ export default function RequestCard({ request }) {
 
 RequestCard.propTypes = {
   request: PropTypes.object,
+  onClick: PropTypes.func,
 };

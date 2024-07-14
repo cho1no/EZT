@@ -34,7 +34,7 @@ public interface AdminMapper {
 	// 의뢰 전체 가져오기
 	public List<RequestVO> selectRequests();
 	// 의뢰 단건 조회
-	public RequestVO selectRequest(int requestNo);
+//	public RequestVO selectRequest(int requestNo);
 	// 의뢰 삭제
 	public int deleteRequest();
 	

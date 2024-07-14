@@ -19,7 +19,7 @@ import { fNumber } from 'src/utils/format-number';
 import Scrollbar from 'src/components/scrollbar';
 import Spinner from 'src/components/spinner/spinner';
 
-import { style, boxStyle } from '../common-table/css';
+import { style, boxStyle, styleColBox, modalTitleStyle } from '../common-table/css';
 
 export default function PayModal({ payNo, open, onClose }) {
   const [info, setInfo] = useState({});
@@ -42,11 +42,6 @@ export default function PayModal({ payNo, open, onClose }) {
     };
     getInfo();
   }, [payNo]);
-  const styleColBox = {
-    // border: '1px solid #eee',
-    boxShadow: 2,
-    p: 2,
-  };
   return (
     <Modal
       open={open}
@@ -55,7 +50,7 @@ export default function PayModal({ payNo, open, onClose }) {
       aria-describedby="modal-modal-description"
     >
       <Card sx={style}>
-        <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Grid sx={modalTitleStyle}>
           <Typography variant="h6" component="h2">
             결제 상세 정보
           </Typography>
@@ -63,7 +58,7 @@ export default function PayModal({ payNo, open, onClose }) {
         {loading ? (
           <Spinner />
         ) : (
-          <Scrollbar>
+          <Scrollbar sx={{ height: '92%' }}>
             <CardContent>
               <Grid container spacing={2}>
                 <Grid item xs={6}>

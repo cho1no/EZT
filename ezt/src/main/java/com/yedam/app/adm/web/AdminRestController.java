@@ -115,6 +115,13 @@ public class AdminRestController {
 	public List<RequestVO> getRequests(){
 		return admSvc.getRequests();
 	}
+	// 의뢰 단건 조회
+	@CheckToken
+	@GetMapping("/requestInfo/{requestNo}")
+	public Map<String, Object> getRequest(@PathVariable int requestNo) {
+		return admSvc.getRequest(requestNo);
+	}
+	
 	
 	// 통일 계약서 전체 조회
 	@CheckToken

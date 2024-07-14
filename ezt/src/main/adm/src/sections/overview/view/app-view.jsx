@@ -122,8 +122,8 @@ export default function AppView() {
           />
         </Grid>
 
-        <Grid container xs={12} sm={6} md={4} spacing={2}>
-          <Grid xs={12}>
+        <Grid container xs={12} sm={12} md={4} spacing={3}>
+          <Grid xs={12} sm={4} md={12}>
             <AppWidgetSummary
               title="전체 유저"
               total={statistic.totalUsersCnt}
@@ -132,7 +132,7 @@ export default function AppView() {
               icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
             />
           </Grid>
-          <Grid xs={12}>
+          <Grid xs={12} sm={4} md={12}>
             <AppWidgetSummary
               title="경력 인증 대기"
               total={statistic.crrWaitCnt}
@@ -141,7 +141,7 @@ export default function AppView() {
               icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
             />
           </Grid>
-          <Grid xs={12}>
+          <Grid xs={12} sm={4} md={12}>
             <AppWidgetSummary
               title="Bug Reports"
               total={234}
