@@ -30,8 +30,45 @@ $(document).ready(function() {
                 if (response) {
                     alert("반려 처리되었습니다.");
                     $('#deny').modal('hide');
-                } else {
-                    alert("반려 처리에 실패했습니다.");
+					$('textarea[name="content"]').val('');
+                }
+            },
+            error: function(error) {
+                console.log(error);
+                alert("오류가 발생했습니다.");
+            }
+        });
+    });
+    
+    $('.approveBtn').click(function() {
+        let enrollNo = $('#enrollNo').val();
+        let usersNo = $('#writer').val();
+        let workCode = $('textarea[name="content"]').val();
+        let teamNo = $('#writer').val();
+
+        
+         // content가 null이면 alert
+        if (content == null ) {
+            alert("반려 사유를 입력해주세요.");
+            return;
+        }
+
+        let data = {
+            enrollNo: enrollNo,
+            writer: writer,
+            content: content
+        };
+
+        $.ajax({
+            url: '/team/memberDeny',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                if (response) {
+                    alert("반려 처리되었습니다.");
+                    $('#deny').modal('hide');
+					$('textarea[name="content"]').val('');
                 }
             },
             error: function(error) {
@@ -61,8 +98,13 @@ $(document).ready(function() {
 	                    	</tr>`
 				$('#volunteerBody').append(table);
             }
-			if(result.length>0){
-				$('#volunteerBody').find('tr').eq(0).find('td').click();
+				if (result.length > 0) {
+	            $('#volunteerBody').find('tr').eq(0).find('td').click();
+	        }else{
+				$('#content').text(''); // 상세 내용 초기화
+	            $('#denyUser').val(''); // 신청인 초기화
+	            $('#enrollNo').val(''); // enrollNo 초기화
+	            $('#worker').text(''); // worker 초기화
 			}
 		})
 	}

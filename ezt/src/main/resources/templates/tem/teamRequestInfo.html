@@ -99,7 +99,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            	<p>카테고리  : </p>
+            	<p>카테고리  : <span id="categoryCode"></span> </p>
             <div class="row">
             	<div class="col">
                 <table class="table">
@@ -129,7 +129,7 @@
             			<tr>
 	            			<td colspan="2">
 	            				<button class="btn btn-primary" >정보보기</button>
-	            				<button class="btn btn-primary">추가하기</button>
+	            				<button class="btn btn-primary approveBtn">추가하기</button>
 	            				<button data-bs-toggle="modal" data-bs-target="#deny" class="btn btn-primary">반려하기</button>
 	            			</td>
             			</tr>
@@ -164,7 +164,7 @@
                         </tr>
                         <tr>
                             <th>반려사유</th>
-                            <td><textarea name="content"></textarea></td>
+                            <td><textarea name="content" id="content"></textarea></td>
                         </tr>
                         <tr>
                             <td colspan="2"><button id="denyBtn" class="btn btn-primary">반려하기</button></td>
@@ -226,7 +226,7 @@
     </div>
 </div>
 
-<script src="/js/tem/temRequestUpdate.js"></script>
+<script src="/js/tem/teamRequestUpdate.js"></script>
 <script src="/js/tem/teamModal.js"></script>
 </body>
 </html>

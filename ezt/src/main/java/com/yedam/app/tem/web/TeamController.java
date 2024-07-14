@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +17,7 @@ import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.PageDTO;
 import com.yedam.app.tem.service.MemberDenyVO;
 import com.yedam.app.tem.service.MemberEnrollVO;
+import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.tem.service.TeamService;
 import com.yedam.app.tem.service.TeamVO;
 import com.yedam.app.tem.service.TeamWorkCategoryVO;
@@ -151,6 +151,7 @@ public class TeamController {
         teamService.deleteCategory(twcVO);
         return "tem/teamRequestInfo";
     }
+    
     //신청자 반려
     @GetMapping("/memberDeny")
     public String memberDeny(Model model) {
@@ -161,7 +162,7 @@ public class TeamController {
     
     @PostMapping("/memberDeny")
     @ResponseBody
-    public boolean memberDeny(MemberDenyVO memberDenyVO) {
+    public boolean memberDeny(@RequestBody MemberDenyVO memberDenyVO) {
     	return teamService.updateMemberEnroll(memberDenyVO);
     }
     
@@ -178,7 +179,23 @@ public class TeamController {
     public String memberInsert(MemberEnrollVO memberEnrollVO, @RequestParam("teamNo") int teamNo) {
         memberEnrollVO.setTeamNo(teamNo);
         teamService.insertMember(memberEnrollVO);
-        return "redirect:/team/requestInfo";
+        return "redirect:requestInfo?teamNo="+teamNo;
+    }
+    
+    
+  //신청자 승인
+    @GetMapping("/approveMember")
+    public String approveMember(Model model) {
+    	model.addAttribute("approve", new MemberVO());
+    	
+    	return "team/teamRequestInfo";
+    }
+    
+    @PostMapping("/approveMember")
+    @ResponseBody
+    public boolean approveMember(@RequestBody MemberVO memberVO) {
+    	
+    	return teamService.approveMember(memberVO);
     }
 }
 

@@ -220,7 +220,7 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
 		and process_result = 'A01'
 	ORDER BY process_result		
 </select>
-<!-- 지원자 반려 -->
+<!-- 지원자 반려  member_deny - insert, member_enroll - update -->
 <update id="updateMemberEnroll" statementType="CALLABLE" parameterType="MemberDenyVO">
 	{CALL
 		memberdeny(#{enrollNo},#{content},#{writer})
@@ -254,4 +254,10 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
         )
 </insert>
 
+<!-- 지원자 승인 member - insert, member_enroll - update -->
+<update id="approveMember" statementType="CALLABLE" parameterType="MemberVO">
+	{CALL
+		memberinsert(#{enrollNo},#{usersNo},#{workCode},#{teamNo})
+	}
+</update>
 </mapper>

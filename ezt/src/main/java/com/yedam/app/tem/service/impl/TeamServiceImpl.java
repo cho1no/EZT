@@ -9,6 +9,7 @@ import com.yedam.app.req.service.Criteria;
 import com.yedam.app.tem.mapper.TeamMapper;
 import com.yedam.app.tem.service.MemberDenyVO;
 import com.yedam.app.tem.service.MemberEnrollVO;
+import com.yedam.app.tem.service.MemberVO;
 import com.yedam.app.tem.service.TeamService;
 import com.yedam.app.tem.service.TeamVO;
 import com.yedam.app.tem.service.TeamWorkCategoryVO;
@@ -100,8 +101,15 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	public int insertMember(MemberEnrollVO memberEnrollVO) {
 		int result = teamMapper.insertMember(memberEnrollVO);
-		return result == 1 ? memberEnrollVO.getTeamNo() : -1;
+		return result == 1 ? memberEnrollVO.getTeamNo() : 1;
 		
+	}
+
+	//신청자 승인하기
+	@Override
+	public boolean approveMember(MemberVO memberVO) {
+		
+		return teamMapper.approveMember(memberVO) == 1;
 	}
 
 
