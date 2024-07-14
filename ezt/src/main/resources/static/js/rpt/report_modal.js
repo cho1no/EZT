@@ -18,12 +18,12 @@ var maxSize = 1048576; // 5MB
 
 function checkExtentsion(fileName, fileSize) {
 	if (fileSize >= maxSize) {
-		alert("파일 사이즈 초과");
+		sweetModalError("파일 사이즈가 초과되었습니다");
 		return false;
 	}
 
 	if (regex.test(fileName)) {
-		alert("해당 종류의 파일은 업로드할 수 없습니다.")
+		sweetModalError("해당 종류의 파일은 업로드할 수 없습니다.")
 		return false;
 	}
 	return true;
@@ -102,7 +102,7 @@ function fileList() {
 
 	if ('files' in x) {
 		if (x.files.length > 5) {
-			alert("파일 개수가 초과되었습니다.");
+			sweetModalError("파일 개수가 초과되었습니다.");
 			document.getElementById("multiFile").value = "";
 			return;
 		}
@@ -126,7 +126,7 @@ function fileList() {
 			return false;
 		}
 		if (files[i].type.indexOf('image') == -1) {
-			alert("이미지 파일을 등록해 주세요.")
+			sweetModalError("이미지 파일을 등록해 주세요.")
 			return false;
 		}
 
@@ -203,17 +203,21 @@ function reportInsertAction() {
 	// 유효성 검사
 	if (selectData() == false) {
 		return false;
-	} else if ($('input[name="title"]').val() == '') {
-		alert("제목을 입력해 주세요");
+	}
+	if ($('input[name="title"]').val() == '') {
+		sweetModalError("제목을 입력해 주세요");
 		return false;
-	} else if ($('textarea[name="detailContent"]').val() == '') {
-		alert("내용을 입력해 주세요");
+	}
+	if ($('textarea[name="detailContent"]').val() == '') {
+		sweetModalError("내용을 입력해 주세요");
 		return false;
-	} else if (uploadFiles == '') {
-		alert("이미지를 업로드해 주세요");
+	}
+	if (uploadFiles == '') {
+		sweetModalError("이미지를 업로드해 주세요");
 		return false;
-	} else if (maxLength() == false) {
-		alert("글자수를 초과했습니다. 다시 확인해주세요.");
+	}
+	if (maxLength() == false) {
+		sweetModalError("글자수를 초과했습니다. 다시 확인해주세요.");
 		return false;
 	}
 
@@ -223,9 +227,9 @@ function reportInsertAction() {
 
 	var formData = new FormData(document.reportInsertForm);
 
-	for (const pair of formData.entries()) {
-		//console.log(pair[0], pair[1]);
-	}
+	/*for (const pair of formData.entries()) {
+		console.log(pair[0], pair[1]);
+	}*/
 
 	$.ajax({
 		url: '/rptInsertInfo',
@@ -235,7 +239,7 @@ function reportInsertAction() {
 		type: 'Post',
 		dataType: 'JSON'
 
-		, success: function(result) {
+		, success: function() {
 			//rptInfo(result); // 상세 정보 가져오기
 			if (uploadFiles != '') {
 				fileDelete(uploadFiles);
@@ -286,15 +290,34 @@ $('.uploadResult').on("click", "img", function(e) {
 // 공사 보고 삭제
 $('#rpt_deleteBtn').on("click", function() {
 
-	$.ajax({
-		url: '/rptDelete',
-		type: 'post',
-		contentType: 'application/json',
-		data: JSON.stringify(modalData.fileList),
-		async: false
+	Swal.fire({
+		title: '이대로 진행하시겠습니까?',
+		text: '다시 되돌릴 수 없습니다.',
+		icon: 'warning',
 
-	})
-	location.reload();
+		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+		confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+		cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+		confirmButtonText: '삭제', // confirm 버튼 텍스트 지정
+		cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+	}).then(result => {
+		// 만약 Promise리턴을 받으면,
+		if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+
+			$.ajax({
+				url: '/rptDelete',
+				type: 'post',
+				contentType: 'application/json',
+				data: JSON.stringify(modalData.fileList),
+				async: false
+			})
+			Swal.fire('삭제 완료되었습니다', '', 'success');
+			location.reload();
+		}
+	});
+
+
 })
 // 수정 모달 열기
 $('#rpt_updateBtn').on('click', function() {
@@ -343,14 +366,17 @@ function reportUpdateAction() {
 
 	if (selectData() == false) {
 		return false;
-	} else if ($('input[name="title"]').val() == '') {
-		alert("제목을 입력해 주세요");
+	}
+	if ($('input[name="title"]').val() == '') {
+		sweetModalError("제목을 입력해 주세요");
 		return false;
-	} else if ($('textarea[name="detailContent"]').val() == '') {
-		alert("내용을 입력해 주세요");
+	}
+	if ($('textarea[name="detailContent"]').val() == '') {
+		sweetModalError("내용을 입력해 주세요");
 		return false;
-	} else if (maxLength() == false) {
-		alert("글자수를 초과했습니다. 다시 확인해주세요.");
+	}
+	if (maxLength() == false) {
+		sweetModalError("글자수를 초과했습니다. 다시 확인해주세요.");
 		return false;
 	}
 
@@ -364,9 +390,9 @@ function reportUpdateAction() {
 		formData.append("fileId", modalData.fileId);
 	}
 
-	for (const pair of formData.entries()) {
-		//console.log(pair[0], pair[1]);
-	}
+	/*for (const pair of formData.entries()) {
+		console.log(pair[0], pair[1]);
+	}*/
 
 	$.ajax({
 		url: '/rptUpdate',
@@ -391,14 +417,31 @@ function reportUpdateAction() {
 
 // 공사 보고 승인
 $('#rpt_approveBtn').on("click", function() {
-	$.ajax({
-		url: '/rptApprove?cttReportNo=' + modalData.cttReportNo + '&workerNo=' + workerNo,
-		type: 'Get'
-		, success: function() {
-			alert("승인 되었습니다.")
-			location.reload();
+
+	Swal.fire({
+		title: '이대로 진행하시겠습니까?',
+		text: '다시 되돌릴 수 없습니다.',
+		icon: 'warning',
+
+		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+		confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+		cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+		confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+		cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+	}).then(result => {
+		// 만약 Promise리턴을 받으면,
+		if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+			$.ajax({
+				url: '/rptApprove?cttReportNo=' + modalData.cttReportNo + '&workerNo=' + workerNo,
+				type: 'Get'
+				, success: function() {
+					Swal.fire('승인 완료되었습니다', '', 'success');
+					location.reload();
+				}
+			})
 		}
-	})
+	});
 })
 
 // 공사 보고 요청
@@ -407,7 +450,7 @@ $('#rpt_requestBtn').on("click", function() {
 		url: '/rptRequest?requestNo=' + rno,
 		type: 'Get'
 		, success: function() {
-			alert("승인 요청 되었습니다.");
+			sweetModalSuccess("승인 요청 되었습니다");
 		}
 	})
 })
@@ -417,7 +460,7 @@ function selectData() {
 	if ($('select').val() !== '유형 선택') {
 		$('input[name=cttDivision]').val($('select').val());
 	} else {
-		alert("유형을 선택해 주세요")
+		sweetModalError("유형을 선택해 주세요")
 		return false;
 	}
 }
@@ -565,4 +608,41 @@ function chkword(obj, maxlength) {
 	}
 	obj.focus();
 
+}
+
+function sweetModalError(text) {
+	Swal.fire({
+		icon: "error",
+		title: "다시 확인해 주세요",
+		text: text
+	});
+}
+
+function sweetModalSuccess(text) {
+	Swal.fire({
+		icon: "success",
+		title: text
+	});
+}
+
+function sweetModalConfirm(text) {
+	Swal.fire({
+		title: '이대로 진행하시겠습니까?',
+		text: '다시 되돌릴 수 없습니다.',
+		icon: 'warning',
+
+		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+		confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+		cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+		confirmButtonText: text, // confirm 버튼 텍스트 지정
+		cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+	}).then(result => {
+		// 만약 Promise리턴을 받으면,
+		if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+			//Swal.fire( text + '완료되었습니다', 'success');
+		} else {
+			return false;
+		}
+	});
 }
