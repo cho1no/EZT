@@ -295,6 +295,7 @@ $('#rpt_deleteBtn').on("click", function() {
 		text: '다시 되돌릴 수 없습니다.',
 		icon: 'warning',
 
+		allowOutsideClick: false,
 		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
 		confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
 		cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
@@ -312,8 +313,16 @@ $('#rpt_deleteBtn').on("click", function() {
 				data: JSON.stringify(modalData.fileList),
 				async: false
 			})
-			Swal.fire('삭제 완료되었습니다', '', 'success');
-			location.reload();
+			Swal.fire({
+				icon: "success",
+				title: "삭제 완료되었습니다",
+				allowOutsideClick: false
+			}).then(e => {
+				// 만약 Promise리턴을 받으면,
+				if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+					location.reload();
+				}
+			});
 		}
 	});
 })
@@ -422,6 +431,7 @@ $('#rpt_approveBtn').on("click", function() {
 		text: '다시 되돌릴 수 없습니다.',
 		icon: 'warning',
 
+		allowOutsideClick: false,
 		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
 		confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
 		cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
@@ -435,8 +445,17 @@ $('#rpt_approveBtn').on("click", function() {
 				url: '/rptApprove?cttReportNo=' + modalData.cttReportNo + '&workerNo=' + workerNo,
 				type: 'Get'
 				, success: function() {
-					Swal.fire('승인 완료되었습니다', '', 'success');
-					location.reload();
+
+					Swal.fire({
+						icon: "success",
+						title: "승인 완료되었습니다",
+						allowOutsideClick: false
+					}).then(e => {
+						// 만약 Promise리턴을 받으면,
+						if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+							location.reload();
+						}
+					});
 				}
 			})
 		}

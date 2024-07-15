@@ -371,23 +371,28 @@
 	let priceList = /*[[${ppsInfo.list}]]*/"";
 	var unity_origin = /*[[${unity.contractTermsContent}]]*/""
 	
+	// 날짜&통일 계약서 표시
+	window.onload = function(){
+		Curday();
+		UnityDoc();
+	}
 	// 공사 대금 표기
 	var totalPrice = 0;
 
 	for (i = 0; i < priceList.length; i++) {
 		totalPrice += priceList[i].qty * priceList[i].unitprice;
 	}
-
 	$('input[name="cttPrice"]').val(totalPrice.toString().replace(
 		/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
-
-
 	
 	// 폼 데이터 전송
 	$('#insertBtn').on('click', insertAjax );
 
 	function insertAjax(e){
 
+		// 대금 지급 시기 총 금액 확인
+		if(!GetTotal()) return;
+		
 		// 이미지&오디오 파일 제약
 		if(!onlyFile()) return;
 		
@@ -413,7 +418,8 @@
 				//console.log(result);
 				Swal.fire({
 					icon: "success",
-					title: "등록 되었습니다"
+					title: "등록 되었습니다",
+					allowOutsideClick: false
 				}).then(e => {
 					   // 만약 Promise리턴을 받으면,
 					   if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
