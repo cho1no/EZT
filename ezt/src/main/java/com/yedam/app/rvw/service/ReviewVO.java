@@ -26,9 +26,6 @@ public class ReviewVO {
 	private int cttPlaceArea;// 공간면적
 	private String writerName;	//작성자 이름
 	private String workerName;	//작업자 이름
-	private String saveName;	//파일저장명
-	private String ext;			//확장자명
-	private String bossTf;	//썸네일 여부
 	
 	private List<FileVO> fileVO;
 }

@@ -64,6 +64,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	</where>
 </select>
 <resultMap id="imgMap" type="ReviewVO">
+	<id column="file_id" property="fileId"/>
 	<collection property="fileVO" javaType="ArrayList" column="file_id" ofType="FileVO" select="selectImgALl" />
 </resultMap>
 <!-- 후기 단건 조회 -->
@@ -93,6 +94,8 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	SELECT file_id
 			,file_no
 			,save_name
+			,save_path
+			,original_file_name
 			,ext
 			,boss_tf
 	FROM file_detail_info
@@ -134,6 +137,20 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		
 	
 </insert>
+<!-- 파일 정보 DB 등록 attr : 의뢰 -->
+<insert id="insertFileAttrRvwInfo" statementType="CALLABLE"
+	parameterType="ReviewVO">
+	<selectKey keyProperty="fileId" resultType="Integer"
+		order="BEFORE">
+		SELECT SEQ_FILEID.NEXTVAL
+		FROM dual
+	</selectKey>
+	{CALL
+	insert_review_file(#{fileId}, #{reviewNo})
+	}
+</insert>
+
+
 <!-- 후기 수정(별점 및 내용)  -->
 <update id="updateReview" parameterType="ReviewVO">
 	UPDATE review

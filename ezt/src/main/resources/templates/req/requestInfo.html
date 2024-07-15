@@ -77,10 +77,13 @@
             <button
               type="button"
               class="btn btn-secondary delBtn"
-              th:onclick="|location.href='@{/request/delete(requestNo=${request.requestNo})}'|">
+              th:onClick="'deleteRequest(' + ${request.requestNo} + ')'">
 			  삭제
             </button>
           </div>
+		  </th:block>
+		  <th:block th:if="${#authentication.principal.userVO.usersRole == 'ROLE_WORKER'}" >
+		  	<button type="button" class="btn btn-primary" th:onClick="|location.href='@{/ppsInsert(requestNo=${request.requestNo})}'|">견적서 쓰기</button>
 		  </th:block>
         </div>
         <div class="col-lg-6 col-md-12">
@@ -88,10 +91,11 @@
             <div class="slide-content">
               <div class="card-wrapper swiper-wrapper">
                 <th:block th:each="img :${request.fileVO}">
+              
                   <div class="card swiper-slide">
                     <img
                       class="img"
-                      th:src="@{'/images/req/' + ${img.saveName} + '.' + ${img.ext}}"
+                      th:src="|@{${'/display?fileName=' + img.savePath.replaceAll('\\','/') +'/'+ img.saveName + '_' + img.originalFileName + '.' + img.ext}}|"
                     />
                   </div>
                 </th:block>
@@ -272,11 +276,14 @@
       </form>
     </div>
     <!-- 의뢰상세 -->
+    
+    
     <!-- 견적서 -->
-    <div class="row gap-2">
+    <div class="row gap-2" th:if="${#authentication.principal.userVO.usersRole == 'ROLE_WORKER' or #authentication.principal.userNo == request.requester}">
       <div class="d-flex justify-content-between">
         <div>
           <h4>견적서</h4>
+          <p>[[${request}]] 건</p>
         </div>
         <div>
           <select class="form-select">
@@ -351,6 +358,7 @@
     </div>
     <!-- 견적서 -->
     <!-- 계약서 -->
+    <div th:if="${#authentication.principal.userNo == request.requester or #authentication.principal.userNo == contract.workerInfo}">
     <div class="row">
       <div th:if="${contract == null}">
         <p>체결 된 계약건이 아직 없습니다.</p>
@@ -463,6 +471,8 @@
         </th:block>
       </table>
     </div>
+    </th:block>
+  </div>
     <div class="row">
       <button
         type="button"
@@ -545,6 +555,14 @@
       if(/*[[${workerNo}]]*/"" != null){
       var workerNo = /*[[${workerNo}]]*/"";
       }
+      
+      if(/*[[${ request.fileVO}]]*/"" != null){
+	      var uploadImg = /*[[${ request.fileVO}]]*/"";
+	      console.log(uploadImg);
+      }else{
+    	  var uploadImg = null;
+      }
     </script>
+    <script src="/js/req/img.js"></script>
   </body>
 </html>

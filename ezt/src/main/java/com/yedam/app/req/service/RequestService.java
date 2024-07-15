@@ -31,4 +31,7 @@ public interface RequestService {
 	public List<MemberVO> memberList(int requestNo);
 	//전체 데이터 갯수
 	public int getTotal(Criteria cri);
+	
+	//이미지 삭제
+	public int deleteFile(int fileId);
 }

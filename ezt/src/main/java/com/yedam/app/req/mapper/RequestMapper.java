@@ -2,6 +2,7 @@ package com.yedam.app.req.mapper;
 
 import java.util.List;
 
+import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
 import com.yedam.app.req.service.Criteria;
@@ -38,4 +39,8 @@ public interface RequestMapper {
 	public List<MemberVO> selectMembers(int requestNo);
 	//전체 게시물 갯수
 	public int getTotalCount(Criteria cri);
+	//파일 등록
+	public int insertFileAttrReqInfo(RequestVO requestVO);
+	//파일 삭제
+	public int deleteFile(int fileId);
 }

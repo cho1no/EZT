@@ -40,7 +40,7 @@
         </tr>
         <tr>
             <th></th>
-            <td colspan="3"><a>의뢰 상세보기</a></td>
+            <td colspan="3"><a th:href="@{/request/info(requestNo=${team.requestNo})}">의뢰 상세보기</a></td>
         </tr>
     </table>
 </form>
@@ -90,6 +90,9 @@
 <button type="button" class="btn btn-primary upBtn update">수정</button>
 <button type="button" class="btn btn-primary"
         th:onclick="|location.href='@{/team/requestDelete(teamNo=${team.teamNo})}'|">삭제
+</button>
+<button type="button" class="btn btn-primary endBtn">
+팀 모집 완료하기
 </button>
 </th:block>
 <!-- 카테고리 별 신청자 확인 Modal -->

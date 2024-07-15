@@ -60,7 +60,7 @@ img{
             <a th:onclick="|location.href='@{/review/info(reviewNo=${rv.reviewNo})}'|" >
              <th:block>
              <img th:if ="${rv.fileId == 0}"  th:src="@{/images/interior.jpg}" alt="Image" class="rounded mb-4">
-    	     <img th:unless ="${rv.fileId == 0}"  th:src="@{'/images/rvw/' + ${rv.saveName} + '.' + ${rv.ext}}" alt="Image" class=" rounded mb-4">
+    	     <img th:unless ="${rv.fileId == 0}"   alt="Image" class=" rounded mb-4">
             </th:block>
             </a>
             <div >

@@ -1,8 +1,12 @@
 package com.yedam.app.rvw.web;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,8 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.common.service.FileVO;
+import com.yedam.app.fie.service.FileService;
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.PageDTO;
 import com.yedam.app.req.service.RequestService;
@@ -32,7 +39,8 @@ public class ReviewController {
 	CommonCodeService commonCodeService;
 	@Autowired
 	RequestService requestService;
-
+	@Autowired
+	FileService fileService;
 	
 	//리뷰 전체조회
 	@GetMapping("/list")
@@ -49,9 +57,14 @@ public class ReviewController {
 	
 	//리뷰 상세조회
 	@GetMapping("/info")
-	public String reviewInfo(ReviewVO reviewVO,WorkerReplyVO replyVO,  Model model) {
+	public String reviewInfo(ReviewVO reviewVO,
+							 WorkerReplyVO replyVO,  
+							 Model model) {
 		//리뷰 조회
 		ReviewVO findVO = reviewService.reviewInfo(reviewVO);
+		if(findVO.getFileVO().isEmpty()) {
+			findVO.setFileVO(null);
+		}
 		model.addAttribute("review",findVO);
 		
 		//공통코드
@@ -83,11 +96,38 @@ public class ReviewController {
 	}
 	
 	@PostMapping("/insert")
-	public String reviewInsert(ReviewVO reviewVO) {
+	@ResponseBody
+	public int reviewInsert(MultipartFile[] uploadFile, ReviewVO reviewVO) {
+		if (uploadFile != null && uploadFile.length > 0) {
+			List<FileVO> list = fileService.uploadFiles(uploadFile);
+			int i = 0;
+			for(FileVO e : list) {
+				if( i == 0) {
+					e.setBossTf("Y");
+				}else {
+					e.setBossTf("N");
+				}
+				i+= 1;
+			}
+			if (!list.isEmpty()) {
+				reviewVO.setFileVO(list);
+			}
+		}
 		reviewService.insertReview(reviewVO);
-		return "redirect:list";
+		return 1;
 	}
 	
+	// 첨부 파일 업로드
+	@PostMapping("/fileInsert")
+	@ResponseBody
+	public List<FileVO> rptFileInsert(MultipartFile[] uploadFile) {
+
+		List<FileVO> list = fileService.uploadFiles(uploadFile);
+
+		return list;
+	}
+	
+
 	//후기 수정
 	@PostMapping("/update")
 	@ResponseBody
@@ -97,11 +137,36 @@ public class ReviewController {
 	
 	//후기 삭제
 	@GetMapping("/delete")
-	public String reviewDelete(Integer reviewNo) {
+	@ResponseBody
+	public int reviewDelete(Integer reviewNo) {
+		ReviewVO reviewVO = new ReviewVO();
+		reviewVO.setReviewNo(reviewNo);
+		ReviewVO findVO = reviewService.reviewInfo(reviewVO);
+		
 		reviewService.deleteReview(reviewNo);
-		return "redirect:list";
+		
+		if(findVO.getFileId() != 0) {
+			requestService.deleteFile(findVO.getFileId());
+		}
+		return 1;
 	}
 	
+	// 첨부 파일 삭제
+	@PostMapping("/fileDelete")
+	@ResponseBody
+	public ResponseEntity<String> fileDelete(@RequestBody List<FileVO> fileVO) throws UnsupportedEncodingException {
+		
+		fileService.deleteFile(fileVO);
+		List<FileVO> sFileVO = new ArrayList<FileVO>();
+		System.out.println("=======" + fileVO);
+		for (FileVO file : fileVO) {
+			file.setSaveName("s_" + file.getSaveName());
+			sFileVO.add(file);
+		}
+		fileService.deleteFile(sFileVO);
+		
+		return new ResponseEntity<String>("deleted", HttpStatus.OK);
+	}
 	//댓글 등록
 	@GetMapping("/replyInsert")
 	public String replyInsert(Model model) {

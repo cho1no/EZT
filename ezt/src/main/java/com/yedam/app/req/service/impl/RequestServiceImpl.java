@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.app.doc.service.ContractVO;
 import com.yedam.app.doc.service.ProposalVO;
+import com.yedam.app.fie.mapper.FileMapper;
 import com.yedam.app.req.mapper.RequestMapper;
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.RequestService;
@@ -20,6 +21,8 @@ public class RequestServiceImpl implements RequestService {
 
 	@Autowired
 	RequestMapper requestMapper;
+	@Autowired
+	FileMapper fileMapper;
 	
 	//유저 정보조회
 	@Override
@@ -46,6 +49,14 @@ public class RequestServiceImpl implements RequestService {
 	public int insertRequest(RequestVO requestVO) {
 		int result = requestMapper.insertRequest(requestVO);
 		
+		//파일 등록
+		if(requestVO.getFileVO() != null) {
+			requestMapper.insertFileAttrReqInfo(requestVO);
+			requestVO.getFileVO().forEach(e->{
+				e.setFileId(requestVO.getFileId());
+				fileMapper.insertFileInfo(e);
+			});
+		}
 		return result == 1 ? requestVO.getRequestNo() : -1;
 		
 	}
@@ -92,6 +103,13 @@ public class RequestServiceImpl implements RequestService {
 	@Override
 	public int getTotal(Criteria cri) {
 		return requestMapper.getTotalCount(cri);
+	}
+	
+	//이미지 삭제
+	@Override
+	public int deleteFile(int fileId) {
+		
+		return requestMapper.deleteFile(fileId);
 	}
 
 
