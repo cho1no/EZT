@@ -32,6 +32,7 @@ public interface UserMapper {
 
 	//사용자정보 수정
 	public int updateUserInfo(UserVO userVO);
+	public int insertUserImg(UserVO userVO);
 	
 	//비밀번호 조회
 	public String selectEncPw(int usersNo);

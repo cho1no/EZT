@@ -192,6 +192,10 @@
         	   , (SELECT SUM(pd.unitprice * pd.qty)
 	              FROM proposal_detail pd
 	              WHERE pd.proposal_no = p.proposal_no) as total
+	           , (SELECT contract_no
+	              FROM contract c
+	              WHERE c.proposal_no = p.proposal_no
+	              AND rownum = 1) contract_no
 				FROM proposal p
 				WHERE worker = #{usersNo}
 				ORDER BY update_dt desc
@@ -218,6 +222,12 @@
 		  FROM proposal p
 		  WHERE worker = #{usersNo}
 		 )
+	</select>
+	
+	<select id="chkContract" resultType="int">
+		SELECT COUNT(*)
+		FROM contract
+		WHERE proposal_no = #{proposalNo}
 	</select>
 	
 	<!-- 계약서 목록 조회 -->
@@ -399,7 +409,8 @@
 
 	<update id="updateWorkerInfo" parameterType="UserVO">
 		UPDATE users
-		SET users_nick = #{usersNick}
+		SET file_id = #{fileId}
+		    , users_nick = #{usersNick}
 			, users_phone = #{usersPhone}
 			, users_email = #{usersEmail}
 		WHERE users_id = #{usersId}

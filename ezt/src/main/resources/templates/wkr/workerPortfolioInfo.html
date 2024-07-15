@@ -111,7 +111,7 @@
 	      <span>[[${category.CATEGORY_CODE}]]</span>
 	    </th:block>
       </li>
-	  <li class="list-group-item">내용: [[${portfolioInfo.content}]]</li>
+	  <li id="portContent" class="list-group-item">내용: [[${portfolioInfo.content}]]</li>
 	</ul>
  <!-- Swiper JS -->
       <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.js"></script>
@@ -145,6 +145,13 @@
         },
       });
 
+      function getHtml(){
+  		var html = $("#portContent").text().replace(/(?:\r\n|\r|\n)/g, '<br />');
+  		$("#portContent").html(html);
+	  	}
+	  	
+	  	getHtml();
+      
     </script>
 </body>
 </html>

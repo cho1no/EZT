@@ -111,7 +111,12 @@ public class WorkerServiceImpl implements WorkerService{
 	public List<ContractVO> selectWorkerContractList(WorkerRvwCriteria cri) {
 		return workerMapper.selectWorkerContractList(cri);
 	}
-
+	@Override
+	//작성한 계약서 존재확인
+	public int chkContract(int proposalNo) {
+		return workerMapper.chkContract(proposalNo);
+	};
+	
 	
 	//작업자 포트폴리오 목록
 	@Override

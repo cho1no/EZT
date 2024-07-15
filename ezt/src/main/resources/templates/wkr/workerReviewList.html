@@ -6,6 +6,15 @@
 <head>
 <meta charset="UTF-8">
 <title>작업자 마이페이지</title>
+<link rel="stylesheet" href="/css/rvw/rvInfo.css">
+<style>
+.yellow{
+	font-size:90%;
+}
+.gray{
+	font-size:90%;
+}
+</style>
 </head>
 <body>
 	<h4>후기 목록</h4>
@@ -16,9 +25,25 @@
       <div class="list-group m-3">
 	    <a th:href="@{/review/info(reviewNo=${review.reviewNo})}" class="list-group-item list-group-item-action" aria-current="true">
 		  <span>내용 : [[${review.content}]]</span><hr>
-		  <span>별점 : [[${review.star}]]</span>
-		  <small>구분 : [[${review.reviewDivision}]]</small>
-		  <small>[[${#dates.format(review.writeDt, 'yyyy-MM-dd')}]]</small>
+		  <span>작성일 : [[${#dates.format(review.writeDt, 'yyyy-MM-dd')}]]</span>
+		  <div> 
+		    <div class="star-rating ms-0">
+           	  <p th:text="${review.star}" class="star" style="display:none" ></p>
+           	  <div class="stars star-rating ms-0" >평점 : </div>
+		    </div>
+		    <fieldset class="reStar" style="display:none; width:10px; height:10px">
+		      <input type="radio" name="star" value="5" id="rate1" th:checked="${review.star == 5}"><label for="rate1">★</label>
+		      <input type="radio" name="star" value="4" id="rate2" th:checked="${review.star == 4}"><label for="rate2">★</label>
+		      <input type="radio" name="star" value="3" id="rate3" th:checked="${review.star == 3}"><label for="rate3">★</label>
+		      <input type="radio" name="star" value="2" id="rate4" th:checked="${review.star == 2}"><label for="rate4">★</label>
+		      <input type="radio" name="star" value="1" id="rate5" th:checked="${review.star == 1}"><label for="rate5">★</label>
+		      <span class="text-bold">평점 : </span>
+		    </fieldset>
+		  </div>
+		  <div th:if="${review.reviewDivision != null}">
+		    <span th:if="${review.reviewDivision == 'F'}">1차 후기</span>
+		    <span th:if="${review.reviewDivision == 'S'}">2차 후기</span>
+		  </div>
 		</a>
 	  </div>
 	</th:block>
@@ -38,6 +63,17 @@
     </div>
   </div>
 </div>
+<script th:inline="javascript">
+//별점 출력
+for(let i=0; i<$(".star").length; i++){
+	for(let j=0; j<parseInt($(".star:eq("+i+")").text()); j++){
+		$(".stars:eq("+i+")").append(`<div class="yellow">★</div>`);
+	}
+	for(let k=0; k<5-parseInt($(".star:eq("+i+")").text()); k++){
+		$(".stars:eq("+i+")").append(`<div class="gray">★</div>`);
+	}
 
+}
+</script>
 </body>
 </html>

@@ -69,5 +69,9 @@ public class UserVO {
 	
 	private LicenseVO licenseVO;
 	private int fileId;
+	private String savePath;
+	private String saveName;
+	private String originalFileName;
+	private String ext;
 	
 }

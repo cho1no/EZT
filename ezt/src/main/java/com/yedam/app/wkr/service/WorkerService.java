@@ -47,6 +47,9 @@ public interface WorkerService {
 	//작업자 계약서 목록
 	public List<ContractVO> selectWorkerContractList(WorkerRvwCriteria cri);
 	
+	//작성한 계약서 존재확인
+	public int chkContract(int proposalNo);
+	
 	//작업자 포트폴리오 목록
 	public List<PortfolioVO> selectWorkerPortfolioList(WorkerPFCriteria cri);
 	

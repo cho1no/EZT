@@ -3,23 +3,29 @@
 <mapper namespace="com.yedam.app.usr.mapper.UserMapper">
 	<!-- 사원정보 조회 -->
 	<select id="selectUserInfo" resultType="UserVO">
-		SELECT users_no
-				, users_id
-				, users_pw
-				, users_email
-				, users_birth
-				, users_rnn
-				, users_gender
-				, users_name
-				, users_phone
-				, users_nick
-				, users_role
-				, users_join_dt
-				, users_state_change_dt
-				, users_state
-				, file_id
-		FROM users
-		WHERE users_id = #{id}
+		SELECT u.users_no
+				, u.users_id
+				, u.users_pw
+				, u.users_email
+				, u.users_birth
+				, u.users_rnn
+				, u.users_gender
+				, u.users_name
+				, u.users_phone
+				, u.users_nick
+				, u.users_role
+				, u.users_join_dt
+				, u.users_state_change_dt
+				, u.users_state
+				, u.file_id
+				, f.save_path
+				, f.save_name
+				, f.original_file_name
+				, f.ext
+		FROM users u
+			LEFT JOIN file_detail_info f
+			ON u.file_id = f.file_id
+		WHERE u.users_id = #{id}
 	</select>
 	<!-- 회원가입 시 DB중복체크 -->
 	<select id="idChk" resultType="int">
@@ -47,10 +53,10 @@
 		</selectKey>
 		INSERT INTO users(users_no, users_role, users_id, users_pw, users_name
 							, users_phone, users_nick, users_email, users_rnn
-							, users_state, users_gender, users_birth, users_state_change_dt )
+							, users_state, users_gender, users_birth, users_state_change_dt, file_id )
 		VALUES(#{usersNo}, #{usersRole}, #{usersId}, #{usersPw}, #{usersName}
 				, #{usersPhone}, #{usersNick}, #{usersEmail}, #{usersRnn}
-				, 'active', #{usersGender}, #{usersBirth}, sysdate )
+				, 'active', #{usersGender}, #{usersBirth}, sysdate, 664 )
 	</insert>
 	
 	<!-- 작업자 회원가입 -->
@@ -63,10 +69,10 @@
 		INSERT ALL 
 		INTO users(users_no, users_role, users_id, users_pw, users_name, users_phone
 					, users_nick, users_email, users_birth, users_rnn, users_state
-					, users_gender, users_state_change_dt )
+					, users_gender, users_state_change_dt, file_id )
 		VALUES(#{usersNo}, #{usersRole}, #{usersId}, #{usersPw}, #{usersName}
 				, #{usersPhone}, #{usersNick}, #{usersEmail}, #{usersBirth}
-				, #{usersRnn}, 'active', #{usersGender}, sysdate )
+				, #{usersRnn}, 'active', #{usersGender}, sysdate, 664 )
 					
 		INTO license( license_no, license_detail_no, users_no,  write_dt, file_id) 
 		VALUES ( SEQ_LICENSE.NEXTVAL, #{licenseVO.licenseDetailNo}, #{usersNo}, sysdate, #{licenseVO.fileId} )
@@ -104,12 +110,14 @@
 	
 	<update id="updateUserInfo" parameterType="UserVO">
 		UPDATE users
-		SET users_nick = #{usersNick},
+		SET file_id = #{fileId},
+			users_nick = #{usersNick},
 			users_phone = #{usersPhone},
 			users_email = #{usersEmail}
 		WHERE users_id = #{usersId} 
 	</update>
 	
+
 	<!-- 후기목록 -->
 	<select id="selectUserRvwList" resultType="ReviewVO">
 		SELECT c.*
