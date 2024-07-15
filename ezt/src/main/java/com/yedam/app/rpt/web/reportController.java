@@ -64,6 +64,15 @@ public class reportController {
 	public int uploadAjaxRpt(MultipartFile[] uploadFile, CttReportVO cttReportVO, RequestVO requestVO ) {
 		if (uploadFile != null && uploadFile.length > 0) {
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
+			int i = 0;
+			for (FileVO e : list) {
+				if (i == 0) {
+					e.setBossTf("Y");
+				} else {
+					e.setBossTf("N");
+				}
+				i += 1;
+			}
 			if (!list.isEmpty()) {
 				cttReportVO.setFileList(list);
 			}
@@ -108,6 +117,15 @@ public class reportController {
 			// 수정
 			if (uploadFile != null && uploadFile.length > 0) {
 				List<FileVO> list = fileService.uploadFiles(uploadFile);
+				int i = 0;
+				for (FileVO e : list) {
+					if (i == 0) {
+						e.setBossTf("Y");
+					} else {
+						e.setBossTf("N");
+					}
+					i += 1;
+				}
 				if (!list.isEmpty()) {
 					cttReportVO.setFileList(list);
 				}

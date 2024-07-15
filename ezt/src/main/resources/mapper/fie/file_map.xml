@@ -18,7 +18,7 @@
 		, #{originalFileName}
 		, #{ext}
 		, #{fileSize}
-		, 'N'
+		, #{bossTf}
 		)
 	</insert>
 	<!--파일 정보 DB 등록 -->

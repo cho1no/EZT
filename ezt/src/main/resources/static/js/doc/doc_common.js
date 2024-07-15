@@ -1,11 +1,22 @@
+// 엔터 막기
+$(document).ready(function() {
+	//공통 enter 막기
+	$('input').keydown(function(event) {
+		if (event.keyCode === 13) {
+			event.preventDefault();
+		}
+	});
+
+});
+
 // + 버튼 : tbody tr 추가
 $('table thead button').on('click', addForm);
 let num = 1;
 function addForm(e) {
 	$('.content').append(`<tr>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,50);" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,20);" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,20);" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" 
 						onKeyup="inputNumberFormat(this); GetSum(${num});" 
 						value="0" maxlength="4" class="qty_${num}" /></td>
@@ -13,7 +24,7 @@ function addForm(e) {
 						onKeyup="inputNumberFormat(this); GetSum(${num});" 
 						value="0" maxlength="8" class="price_${num}" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" value="0" class="result_${num}" readonly /></td>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,500);" /></td>
 				<td><button type="button" class="btn btn-outline-dark" name="deleteBtn"
 					style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">-</button></td>
 			</tr>`);
@@ -108,3 +119,35 @@ function fileDownload(fileList) {
 	}
 }
 
+
+// 입력 길이 제한
+function chkword(obj, maxlength) {
+
+	var str = obj.value; // 이벤트가 일어난 컨트롤의 value 값
+	var str_length = str.length; // 전체길이
+
+	// 변수초기화
+	var max_length = maxlength; // 제한할 글자수 길이
+	var i = 0; // for문에 사용
+	var ko_byte = 0; // 총 글자 길이
+	var li_len = 0; // substring하기 위해서 사용
+	var one_char = ""; // 한글자씩 검사한다
+
+	for (i = 0; i < str_length; i++) {
+		// 한글자추출
+		one_char = str.charAt(i);
+		ko_byte += 1;
+	}
+
+	// 전체 크기가 max_length를 넘지않으면
+	if (ko_byte <= max_length) {
+		li_len = i + 1;
+	}
+
+	// 전체길이를 초과하면
+	if (ko_byte > max_length) {
+		str2 = str.substr(0, max_length);
+        obj.value = str2;
+	}
+	obj.focus();
+}

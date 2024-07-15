@@ -81,6 +81,15 @@ public class ContractController {
 							  , ContractVO contractVO) {
 		if(uploadFile != null && uploadFile.length > 0) {
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
+			int i = 0;
+			for (FileVO e : list) {
+				if (i == 0) {
+					e.setBossTf("Y");
+				} else {
+					e.setBossTf("N");
+				}
+				i += 1;
+			}
 			if (!list.isEmpty()) {
 				contractVO.setFileList(list);
 			}
@@ -179,6 +188,15 @@ public class ContractController {
 		if (uploadFile != null  && uploadFile.length > 0) {
 
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
+			int i = 0;
+			for (FileVO e : list) {
+				if (i == 0) {
+					e.setBossTf("Y");
+				} else {
+					e.setBossTf("N");
+				}
+				i += 1;
+			}
 			if (!list.isEmpty()) {
 				contractVO.setFileList(list);
 			}
@@ -295,6 +313,15 @@ public class ContractController {
 							, PartnershipContractVO partnershipContractVO) {
 		if(uploadFile != null && uploadFile.length > 0) {
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
+			int i = 0;
+			for (FileVO e : list) {
+				if (i == 0) {
+					e.setBossTf("Y");
+				} else {
+					e.setBossTf("N");
+				}
+				i += 1;
+			}
 			if (!list.isEmpty()) {
 				contractVO.setFileList(list);
 			}

@@ -90,7 +90,7 @@
 									<label for="detailAddr"><b>상세주소</b></label> <input type="text"
 										class="form-control" id="input_detailAddr"
 										name="workerDetailAddress"
-										th:value="${ppsInfo.workerDetailAddress}">
+										th:value="${ppsInfo.workerDetailAddress}" onkeyup="chkword(this,5);">
 								</div>
 							</div>
 							<!-- postcode -->
@@ -98,7 +98,7 @@
 							<div class="form-floating"
 								style="margin-top: 30px; margin-bottom: 30px">
 								<textarea name="comments" class="form-control"
-									placeholder="Leave a comment here" id="floatingTextarea">[[${ppsInfo.comments}]]</textarea>
+									placeholder="Leave a comment here" id="floatingTextarea" onkeyup="chkword(this,500);">[[${ppsInfo.comments}]]</textarea>
 								<label for="floatingTextarea"><b>비고</b></label>
 							</div>
 
@@ -132,7 +132,7 @@
 					<table class="table table-hover">
 						<thead>
 							<tr class="text-center">
-								<th scope="col">품명</th>
+								<th scope="col" width="120px">품명</th>
 								<th scope="col" width="120px">구분</th>
 								<th scope="col" width="60px">단위</th>
 								<th scope="col" width="70px">수량</th>

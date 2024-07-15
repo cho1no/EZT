@@ -4,70 +4,17 @@
 	layout:decorate="~{common/layouts/default_layout}"
 	layout:fragment="Content">
 <head>
+<!-- 서명 -->
 <link href="/css/doc/jquery.signaturepad.css" rel="stylesheet">
 <script src="/js/doc/jquery.signaturepad.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+
+<!-- 공통 스타일 -->
+<link rel="stylesheet" href="/css/doc/doc_common.css">
+	
 <title>계약서 상세</title>
 
-<style>
-.hr-sect {
-	display: flex;
-	flex-basis: 100%;
-	align-items: center;
-	color: gray;
-	font-size: 20px;
-	margin: 8px 0px;
-}
-
-.hr-sect::before, .hr-sect::after {
-	content: "";
-	flex-grow: 1;
-	background: rgba(0, 0, 0, 0.35);
-	height: 1px;
-	font-size: 0px;
-	line-height: 0px;
-	margin: 0px 16px;
-}
-
-.uploadDiv label {
-	display: inline-block;
-	padding: 5px 20px 10px 20px;
-	color: #fff;
-	vertical-align: middle;
-	background-color: #999999;
-	cursor: pointer;
-	height: 40px;
-}
-
-.uploadDiv input[type="file"] {
-	position: absolute;
-	width: 0;
-	height: 0;
-	padding: 0;
-	overflow: hidden;
-	border: 0;
-}
-
-.con_ul li div:nth-child(1) {
-	margin-top: 6px;
-}
-
-.con_ul li div:nth-child(2) {
-	height: 38px;
-}
-
-canvas {
-	border: 1px solid black;
-	width: 260px;
-	height: 100px;
-}
-
-.unity{
-	word-break : keep-all;
-	overflow-wrap : break-word;
-}
-</style>
 </head>
 <body>
 
@@ -112,17 +59,17 @@ canvas {
 							<div class="row form-group">
 								<div class="col-4">
 									<label><b>공사시작날짜</b></label>
-									<p class="text-black">[[${#dates.format(con.cttStartDt,
+									<p class="text-black" id="startDt">[[${#dates.format(con.cttStartDt,
 										'yyyy-MM-dd')}]]</p>
 								</div>
 								<div class="col-4">
 									<label><b>공사마감날짜</b></label>
-									<p class="text-black">[[${#dates.format(con.cttEndDt,
+									<p class="text-black" id="endDt">[[${#dates.format(con.cttEndDt,
 										'yyyy-MM-dd')}]]</p>
 								</div>
 								<div class="col-4">
-									<label><b>하자보수기간</b></label> <input type="text"
-										class="form-control">
+									<label><b>하자보수기간</b>(시작 날짜로부터 1년)</label> 
+									<p class="text-black" id="repairDay"></p>
 								</div>
 							</div>
 							<!-- datepicker -->
@@ -436,9 +383,6 @@ canvas {
 				</div>
 			</div>
 		</div>
-	
-
-
 
 	<script th:inline="javascript">
 	
@@ -449,6 +393,26 @@ canvas {
 	$('.cur_year').html(date.substring(0, date_num1) + '년');
     $('.cur_month').html(date.substring(date_num1 + 1, date_num2) + '월');
     $('.cur_day').html(date.substring(date_num2 + 1,) + '일');
+    
+    // 날짜 표기
+    if ($('#startDt').html() == '1900-01-01') {
+		$('#startDt').html('입력 필요');
+		$('#startDt').attr('class', 'text-danger');
+	}
+	if ($('#endDt').html() == '1900-01-01') {
+		$('#endDt').html('입력 필요');
+		$('#endDt').attr('class', 'text-danger');
+	}
+	window.onload = function(){
+    	if($('#startDt').html() != '입력 필요'){
+		let date = new Date(/*[[${con.cttStartDt}]]*/"");
+		console.log(date);
+		date.setFullYear(date.getFullYear() + 1);
+		$('#repairDay').html(date.getFullYear() + "-" 
+		+ ((date.getMonth() + 1) > 9 ?  (date.getMonth() + 1) : ("0" + (date.getMonth() + 1)))+ "-" 
+		+ ((date.getDate()) > 9 ?  (date.getDate()) : ("0" + (date.getDate()))));
+		}
+	}
     
     
     // 주소 표기
@@ -551,6 +515,9 @@ canvas {
     }
 
 	</script>
+	
+	<!-- 공통 js 파일 -->
+	<script type="text/javascript" th:src="@{/js/doc/con_common.js}"></script>
 
 </body>
 </html>

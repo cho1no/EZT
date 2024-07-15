@@ -59,29 +59,29 @@
 								<label for="postCode" style="margin: 0"><b>우편번호</b></label>
 							</div>
 							<div class="col-4">
-								<input type="text" class="form-control" id="input_postcode" th:field="*{workerPostcode}">
+								<input type="text" class="form-control bg-white" id="input_postcode" th:field="*{workerPostcode}" readonly>
 							</div>
 							<div class="col-auto">
-								<button type="button" class="btn btn-primary" onclick="input_execDaumPostcode()">우편번호 찾기</button>
+								<button type="button" class="btn btn-primary" onclick="input_execDaumPostcode()" >우편번호 찾기</button>
 							</div>
 						</div>
 						<div class="row form-group">
 							<div class="col-12">
 								<label for="addr"><b>주소</b></label> <input type="text"
-									class="form-control" id="input_addr" th:field="*{workerAddress}">
+									class="form-control bg-white" id="input_addr" th:field="*{workerAddress}" readonly>
 							</div>
 						</div>
 						<div class="row form-group">
 							<div class="col-12">
 								<label for="detailAddr"><b>상세주소</b></label> <input type="text"
-									class="form-control" id="input_detailAddr" th:field="*{workerDetailAddress}">
+									class="form-control" id="input_detailAddr" th:field="*{workerDetailAddress}" onkeyup="chkword(this,50);">
 							</div>
 						</div>
 						<!-- postcode -->
 						
 
 							<div class="form-floating" style="margin-top: 30px; margin-bottom: 30px">
-								<textarea th:field="*{comments}" class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+								<textarea th:field="*{comments}" class="form-control" placeholder="Leave a comment here" id="floatingTextarea" onkeyup="chkword(this,500);"></textarea>
 								<label for="floatingTextarea"><b>비고</b></label>
 							</div>
 						
@@ -106,7 +106,7 @@
 				<table class="table table-hover">
 							<thead>
 								<tr class="text-center">
-									<th scope="col">품명</th>
+									<th scope="col" width="120px">품명</th>
 									<th scope="col" width="120px">구분</th>
 									<th scope="col" width="60px">단위</th>
 									<th scope="col" width="70px">수량</th>

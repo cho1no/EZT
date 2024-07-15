@@ -1,17 +1,9 @@
 package com.yedam.app.doc.web;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import org.aspectj.weaver.tools.UnsupportedPointcutPrimitiveException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.alm.service.AlarmVO;
+import com.yedam.app.alm.web.StompAlarmController;
 import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.service.ProposalService;
 import com.yedam.app.doc.service.ProposalVO;
@@ -45,12 +39,18 @@ public class ProposalController {
 	@Autowired
 	FileService fileService;
 	
+	@Autowired 
+	StompAlarmController sac;
+	
 	// 견적서 단건조회
 	@GetMapping("ppsInfo")
 	public String ppsInfo(ProposalVO proposalVO
 						  , Model model) {
 		// 견적서 정보 조회
 		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO.getProposalNo());
+		if(findVO.getList().isEmpty()) {
+			findVO.setList(null);
+		}
 		model.addAttribute("ppsInfo", findVO);
 
 		// 유저 정보 조회
@@ -61,9 +61,6 @@ public class ProposalController {
 		RequestVO reqVO = ppsSerivce.reqInfo(findVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
 
-		proposalVO.setWorker(findVO.getWorker());
-		List<ProposalVO> list = ppsSerivce.ppsListInfo(proposalVO);
-		model.addAttribute("ppsList", list);
 		return "doc/proposalInfo";
 	}
 
@@ -141,12 +138,33 @@ public class ProposalController {
 												, ProposalVO proposalVO) {
 		if(uploadFile != null && uploadFile.length > 0) {
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
+			int i = 0;
+			for (FileVO e : list) {
+				if (i == 0) {
+					e.setBossTf("Y");
+				} else {
+					e.setBossTf("N");
+				}
+				i += 1;
+			}
 			if (!list.isEmpty()) {
 			// proposalVO에 값 넣기
 			proposalVO.setFileList(list);
 			}
 		}
 		ppsSerivce.ppsFileUpdate(proposalVO);
+		
+		// 견적서 정보 조회
+		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO.getProposalNo());
+						
+		// 견적서 의뢰정보조회
+		RequestVO reqVO = ppsSerivce.reqInfo(findVO.getRequestNo());
+		
+		AlarmVO alarm = new AlarmVO();
+		alarm.setUsersNo(findVO.getRequester());
+		alarm.setTitle("등록된 견적서가 있습니다");
+		alarm.setContent("["+ reqVO.getTitle() + "] 에서 견적서를 확인해 주세요.");
+		sac.message(alarm);
 
 		return new ResponseEntity<>("true", HttpStatus.OK);
 	}
@@ -175,6 +193,18 @@ public class ProposalController {
 	@GetMapping("ppsApprove")
 	public String ppsApprove(ProposalVO proposalVO) {
 		ppsSerivce.ppsApprove(proposalVO);
+		
+		// 견적서 정보 조회
+		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO.getProposalNo());
+				
+		// 견적서 의뢰정보조회
+		RequestVO reqVO = ppsSerivce.reqInfo(findVO.getRequestNo());
+		
+		AlarmVO alarm = new AlarmVO();
+		alarm.setUsersNo(findVO.getWorker());
+		alarm.setTitle("견적서 승인 완료");
+		alarm.setContent("["+ reqVO.getTitle() + "] 에 등록한 견적서가 승인 되었습니다.");
+		sac.message(alarm);
 		return "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo();
 	}
 

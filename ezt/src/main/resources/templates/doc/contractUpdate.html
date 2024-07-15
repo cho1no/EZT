@@ -15,75 +15,11 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
 
+<!-- 공통 스타일 -->
+<link rel="stylesheet" href="/css/doc/doc_common.css">
+
 <title>계약서 수정</title>
 
-<style>
-.hr-sect {
-	display: flex;
-	flex-basis: 100%;
-	align-items: center;
-	color: gray;
-	font-size: 20px;
-	margin: 8px 0px;
-}
-
-.hr-sect::before, .hr-sect::after {
-	content: "";
-	flex-grow: 1;
-	background: rgba(0, 0, 0, 0.35);
-	height: 1px;
-	font-size: 0px;
-	line-height: 0px;
-	margin: 0px 16px;
-}
-
-.uploadDiv label {
-	display: inline-block;
-	padding: 5px 20px 10px 20px;
-	color: #fff;
-	vertical-align: middle;
-	background-color: #999999;
-	cursor: pointer;
-	height: 40px;
-}
-
-.uploadDiv input[type="file"] {
-	position: absolute;
-	width: 0;
-	height: 0;
-	padding: 0;
-	overflow: hidden;
-	border: 0;
-}
-
-.con_ul li div:nth-child(1) {
-	margin-top: 6px;
-}
-
-.con_ul li div:nth-child(2) {
-	height: 38px;
-}
-
-canvas {
-	border: 1px solid black;
-	width: 260px;
-	height: 100px;
-}
-
-.modal-backdrop {
-	/* bug fix - no overlay */
-	display: none;
-}
-
-.dropdown button {
-	height: 35px;
-}
-
-.unity{
-	word-break : keep-all;
-	overflow-wrap : break-word;
-}
-</style>
 </head>
 <body>
 
@@ -542,24 +478,8 @@ canvas {
 	$('#updateBtn').on('click', insertAjax );
 	
 	function insertAjax(e){
-		// 파일 이미지&오디오 제약
-		var inputFile = $("input[name='uploadFile']");
-		
-		var files = inputFile[0].files;
-		
-		for(var i = 0; i < files.length; i++){
-			if(!checkExtentsion(files[i].name, files[i].size)){
-				return false;
-			}
-			if(files[i].type.indexOf('image') != -1){
-				alert("이미지 파일이 포함되어 있습니다.")
-				return false;
-			}
-			if(files[i].type.indexOf('audio') != -1){
-				alert("오디오 파일이 포함되어 있습니다.")
-				return false;
-			}
-		}
+		// 이미지&오디오 파일 제약
+		if(!onlyFile())return;
 		
 		//폼 데이터 처리
 		$('input[name="workerAddress"]').val($('#input_postcode').val() + '_' 
@@ -710,5 +630,8 @@ $('#saveModal').click(function(e) {
 
 	<!-- 서명 -->
 	<script src="/js/doc/json2.min.js"></script>
+	
+	<!-- 공통 js 파일 -->
+	<script type="text/javascript" th:src="@{/js/doc/con_common.js}"></script>
 </body>
 </html>
