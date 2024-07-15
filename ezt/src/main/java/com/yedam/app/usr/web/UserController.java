@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.yedam.app.alm.web.StompAlarmController;
 import com.yedam.app.common.service.CommonCodeService;
+import com.yedam.app.common.service.SimpleFileService;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewService;
@@ -50,6 +52,9 @@ public class UserController {
 	ReviewService reviewService;
 	
 	@Autowired
+	SimpleFileService simpleFileService;
+	
+	@Autowired
 	UserMapper userMapper;
 	
 	@Autowired StompAlarmController sac;
@@ -60,8 +65,9 @@ public class UserController {
 	@GetMapping("/info")
 	public String userInfo(@AuthenticationPrincipal LoginUserVO vo, Model model) {
 		model.addAttribute("userVO", vo.getUserVO());
+		log.info(vo.toString());
 		return "usr/userInfo";
-	}	
+	}
 	
 	//정보수정 -페이지
 	@GetMapping("/update")
@@ -73,10 +79,17 @@ public class UserController {
 	//정보수정 기능 
 	@PostMapping("/update")
 	@ResponseBody
-	public String userUpdate(@RequestBody UserVO userVO, @AuthenticationPrincipal LoginUserVO vo){
+	public String userUpdate(UserVO userVO,
+							@RequestParam("uploadFile")MultipartFile[] uploadFile,
+							@AuthenticationPrincipal LoginUserVO vo){
+		
+		int result = simpleFileService.uploadFiles(uploadFile);
+		userVO.setFileId(result);
+		
 		userService.updateUser(userVO);
 		UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
 		vo.setUserVO(uvo);
+		log.info(vo.toString());
 		return "redirect: /user/info";
 	}
 
@@ -182,8 +195,8 @@ public class UserController {
 		
 		UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
 		vo.setUserVO(uvo);
-		model.addAttribute("msg", "탈퇴됨!");
-	    model.addAttribute("url", "/main");
+		model.addAttribute("msg", "탈퇴되었습니다.");
+	    model.addAttribute("url", "/logout");
 		return "gongtong/message";
 	}
 }

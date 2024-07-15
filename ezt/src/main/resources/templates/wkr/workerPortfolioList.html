@@ -14,11 +14,10 @@ div.careerList {
 </head>
 <body>
 <h4>포트폴리오 목록</h4>
-<div class="row row-cols-1 row-cols-md-3">
+<div class="row row-cols-1 row-cols-md-3 g-3">
 	<th:block th:each="ptf : ${portfolioList}">
-			<div class="card col-4" style="width: 18rem;">
+			<div class="card col-4" >
 				<div class="card-body">
-					
 					<h5 class="card-title">
 						<label for="ptfTitle">제목</label>
 					</h5>
@@ -49,6 +48,7 @@ div.careerList {
 				</ul>
 				<div class="card-body">
 					<a href="#" class="card-link">File link</a>
+					<a th:href="|@{/find/workerPortfolio(portfolioNo=${ptf.portfolioNo})}|" class="card-link">상세</a>
 				</div>
 			</div>
 		</div>

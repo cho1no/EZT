@@ -8,50 +8,47 @@
 <title>작업자 마이페이지</title>
 </head>
 <body>
- <div class="container">
 	<h4>회원 정보</h4>
-	<div>
-		<div class="row mb-3">
-			<div class="col-md-2">
+	
+	<div class="d-flex mb-3">
+	<div class="card col-md-4 workerImg" >
+  	  <img class="card-img-top"
+  	   th:src="|/display?fileName=${#strings.replace(userVO.savePath, '\', '/')}/${userVO.saveName}_${userVO.originalFileName}.${userVO.ext}|"
+  	   alt="작업자 프로필 이미지">
+	</div>
+		<div class="col-md-8 ml-5">
+			<div>
 				<label for="usersNick">닉네임</label>
-			</div>
-			<div class="col">
-				<input class="form-control" type="text" 
+				<input class="form-control col-md-6" type="text" 
 				id="usersNick" th:value="${userVO.usersNick}" disabled readonly>
 			</div>
-		</div>
-		<div class="row mb-3">
-			<div class="col-md-2">
+			<div>
 				<label for="usersPhone">전화번호</label>
-			</div>
-			<div class="col">
-				<input class="form-control" type="text" 
+				<input class="form-control col-md-6" type="text" 
 				id="usersPhone" th:value="${userVO.usersPhone}" disabled readonly>
 			</div>
-		</div>
-		<div class="row mb-3">
-			<div class="col-md-2">
+			<div>
 				<label for="usersEmail">이메일</label>
-			</div>
-			<div class="col">
-				<input class="form-control" type="email" 
+				<input class="form-control col-md-6" type="email" 
 				id="usersEmail" th:value="${userVO.usersEmail}" disabled readonly>
 			</div>
 		</div>
-		<div class="row mb-3">
-			<label class="text-black" for="regions">주 활동지역</label>
-			<div class="d-flex flex-wrap" id="region0">
-				
+		</div>
+		<div>
+			<div class="row mb-3">
+				<label class="text-black" for="regions">주 활동지역</label>
+				<div class="d-flex flex-wrap" id="region0">
+				  <!-- 지역 -->
+				</div>
+			</div>
+			<div class="row mb-3">
+				<label class="text-black" for="categories">작업 분야</label>
+				<div class="d-flex flex-wrap" id="categories0">
+				  <!-- 분야 -->
+				</div>	
 			</div>
 		</div>
-		<div class="row mb-3">
-			<label class="text-black" for="categories">작업 분야</label>
-			<div class="d-flex flex-wrap" id="categories0">
-				
-			</div>
-		</div>
-	</div>
-  </div>
+	
 </body>
 <script th:inline="javascript">
 	let categories = /*[[${categories}]]*/"";

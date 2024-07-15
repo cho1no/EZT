@@ -25,6 +25,7 @@ import com.yedam.app.sgi.service.LoginUserVO;
 import com.yedam.app.usr.mapper.UserMapper;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
+import com.yedam.app.wkr.mapper.WorkerMapper;
 import com.yedam.app.wkr.service.CareerVO;
 import com.yedam.app.wkr.service.LicenseVO;
 import com.yedam.app.wkr.service.PortfolioVO;
@@ -81,7 +82,13 @@ public class WorkerController {
    
    //정보수정 기능
    @PostMapping("/update")
-   public String workerUpdate(UserVO userVO, Model model, @AuthenticationPrincipal LoginUserVO vo){
+   public String workerUpdate(UserVO userVO,
+		   						Model model,
+		   						@RequestParam("uploadFile")MultipartFile[] uploadFile,
+		   						@AuthenticationPrincipal LoginUserVO vo){
+	  int result = simpleFileService.uploadFiles(uploadFile);
+	  userVO.setFileId(result);
+	  
       workerService.updateWorker(userVO);
 
 
@@ -232,7 +239,8 @@ public class WorkerController {
 	   cri.setUsersNo(vo.getUserVO().getUsersNo());
 	   if (cri.getType() == null) {
 			cri.setType("");
-		}
+	   }
+	   
 	   List<ProposalVO> pList = workerService.selectWorkerProposalList(cri);
 	   model.addAttribute("proposalList", pList);
 	   //페이징
@@ -254,7 +262,7 @@ public class WorkerController {
 //	   return "wkr/workerContractList";
 //   }
    
-   
+   //작업자 계약서 목록조회
    @GetMapping("/contractList")
    public String workerContractList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri, RedirectAttributes redirectAttributes) {
        // 로그인 사용자 정보 가져오기
@@ -361,13 +369,12 @@ public class WorkerController {
    
    //작업자 탈퇴 기능 (상태 수정)
    @PostMapping("/quit")
-   @ResponseBody
-   public String workerStateUpdate(@RequestBody UserVO userVO, @AuthenticationPrincipal LoginUserVO vo, Model model) {
+   public String workerStateUpdate(UserVO userVO, @AuthenticationPrincipal LoginUserVO vo, Model model) {
 	   workerService.workerStateUpdate(userVO);
 	   UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
 		vo.setUserVO(uvo);
-		model.addAttribute("msg", "탈퇴됨!");
-	    model.addAttribute("url", "/main");
+		model.addAttribute("msg", "탈퇴되었습니다.");
+	    model.addAttribute("url", "/logout");
 		return "gongtong/message"; 
    }
    

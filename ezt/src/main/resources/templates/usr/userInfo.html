@@ -8,32 +8,31 @@
 <title>사용자 마이페이지</title>
 </head>
 <body>
-<div class="container">
   <h4>회원 정보</h4>
-  <div>
-	<div>
-<!--	  <img src=`C:\upload\${userVO.SAVE_PATH}\${SAVE_NAME}_${ORIGINAL_FILE_NAME}.${EXT}`-->
-<!--	   alt="/images/rvw/team.jpg">-->
-    </div>
-	<div>
-	  <label for="usersNick">닉네임</label>
-      <input class="form-control" type="text" 
-      id="usersNick" th:value="${userVO.usersNick}" disabled readonly>
+
+  <div class="d-flex mb-3">
+	<div class="card col-md-4 userImg" >
+  	  <img class="card-img-top"
+  	   th:src="|/display?fileName=${#strings.replace(userVO.savePath, '\', '/')}/${userVO.saveName}_${userVO.originalFileName}.${userVO.ext}|"
+  	   alt="사용자 프로필 이미지">
 	</div>
-	<div>
-	  <label for="usersPhone">전화번호</label>
-	  <input class="form-control" type="text" 
-	  id="usersPhone" th:value="${userVO.usersPhone}" disabled readonly>
-	</div>
-	<div>
-	  <label for="usersEmail">이메일</label>
-	  <input class="form-control" type="email" 
-	  id="usersEmail" th:value="${userVO.usersEmail}" disabled readonly>
+	<div class="col-md-8 ml-5">
+		<div>
+		  <label for="usersNick">닉네임</label>
+	      <input class="form-control col-md-6" type="text" 
+	      id="usersNick" th:value="${userVO.usersNick}" disabled readonly>
+		</div>
+		<div>
+		  <label for="usersPhone">전화번호</label>
+		  <input class="form-control col-md-6" type="text" 
+		  id="usersPhone" th:value="${userVO.usersPhone}" disabled readonly>
+		</div>
+		<div>
+		  <label for="usersEmail">이메일</label>
+		  <input class="form-control col-md-6" type="email" 
+		  id="usersEmail" th:value="${userVO.usersEmail}" disabled readonly>
+		</div>
 	</div>
   </div>
-</div>
-
-
-
 </body>
 </html>

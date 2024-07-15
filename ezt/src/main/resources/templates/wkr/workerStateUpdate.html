@@ -28,7 +28,7 @@
 	    <label for="checking">회원탈퇴 시 유의사항을 모두 확인하였으며, 모두 동의합니다.</label>
 	  </strong></h4>
 	  <div class="col-md-12">
-	    <form th:action="@{/user/quit}" th:object="${userVO}" method="post" name="userStateUpdate">
+	    <form th:action="@{/worker/quit}" th:object="${userVO}" method="post" name="userStateUpdate">
 	      <input type="hidden" th:field="${userVO.usersId}">
 	      <input type="button" value="탈퇴하기" id="userQuitBtn"
 	        class="btn px-8 btn-primary text-white" style="float: right">
@@ -55,10 +55,7 @@
 			}).then(result => {
 	            if (result.isConfirmed) {
 	  				$(userStateUpdate).submit();
-	            	Swal.fire({
-	            		text:'탈퇴되었습니다.',
-	            		showConfirmButton : false
-	            	})
+	            	
 	            	setTimeout(()=>
 	                location.href = "/main", 1200
 	            			)

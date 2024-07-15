@@ -6,6 +6,14 @@
 <head>
 <meta charset="UTF-8">
 <title>작업자 마이페이지</title>
+<style>
+button.teamBtn {
+	border-bottom-left-radius: 0.25rem;
+	border-bottom-right-radius: 0.25rem;
+	border: 1px solid rgba(0, 0, 0, 0.125);
+	background-color: #efefef !important;
+}
+</style>
 </head>
 <body>
 	<div class="d-flex mb-3">
@@ -30,8 +38,12 @@
 		    <span>단가 : </span><span class="totalPrice">[[${pps.total}]]</span><span> (원)/</span>
 		    <span>공사 일정: [[${#dates.format(pps.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(pps.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
 		    <span>작성일 : [[${#dates.format(pps.writeDt, 'yyyy-MM-dd')}]] / 수정일 : [[${#dates.format(pps.updateDt, 'yyyy-MM-dd')}]]</span>
-		    <span>/  구분 : [[${pps.proposalStateNm}]]</span>
+		    <span th:if="${pps.proposalState} != null">/  구분 : [[${pps.proposalStateNm}]]</span>
 		  </a>
+		  <th:block th:if="${pps.contractNo <= 0}">
+			  <button class="teamBtn" type="button" th:onclick="|location.href='@{/conInsert(proposalNo=${pps.proposalNo})}'|" 
+			  th:if="${pps.proposalState} == 'A02'">계약서 작성하러가기</button>
+		  </th:block>
 		</div>
 	</th:block>
   </div>

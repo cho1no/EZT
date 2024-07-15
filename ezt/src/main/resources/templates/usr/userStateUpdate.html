@@ -56,10 +56,7 @@
 		}).then(result => {
             if (result.isConfirmed) {
   				$(userStateUpdate).submit();
-            	Swal.fire({
-            		text:'탈퇴되었습니다.',
-            		showConfirmButton : false
-            	})
+            	
             	setTimeout(()=>
                 location.href = "/main", 1200
             			)

@@ -42,7 +42,7 @@ button.teamBtn {
 		    <span>상태 : [[${ctt.contractStateNm}]]</span>
 		  </a>
 		  <button class="teamBtn" type="button" th:onclick="|location.href='@{/team/requestInsert(contractNo=${ctt.contractNo})}'|" 
-		  th:if="${ctt.contractState} == 'G01'">팀이 필요하세요?</button>
+		  th:if="${ctt.contractState} == 'G02'">팀이 필요하세요?</button>
 		</div>
 	</th:block>
   </div>

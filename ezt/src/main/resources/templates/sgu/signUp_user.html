@@ -22,24 +22,6 @@ form span {
 </style>
 </head>
 <body id="top">
-<!-- 	페이지 로딩? 기능 -->
-<!-- 	<div id="overlayer"></div> -->
-<!-- 	<div class="loader"> -->
-<!-- 		<div class="spinner-border text-primary" role="status"> -->
-<!-- 			<span class="sr-only">Loading...</span> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-<!-- 	<div class="site-wrap"> -->
-<!-- 		<div class="site-mobile-menu site-navbar-target"> -->
-<!-- 			<div class="site-mobile-menu-header"> -->
-<!-- 				<div class="site-mobile-menu-close mt-3"> -->
-<!-- 					<span class="icon-close2 js-menu-toggle"></span> -->
-<!-- 				</div> -->
-<!-- 			</div> -->
-<!-- 			<div class="site-mobile-menu-body"></div> -->
-<!-- 		</div> -->
-		<!-- .site-mobile-menu -->
-		<!-- HOME -->
 		<section class="site-section">
 			<div class="container">
 				<div class="row">
@@ -356,14 +338,14 @@ form span {
 			})
 			return false;
 		}
-		
-		if($('input[name=checked_jumin]').val() == ''){
-			Swal.fire({
-				 text:'실명인증이 완료되지않았습니다.',
-				 icon: 'warning'
-				})
-				return false;
-		}
+		//실명인증 제한(나중에 주석풀기)
+// 		if($('input[name=checked_jumin]').val() == ''){
+// 			Swal.fire({
+// 				 text:'실명인증이 완료되지않았습니다.',
+// 				 icon: 'warning'
+// 				})
+// 				return false;
+// 		}
 		
 		if($('#JUMIN2').val()[0] == 1 || $('#JUMIN2').val()[0] == 3){
 			$('#usersGender').val('남');

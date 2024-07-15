@@ -17,61 +17,73 @@ form span {
   color: blue;
   font-size: 10pt;
 }
+
+.workerImg {
+	position:relative;
+}
+.overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: inherit;
+            height: inherit;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgb(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.2s;
+	}
+.workerImg:hover .overlay {
+            opacity: 1;
+ 	}
 </style>
 </head>
 <body>
-  <div class="container">
-    <h4>회원정보 수정</h4>
-    <form
+  <h4>회원정보 수정</h4>
+  <form
       th:action="@{/worker/update}"
       th:object="${userVO}"
       method="post"
       name="workerUpdate"
-    >
-      <div>
-        <div class="row mb-3">
-          <input type="hidden" th:field="*{usersNo}" />
-          <input type="hidden" th:field="*{usersId}" />
-        </div>
-        <div class="row mb-3">
-        	<div class="col-md-2">
-          <label for="usersNick">닉네임</label>
-          </div>
-          <div class="col">
-          <input
-            class="form-control"
-            type="text"
-            id="usersNick"
-            th:field="*{usersNick}"
-          /><span></span>
-          </div>
-        </div>
-        <div class="row mb-3">
-        	<div class="col-md-2">
-          		<label for="usersPhone">전화번호</label>
-          	</div>
-			<div class="col">
-			 <input
-			   class="form-control"
-			   type="text"
-			   id="usersPhone"
-			   th:field="*{usersPhone}"
-			 /><span></span>
-			</div>
-        </div>
-        <div class="row mb-3">
-        	<div class="col-md-2">
-          	<label for="usersEmail">이메일</label>
-          </div>
-          <div class="col">
-	          <input
-	            class="form-control"
-	            type="email"
-	            id="usersEmail"
-	            th:field="*{usersEmail}"
-	          /><span></span>
-          </div>
-        </div>
+      enctype="multipart/form-data"
+   >
+     <div>
+       <input type="hidden" th:field="*{usersNo}" />
+       <input type="hidden" th:field="*{usersId}" />
+     </div>
+     <div class="d-flex mb-3">
+        <div class="card col-md-4 workerImg">
+	  	  <img class="card-img-top" id="preview"
+  	   		th:src="|/display?fileName=${#strings.replace(userVO.savePath, '\', '/')}/${userVO.saveName}_${userVO.originalFileName}.${userVO.ext}|"
+  	   		alt="작업자 프로필 이미지">
+  	   	  <div class="overlay">
+		    <label for="uploadFile" class="text-black" style="cursor:pointer;">
+ 	   		  <span style="color:#89ba16;">이미지 선택</span>
+	  	    </label>
+ 	   	  </div>
+	  	  <input name="uploadFile" type="file" id="uploadFile" class="form-control" accept=".jpg, .png" style="display:none;">
+	  	</div>
+        
+         <div class="col-md-8 ml-5">
+		  <div>
+			<label for="usersNick">닉네임</label>
+			<input class="form-control col-md-6" type="text" 
+			  id="usersNick"  th:field="*{usersNick}"><span></span>
+		  </div>
+		  <div>
+			<label for="usersPhone">전화번호</label>
+			<input class="form-control col-md-6" type="text" 
+			id="usersPhone" th:field="*{usersPhone}"><span></span>
+		  </div>
+		  <div>
+			<label for="usersEmail">이메일</label>
+			<input class="form-control col-md-6" type="email" 
+			id="usersEmail"  th:field="*{usersEmail}"><span></span>
+		  </div>
+     	</div>
+	  </div>
+        
         <div class="row mb-3 form-group">
           <label class="text-black" for="regions">주 활동지역</label>
           <div class="d-flex flex-wrap gap-2" role="group" aria-label="Basic checkbox toggle button group"  id="region">
@@ -86,7 +98,6 @@ form span {
         <button type="button" id="updateBtn" class="btn btn-primary border-width-2 d-none d-lg-inline-block">수정하기</button>
       </div>
     </form>
-  </div>
 </body>
 <script th:inline="javascript">
   let regions = /*[[${regions}]]*/ "";
@@ -281,5 +292,20 @@ form span {
       });
     });
   }
+  
+  //이미지변경시 바로보여줌
+  $("#uploadFile").on("change", function(event) {
+
+	    var file = event.target.files[0];
+
+	    var reader = new FileReader(); 
+	    reader.onload = function(e) {
+
+	        $("#preview").attr("src", e.target.result);
+	    }
+
+	    reader.readAsDataURL(file);
+	});
+  
 </script>
 </html>

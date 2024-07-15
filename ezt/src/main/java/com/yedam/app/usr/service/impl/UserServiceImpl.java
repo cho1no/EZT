@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.common.service.SimpleFileService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.usr.mapper.UserMapper;
@@ -28,6 +29,9 @@ public class UserServiceImpl implements UserService{
 	UserMapper userMapper;
 	
 	@Autowired
+	SimpleFileService simpleFileService;
+	
+	@Autowired
 	PasswordEncoder passwordEncoder; 
 
 	@Override
@@ -35,6 +39,7 @@ public class UserServiceImpl implements UserService{
 		return userMapper.selectUserInfo(id);
 	}
 
+	//회원정보 수정
 	@Override
 	public Map<String, Object> updateUser(UserVO userVO) {
 		Map<String, Object> map = new HashMap<>();
@@ -44,10 +49,18 @@ public class UserServiceImpl implements UserService{
 		if(result == 1) {
 			isSuccessed = true;
 		}
+		
+		
+		
 		map.put("result", isSuccessed);
 		map.put("target", userVO);
 		
 		return map;
+	}
+	
+	@Override
+	public int insertUserImg(UserVO userVO) {
+		return userMapper.insertUserImg(userVO);
 	}
 
 	//비밀번호 조회
@@ -114,6 +127,8 @@ public class UserServiceImpl implements UserService{
 	public int workerListGetTotal(FindWorkerCriteria cri) {
 		return userMapper.getTotalWorkerCount(cri);
 	}
+
+	
 
 
 

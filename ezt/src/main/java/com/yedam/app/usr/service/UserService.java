@@ -15,6 +15,7 @@ public interface UserService {
 	
 	//수정
 	public Map<String, Object> updateUser(UserVO userVO);
+	public int insertUserImg(UserVO userVO);
 	
 	//비밀번호 조회
 	public String selectEncPw(int usersNo);
