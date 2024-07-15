@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.fie.mapper.FileMapper;
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.rvw.mapper.ReviewMapper;
 import com.yedam.app.rvw.service.ReviewService;
@@ -15,7 +16,8 @@ import com.yedam.app.rvw.service.WorkerReplyVO;
 public class ReviewServiceImpl implements ReviewService {
 	@Autowired
 	ReviewMapper reviewMapper;
-	
+	@Autowired
+	FileMapper fileMapper;
 	//후기 전체조회
 	@Override
 	public List<ReviewVO> reviewList(Criteria cri) {
@@ -32,7 +34,14 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public int insertReview(ReviewVO reviewVO) {
 		int result = reviewMapper.insertReview(reviewVO);
-		System.out.println(reviewVO);
+		//파일 등록
+		if(reviewVO.getFileVO() != null) {
+			reviewMapper.insertFileAttrRvwInfo(reviewVO);
+			reviewVO.getFileVO().forEach(e->{
+				e.setFileId(reviewVO.getFileId());
+				fileMapper.insertFileInfo(e);
+			});
+		}
 		return result == 1 ? reviewVO.getReviewNo() : -1;
 	}
 	//후기 수정
@@ -83,5 +92,7 @@ public class ReviewServiceImpl implements ReviewService {
 		
 		return reviewMapper.deleteReply(workerReplyNo);
 	}
+	
+	
 
 }

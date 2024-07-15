@@ -26,7 +26,8 @@
             </tr>
             <tr>
                 <th>의뢰 내용</th>
-                <td colspan="4"><a>의뢰 바로가기</a></td>
+	            <td>[[${team}]]</td>
+                <td colspan="4"><a th:onclick="|window.open('/request/info?requestNo=${team.requestNo}')|">의뢰 바로가기</a></td>
             </tr>
             <tr id="detail-template">
                 <th></th>

@@ -71,6 +71,7 @@ public class TeamController {
     // 팀 신청 등록 페이지
     @GetMapping("/requestInsert")
     public String teamRequestInsert(Model model, TeamVO teamVO) {
+    	
         model.addAttribute("team", new TeamVO());
         model.addAttribute("twc", new TeamWorkCategoryVO());
         

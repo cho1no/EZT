@@ -3,6 +3,7 @@ package com.yedam.app.rvw.mapper;
 import java.util.List;
 
 import com.yedam.app.req.service.Criteria;
+import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.rvw.service.WorkerReplyVO;
 
@@ -42,5 +43,9 @@ public interface ReviewMapper {
 	
 	//댓글 삭제
 	public int deleteReply(int workerReplyNo);
+	
+	//파일 등록
+	public int insertFileAttrRvwInfo(ReviewVO reviewVO);
+
 	
 }

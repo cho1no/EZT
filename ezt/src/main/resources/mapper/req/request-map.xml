@@ -113,6 +113,8 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	<collection property="fileVO" ofType="FileVO">
 		<id property="fileId" column="file_id"></id>
 		<id property="saveName" column="save_name"></id>
+		<id property="originalFileName" column="original_file_name"></id>
+		<id property="savePath" column="save_path"></id>
 		<id property="ext" column="ext"></id>
 	</collection>
 </resultMap>
@@ -141,10 +143,16 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		  ,r.file_id
 		  ,f.save_name
 		  ,f.ext
+		  ,f.original_file_name
+		  ,f.save_path
 		  ,r.category_code
 		  ,FIND_COMMONCODE(r.category_code) as category_code_nm
           ,u.users_name
           ,FIND_COMMONCODE(r.region_code) as region_code_nm
+          ,(SELECT
+		 			COUNT(*)
+		 	FROM 	proposal
+		 	WHERE request_no = r.request_no) as pps_count
 	FROM request r
         JOIN users u
         ON r.requester = u.users_no
@@ -206,6 +214,20 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		
 		
 </insert>
+
+<!-- 파일 정보 DB 등록 attr : 의뢰 -->
+<insert id="insertFileAttrReqInfo" statementType="CALLABLE"
+	parameterType="RequestVO">
+	<selectKey keyProperty="fileId" resultType="Integer"
+		order="BEFORE">
+		SELECT SEQ_FILEID.NEXTVAL
+		FROM dual
+	</selectKey>
+	{CALL
+	insert_request_file(#{fileId}, #{requestNo})
+	}
+</insert>
+
 <!-- 수정 -->
 <update id="updateRequestInfo" parameterType="RequestVO">
 	UPDATE request
@@ -234,6 +256,13 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
   
 </resultMap>
 
+<!-- 파일 삭제 -->
+<delete id="deleteFile" statementType="CALLABLE"
+	parameterType="int">
+	{CALL
+	delete_file(#{fileId})
+	}
+</delete>
 <!-- 견적서 전체조회 -->
 <select id="selectProposalAll" parameterType="ProposalVO" resultMap="ppMap">
 	SELECT p.worker
@@ -247,6 +276,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		  ,NVL(( SELECT contract_no 
 		 		 FROM contract
 		 		 WHERE proposal_no = p.proposal_no ),0) as contract_no
+		 
 		 	
 	FROM proposal p
 		JOIN users u
@@ -290,7 +320,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 			,c.proposal_no
 			,c.write_dt
 			,c.update_dt
-			,c.contract_state
+			,FIND_COMMONCODE(c.contract_state) as contract_state
 			,c.ctt_start_dt
 			,c.ctt_end_dt
 			,p.request_no

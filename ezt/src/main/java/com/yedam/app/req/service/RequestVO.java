@@ -49,7 +49,7 @@ public class RequestVO {
 	private String saveName;			// 파일이름
 	private String originalFileName;	// 원 파일 명
 	private String ext;					// 파일 확장자
-	
+	private int ppsCount;  				//견적서 건수
 
 	private String usersPhone;
 	private String comments;
