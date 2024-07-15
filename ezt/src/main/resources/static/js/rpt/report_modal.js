@@ -316,9 +316,8 @@ $('#rpt_deleteBtn').on("click", function() {
 			location.reload();
 		}
 	});
-
-
 })
+
 // 수정 모달 열기
 $('#rpt_updateBtn').on('click', function() {
 
@@ -577,6 +576,7 @@ function imageshow(obj) {
 	return str;
 }
 
+// 입력 길이 제한
 function chkword(obj, maxlength) {
 
 	var str = obj.value; // 이벤트가 일어난 컨트롤의 value 값
@@ -610,6 +610,7 @@ function chkword(obj, maxlength) {
 
 }
 
+// alert
 function sweetModalError(text) {
 	Swal.fire({
 		icon: "error",
@@ -622,27 +623,5 @@ function sweetModalSuccess(text) {
 	Swal.fire({
 		icon: "success",
 		title: text
-	});
-}
-
-function sweetModalConfirm(text) {
-	Swal.fire({
-		title: '이대로 진행하시겠습니까?',
-		text: '다시 되돌릴 수 없습니다.',
-		icon: 'warning',
-
-		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
-		confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
-		cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-		confirmButtonText: text, // confirm 버튼 텍스트 지정
-		cancelButtonText: '취소', // cancel 버튼 텍스트 지정
-
-	}).then(result => {
-		// 만약 Promise리턴을 받으면,
-		if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
-			//Swal.fire( text + '완료되었습니다', 'success');
-		} else {
-			return false;
-		}
 	});
 }

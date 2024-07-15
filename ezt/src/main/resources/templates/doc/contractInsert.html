@@ -16,71 +16,11 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
 
+<!-- 공통 스타일 -->
+<link rel="stylesheet" href="/css/doc/doc_common.css">
+
 <title>계약서 작성</title>
 
-<style>
-.hr-sect {
-	display: flex;
-	flex-basis: 100%;
-	align-items: center;
-	color: gray;
-	font-size: 20px;
-	margin: 8px 0px;
-}
-
-.hr-sect::before, .hr-sect::after {
-	content: "";
-	flex-grow: 1;
-	background: rgba(0, 0, 0, 0.35);
-	height: 1px;
-	font-size: 0px;
-	line-height: 0px;
-	margin: 0px 16px;
-}
-
-.uploadDiv label {
-	display: inline-block;
-	padding: 5px 20px 10px 20px;
-	color: #fff;
-	vertical-align: middle;
-	background-color: #999999;
-	cursor: pointer;
-	height: 40px;
-}
-
-.uploadDiv input[type="file"] {
-	position: absolute;
-	width: 0;
-	height: 0;
-	padding: 0;
-	overflow: hidden;
-	border: 0;
-}
-
-.con_ul li div:nth-child(1) {
-	margin-top: 6px;
-}
-
-.con_ul li div:nth-child(2) {
-	height: 38px;
-}
-
-canvas {
-	border: 1px solid black;
-	width: 260px;
-	height: 100px;
-}
-
-.modal-backdrop {
-	/* bug fix - no overlay */
-	display: none;
-}
-
-.unity {
-	word-break: keep-all;
-	overflow-wrap: break-word;
-}
-</style>
 </head>
 <body>
 
@@ -138,8 +78,8 @@ canvas {
 									placeholder="날짜 선택">
 							</div>
 							<div class="col-4">
-								<label><b>하자보수기간</b></label> <input type="text"
-									class="form-control">
+								<label><b>하자보수기간</b>(시작 날짜로부터 1년)</label> <input type="text"
+									class="form-control bg-white" id="repairDay" readonly>
 							</div>
 						</div>
 						<!-- datepicker -->
@@ -425,143 +365,42 @@ canvas {
 	</div>
 
 
-
-
-
-
-
 	<script th:inline="javascript">
 	
-	// 공사 대금 표기
-	 var totalPrice = 0;
-
-	let priceList = /*[[${ppsInfo.list}]]*/""
+	// 변수
+	let priceList = /*[[${ppsInfo.list}]]*/"";
+	var unity_origin = /*[[${unity.contractTermsContent}]]*/""
 	
-	for(i =0 ; i < priceList.length ; i++){
+	// 공사 대금 표기
+	var totalPrice = 0;
+
+	for (i = 0; i < priceList.length; i++) {
 		totalPrice += priceList[i].qty * priceList[i].unitprice;
 	}
-	
+
 	$('input[name="cttPrice"]').val(totalPrice.toString().replace(
-			/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
-	
-	
-	// 현재 년월일 표시
-	date = new Date();
-    year = date.getFullYear();
-    month = date.getMonth() + 1;
-    day = date.getDate();
-	
-    $('.cur_year').html(year + '년');
-    $('.cur_month').html(month + '월');
-    $('.cur_day').html(day + '일');
- 	// 통일 계약서 표기
-    var unity_origin = /*[[${unity.contractTermsContent}]]*/""
-    var unity_content = unity_origin.replaceAll('\n', '<br />');
-    $('.unity p').html(unity_content);
-    
-    
-	// + 버튼 : tbody tr 추가
-	$('table thead button').on('click', addForm);
-	let num = 1;
-	function addForm(e){
-		$('.content').append(`<tr>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" 
-						onKeyup="this.value=this.value.replace(/[^-0-9]/g,'').replace('-','').replace(/^0+/, '');" 
-						value="0" maxlength="12" class="price_${num}" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" value='1900-01-01' /></td>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><button type="button" class="btn btn-outline-dark" name="deleteBtn"
-					style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">-</button></td>
-			</tr>`);
-		num += 1;
-		addRound();
-	}
-	// 회차 표기
-	function addRound(){
-		for(i=0; i < $('tbody tr').length; i++){
-	    	$('tbody tr:eq('+i+') td:eq(0) input').val(i + 1);
-	    }
-	}
-	
-	// - 버튼 : tbody tr 제거
-	$(document).on('click', 'button[name=deleteBtn]', function(e) {
-	    e.target.closest('tr').remove();
-	    //GetTotal();
-	    addRound();
-	});
+		/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
+
 
 	
 	// 폼 데이터 전송
 	$('#insertBtn').on('click', insertAjax );
-	
+
 	function insertAjax(e){
-		
-		
+
 		// 이미지&오디오 파일 제약
-		var inputFile = $("input[name='uploadFile']");
-		
-		var files = inputFile[0].files;
-		
-		
-		for(var i = 0; i < files.length; i++){
-			if(!checkExtentsion(files[i].name, files[i].size)){
-				return false;
-			}
-			if(files[i].type.indexOf('image') != -1){
-				alert("이미지 파일이 포함되어 있습니다.")
-				return false;
-			}
-			if(files[i].type.indexOf('audio') != -1){
-				alert("오디오 파일이 포함되어 있습니다.")
-				return false;
-			}
-		}
-		
+		if(!onlyFile()) return;
 		
 		// 폼 데이터 처리
-		$('input[name="workerAddress"]').val($('#input_postcode').val() + '_' 
-				+ $('#input_addr').val() + '_' + $('#input_detailAddr').val());
-				
-		var bankcode = $('select').val();
-		var bank_num1 = bankcode.indexOf('(');
-		if(bankcode != '은행 선택'){
-		$('input[name="workerBankcode"]').val(bankcode.substring(bank_num1+1).replace(')', ''));
-		}else{
-			$('input[name="workerBankcode"]').val(null);
-		}
-		
-				
-		$('input[name="cttPrice"]').val($('input[name="cttPrice"]').val().replace(',', ''));
-	
-		let startDt = $('#startDt');
-		let endDt = $('#endDt');
-		
-		if(startDt.val() == ''){
-			startDt.val('1900-01-01');
-		}
-		if(endDt.val() == ''){
-			endDt.val('1900-01-01');
-		}
-	
-	
-    	for(i=0; i < $('tbody tr').length; i++){
-    		$('tbody tr:eq('+i+') td:eq(0) input').attr('name', 'dList['+i+'].round');
-    		$('tbody tr:eq('+i+') td:eq(1) input').attr('name', 'dList['+i+'].price');
-    		$('tbody tr:eq('+i+') td:eq(2) input').attr('name', 'dList['+i+'].paymentDt');
-    		$('tbody tr:eq('+i+') td:eq(3) input').attr('name', 'dList['+i+'].history');
-    	}
-    	
-    	
+		con_insert_data();
 		
 		// 폼 데이터 전송
 		var formData = new FormData(document.conInsertForm);
 		formData.append("worSign.signsContent", compressedData);
-			
+		
 		for (const pair of formData.entries()) {
 			console.log(pair[0], pair[1]);
 		}
-			
 		$.ajax({
 			url: '/conInsert',
 			processData : false,
@@ -571,69 +410,20 @@ canvas {
 			dataType:'JSON'
 					
 			,success : function(result){
-				console.log(result);
+				//console.log(result);
+				Swal.fire({
+					icon: "success",
+					title: "등록 되었습니다"
+				}).then(e => {
+					   // 만약 Promise리턴을 받으면,
+					   if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+					   
 				location.href='/conInfo?contractNo='+result;
+			 }});
 			}
 		
 		})
 	}
-	
-		// 서명
-		var compressedData;
-    	
-        $('.sigPad').signaturePad({drawOnly:true});
- 
-        $('#saveModal').click(function(event) {
-        	event.preventDefault(); // 폼의 기본 제출 동작을 방지
-        	
-	        // 서명 데이터를 JSON 형식으로 가져오기
-	        var signatureData = $('.sigPad').signaturePad().getSignatureString();
-	        
-	        // 서명 데이터를 압축
-	        compressedData = LZString.compressToBase64(signatureData);
-	
-	        // 압축된 데이터를 숨겨진 input에 저장
-	        $('input.output').val(compressedData);
-	
-	        // 압축된 데이터 출력 (선택 사항)
-	        //console.log(compressedData);
-	       
-	        signView(compressedData);
-        });
-      
-
-	  		function drawSignature(data) {
-		        // Canvas / 컨텍스트
-		        let canvas = document.getElementById('signatureCanvas');
-		        let ctx = canvas.getContext('2d');
-		        
-		     	// 캔버스 초기화
-		        ctx.clearRect(0, 0, canvas.width, canvas.height);
-		        ctx.beginPath();
-		        for (let i = 0; i < data.length; i++) {
-		        	let point = data[i];
-		            ctx.moveTo(point.mx, point.my);
-		            ctx.lineTo(point.lx, point.ly);
-		        }
-		        ctx.stroke();
-		        $('#sendModal').modal('hide');
-		    }
-	 
-		    function signView(compressedSignatureData) {
-		        //console.log("compressedSignatureData = " + compressedSignatureData);
-		        
-		        // 압축된 데이터 복원
-		        let decompressedSignatureData 
-	                      = LZString.decompressFromBase64(compressedSignatureData);
-	 
-		        // 복원된 서명을 JSON화
-		        let signatureData = JSON.parse(decompressedSignatureData);
-	 
-		        // 서명 그리기
-		        drawSignature(signatureData);
-		    }
-		 	// 서명
-
 
 	</script>
 	<!-- datepicker -->
@@ -649,6 +439,10 @@ canvas {
 
 	<!-- 서명 -->
 	<script src="/js/doc/json2.min.js"></script>
+	<script type="text/javascript" th:src="@{/js/doc/doc_sign.js}"></script>
+	
+	<!-- 공통 js 파일 -->
+	<script type="text/javascript" th:src="@{/js/doc/con_common.js}"></script>
 
 </body>
 </html>
