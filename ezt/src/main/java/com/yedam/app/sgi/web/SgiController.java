@@ -14,10 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 public class SgiController {
 	
 	
-	@GetMapping("main")
-	public String all() {
-		return "gongtong/main";
-	}
+//	@GetMapping("main")
+//	public String all() {
+//		return "gongtong/main";
+//	}
 	 
 	@GetMapping("user")
 	public void user() {}
@@ -36,10 +36,10 @@ public class SgiController {
 		return "sgi/login";
 	}
 	
-	@GetMapping("/")
-	public String main() {
-		return "redirect:/main";
-	}
+//	@GetMapping("/")
+//	public String main() {
+//		return "redirect:/main";
+//	}
     
     @GetMapping("/find/idPw")
     public String findIdPw() {

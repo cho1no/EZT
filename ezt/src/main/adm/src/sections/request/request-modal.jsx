@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import TabList from '@mui/lab/TabList';
 import Modal from '@mui/material/Modal';
 import TabPanel from '@mui/lab/TabPanel';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import TabContext from '@mui/lab/TabContext';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
@@ -24,7 +24,11 @@ import Request from './request-modal-req';
 import Proposal from './request-modal-prop';
 import Contract from './request-modal-cont';
 import CttReport from './request-modal-cttReport';
-import { style, buttonStyle, modalTitleStyle } from '../common-table/css';
+import {
+  style,
+  //  buttonStyle,
+  modalTitleStyle,
+} from '../common-table/css';
 
 export default function RequestModal({ requestNo, open, onClose }) {
   const [reqInfo, setReqInfo] = useState({});
@@ -126,7 +130,7 @@ export default function RequestModal({ requestNo, open, onClose }) {
             </CardContent>
           </Scrollbar>
         )}
-        {tabVal === '1' && (
+        {/* {tabVal === '1' && (
           <Button
             variant="contained"
             fullWidth
@@ -136,7 +140,7 @@ export default function RequestModal({ requestNo, open, onClose }) {
           >
             삭제하기
           </Button>
-        )}
+        )} */}
       </Card>
     </Modal>
   );
