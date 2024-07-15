@@ -84,18 +84,23 @@ public class ProposalController {
 
 	@PostMapping("ppsInsert")
 	public String ppsInsertProcess(ProposalVO proposalVO
-								   , RequestVO requestVO) {
+								   , RequestVO requestVO
+								   , Model model) {
 
 		int no = ppsSerivce.ppsInsert(proposalVO);
-		String url = null;
 
 		if (no > -1) {
-			url = "redirect:ppsInfo?proposalNo=" + no ;
+			
+			model.addAttribute("msg", "견적서 등록 완료");
+		    model.addAttribute("icon", "success");
+		    model.addAttribute("url", "redirect:ppsInfo?proposalNo=" + no);
+		    return "gongtong/message";
 		} else {
-			url = "redirect:ppsInsert?requestNo=" + proposalVO.getRequestNo();
+			model.addAttribute("msg", "견적서 등록 실패");
+ 	        model.addAttribute("icon", "warning");
+ 	        model.addAttribute("url", "redirect:ppsInsert?requestNo=" + proposalVO.getRequestNo());
+ 	        return "gongtong/message"; 
 		}
-
-		return url;
 	}
 
 	// 견적서 수정
@@ -191,21 +196,32 @@ public class ProposalController {
 	
 	// 견적서 승인
 	@GetMapping("ppsApprove")
-	public String ppsApprove(ProposalVO proposalVO) {
-		ppsSerivce.ppsApprove(proposalVO);
+	public String ppsApprove(ProposalVO proposalVO
+							, Model model) {
+		int result = ppsSerivce.ppsApprove(proposalVO);
 		
-		// 견적서 정보 조회
-		ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO.getProposalNo());
+		if( result > 0) {
+			// 견적서 정보 조회
+			ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO.getProposalNo());
 				
-		// 견적서 의뢰정보조회
-		RequestVO reqVO = ppsSerivce.reqInfo(findVO.getRequestNo());
+			// 견적서 의뢰정보조회
+			RequestVO reqVO = ppsSerivce.reqInfo(findVO.getRequestNo());
 		
-		AlarmVO alarm = new AlarmVO();
-		alarm.setUsersNo(findVO.getWorker());
-		alarm.setTitle("견적서 승인 완료");
-		alarm.setContent("["+ reqVO.getTitle() + "] 에 등록한 견적서가 승인 되었습니다.");
-		sac.message(alarm);
-		return "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo();
+			AlarmVO alarm = new AlarmVO();
+			alarm.setUsersNo(findVO.getWorker());
+			alarm.setTitle("견적서 승인 완료");
+			alarm.setContent("["+ reqVO.getTitle() + "] 에 등록한 견적서가 승인 되었습니다.");
+			sac.message(alarm);
+		
+	        model.addAttribute("msg", "견적서 승인 완료");
+	        model.addAttribute("icon", "success");
+	        model.addAttribute("url", "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo());
+	        return "gongtong/message";
+	    }else {
+	    	model.addAttribute("msg", "다시 확인해 주세요");
+ 	        model.addAttribute("icon", "warning");
+ 	        model.addAttribute("url", "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo());
+ 	        return "gongtong/message"; 
+	    }
 	}
-
 }

@@ -214,7 +214,8 @@
 			title: '이대로 진행하시겠습니까?',
 			text: '다시 되돌릴 수 없습니다.',
 			icon: 'warning',
-
+			
+			allowOutsideClick: false,
 			showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
 			confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
 			cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
@@ -238,11 +239,19 @@
 					type :'Post',
 					async : false,
 					success : function(result){	
-						Swal.fire('결제 완료되었습니다','', 'success');
-						location.href='/payInfo?payNo='+result;
+						
+						Swal.fire({
+							icon: "success",
+							title: "결제 완료되었습니다",
+							allowOutsideClick: false
+						}).then(e => {
+							// 만약 Promise리턴을 받으면,
+							if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+								location.href='/payInfo?payNo='+result;
+							}
+						});
 					}
 				})
-				
 			} 
 		});
 	}
