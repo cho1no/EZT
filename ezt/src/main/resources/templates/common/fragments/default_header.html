@@ -12,47 +12,32 @@
           <li><a th:href="@{/find/workerList}">작업자 찾기</a></li>
           <li><a th:href="@{/review/list}">후기 목록</a></li>
           <th:block sec:authorize="hasRole('ROLE_WORKER')">
-          	<li><a th:href="@{/team/requestList}">팀 찾기</a></li>
+            <li><a th:href="@{/team/requestList}">팀 찾기</a></li>
           </th:block>
           <th:block sec:authorize="isAnonymous()">
-			<li><a href="/signUp/joinUser">회원가입</a></li> 
-			<li><a href="/signUp/joinWorker">작업자가입</a></li> 
-			<li><a href="/login">로그인</a></li>
+            <li class="d-lg-none"><a href="/signUp/joinUser">회원가입</a></li>
+            <li class="d-lg-none">
+              <a href="/signUp/joinWorker">작업자가입</a>
+            </li>
+            <li class="d-lg-none"><a href="/login">로그인</a></li>
           </th:block>
           <li class="d-lg-none">
-          <th:block sec:authorize="hasRole('ROLE_USER')">
-            <a
-              id="mypage"
-              href="/user/info"
-              >마이페이지</a
-            >
-          </th:block>
+            <th:block sec:authorize="hasRole('ROLE_USER')">
+              <a id="mypage" href="/user/info">마이페이지</a>
+            </th:block>
 
-          <th:block sec:authorize="hasRole('ROLE_WORKER')">
-            <a
-              id="mypage"
-              href="/worker/info"
-              >마이페이지</a
-            >
-          </th:block>
+            <th:block sec:authorize="hasRole('ROLE_WORKER')">
+              <a id="mypage" href="/worker/info">마이페이지</a>
+            </th:block>
 
-          <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-            <a
-              id="mypage"
-              href="http://localhost:3000/"
-              >관리자 페이지</a
-            >
-          </th:block>
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+              <a id="mypage" href="http://localhost:3000/">관리자 페이지</a>
+            </th:block>
           </li>
           <li class="d-lg-none">
-          <th:block sec:authorize="!isAnonymous()">
-            <a
-              id="logout"
-              style="color: #89ba16"
-              href="/logout"
-              >로그아웃</a
-            >
-          </th:block>
+            <th:block sec:authorize="!isAnonymous()">
+              <a id="logout" style="color: #89ba16" href="/logout">로그아웃</a>
+            </th:block>
           </li>
         </ul>
       </nav>

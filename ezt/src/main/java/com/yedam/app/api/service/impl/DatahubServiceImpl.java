@@ -25,11 +25,11 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class DatahubServiceImpl implements DatahubService {
 	String url = "https://datahub-dev.scraping.co.kr";
-	String token = "Token 24c44dac440f4ba183caa2939084694118f00a5f";
+	String token = "Token 2298765cdff24a0bb29446391b18b157f9b96871";
 
-	String encSpec = "AES/CBC/PKCS5Padding";
-	String encKey = "EEzzW44#VC/9JdIGV/W!ZZqZ/VpSm4Zq"; // 32 bytes key
-	String encIV = "/WZJ4fVCWmSqWEmm"; // 16 bytes IV
+	String encSpec = "AES/CBC/PKCS5PADDING/256";
+	String encKey = "35z8@J!2A!=!hk9g#Mkt2A3gANMJh9KA"; // 32 bytes key
+	String encIV = "/#zx9#ksAvvzv92gd"; // 16 bytes IV
 	@Autowired
 	WebClient webClient;
 
