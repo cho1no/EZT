@@ -29,6 +29,8 @@ public interface UserMapper {
 	public int nickChk(String nick);
 	
 	public int emailChk(String email);
+	
+	public int rnnChk(String rnn);
 
 	//사용자정보 수정
 	public int updateUserInfo(UserVO userVO);

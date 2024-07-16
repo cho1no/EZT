@@ -244,103 +244,129 @@ form span {
 	$('.page-desc').text('작업자');
 	
 	//주민등록증 진위여부
-	$('#rnnChkBtn').click(() => {checkRnn()});
-	function checkRnn(){
-		var userName = $('#usersName').val();
-		var jumin1 = $('#JUMIN1').val();
-		var jumin2 = $('#JUMIN2').val();
-		var rnn = jumin1 + jumin2; 
-		var issuDate = $('#issuDate').val();
-		//console.log(userName, rnn, issuDate);
-		if(userName == ''){
-			$('#juminChk').text('성명을 입력해주세요.');
-			$('#juminChk').addClass('error');
-			return false;
+		$('#rnnChkBtn').click(() => {checkRnn()});
+		function checkRnn(){
+			var userName = $('#usersName').val();
+			var jumin1 = $('#JUMIN1').val();
+			var jumin2 = $('#JUMIN2').val();
+			var rnn = jumin1 + jumin2; 
+			var issuDate = $('#issuDate').val();
+			//console.log(userName, rnn, issuDate);
+			if(userName == ''){
+				$('#juminChk').text('성명을 입력해주세요.');
+				$('#juminChk').addClass('error');
+				return false;
+			}
+			var reqExpUsrNm = /^[가-힣]*$/;
+			if(!reqExpUsrNm.test(userName)){
+				$('#juminChk').text('성명은 한글로 올바르게 입력해주세요.');
+				$('#juminChk').addClass('error');
+				return false;
+			}
+			if(issuDate == ''){
+				$('#juminChk').text('주민등록증 발급일자를 입력해주세요.');
+				$('#juminChk').addClass('error');
+				return false;
+			}
+			if(jumin1 == ''){
+				$('#juminChk').text('생년월일을 입력해주세요.');
+				$('#juminChk').addClass('error');
+				return false;
+			}
+			
+			if(jumin2 == ''){
+				$('#juminChk').text('주민번호를 입력해주세요.');
+				$('#juminChk').addClass('error');
+				return false;
+			}
+			var reqExp = /^[0-9]*$/;
+			if(!reqExp.test(jumin1) || !reqExp.test(jumin2) || !reqExp.test(issuDate)){
+				$('#juminChk').text('주민번호, 발급일자는 숫자를 입력해주세요.');
+				$('#juminChk').addClass('error');
+				return false;
+			}
+			
+			var reqExp2 = /^[0-9]{8}$/;
+			if(!reqExp2.test(issuDate)){
+				$('#juminChk').text('발급일자는 8자리숫자입니다.');
+				$('#juminChk').addClass('error');
+				return false;
+			}
+			
+			var reqExp3 = /^[0-9]{6}$/;
+			if(!reqExp3.test(jumin1)){
+				$('#juminChk').text('생년월일은 6자리숫자입니다.');
+				$('#juminChk').addClass('error');
+				return false;
+			}
+			var reqExp4 = /^[0-9]{7}$/;
+			if(!reqExp4.test(jumin2)){
+				$('#juminChk').text('뒷자리는 7자리숫자입니다.');
+				$('#juminChk').addClass('error');
+				return false;
+			}
+			
+			var juChk = $('#JUMIN2');
+			$.ajax({
+				type : "get",
+				url : "/signUp/checkRnn/"+juChk.val(),
+				success : function(dt) {
+					if (dt == '중복') {
+						$('#juminChk').text('주민번호가 이미존재합니다.')
+						$('#juminChk').addClass('error')
+						return false;
+					}else{
+						$('#juminChk').text('')
+						$('#juminChk').removeClass('error')
+						$('#rnnChkBtn').css('display', 'none');
+						$('#loadChk').css('display', 'block');
+			
+			
+			
+	//		실명인증api(횟수제한,실검증시 주석해제)
+	// 		$.ajax({
+	// 				url : "/api/idCardCheck",
+	// 				type : "POST",
+	// 				contentType : "application/json;charset=UTF-8",
+	// 				data : JSON.stringify({
+	// 						NAME : userName,
+	// 						JUMIN : rnn,
+	// 						ISSUEDATE : issuDate
+	// 				}),
+	// 				success : function(re){
+	// 					console.log(re);
+	// 					if(re.data.AGREEMENTYNE == "Y"){
+	// 						$('input[name=checked_jumin]').val("y");
+	// 						$('#rnnChkBtn').css('display', 'block');
+	// 						$('#rnnChkBtn').attr('disabled', 'true');
+	// 						$('#loadChk').css('display', 'none');
+	// 						Swal.fire({
+	// 							text: '실명인증 완료',
+	// 							icon: 'success'
+	// 						})
+	// 					}else {
+	// 						Swal.fire({
+	// 							text: '입력오류',
+	// 							icon: 'error'
+	// 						})
+	// 						$('#rnnChkBtn').css('display', 'block');
+	// 						$('#loadChk').css('display', 'none');
+	// 					}
+	// 				},
+	// 				error : function(er){
+	// 					Swal.fire({
+	// 						text: 'error',
+	// 						icon: 'error'
+	// 					})
+	// 					$('#rnnChkBtn').css('display', 'none');
+	// 					$('#loadChk').css('display', 'block');
+	// 				}
+	// 			})
+					}
+				}
+			})
+			
 		}
-		if(issuDate == ''){
-			$('#juminChk').text('주민등록증 발급일자를 입력해주세요.');
-			$('#juminChk').addClass('error');
-			return false;
-		}
-		if(jumin1 == ''){
-			$('#juminChk').text('생년월일을 입력해주세요.');
-			$('#juminChk').addClass('error');
-			return false;
-		}
-		
-		if(jumin2 == ''){
-			$('#juminChk').text('주민번호를 입력해주세요.');
-			$('#juminChk').addClass('error');
-			return false;
-		}
-		var reqExp = /^[0-9]*$/;
-		if(!reqExp.test(jumin1) || !reqExp.test(jumin2) || !reqExp.test(issuDate)){
-			$('#juminChk').text('주민번호, 발급일자는 숫자를 입력해주세요.');
-			$('#juminChk').addClass('error');
-			return false;
-		}
-		
-		var reqExp2 = /^[0-9]{8}$/;
-		if(!reqExp2.test(issuDate)){
-			$('#juminChk').text('발급일자는 8자리숫자입니다.');
-			$('#juminChk').addClass('error');
-			return false;
-		}
-		
-		var reqExp3 = /^[0-9]{6}$/;
-		if(!reqExp3.test(jumin1)){
-			$('#juminChk').text('생년월일은 6자리숫자입니다.');
-			$('#juminChk').addClass('error');
-			return false;
-		}
-		var reqExp4 = /^[0-9]{7}$/;
-		if(!reqExp4.test(jumin2)){
-			$('#juminChk').text('뒷자리는 7자리숫자입니다.');
-			$('#juminChk').addClass('error');
-			return false;
-		}
-		$('#rnnChkBtn').css('display', 'none');
-		$('#loadChk').css('display', 'block');
-		
-//		실명인증api(횟수제한,실검증시 주석해제)
-// 		$.ajax({
-// 				url : "/api/idCardCheck",
-// 				type : "POST",
-// 				contentType : "application/json;charset=UTF-8",
-// 				data : JSON.stringify({
-// 						NAME : userName,
-// 						JUMIN : rnn,
-// 						ISSUEDATE : issuDate
-// 				}),
-// 				success : function(re){
-// 					if(re.result == "SUCCESS"){
-// 						$('input[name=checked_jumin]').val("y");
-// 						$('#rnnChkBtn').css('display', 'block');
-// 						$('#rnnChkBtn').attr('disabled', 'true');
-// 						$('#loadChk').css('display', 'none');
-// 						Swal.fire({
-// 							text: '실명인증 완료',
-// 							icon: 'success'
-// 						})
-// 					}else {
-// 						Swal.fire({
-// 							text: '입력오류',
-// 							icon: 'error'
-// 						})
-// 						$('#rnnChkBtn').css('display', 'block');
-// 						$('#loadChk').css('display', 'none');
-// 					}
-// 				},
-// 				error : function(er){
-// 					Swal.fire({
-// 						text: 'error',
-// 						icon: 'error'
-// 					})
-// 					$('#rnnChkBtn').css('display', 'none');
-// 					$('#loadChk').css('display', 'block');
-// 				}
-// 			})
-	}
 	
 	//자격증 진위여부 
 	$('#check-license-Btn').click(() => {checkLic()});

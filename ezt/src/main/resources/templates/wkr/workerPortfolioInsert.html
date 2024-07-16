@@ -17,7 +17,7 @@
 				<label class="text-black" for="title">제목</label>
 			</div>
 			<div class="col-md-8">
-				<input type="text" id="title" class="form-control" th:field="${ptf.title}">
+				<input type="text" id="title" class="form-control" th:field="${ptf.title}" placeholder="제목을 입력해주세요">
 			</div>
 		</div>
 		<div class="row mb-2">
@@ -25,16 +25,23 @@
 				<label class="text-black" for="content">내용</label>
 			</div>
 			<div class="col-md-8">
-				<textarea  id="content" class="form-control" th:field="${ptf.content}"></textarea>
+				<textarea  id="content" class="form-control" th:field="${ptf.content}" placeholder="내용을 입력해주세요"></textarea>
 			</div>
 		</div>
 		<div class="row mb-2">
 			<div class="col-md-2">
 				<label class="text-black" for="workTime">작업 기간(일)</label>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-2">
 				<input type="text" id="workTime" class="form-control" th:field="${ptf.workTime}" placeholder="OO일">
 			</div>
+			<div class="col-md-2">
+				<label class="text-black" for="price">금액</label>
+			</div>
+			<div class="col-md-3">
+				<input type="text" id="price" class="form-control" th:field="${ptf.price}" style="text-align:right;" placeholder="숫자로 입력">
+			</div>
+				<label class="text-black col-1">원</label>
 		</div>
 		<div class="row">
 			<div class="col-md-6 mb-3 mb-md-0">
@@ -54,40 +61,46 @@
 			</select>
 			</div>
 		</div>
-		<div class="row">
-		</div>
 		<div class="row mb-2">
 			<div class="col-md-2">  
 			<label for="uploadFile" class="text-black">파일첨부</label>
 			</div>
 			<div class="col-md-10"> 
 			<input name="uploadFile" type="file" multiple="multiple" id="uploadFile" class="form-control" accept=".jpg, .png, .jfif">
+			<div>※확장자 .jpg .png .jfif 외 불가</div>
 			</div>		
 		</div>
 		
 		<div class="col-md-3">
-			<button type="submit" id="insert-ptf-Btn" class="btn px-4 btn-primary text-white">등록하기</button>
+			<button type="button" id="insert-ptf-Btn" class="btn px-4 btn-primary text-white">등록하기</button>
 		</div>
 	</form>
 <script th:inline="javascript">
 	$('#insert-ptf-Btn').click(() => {checkPtf()}); 
-	function checkCareer(){
+	function checkPtf(){
 		var title = $('#title').val();
 		var content = $('#content').val();
-		var carInfo = $('#careerInfo').val();
+		var workTime = $('#workTime').val();
 		var uploadFile = $('#uploadFile').val(); 
-		//파일첨부 = ~;
-		if(startDt == '' || endDt == ''){
-		  Swal.fire({
-		    text:'근무기간을 입력해주세요',
-			icon: 'warning' 
-		 })
-		 return false;
-		}
 		 
-		if(carInfo == ''){
+		if(title == ''){
+			Swal.fire({
+				text:'제목을 입력해주세요',
+				icon: 'warning' 
+			})
+		 	return false;
+		}
+		
+		if(content == ''){
 			Swal.fire({
 				text:'작업내용을 입력해주세요',
+				icon: 'warning' 
+			})
+		 	return false;
+		}
+		if(workTime == ''){
+			Swal.fire({
+				text:'작업기간을 입력해주세요',
 				icon: 'warning' 
 			})
 		 	return false;
@@ -100,10 +113,30 @@
 			})
 		 	return false;
 		}
-		$(insertCareer).submit();
+		
+		Swal.fire({
+			text:'등록하시겠습니까?',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonText: '등록',
+			cancelButtonText: '취소',
+			
+		}).then(result => {
+            if (result.isConfirmed) {
+					Swal.fire({
+						text:'등록완료.',
+						icon: 'success',
+					}).then(re => {
+					$(insertCareer).submit();
+				})
+            } else if (result.isDismissed) {
+                return false;
+            }
+
+        })
+		
 	};
 
-	
 </script>
 </body>
 </html>

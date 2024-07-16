@@ -90,6 +90,15 @@ public class SignUpService {
 		}
 	}
 	
+	//주민번호 중복체크 
+	public String rnnChk(UserVO vo) {
+		if (userMapper.rnnChk(vo.getUsersRnn()) > 0) {
+			return "중복";
+		}else{
+			return "중복아님";
+		}
+	}
+	
 	
 
 	

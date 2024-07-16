@@ -6,6 +6,10 @@
 <head>
 <meta charset="UTF-8">
 <title>작업자 마이페이지</title>
+
+<!-- jQuery datePicker -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 </head>
 <body>
 <hr>
@@ -14,22 +18,38 @@
 		method="post" class="p-4 border rounded" name="insertCareer" enctype="multipart/form-data">
 		<input type="hidden" th:field="${userVO.usersNo}">
 		
-		<div class="row mb-2">
-			<div class="col-md-2">
-				<label class="text-black" for="careerStartDt">근무기간</label>
-			</div>
-			<div class="col-md-4">
-				<input name="careerStartDt" type="date" id="careerStartDt" 
-				class="form-control" th:field="${car.careerStartDt}" placeholder="YYYY-MM-DD(시작일)">
-			</div>
+<!--		<div class="row mb-2">-->
+<!--			<div class="col-md-2">-->
+<!--				<label class="text-black" for="careerStartDt">근무기간</label>-->
+<!--			</div>-->
+<!--			<div class="col-md-4">-->
+<!--				<input name="careerStartDt" type="date" id="careerStartDt" -->
+<!--				class="form-control" th:field="${car.careerStartDt}" placeholder="YYYY-MM-DD(시작일)">-->
+<!--			</div>-->
 			
-				<strong class="col-md-2 text-center"> - </strong>
+<!--				<strong class="col-md-2 text-center"> - </strong>-->
 			
-			<div class="col-md-4">
-				<input name="careerEndDt" type="date" id="careerEndDt" 
-				class="form-control" th:field="${car.careerEndDt}" placeholder="YYYY-MM-DD(종료일)">
+<!--			<div class="col-md-4">-->
+<!--				<input name="careerEndDt" type="date" id="careerEndDt" -->
+<!--				class="form-control" th:field="${car.careerEndDt}" placeholder="YYYY-MM-DD(종료일)">-->
+<!--			</div>-->
+<!--		</div>-->
+		
+		<!-- datepicker : id&type="text"-->
+		<div class="row form-group">
+			<div class="col-6">
+				<label for="careerStartDt"><b>공사시작날짜</b></label> <input type="text"
+					class="form-control bg-white" id="careerStartDt" th:field="${car.careerStartDt}" readonly placeholder="날짜 선택">
+			</div>
+			<div class="col-6">
+				<label for="careerEndDt"><b>공사마감날짜</b></label> <input type="text"
+					class="form-control bg-white" id="careerEndDt" th:field="${car.careerEndDt}" readonly placeholder="날짜 선택">
 			</div>
 		</div>
+		<!-- datepicker -->
+		
+		
+		
 		
 		<div class="row mb-2">
 			<div class="col-md-2">
@@ -87,14 +107,42 @@
 		}
 		$(insertCareer).submit();
 	};
-	
+		/*
 		$('#careerEndDt').on('change', function(){
 			if($('#careerStartDt').val() > $('#careerEndDt').val()){
 				return ;
 			}
 			
-		});
+		});*/
 		
+		
+		// 시작날짜, 마감날짜 datepicker
+		$('#careerStartDt').datepicker({
+			 dateFormat: 'yy-mm-dd',
+			 // 0 : 오늘 날짜
+			  minDate: 0
+			})
+			.on( "change", function() {
+				$( "#careerEndDt" ).datepicker( "option", "minDate", getDate( this ) )
+			});
+		$( "#careerEndDt" ).datepicker({
+			dateFormat: 'yy-mm-dd',
+	  	  	minDate: 0
+	        })
+	    	.on( "change", function() {
+	    	$('#careerStartDt').datepicker( "option", "maxDate", getDate( this ) );
+	    });
+		function getDate( element ) {
+			//console.log(element.value);
+		      var date;
+		      try {
+		        date = element.value
+		      } catch( error ) {
+		        date = null;
+		      }
+		 
+		      return date;
+		    }
 	
 </script>
 </body>

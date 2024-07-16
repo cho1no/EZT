@@ -166,4 +166,13 @@ public class SignUpController {
     	vo.setUsersEmail(email);
     	return signUpService.emailChk(vo);
     }
+    
+    //주민번호 중복체크
+    @GetMapping("signUp/checkRnn/{rnn}")
+    @ResponseBody
+    public String checkRnn(@PathVariable String rnn) {
+    	UserVO vo = new UserVO();
+    	vo.setUsersRnn(rnn);
+    	return signUpService.rnnChk(vo);
+    }
 }
