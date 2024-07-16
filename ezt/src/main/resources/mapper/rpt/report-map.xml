@@ -67,7 +67,7 @@
 	<!-- 공사 보고 수정 -->
 	
 	<!-- 공사 보고 삭제 -->
-	<delete id="deleteCttInfo" parameterType="int">
+	<delete id="deleteCttInfo" parameterType="int" statementType="CALLABLE">
 		{CALL
 			delete_report_and_file(#{fileId})
 		}

@@ -77,8 +77,8 @@ public class ProposalServiceImpl implements ProposalService {
 	@Override
 	public int ppsDelete(int proposalNo) {
 		ppsMapper.deletePpsDetailInfo(proposalNo);
-		int success = ppsMapper.deletePpsInfo(proposalNo);
-		return success == 1 ? proposalNo: -1;
+		int result = ppsMapper.deletePpsInfo(proposalNo);
+		return result == 1 ? proposalNo : -1;
 
 	}
 
@@ -99,25 +99,21 @@ public class ProposalServiceImpl implements ProposalService {
 				fileMapper.insertFileInfo(e);
 			});
 		}
-		ppsMapper.sendPpsInfo(proposalVO);
+		ppsMapper.sendPpsInfo(proposalVO); // 프로시저
 		return proposalVO.getProposalNo();
 	}
 
 	// 파일&견적서 삭제
 	@Override
 	public int ppsFileDelete(int fileId) {
-		boolean result = false;
-		if (ppsMapper.deleteFileInfo(fileId) == 1) {
-			result = true;
-		}
-
-		return result == true ? 1 : -1;
+		ppsMapper.deleteFileInfo(fileId); // 프로시저
+		return 1;
 	}
 	
 	// 견적서 승인
 	@Override
 	public int ppsApprove(ProposalVO proposalVO) {
-		ppsMapper.approvePpsInfo(proposalVO);
+		ppsMapper.approvePpsInfo(proposalVO); // 프로시저
 		return 1;
 	}
 

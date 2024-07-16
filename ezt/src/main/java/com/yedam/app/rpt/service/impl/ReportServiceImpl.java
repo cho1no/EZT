@@ -77,9 +77,8 @@ public class ReportServiceImpl implements ReportService {
 	// 공사 보고 삭제
 	@Override
 	public int reportDelete(int fileId) {
-		int result = reportMapper.deleteCttInfo(fileId);
-
-		return result == 1 ? fileId : -1;
+		reportMapper.deleteCttInfo(fileId); // 프로시저
+		return fileId;
 	}
 
 	// 공사 보고 파일 조회
