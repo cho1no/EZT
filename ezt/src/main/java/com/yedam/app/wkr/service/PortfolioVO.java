@@ -12,6 +12,9 @@ public class PortfolioVO {
 	private String title; //제목
 	private String content; //내용
 	private String pyung; //평수
+	
+	private String pyungNm;
+	
 	private int price; //금액
 	private int usersNo; //유저번호
 	private int fileId; //파일아이디

@@ -45,6 +45,7 @@ public class AdminServiceImpl implements AdminService{
 		map.put("reqRegion", admMapper.selectReqRegionStatistics()); // 의뢰 지역별 통계
 		map.put("crrWaitCnt", admMapper.selectCrrAcptWaitCnt());
 		map.put("totalUsersCnt", admMapper.selectUsersCnt());
+		map.put("totalReqCnt", admMapper.selectReqCnt());
 		return map;
 	}
 	

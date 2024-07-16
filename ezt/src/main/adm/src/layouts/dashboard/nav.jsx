@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect, useContext } from 'react';
 
 import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 // import Button from '@mui/material/Button';
@@ -17,7 +18,6 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { account } from 'src/_mock/account';
 
-import Logo from 'src/components/logo';
 import Scrollbar from 'src/components/scrollbar';
 
 // eslint-disable-next-line import/no-cycle
@@ -83,8 +83,19 @@ export default function Nav({ openNav, onCloseNav }) {
         },
       }}
     >
-      <Logo sx={{ mt: 3, ml: 4 }} />
-
+      {/* <Logo sx={{ mt: 3, ml: 4 }} /> */}
+      <Link component={RouterLink} href="/" sx={{ display: 'contents' }}>
+        <h2
+          style={{
+            marginTop: 30,
+            marginLeft: 25,
+            marginBottom: 0,
+            color: '#637381',
+          }}
+        >
+          <span style={{ display: 'inline-block' }}>이지테리어</span>
+        </h2>
+      </Link>
       {renderAccount}
 
       {renderMenu}

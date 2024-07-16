@@ -20,6 +20,9 @@ public interface AdminMapper {
 	public int selectCrrAcptWaitCnt();
 	// 전체 유저 수 ( 일반유저, 작업자 )
 	public int selectUsersCnt();
+	// 전체 의뢰 수
+	public int selectReqCnt();
+	
 	
 	// 회원 정보 가져오기
 	public List<UserVO> selectUsers();

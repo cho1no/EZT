@@ -1,186 +1,360 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-<meta charset="UTF-8" />
-<th:block th:replace="common/configs/default_config :: ConfigFragment"></th:block>
-<scr th:insert="common/fragments/default_scr :: scrFragment"></scr>
-</head>
-<body id="top">
-	<div class="site-wrap">
-		<mobile th:insert="common/fragments/default_mobile :: mobileFragment"></mobile>
-		<header class="site-navbar mt-3"
-			th:insert="common/fragments/default_header :: headerFragment"></header>
-		<section class="section-hero inner-page"
-			style="background-color: white" id="home-section">
-		</section>
-		<section class="back-smooth"></section>
-	<section class="site-section">
-	<div class="container">
-		<div class="row">
-			<div class="col-3">
-				<div class="accordion accordion-flush " id="accordionFlushExample">
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button"
-								data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
-								aria-expanded="false" aria-controls="flush-collapseOne">
-								회원정보</button>
-						</h2>
-						<div id="flush-collapseOne" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/info">회원정보
-										조회</a></strong>
-							</div>
-						</div>
-						<div id="flush-collapseOne" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/update">회원정보
-										수정</a></strong>
-							</div>
-						</div>
-						<div id="flush-collapseOne" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/pwUpdate">비밀번호
-										변경</a></strong>
-							</div>
-						</div>
-					</div>
-					
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button"
-								data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo"
-								aria-expanded="false" aria-controls="flush-collapseTwo">
-								경력인증</button>
-						</h2>
-						<div id="flush-collapseTwo" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/careerList">경력증명서 목록</a></strong>
-							</div>
-						</div>
-						<div id="flush-collapseTwo" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/careerInsert">경력증명서 등록</a></strong>
-							</div>
-						</div>
-					</div>
-					
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button"
-								data-bs-toggle="collapse" data-bs-target="#flush-collapseThree"
-								aria-expanded="false" aria-controls="flush-collapseThree">
-								작업물 후기</button>
-						</h2>
-						<div id="flush-collapseThree" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/reviewList">후기 목록</a></strong>
-							</div>
-						</div>
-						<div id="flush-collapseThree" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/teamReviewList">팀 후기 목록</a></strong>
-							</div>
-						</div>
-					</div>
-					
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button"
-								data-bs-toggle="collapse" data-bs-target="#flush-collapseFour"
-								aria-expanded="false" aria-controls="flush-collapseFive">
-								견적서&계약서</button>
-						</h2>
-						
-						<div id="flush-collapseFour" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/proposalList">내가 쓴 견적서</a></strong>
-							</div>
-						</div>
-						<div id="flush-collapseFour" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/contractList">내가 쓴 계약서</a></strong>
-							</div>
-						</div>
-					</div>
-					
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button"
-								data-bs-toggle="collapse" data-bs-target="#flush-collapseFive"
-								aria-expanded="false" aria-controls="flush-collapseSix">
-								포트폴리오</button>
-						</h2>
-						<div id="flush-collapseFive" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/portfolioList">포트폴리오 목록</a></strong>
-							</div>
-						</div>
-						<div id="flush-collapseFive" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/portfolioInsert">포트폴리오 등록</a></strong>
-							</div>
-						</div>
-					</div>
-					
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button"
-								data-bs-toggle="collapse" data-bs-target="#flush-collapseSix"
-								aria-expanded="false" aria-controls="flush-collapseSeven">
-								자격증</button>
-						</h2>
-						<div id="flush-collapseSix" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/licenseList">자격증 목록</a></strong>
-							</div>
-						</div>
-						<div id="flush-collapseSix" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/licenseInsert">자격증 등록</a></strong>
-							</div>
-						</div>
-					</div>
-					
-					<div class="accordion-item">
-						<h2 class="accordion-header">
-							<button class="accordion-button collapsed" type="button"
-								data-bs-toggle="collapse" data-bs-target="#flush-collapseSeven"
-								aria-expanded="false" aria-controls="flush-collapseEight">
-								회원탈퇴</button>
-						</h2>
-						<div id="flush-collapseSeven" class="accordion-collapse collapse"
-							data-bs-parent="#accordionFlushExample">
-							<div class="accordion-body">
-								<strong><a class="nav-link" href="/worker/quit">회원탈퇴</a></strong>
-							</div>
-						</div>
-					</div>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <th:block
+      th:replace="common/configs/default_config :: ConfigFragment"
+    ></th:block>
+    <scr th:insert="common/fragments/default_scr :: scrFragment"></scr>
+    <style>
+      a.nav-link {
+        padding: 0;
+        font-size: 14px;
+      }
+      button.accordion-button {
+        padding: 12px 16px;
+      }
+      div.accordion-body {
+        padding: 12px 16px;
+      }
+    </style>
+  </head>
+  <body id="top">
+    <div class="site-wrap">
+      <mobile
+        th:insert="common/fragments/default_mobile :: mobileFragment"
+      ></mobile>
+      <header
+        class="site-navbar mt-3"
+        th:insert="common/fragments/default_header :: headerFragment"
+      ></header>
+      <section
+        class="section-hero inner-page"
+        style="background-color: white"
+        id="home-section"
+      ></section>
+      <section class="back-smooth"></section>
+      <section class="site-section pt-5 mt-5">
+        <div class="container">
+          <div class="p-5 border rounded-4 border-light-subtle bg-white">
+            <div
+              class="ezt-section-title pb-5 mb-5"
+              style="border-bottom: 1px solid #dee2e6"
+            >
+              <div class="text-center">
+                <h2 class="m-0">마이페이지</h2>
+                <b style="font-size: 14px; color: #89ba16">내 정보 조회하기</b>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3 pe-4">
+                <div
+                  class="accordion accordion-flush"
+                  id="accordionFlushExample"
+                >
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseOne"
+                      >
+                        회원정보
+                      </button>
+                    </h2>
+                    <div
+                      id="flush-collapseOne"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/info"
+                            >회원정보 조회</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                    <div
+                      id="flush-collapseOne"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/update"
+                            >회원정보 수정</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                    <div
+                      id="flush-collapseOne"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/pwUpdate"
+                            >비밀번호 변경</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                  </div>
 
-				</div>
-			</div>
-			<div class="col-9 pb-4">
-			<main layout:fragment="Content" ></main>
-			</div>
-		</div>
-		</div>
-		</section>
-		<footer class="site-footer"
-			th:insert="common/fragments/default_footer :: footerFragment"></footer>
-	</div>
-</body>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseTwo"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseTwo"
+                      >
+                        경력인증
+                      </button>
+                    </h2>
+                    <div
+                      id="flush-collapseTwo"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/careerList"
+                            >경력증명서 목록</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                    <div
+                      id="flush-collapseTwo"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/careerInsert"
+                            >경력증명서 등록</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseThree"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseThree"
+                      >
+                        작업물 후기
+                      </button>
+                    </h2>
+                    <div
+                      id="flush-collapseThree"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/reviewList"
+                            >후기 목록</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                    <div
+                      id="flush-collapseThree"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/teamReviewList"
+                            >팀 후기 목록</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseFour"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseFive"
+                      >
+                        견적서&계약서
+                      </button>
+                    </h2>
+
+                    <div
+                      id="flush-collapseFour"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/proposalList"
+                            >내가 쓴 견적서</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                    <div
+                      id="flush-collapseFour"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/contractList"
+                            >내가 쓴 계약서</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseFive"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseSix"
+                      >
+                        포트폴리오
+                      </button>
+                    </h2>
+                    <div
+                      id="flush-collapseFive"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/portfolioList"
+                            >포트폴리오 목록</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                    <div
+                      id="flush-collapseFive"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/portfolioInsert"
+                            >포트폴리오 등록</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseSix"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseSeven"
+                      >
+                        자격증
+                      </button>
+                    </h2>
+                    <div
+                      id="flush-collapseSix"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/licenseList"
+                            >자격증 목록</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                    <div
+                      id="flush-collapseSix"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/licenseInsert"
+                            >자격증 등록</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button
+                        class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseSeven"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseEight"
+                      >
+                        회원탈퇴
+                      </button>
+                    </h2>
+                    <div
+                      id="flush-collapseSeven"
+                      class="accordion-collapse collapse"
+                      data-bs-parent="#accordionFlushExample"
+                    >
+                      <div class="accordion-body">
+                        <strong
+                          ><a class="nav-link" href="/worker/quit"
+                            >회원탈퇴</a
+                          ></strong
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-9 px-4 pb-4">
+                <main layout:fragment="Content"></main>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer
+        class="site-footer"
+        th:insert="common/fragments/default_footer :: footerFragment"
+      ></footer>
+    </div>
+  </body>
 </html>
