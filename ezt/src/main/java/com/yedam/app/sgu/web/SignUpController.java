@@ -1,5 +1,8 @@
 package com.yedam.app.sgu.web;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.alm.service.AlarmVO;
+import com.yedam.app.alm.web.StompAlarmController;
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.common.service.SimpleFileService;
 import com.yedam.app.sgu.service.SignUpService;
@@ -36,6 +41,8 @@ public class SignUpController {
 	   SimpleFileService simpleFileService;
 	 @Autowired
 	   WorkerService workerService;
+	 
+	 @Autowired StompAlarmController sac;
 	// == 사용자 회원가입 ==
 	@GetMapping("signUp/joinUser")
     public String signUpUserForm(Model model) {
@@ -64,7 +71,18 @@ public class SignUpController {
         }
         //  주석풀어야 회원가입됨
          signUpService.joinUser(userVO);
+         
+         //회원가입후 축하알림
+         AlarmVO alarm = new AlarmVO();
+         alarm.setUsersNo(userVO.getUsersNo());
+         alarm.setTitle("환영합니다.");
+         Date today = new Date();
+         SimpleDateFormat sDFt = new SimpleDateFormat("yyyy년 MM월 dd일");
+         alarm.setContent(sDFt.format(today)+" 회원가입이 완료되었습니다.");
+         sac.message(alarm);
+         
         model.addAttribute("msg", "회원가입 완료!");
+        model.addAttribute("icon", "success");
         model.addAttribute("url", "/login");
         return "gongtong/message";
     }
@@ -107,7 +125,17 @@ public class SignUpController {
     	userVO.setLicenseVO(lvo);
     	signUpService.joinWorker(userVO);
     	
+    	//회원가입후 축하알림
+        AlarmVO alarm = new AlarmVO();
+        alarm.setUsersNo(userVO.getUsersNo());
+        alarm.setTitle("환영합니다.");
+        Date today = new Date();
+        SimpleDateFormat sDFt = new SimpleDateFormat("yyyy년 MM월 dd일");
+        alarm.setContent(sDFt.format(today)+" 회원가입이 완료되었습니다.");
+        sac.message(alarm);
+    	
     	model.addAttribute("msg", "회원가입 완료!");
+    	model.addAttribute("icon", "success");
     	model.addAttribute("url", "/sgi/login");
     	return "gongtong/message";
     }

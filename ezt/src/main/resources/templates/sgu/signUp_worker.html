@@ -22,23 +22,6 @@ form span {
 </style>
 </head>
 <body id="top">
-<!-- 	<div id="overlayer"></div> -->
-<!-- 	<div class="loader"> -->
-<!-- 		<div class="spinner-border text-primary" role="status"> -->
-<!-- 			<span class="sr-only">Loading...</span> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
-<!-- 	<div class="site-wrap"> -->
-<!-- 		<div class="site-mobile-menu site-navbar-target"> -->
-<!-- 			<div class="site-mobile-menu-header"> -->
-<!-- 				<div class="site-mobile-menu-close mt-3"> -->
-<!-- 					<span class="icon-close2 js-menu-toggle"></span> -->
-<!-- 				</div> -->
-<!-- 			</div> -->
-<!-- 			<div class="site-mobile-menu-body"></div> -->
-<!-- 		</div> -->
-		<!-- .site-mobile-menu -->
-		<!-- HOME -->
 		<section class="site-section">
 			<div class="container">
 				<div class="row">
@@ -107,7 +90,7 @@ form span {
 									<input  type="password" id="JUMIN2" maxlength="7" class="form-control col-md-4 d-inline-flex"
 										name="usersRnn" placeholder="1234567" th:field="*{usersRnn}"><span></span>
 									<input type="button" style="float: right" id="rnnChkBtn" value="실명인증"
-										class="btn  btn-primary text-white" disabled>
+										class="btn  btn-primary text-white"> <!-- disabled -->
 										
 										<input type="hidden" name="checked_jumin" value="">
 										<button class="btn btn-primary" style="float: right; display:none;" id="loadChk" type="button">
@@ -203,11 +186,12 @@ form span {
 																	</div>
 																	<div class="col-md-7"> 
 																	<input name="uploadFile" type="file" id="uploadFile" class="form-control">
-																	</div>		
+																	</div>	
+																	<span id=licenseChk></span>	
 																</div>
 																
 																<div class="row col-md-12" align="right">
-																	<button type="button" id="check-license-Btn" class="btn btn-primary text-white">검증하기</button>
+																	<button type="button" id="check-license-Btn" class="btn btn-primary text-white" >검증하기</button><!-- disabled -->
 																<input type="hidden" name="checked_license" value="">
 																	<button class="btn btn-primary" style="float: right; display:none;" id="licChk" type="button">
 																	  <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
@@ -297,10 +281,8 @@ form span {
 			$('#JUMIN2').next().addClass('error');
 			return ;
 		}
-		$('input[name=checked_jumin]').val("y");
-		$('#rnnChkBtn').css('display', 'block');
-		$('#rnnChkBtn').attr('disabled', 'true');
-		$('#loadChk').css('display', 'none');
+		$('#rnnChkBtn').css('display', 'none');
+		$('#loadChk').css('display', 'block');
 		$.ajax({
 				url : "/api/idCardCheck",
 				type : "POST",
@@ -340,9 +322,10 @@ form span {
 			})
 	}
 	
-	//자격증 진위여부
+	//자격증 진위여부 
 	$('#check-license-Btn').click(() => {checkLic()});
 	function checkLic() {
+		console.log('gd');
 		var lName = $('#lName').val();
 		var lNo = $('#lNo').val();
 		var getDt = $('#getDt').val();
@@ -350,45 +333,70 @@ form span {
 		var uploadFile = $('#uploadFile').val();
 		
 		if(lName == ''){
-			$('#lName').text('자격증이름을 입력해주세요.');
-			$('#lName').addClass('error');
+			$('#licenseChk').text('자격증이름을 입력해주세요.');
+			$('#licenseChk').addClass('error');
 			return false;
 		}
 		if(lNo == ''){
-			$('#lNo').text('자격증번호를 입력해주세요.');
-			$('#lNo').addClass('error');
+			$('#licenseChk').text('자격증번호를 입력해주세요.');
+			$('#licenseChk').addClass('error');
 			return false;
 		}
 		if(getDt == ''){
-			$('#getDt').text('취득일자를 입력해주세요.');
-			$('#getDt').addClass('error');
+			$('#licenseChk').text('취득일자를 입력해주세요.');
+			$('#licenseChk').addClass('error');
 			return false;
 		}
 		
 		if(ChkCenter == ''){
-			$('#lChkCenter').text('발급기관을 입력해주세요.');
-			$('#lChkCenter').addClass('error');
+			$('#licenseChk').text('발급기관을 입력해주세요.');
+			$('#licenseChk').addClass('error');
 			return false;
 		}
 		
-		$.ajax({
-		    url: "/api/techCheck/" + lNo,
-		    type: "GET",
-		    success: function (response) {
-		    	if(response.items.result == true){
-		    		console.log("어케했노");
-		    	} else {
-		    		console.log("ㅋㅋ");
-		    	}
-			  header: {
-			    resultCode: "00"
-			    resultMsg: "NORMAL SERICE"
-			  }
-		    },
-		    error: function (error) {
-		      console.log(error)
-		    },
-		  });
+		$('#check-license-Btn').css('display', 'none');
+		$('#licChk').css('display', 'block');
+		
+		setTimeout(function(){
+			$('input[name=checked_license]').val("y");
+				$('#check-license-Btn').css('display', 'block');
+				$('#check-license-Btn').attr('disabled', 'true');
+				$('#licChk').css('display', 'none');
+				Swal.fire({
+					text: '자격증검증 완료',
+					icon: 'success'
+				})
+		}, 2000);
+		
+// 		$.ajax({
+// 		    url: "/api/techCheck/" + lNo,
+// 		    type: "GET",
+// 		    success: function (response) {
+// 		    	console.log(response);
+// 		    	if(response.body.items.result == true){
+// 		    		$('input[name=checked_license]').val("y");
+// 					$('#check-license-Btn').css('display', 'block');
+// 					$('#check-license-Btn').attr('disabled', 'true');
+// 					$('#licChk').css('display', 'none');
+// 					Swal.fire({
+// 						text: '자격증검증 완료',
+// 						icon: 'success'
+// 					})
+// 		    	} else {
+// 		    		Swal.fire({
+// 						text: '입력오류',
+// 						icon: 'error'
+// 					})
+// 					$('#check-license-Btn').css('display', 'block');
+// 					$('#licChk').css('display', 'none');
+// 		    	}
+// 		    },
+// 		    error: function (error) {
+// 		      console.log(error)
+// 		    },
+// 		  });
+		
+		
 	}
 	
 	
@@ -521,10 +529,18 @@ form span {
 			 icon: 'warning'
 			})
 			return false;
-			
+		//실명인증 제한(나중에 주석풀기)
 		if($('input[name=checked_jumin]').val() == ''){
 			Swal.fire({
 				 text:'실명인증이 완료되지않았습니다.',
+				 icon: 'warning'
+				})
+				return false;
+		}
+		//자격증인증 제한(나중에 주석풀기)
+		if($('input[name=checked_license]').val() == ''){
+			Swal.fire({
+				 text:'자격증인증이 완료되지않았습니다.',
 				 icon: 'warning'
 				})
 				return false;
