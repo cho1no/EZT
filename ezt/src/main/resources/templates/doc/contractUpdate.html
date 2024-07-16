@@ -403,15 +403,15 @@
 
 
 	<script th:inline="javascript">
-	// 조회 데이터 표기
-	date = new Date();
-    year = date.getFullYear();
-    month = date.getMonth() + 1;
-    day = date.getDate();
 	
-    $('.cur_year').html(year + '년');
-    $('.cur_month').html(month + '월');
-    $('.cur_day').html(day + '일');
+	// 변수
+	var unity_origin = /*[[${unity.contractTermsContent}]]*/""
+	
+	// 날짜&통일 계약서 표시
+	window.onload = function(){
+		Curday();
+		UnityDoc();
+	}
 
     // 주소 표기
      if(/*[[${con.workerAddress}]]*/"" != null){
@@ -440,37 +440,6 @@
     		}
     	}
  	}
-    
-	// + 버튼 : tbody tr 추가
-	$('table thead button').on('click', addForm);
-	let num = 1;
-	function addForm(e){
-		$('.content').append(`<tr>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" 
-						onKeyup="this.value=this.value.replace(/[^-0-9]/g,'').replace('-','').replace(/^0+/, '');" 
-						value="0" maxlength="12" class="price_${num}" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" value='1900-01-01' /></td>
-				<td><input type="text" style="border: 0; width: 100%;" /></td>
-				<td><button type="button" class="btn btn-outline-dark" name="deleteBtn"
-					style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">-</button></td>
-			</tr>`);
-		num += 1;
-		addRound();
-	}
-	
-	function addRound(){
-		for(i=0; i < $('tbody tr').length; i++){
-	    	$('tbody tr:eq('+i+') td:eq(0) input').val(i + 1);
-	    }
-	}
-	
-	// - 버튼 : tbody tr 제거
-	$(document).on('click', 'button[name=deleteBtn]', function(e) {
-	    e.target.closest('tr').remove();
-	    //GetTotal();
-	    addRound();
-	});
 	
 	var contractNo = /*[[${con.contractNo}]]*/"";
 	
@@ -607,8 +576,7 @@ $('#saveModal').click(function(e) {
     $('input.output').val(compressedData);
 
     // 압축된 데이터 출력 (선택 사항)
-    //console.log(compressedData);
-   
+    //console.log(compressedData); 
 
     workNewSign = compressedData;
     signView(compressedData, 3);

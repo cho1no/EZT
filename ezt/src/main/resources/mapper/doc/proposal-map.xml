@@ -68,6 +68,7 @@
 		FROM proposal_detail
 		WHERE proposal_no =
 		#{proposalNo}
+		order by proposal_detail_no
 	</select>
 
 <!-- 견적서 등록 -->

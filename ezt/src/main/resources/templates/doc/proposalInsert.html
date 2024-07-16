@@ -13,7 +13,7 @@
 </head>
 <body>
 
-		<div class="container">
+		<div class="container pps">
 			<div class="row mb-5">
 					<form class="p-4 p-md-5 border rounded" id="ppsInsertForm" th:action="@{/ppsInsert}" method="post" th:object="${proposalVO}">
 					<div class="row form-group">
@@ -25,17 +25,17 @@
 						
 						<div class="row form-group">
 							<div class="col-2">
-							<b class="text-black">작성자ID</b> 
+							<b class="text-black">성명</b> 
 							</div>
 							<div class="col-3">
-							<p>[[${userInfo.usersId}]]</p>
+							<p>[[${userInfo.usersName}]]</p>
 							
 							</div>
 							<div class="col-3">
 								<b class="text-black">전화번호</b>
 							</div>
-							<div class="col-4">
-							<p>[[${userInfo.usersPhone}]]</p>
+							<div class="col">
+							<p id="user_phone">[[${userInfo.usersPhone}]]</p>
 							</div>
 						</div>
 						
@@ -44,17 +44,25 @@
 						<div class="row form-group">
 							<div class="col-6">
 								<label for="startDt"><b>공사시작날짜</b></label> <input type="text"
-									class="form-control" id="startDt" th:field="*{cttStartDt}" readonly placeholder="날짜 선택">
+									class="form-control bg-white" id="startDt" th:field="*{cttStartDt}" readonly placeholder="날짜 선택">
 							</div>
 							<div class="col-6">
 								<label for="endDt"><b>공사마감날짜</b></label> <input type="text"
-									class="form-control" id="endDt" th:field="*{cttEndDt}" readonly placeholder="날짜 선택">
+									class="form-control bg-white" id="endDt" th:field="*{cttEndDt}" readonly placeholder="날짜 선택">
 							</div>
 						</div>
 						<!-- datepicker -->
 						
-						<!-- postcode : id&onclick-->
+						
+						
 						<div class="row form-group" style="padding-top: 20px">
+							<div class="col-auto">
+								<b class="text-black fs-5 mb-2">[작업장 주소]</b>
+							</div>
+						</div>
+						
+						<!-- postcode : id&onclick-->
+						<div class="row form-group" style="padding-top: 10px">
 							<div class="col-auto">
 								<label for="postCode" style="margin: 0"><b>우편번호</b></label>
 							</div>
@@ -80,9 +88,11 @@
 						<!-- postcode -->
 						
 
-							<div class="form-floating" style="margin-top: 30px; margin-bottom: 30px">
-								<textarea th:field="*{comments}" class="form-control" placeholder="Leave a comment here" id="floatingTextarea" onkeyup="chkword(this,500);"></textarea>
-								<label for="floatingTextarea"><b>비고</b></label>
+							<div class="row form-group mt-4" style="margin-top: 30px; margin-bottom: 30px">
+								<div class="col">
+								<label ><b>비고</b></label>
+								<textarea th:field="*{comments}" class="form-control" onkeyup="chkword(this,500);"></textarea>
+								</div>
 							</div>
 						
 				</div>
@@ -94,16 +104,16 @@
                 <li class="mb-2"><strong class="text-black">공사공간 :</strong> [[${reqInfo.cttPlace}]]</li>
                 <li class="mb-2"><strong class="text-black">공사공간 면적 :</strong> [[${reqInfo.cttPlaceArea}]]</li>
                 <li class="mb-2"><strong class="text-black">공사공간 상황 :</strong> [[${reqInfo.cttPlaceSituation}]]</li>
-                <li class="mb-2"><strong class="text-black">희망 공사 예산 :</strong> [[${reqInfo.hopeCttBudget}]]</li>
+                <li class="mb-2"><strong class="text-black">희망 공사 예산 :</strong> [[${#numbers.formatInteger(reqInfo.hopeCttBudget,1,'COMMA')}]]</li>
                 <li class="mb-2"><strong class="text-black">희망 공사 시작일 :</strong> [[${#dates.format(reqInfo.hopeCttStartDt, 'yyyy-MM-dd')}]]</li>
                 <li class="mb-2"><strong class="text-black">희망 공사 종료일 :</strong> [[${#dates.format(reqInfo.hopeCttEndDt, 'yyyy-MM-dd')}]]</li>
                 <li class="mb-2"><strong class="text-black">내용</strong></li>
-                <li class="mb-2">[[${reqInfo.content}]]</li>
+                <li class="mb-2">[(${reqInfo.content})]</li>
               </ul>
             </div>
             </div>
             </div>
-				<table class="table table-hover">
+				<table class="table table-hover" id="pps_table">
 							<thead>
 								<tr class="text-center">
 									<th scope="col" width="120px">품명</th>
@@ -130,7 +140,7 @@
 					<div class="row">
 						<div class="col-6"></div>
 						<div class="col-6">
-							<button type="submit" class="btn btn-block btn-primary btn-md" form="ppsInsertForm">저장</button>
+							<button type="submit" class="btn btn-block btn-primary btn-md" form="ppsInsertForm">작성</button>
 						</div>
 					</div>
 				</div>
@@ -138,13 +148,19 @@
 		</div>
 	
 	
-	<script>
+	<script th:inline="javascript">
+	
+	// 변수
+	var phone = /*[[${userInfo.usersPhone}]]*/"";
+	
+	// 웹 페이지 로드 된 후
+	window.onload = function(){
+		userPhone();
+	};
 	
 	$('button[type="submit"]').on('click', function(e) {
-		
 		dataProcessPps();
-
-	});
+	});	
 
 	</script>
 	<!-- datepicker -->

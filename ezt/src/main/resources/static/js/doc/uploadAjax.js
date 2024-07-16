@@ -26,13 +26,17 @@ function nameList() {
 	$('.uploadResult ul li').remove();
 	$('.uploadResult ul').attr("style", "padding:0");
 	var inp = document.getElementById("multiFile");
-	for (var i = 0; i < inp.files.length; ++i) {
-		var name = inp.files.item(i).name;
-		uploadResult.append("<li style='list-style:none'>" + ' - ' + name + "</li>");
+
+	if (inp.files.length > 5) {
+		sweetAlertError("파일 개수가 초과되었습니다.");
+		document.getElementById("multiFile").value = "";
+	} else {
+		for (var i = 0; i < inp.files.length; ++i) {
+			var name = inp.files.item(i).name;
+			uploadResult.append("<li style='list-style:none'>" + ' - ' + name + "</li>");
+		}
 	}
-
 }
-
 
 // 업로드&전송
 $('#uploadBtn').on("click", function() {
@@ -74,7 +78,7 @@ $('#uploadBtn').on("click", function() {
 		showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
 		confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
 		cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-		confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+		confirmButtonText: '전송', // confirm 버튼 텍스트 지정
 		cancelButtonText: '취소', // cancel 버튼 텍스트 지정
 
 	}).then(result => {
@@ -92,7 +96,7 @@ $('#uploadBtn').on("click", function() {
 			})
 			Swal.fire({
 				icon: "success",
-				title: "승인 완료되었습니다",
+				title: "전송 완료되었습니다",
 				allowOutsideClick: false
 			}).then(e => {
 				// 만약 Promise리턴을 받으면,

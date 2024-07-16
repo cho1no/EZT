@@ -117,8 +117,8 @@ public class ProposalServiceImpl implements ProposalService {
 	// 견적서 승인
 	@Override
 	public int ppsApprove(ProposalVO proposalVO) {
-		int result = ppsMapper.approvePpsInfo(proposalVO);
-		return result == 1 ? proposalVO.getProposalNo() : -1;
+		ppsMapper.approvePpsInfo(proposalVO);
+		return 1;
 	}
 
 }

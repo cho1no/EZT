@@ -14,7 +14,7 @@
 </head>
 <body>
 
-		<div class="container">
+		<div class="container pps">
 			<div class="row mb-5">
 				<form class="p-4 p-md-5 border rounded" name="updateForm"
 					id="ppsUpdateForm" th:action="@{/ppsUpdate}" method="post"
@@ -32,17 +32,17 @@
 								type="hidden" name="proposalNo" th:value="${ppsInfo.proposalNo}">
 							<div class="row form-group">
 								<div class="col-2">
-									<b class="text-black">작성자ID</b>
+									<b class="text-black">성명</b>
 								</div>
 								<div class="col-3">
-									<p>[[${userInfo.usersId}]]</p>
+									<p>[[${userInfo.usersName}]]</p>
 
 								</div>
 								<div class="col-3">
 									<b class="text-black">전화번호</b>
 								</div>
 								<div class="col-4">
-									<p>[[${userInfo.usersPhone}]]</p>
+									<p id="user_phone"></p>
 								</div>
 							</div>
 
@@ -51,27 +51,33 @@
 							<div class="row form-group">
 								<div class="col-6">
 									<label for="startDt"><b>공사시작날짜</b></label> <input type="text"
-										name="cttStartDt" class="form-control" id="startDt"
+										name="cttStartDt" class="form-control bg-white" id="startDt"
 										th:value="${#dates.format(ppsInfo.cttStartDt, 'yyyy-MM-dd')}"
 										readonly placeholder="날짜 선택">
 								</div>
 								<div class="col-6">
 									<label for="endDt"><b>공사마감날짜</b></label> <input type="text"
-										name="cttEndDt" class="form-control" id="endDt"
+										name="cttEndDt" class="form-control bg-white" id="endDt"
 										th:value="${#dates.format(ppsInfo.cttEndDt, 'yyyy-MM-dd')}"
 										readonly placeholder="날짜 선택">
 								</div>
 							</div>
 							<!-- datepicker -->
 
-							<!-- postcode : id&onclick-->
 							<div class="row form-group" style="padding-top: 20px">
+								<div class="col-auto">
+									<b class="text-black fs-5 mb-2">[작업장 주소]</b>
+								</div>
+							</div>
+
+							<!-- postcode : id&onclick-->
+							<div class="row form-group" style="padding-top: 10px">
 								<div class="col-auto">
 									<label for="postCode" style="margin: 0"><b>우편번호</b></label>
 								</div>
 								<div class="col-4">
-									<input type="text" class="form-control" id="input_postcode"
-										name="workerPostcode" th:value="${ppsInfo.workerPostcode}">
+									<input type="text" class="form-control bg-white" id="input_postcode"
+										name="workerPostcode" th:value="${ppsInfo.workerPostcode}" readonly>
 								</div>
 								<div class="col-auto">
 									<button type="button" class="btn btn-primary"
@@ -81,8 +87,8 @@
 							<div class="row form-group">
 								<div class="col-12">
 									<label for="addr"><b>주소</b></label> <input type="text"
-										class="form-control" id="input_addr" name="workerAddress"
-										th:value="${ppsInfo.workerAddress}">
+										class="form-control bg-white" id="input_addr" name="workerAddress"
+										th:value="${ppsInfo.workerAddress}" readonly>
 								</div>
 							</div>
 							<div class="row form-group">
@@ -95,11 +101,12 @@
 							</div>
 							<!-- postcode -->
 
-							<div class="form-floating"
+							<div class="row form-group"
 								style="margin-top: 30px; margin-bottom: 30px">
-								<textarea name="comments" class="form-control"
-									placeholder="Leave a comment here" id="floatingTextarea" onkeyup="chkword(this,500);">[[${ppsInfo.comments}]]</textarea>
-								<label for="floatingTextarea"><b>비고</b></label>
+								<div class="col">
+								<label><b>비고</b></label>
+								<textarea name="comments" class="form-control" onkeyup="chkword(this,500);">[[${ppsInfo.comments}]]</textarea>
+								</div>
 							</div>
 
 						</div>
@@ -112,11 +119,11 @@
 									<li class="mb-2"><strong class="text-black">공사공간
 											:</strong> [[${reqInfo.cttPlace}]]</li>
 									<li class="mb-2"><strong class="text-black">공사공간
-											면적 :</strong> [[${reqInfo.cttPlaceArea}]]</li>
+											면적 :</strong> [[${reqInfo.cttPlaceArea + '평'}]]</li>
 									<li class="mb-2"><strong class="text-black">공사공간
 											상황 :</strong> [[${reqInfo.cttPlaceSituation}]]</li>
 									<li class="mb-2"><strong class="text-black">희망 공사
-											예산 :</strong> [[${reqInfo.hopeCttBudget}]]</li>
+											예산 :</strong> [[${#numbers.formatInteger(reqInfo.hopeCttBudget,1,'COMMA')}]]</li>
 									<li class="mb-2"><strong class="text-black">희망 공사
 											시작일 :</strong> [[${#dates.format(reqInfo.hopeCttStartDt,
 										'yyyy-MM-dd')}]]</li>
@@ -129,7 +136,7 @@
 							</div>
 						</div>
 					</div>
-					<table class="table table-hover">
+					<table class="table table-hover" id="pps_table">
 						<thead>
 							<tr class="text-center">
 								<th scope="col" width="120px">품명</th>
@@ -194,15 +201,18 @@
 	
 
 	<script th:inline="javascript">
+	// 변수
+	var phone = /*[[${userInfo.usersPhone}]]*/""
+	
 	// 기존 상세 내역에 클래스&함수 추가 || 내역 바탕으로 총 예상금액 계산
 	let num_ = 1;
-	for(i=0; i < $('tbody tr').length; i++){
+	for(i=0; i < $('#pps_table tbody tr').length; i++){
 
-    	$('tbody tr:eq('+i+') td:eq(3) input').addClass("qty_"+num_);
-    	$('tbody tr:eq('+i+') td:eq(3) input').attr("onKeyup", "inputNumberFormat(this); GetSum("+num_+")");
-    	$('tbody tr:eq('+i+') td:eq(4) input').addClass("price_"+num_);
-    	$('tbody tr:eq('+i+') td:eq(4) input').attr("onKeyup", "inputNumberFormat(this); GetSum("+num_+")");
-    	$('tbody tr:eq('+i+') td:eq(5) input').addClass("result_"+num_);
+    	$('#pps_table tbody tr:eq('+i+') td:eq(3) input').addClass("qty_"+num_);
+    	$('#pps_table tbody tr:eq('+i+') td:eq(3) input').attr("onKeyup", "inputNumberFormat(this); GetSum("+num_+")");
+    	$('#pps_table tbody tr:eq('+i+') td:eq(4) input').addClass("price_"+num_);
+    	$('#pps_table tbody tr:eq('+i+') td:eq(4) input').attr("onKeyup", "inputNumberFormat(this); GetSum("+num_+")");
+    	$('#pps_table tbody tr:eq('+i+') td:eq(5) input').addClass("result_"+num_);
 
     	num_ += 1;
     }
@@ -211,6 +221,7 @@
 	window.onload = function(){
 		GetTotal();
     	num = num_;
+    	userPhone();
 	}
 	
 	// 날짜 : 입력 안 함 = '1900-01-01' => 빈 값 처리
