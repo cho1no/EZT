@@ -21,4 +21,8 @@ public class MainController {
 	public String noAddr() {
 		return "redirect:/main";
 	}
+	@GetMapping("admin")
+	public String admin() {
+		return "forward:/adm/index.html";
+	}
 }
