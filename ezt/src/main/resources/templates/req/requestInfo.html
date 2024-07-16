@@ -67,7 +67,7 @@
       <form name="infoForm" th:object="${request}" class="row">
         <div class="d-flex mb-3">
           <h3 class="me-auto p-2">의뢰 상세 정보</h3>
-		  <th:block th:if="${#authentication.principal.userNo == request.requester}">
+		  <th:block sec:authorize="isAuthenticated()" th:if="${#authentication.principal.userNo == request.requester}">
           <div class="p-2">
             <button type="button" class="btn btn-secondary upBtn update">
               수정
@@ -86,26 +86,32 @@
 		  	<button type="button" class="btn btn-primary" th:onClick="|location.href='@{/ppsInsert(requestNo=${request.requestNo})}'|">견적서 쓰기</button>
 		  </th:block>
         </div>
-        <div class="col-lg-6 col-md-12">
-          <div class="slide-container swiper">
-            <div class="slide-content">
-              <div class="card-wrapper swiper-wrapper">
-                <th:block th:each="img :${request.fileVO}">
-              
-                  <div class="card swiper-slide">
-                    <img
-                      class="img"
-                      th:src="|@{${'/display?fileName=' + img.savePath.replaceAll('\\','/') +'/'+ img.saveName + '_' + img.originalFileName + '.' + img.ext}}|"
-                    />
-                  </div>
-                </th:block>
-              </div>
-              <div class="swiper-button-next swiper-navBtn"></div>
-              <div class="swiper-button-prev swiper-navBtn"></div>
-              <div class="swiper-pagination"></div>
-            </div>
-          </div>
-        </div>
+        <th:block  th:if="${request.fileId != 0}"  >
+	        <div class="col-lg-6 col-md-12">
+	          <div class="slide-container swiper">
+	            <div class="slide-content">
+	              <div class="card-wrapper swiper-wrapper">
+	                <th:block th:each="img :${request.fileVO}">
+	                  <div class="card swiper-slide">
+	                    <img
+	                      class="img"
+	                      th:src="|@{${'/display?fileName=' + img.savePath.replaceAll('\\','/') +'/'+ img.saveName + '_' + img.originalFileName + '.' + img.ext}}|"
+	                    />
+	                  </div>
+	                </th:block>
+	              </div>
+	              <div class="swiper-button-next swiper-navBtn"></div>
+	              <div class="swiper-button-prev swiper-navBtn"></div>
+	              <div class="swiper-pagination"></div>
+	            </div>
+	          </div>
+	        </div>
+        </th:block>
+        <th:block>
+	        <div class="col-lg-6 col-md-12" th:unless="${request.fileId != 0}">
+	        	<img class="img" th:src="@{/images/req/default_img.png}"/>
+	        </div>
+        </th:block>
         <div class="col-lg-6 col-md-12">
           <table id="info" class="table">
             <tr style="display: none">
@@ -279,7 +285,8 @@
     
     
     <!-- 견적서 -->
-    <div class="row gap-2" th:if="${#authentication.principal.userVO.usersRole == 'ROLE_WORKER' or #authentication.principal.userNo == request.requester}">
+    <div class="row gap-2" sec:authorize="isAuthenticated()"
+    	 th:if="${#authentication.principal.userVO.usersRole == 'ROLE_WORKER' or #authentication.principal.userNo == request.requester}">
       <div class="d-flex justify-content-between">
         <div>
           <h4>견적서</h4>
@@ -357,7 +364,9 @@
     </div>
     <!-- 견적서 -->
     <!-- 계약서 -->
-    <div th:if="${#authentication.principal.userNo == request.requester or #authentication.principal.userNo == contract.workerInfo}">
+    <th:block th:if="${contract != null}">
+    <div sec:authorize="isAuthenticated()" 
+    	 th:if="${#authentication.principal.userNo == request.requester or #authentication.principal.userNo == contract.workerInfo}">
     <div class="row">
       <div th:if="${contract == null}">
         <p>체결 된 계약건이 아직 없습니다.</p>
@@ -443,7 +452,8 @@
         <div>
           <h4>공사보고</h4>
         </div>
-        <div>
+        <div sec:authorize="isAuthenticated()" 
+    	 	th:if="${#authentication.principal.userNo == contract.workerInfo}">
           <button type="button" class="btn btn-secondary" th:onClick="'window.reportInsertForm(' + ${contract.contractNo} + ')'">
             공사 보고 작성
           </button>
@@ -471,8 +481,8 @@
       </table>
     </div>
     </th:block>
-    
-  </div>
+    </div>
+    </th:block>
     <div class="row">
       <button
         type="button"
