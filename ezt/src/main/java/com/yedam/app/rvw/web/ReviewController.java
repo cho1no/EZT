@@ -26,7 +26,6 @@ import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewService;
 import com.yedam.app.rvw.service.ReviewVO;
-import com.yedam.app.rvw.service.WorkerReplyVO;
 import com.yedam.app.sgi.service.LoginUserVO;
 //리뷰 CRUD 및 댓글 CRUD
 @RequestMapping("review")
@@ -58,11 +57,10 @@ public class ReviewController {
 	//리뷰 상세조회
 	@GetMapping("/info")
 	public String reviewInfo(ReviewVO reviewVO,
-							 WorkerReplyVO replyVO,  
 							 Model model) {
 		//리뷰 조회
 		ReviewVO findVO = reviewService.reviewInfo(reviewVO);
-		if(findVO.getFileVO().isEmpty()) {
+		if(findVO.getFileVO() != null && findVO.getFileVO().isEmpty()) {
 			findVO.setFileVO(null);
 		}
 		model.addAttribute("review",findVO);
@@ -71,10 +69,6 @@ public class ReviewController {
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
 		model.addAttribute("cttPlace", commonCodeService.selectCommonCodeAll("0P"));
 		model.addAttribute("regionCode", commonCodeService.selectCommonCodeAll("0B"));
-		
-		//댓글 조회
-		WorkerReplyVO reply = reviewService.replyInfo(replyVO);			
-		model.addAttribute("reply",reply);
 		
 		return "rvw/reviewInfo";
 	}
@@ -167,33 +161,6 @@ public class ReviewController {
 		
 		return new ResponseEntity<String>("deleted", HttpStatus.OK);
 	}
-	//댓글 등록
-	@GetMapping("/replyInsert")
-	public String replyInsert(Model model) {
-
-		model.addAttribute("replyVO", new WorkerReplyVO());
-
-		return "rvw/reviewInsert";
-	}
 	
-	@PostMapping("/replyInsert")
-	public String replyInsert(WorkerReplyVO replyVO) {
-		reviewService.insertReply(replyVO);
-		return "redirect:list";
-	}
-	
-	//댓글 수정
-	@PostMapping("/replyUpdate")
-	@ResponseBody
-	public boolean replyUpdate(@RequestBody WorkerReplyVO replyVO) {
-		return reviewService.updateReply(replyVO);
-	}
-	
-	//댓글 삭제
-	@GetMapping("/replyDelete")
-	public String replyDelete(Integer workerReplyNo) {
-		reviewService.deleteReply(workerReplyNo);
-		return "rvw/reviewInfo";
-	}
 	
 }

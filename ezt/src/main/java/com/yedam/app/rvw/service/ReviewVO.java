@@ -18,6 +18,10 @@ public class ReviewVO {
 	private Date writeDt;	//작성일시
 	private String reviewDivision;	//리뷰구분(1차후기(F), 하자보수후기(S) 여부 )
 	private int fileId;	//파일아이디
+	private String originalFileName;
+	private String savePath;
+	private String saveName;
+	private String ext;
 	
 	//조인컬럼
 	private String regionCode; //지역카테고리

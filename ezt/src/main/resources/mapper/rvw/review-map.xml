@@ -39,6 +39,8 @@ FROM (
 				,r.review_division
 				,r.file_id
 	            ,f.save_name
+	            ,f.original_file_name
+	            ,f.save_path
 	            ,f.ext
 	            
 		  FROM review r
@@ -166,59 +168,4 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	WHERE review_no = #{reviewNo}
 </delete>
 
-
-
-<!-- 댓글 조회 -->
-<select id="replyInfo" resultType="WorkerReplyVO">
-	SELECT  worker_reply_no
-			,review_no
-			,writer
-			,reply
-			,write_dt
-	FROM worker_reply
-	WHERE review_no = #{reviewNo}
-</select>
-
-<!-- 댓글 등록 -->
-<insert id="insertReply" parameterType="WorkerReplyVO">
-	<selectKey	keyProperty="workerReplyNo"
-				resultType="Integer"
-				order="BEFORE">
-		SELECT seq_workerReply.NEXTVAL
-		FROM dual
-	</selectKey>
-	
-	INSERT worker_reply
-	(
-		 worker_reply_no
-		,review_no
-		,writer
-		,reply
-		,write_dt
-	)
-	
-	VALUES
-	(
-		#{workerReplyNo}
-		,#{reviewNo}
-		,#{writer}
-		,#{reply}
-		,sysdate
-	)
-</insert>
-
-<!-- 댓글 수정 -->
-<update id="updateReply" parameterType="WorkerReplyVO">
-	UPDATE worker_reply
-	
-	SET reply = #{reply}
-	
-	WHERE worker_reply_no = #{workerReplyNo}
-</update>
-
-<!-- 댓글 삭제 -->
-<delete id="deleteReply" parameterType="int">
-	DELETE FROM worker_reply
-	WHERE worker_reply_no = #{WorkerReplyNo}
-</delete>
 </mapper>
