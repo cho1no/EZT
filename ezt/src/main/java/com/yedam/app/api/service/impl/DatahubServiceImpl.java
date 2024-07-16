@@ -27,9 +27,9 @@ public class DatahubServiceImpl implements DatahubService {
 	String url = "https://datahub-dev.scraping.co.kr";
 	String token = "Token 2298765cdff24a0bb29446391b18b157f9b96871";
 
-	String encSpec = "AES/CBC/PKCS5PADDING/256";
+	String encSpec = "AES/CBC/PKCS5Padding";
 	String encKey = "35z8@J!2A!=!hk9g#Mkt2A3gANMJh9KA"; // 32 bytes key
-	String encIV = "/#zx9#ksAvvzv92gd"; // 16 bytes IV
+	String encIV = "#zx9#ksAvvzv92gd"; // 16 bytes IV
 	@Autowired
 	WebClient webClient;
 
@@ -37,9 +37,14 @@ public class DatahubServiceImpl implements DatahubService {
 	public Mono<Map> idCardCheck(Map<String, String> map) {
 		String postUrl = "/scrap/docInq/gov/ResidentPromotionCommittee";
 
+		log.info(map.toString());
 		for (String key : map.keySet()) {
 			map.put(key, getEncStr(map.get(key)));
 		}
+		log.info(map.toString());
+		
+		
+//		return null;
 		return webClient.post()         // POST method
 		        .uri(url+postUrl)    // baseUrl 이후 uri
 		        .header(HttpHeaders.AUTHORIZATION, token)

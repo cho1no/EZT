@@ -37,7 +37,7 @@ public class FindController {
 	@Autowired
 	FindWorkerMapper fwMap;
 	
-	//작업자 찾기
+	//작업자 찾기페이지(목록)
 	@GetMapping("/workerList")
 	public String findWorker(Model model, FindWorkerCriteria cri) {
 		List<UserVO> list = userService.selectFindWorkerList(cri);
