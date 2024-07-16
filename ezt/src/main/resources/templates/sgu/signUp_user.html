@@ -147,6 +147,16 @@ form span {
 	$('.page-title').text('회원가입');
 	$('.page-desc').text('사용자');
 	
+	/*
+	checkJumin();
+	
+	function checkJumin(){
+		$('#JUMIN2').on("change", function(){
+			
+		})
+	}*/
+	
+	
 	//주민등록증 진위여부
 	$('#rnnChkBtn').click(() => {checkRnn()});
 	function checkRnn(){
@@ -158,6 +168,12 @@ form span {
 		//console.log(userName, rnn, issuDate);
 		if(userName == ''){
 			$('#juminChk').text('성명을 입력해주세요.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
+		var reqExpUsrNm = /^[가-힣]*$/;
+		if(!reqExpUsrNm.test(userName)){
+			$('#juminChk').text('성명은 한글로 올바르게 입력해주세요.');
 			$('#juminChk').addClass('error');
 			return false;
 		}
@@ -203,8 +219,23 @@ form span {
 			$('#juminChk').addClass('error');
 			return false;
 		}
-		$('#rnnChkBtn').css('display', 'none');
-		$('#loadChk').css('display', 'block');
+		
+		var juChk = $('#JUMIN2');
+		$.ajax({
+			type : "get",
+			url : "/signUp/checkRnn/"+juChk.val(),
+			success : function(dt) {
+				if (dt == '중복') {
+					$('#juminChk').text('주민번호가 이미존재합니다.')
+					$('#juminChk').addClass('error')
+					return false;
+				}else{
+					$('#juminChk').text('')
+					$('#juminChk').removeClass('error')
+					$('#rnnChkBtn').css('display', 'none');
+					$('#loadChk').css('display', 'block');
+		
+		
 		
 //		실명인증api(횟수제한,실검증시 주석해제)
 // 		$.ajax({
@@ -245,6 +276,10 @@ form span {
 // 					$('#loadChk').css('display', 'block');
 // 				}
 // 			})
+				}
+			}
+		})
+		
 	}
 	
 	//전화번호

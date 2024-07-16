@@ -45,6 +45,12 @@
 		FROM users
 		WHERE users_nick = #{usersNick}
 	</select>
+	
+	<select id="rnnChk" resultType="int">
+		SELECT COUNT(*)
+		FROM users
+		WHERE users_rnn = #{usersRnn}
+	</select>
 	<!-- 사용자 회원가입 -->
 	<insert id="saveUser" parameterType="com.yedam.app.usr.service.UserVO">
 		<selectKey keyProperty="usersNo" resultType="Integer" order="BEFORE">
