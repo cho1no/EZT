@@ -19,14 +19,14 @@
 	
 	<select id="selectReqCategoryStatistics" resultType="java.util.HashMap">
 		SELECT COUNT(*) num
-		        , FIND_COMMONCODE(category_code) category
+		        , NVL(FIND_COMMONCODE(category_code), 'ERROR') category
 		FROM request
 		GROUP BY category_code
 		ORDER BY category_code
 	</select>
 	<select id="selectReqRegionStatistics" resultType="java.util.HashMap">
 		SELECT COUNT(*) num
-        		, FIND_COMMONCODE(region_code) region
+        		, NVL(FIND_COMMONCODE(region_code), 'ERROR') region
 		FROM request
 		GROUP BY region_code
 	</select>
@@ -40,7 +40,10 @@
 		FROM users
 		WHERE users_role IN ('ROLE_USER', 'ROLE_WORKER')
 	</select>
-	
+	<select id="selectReqCnt" resultType="int">
+		SELECT COUNT(*) num
+		FROM request
+	</select>
 	<!-- 의뢰 관련 -->
 	<select id="selectRequests" resultType="RequestVO">
 		SELECT r.request_no

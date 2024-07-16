@@ -33,6 +33,7 @@
   flex-direction: column;
   overflow: hidden;
   text-align: start !important;
+  z-index: 999999;
 }
 .alarm-body {
   padding: 10px;

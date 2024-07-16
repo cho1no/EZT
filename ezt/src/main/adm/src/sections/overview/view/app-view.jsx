@@ -1,21 +1,21 @@
 import axios from 'axios';
-import { faker } from '@faker-js/faker';
+// import { faker } from '@faker-js/faker';
 import { useState, useEffect } from 'react';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 
-import Iconify from 'src/components/iconify';
+// import Iconify from 'src/components/iconify';
 import Spinner from 'src/components/spinner/spinner';
 
-import AppTasks from '../app-tasks';
-import AppNewsUpdate from '../app-news-update';
-import AppOrderTimeline from '../app-order-timeline';
+// import AppTasks from '../app-tasks';
+// import AppNewsUpdate from '../app-news-update';
+// import AppOrderTimeline from '../app-order-timeline';
 import AppCurrentVisits from '../app-current-visits';
 import AppWebsiteVisits from '../app-website-visits';
 import AppWidgetSummary from '../app-widget-summary';
-import AppTrafficBySite from '../app-traffic-by-site';
+// import AppTrafficBySite from '../app-traffic-by-site';
 // import AppCurrentSubject from '../app-current-subject';
 import AppConversionRates from '../app-conversion-rates';
 
@@ -122,7 +122,7 @@ export default function AppView() {
           />
         </Grid>
 
-        <Grid container xs={12} sm={12} md={4} spacing={3}>
+        <Grid container xs={12} sm={12} md={4} spacing={2}>
           <Grid xs={12} sm={4} md={12}>
             <AppWidgetSummary
               title="전체 유저"
@@ -143,10 +143,11 @@ export default function AppView() {
           </Grid>
           <Grid xs={12} sm={4} md={12}>
             <AppWidgetSummary
-              title="Bug Reports"
-              total={234}
+              title="전체 의뢰 수"
+              total={statistic.totalReqCnt}
+              addText="건"
               color="error"
-              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
+              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
             />
           </Grid>
         </Grid>
@@ -170,7 +171,7 @@ export default function AppView() {
           />
         </Grid>
 
-        <Grid xs={12} md={6} lg={8}>
+        {/* <Grid xs={12} md={6} lg={8}>
           <AppNewsUpdate
             title="News Update"
             list={[...Array(5)].map((_, index) => ({
@@ -240,7 +241,7 @@ export default function AppView() {
               { id: '5', name: 'Sprint Showcase' },
             ]}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
     </Container>
   );

@@ -264,10 +264,29 @@
 		SELECT c.*
 		FROM (SELECT ROWNUM as rn
 			  		, a.*
-			  FROM (SELECT *
-					FROM portfolio
-					WHERE users_no = #{usersNo}
-					ORDER BY write_dt DESC)  a 
+			  FROM (SELECT p.PORTFOLIO_NO
+							,p.TITLE
+							,p.CONTENT
+							,p.PYUNG
+							,p.PRICE
+							,p.USERS_NO
+							,p.FILE_ID
+							,p.WRITE_DT
+							,p.UPDATE_DT
+							,p.WORK_TIME
+							,p.CATEGORY_CODE
+							,FIND_COMMONCODE(p.pyung) pyung_nm
+							,f.save_path
+							,f.save_name
+							,f.original_file_name
+							,f.ext
+					FROM portfolio p
+					JOIN (SELECT *
+				            FROM file_detail_info
+				            WHERE boss_tf = 'Y') f
+				      ON p.file_id = f.file_id
+					WHERE p.users_no = #{usersNo}
+					ORDER BY p.write_dt DESC)  a 
 			  ) c
 			<![CDATA[
 			WHERE c.rn <= #{pageNum} * #{amount} AND
