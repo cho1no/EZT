@@ -206,8 +206,8 @@ public class ContractServiceImpl implements ContractService {
 	// 동업 계약서 등록
 	@Override
 	public int ptnConInsert(PartnershipContractVO partnershipContractVO) {
-		int result = conMapper.InsertPartnerCon(partnershipContractVO);
-		return result == 1 ? partnershipContractVO.getContractNo() : -1;
+		conMapper.InsertPartnerCon(partnershipContractVO); // 프로시저
+		return partnershipContractVO.getContractNo();
 	}
 	// 동업 계약서 조회
 	@Override

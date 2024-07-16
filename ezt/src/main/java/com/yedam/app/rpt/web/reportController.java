@@ -197,6 +197,7 @@ public class reportController {
 	@GetMapping("rptApprove")
 	@ResponseBody
 	public int rtpApprove(int cttReportNo, int workerNo) {
+		reportService.reportApprove(cttReportNo);
 		CttReportVO cvo = reportService.reportSelect(cttReportNo);
 		
 		AlarmVO alarm = new AlarmVO();

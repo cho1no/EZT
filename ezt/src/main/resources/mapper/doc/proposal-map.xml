@@ -185,7 +185,7 @@
 	
 	
 	<!-- 파일 정보 DB&견적서 삭제 -->
-	<delete id="deleteFileInfo" statementType="CALLABLE">
+	<delete id="deleteFileInfo" statementType="CALLABLE" parameterType="int">
 		{CALL
 			delete_file_id(#{fileId})
 			}

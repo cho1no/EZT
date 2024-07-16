@@ -52,7 +52,7 @@ $('#reportModal').on('show.bs.modal', function() {
 })
 $('#reportModal').on('hide.bs.modal', function() {
 	$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
-	$('#reportModal .uploadResult .row div').remove();
+	$('#reportModal .uploadModal .row div').remove();
 	$('.bigPictureWrapper').hide();
 })
 $('#reportInfoModal').on('show.bs.modal', function() {
@@ -61,7 +61,7 @@ $('#reportInfoModal').on('show.bs.modal', function() {
 $('#reportInfoModal').on('hide.bs.modal', function() {
 	$('.smoothscroll.scroll-top').removeAttr('style', 'display:none');
 	$(this).find('form')[0].reset();
-	$('#reportInfoModal .uploadResult .row div').remove();
+	$('#reportInfoModal .uploadModal .row div').remove();
 	$('.bigPictureWrapper').hide();
 })
 
@@ -82,7 +82,7 @@ var uploadFiles = '';
 function fileUploadClick() {
 
 	$('input[name="uploadFile"]').val('');
-	$('.uploadResult .row div').remove();
+	$('.uploadModal .row div').remove();
 };
 
 // 파일 삭제
@@ -96,7 +96,7 @@ function fileDelete(uploadFiles) {
 	})
 }
 // 이미지 등록
-function fileList() {
+function modalFileList() {
 
 	var x = document.getElementById("multiFile");
 
@@ -142,7 +142,7 @@ function fileList() {
 		type: 'Post',
 		dataType: 'JSON'
 		, success: function(result) {
-			showUpFile(result);
+			reportShowUpFile(result);
 			if (result != null) {
 				uploadFiles = result;
 			}
@@ -150,16 +150,16 @@ function fileList() {
 	})
 };
 // 이미지 표시
-function showUpFile(uploadResultArr) {
+function reportShowUpFile(uploadModalArr) {
 
-	if (!uploadResultArr || uploadResultArr.length == 0)
+	if (!uploadModalArr || uploadModalArr.length == 0)
 		return;
 
-	var uploadUL = $('#reportModal .uploadResult .row');
+	var uploadUL = $('#reportModal .uploadModal .row');
 
 	var str = "";
 
-	$(uploadResultArr)
+	$(uploadModalArr)
 		.each(
 			function(i, obj) {
 				str += imageshowModal(obj);
@@ -278,7 +278,7 @@ function reportInfoForm(no) {
 }
 
 // 섬네일 이미지 명 가져오기
-$('.uploadResult').on("click", "img", function(e) {
+$('.uploadModal').on("click", "img", function(e) {
 	var obj = e.target;
 
 	var newobj = '';
@@ -528,7 +528,7 @@ function modalInfo(result) {
 		$('#rpt_requestBtn').remove();
 	}
 
-	var uploadUL = $('#reportInfoModal .uploadResult .row');
+	var uploadUL = $('#reportInfoModal .uploadModal .row');
 
 	var str = "";
 
@@ -555,7 +555,7 @@ function modalInsertInfo(result) {
 			$('option:eq(' + i + ')').attr('selected', 'selected');
 		}
 	}
-	var uploadUL = $('#reportModal .uploadResult .row');
+	var uploadUL = $('#reportModal .uploadModal .row');
 
 	var str = "";
 

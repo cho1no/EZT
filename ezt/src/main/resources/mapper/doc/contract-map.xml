@@ -283,7 +283,7 @@
 	<!-- 분야 코드 조회 -->	
 	
 	<!-- 동업 계약서 등록 -->
-	<insert id="InsertPartnerCon" parameterType="PartnershipContractVO">
+	<insert id="InsertPartnerCon" parameterType="PartnershipContractVO" statementType="CALLABLE">
 	<selectKey keyProperty="partnershipContractNo" resultType="Integer"
 			order="BEFORE">
 			SELECT SEQ_PARTNERSHIPCONTRACT.NEXTVAL
