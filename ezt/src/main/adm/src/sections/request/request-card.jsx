@@ -47,8 +47,8 @@ export default function RequestCard({ request, onClick }) {
     <Box
       component="img"
       alt={request.saveName}
-      // src={`C:/${request.savePath}${request.saveName}${request.originalFileName}`}
-      src="/assets/images/products/product_23.jpg"
+      src={`/home/ec2-user/upload/${request.savePath}${request.saveName}${request.originalFileName}`}
+      // src="/assets/images/products/product_23.jpg"
       sx={{
         cursor: 'pointer',
         top: 0,

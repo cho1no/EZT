@@ -25,8 +25,6 @@ public class SgiController {
 	@GetMapping("worker")
 	public void worker() {}
 	
-	@GetMapping("admin")
-	public void admin() {}
 	
 	@GetMapping("login")
 	public String login(@RequestParam(value = "error", required = false) String error,
