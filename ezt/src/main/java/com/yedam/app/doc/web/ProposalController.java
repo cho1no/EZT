@@ -172,7 +172,7 @@ public class ProposalController {
 		
 		AlarmVO alarm = new AlarmVO();
 		alarm.setUsersNo(findVO.getRequester());
-		alarm.setTitle("등록된 견적서가 있습니다");
+		alarm.setTitle("견적서가 등록 확인");
 		alarm.setContent("["+ reqVO.getTitle() + "] 에서 견적서를 확인해 주세요.");
 		sac.message(alarm);
 
@@ -203,9 +203,8 @@ public class ProposalController {
 	@GetMapping("ppsApprove")
 	public String ppsApprove(ProposalVO proposalVO
 							, Model model) {
-		int result = ppsSerivce.ppsApprove(proposalVO);
-		
-		if( result > 0) {
+			ppsSerivce.ppsApprove(proposalVO);
+
 			// 견적서 정보 조회
 			ProposalVO findVO = ppsSerivce.ppsInfo(proposalVO.getProposalNo());
 				
@@ -222,11 +221,5 @@ public class ProposalController {
 	        model.addAttribute("icon", "success");
 	        model.addAttribute("url", "/ppsInfo?proposalNo=" + proposalVO.getProposalNo());
 	        return "gongtong/message";
-	    }else {
-	    	model.addAttribute("msg", "다시 확인해 주세요");
- 	        model.addAttribute("icon", "warning");
- 	        model.addAttribute("url", "/ppsInfo?proposalNo=" + proposalVO.getProposalNo());
- 	        return "gongtong/message"; 
-	    }
 	}
 }

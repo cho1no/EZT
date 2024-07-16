@@ -1,7 +1,7 @@
 // 엔터 막기
 $(document).ready(function() {
 	//공통 enter 막기
-	$('input').keydown(function(event) {
+	$('.pps input').keydown(function(event) {
 		if (event.keyCode === 13) {
 			event.preventDefault();
 		}
@@ -9,26 +9,36 @@ $(document).ready(function() {
 
 });
 
+
 // + 버튼 : tbody tr 추가
-$('table thead button').on('click', addForm);
+$('#pps_table thead button').on('click', addForm);
 let num = 1;
-function addForm(e) {
+function addForm() {
 	$('.content').append(`<tr>
-				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,50);" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,20);" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,20);" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,50);" onClick='keydown(this)' /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,20);" onClick='keydown(this)' /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,20);" onClick='keydown(this)' /></td>
 				<td><input type="text" style="border: 0; width: 100%;" 
-						onKeyup="inputNumberFormat(this); GetSum(${num});" 
+						onKeyup="inputNumberFormat(this); GetSum(${num});" onClick='keydown(this)'
 						value="0" maxlength="4" class="qty_${num}" /></td>
 				<td><input type="text" style="border: 0; width: 100%;" 
-						onKeyup="inputNumberFormat(this); GetSum(${num});" 
+						onKeyup="inputNumberFormat(this); GetSum(${num});" onClick='keydown(this)'
 						value="0" maxlength="8" class="price_${num}" /></td>
-				<td><input type="text" style="border: 0; width: 100%;" value="0" class="result_${num}" readonly /></td>
-				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,500);" /></td>
+				<td><input type="text" style="border: 0; width: 100%;" value="0" 
+						onClick='keydown(this)' class="result_${num}" readonly /></td>
+				<td><input type="text" style="border: 0; width: 100%;" onkeyup="chkword(this,500);" onClick='keydown(this)' /></td>
 				<td><button type="button" class="btn btn-outline-dark" name="deleteBtn"
 					style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">-</button></td>
 			</tr>`);
 	num += 1;
+}
+
+function keydown(e){
+	$(e).keydown(function(event) {
+		if (event.keyCode === 13) {
+			event.preventDefault();
+		}
+	});
 }
 
 // - 버튼 : tbody tr 제거
@@ -50,17 +60,17 @@ function dataProcessPps() {
 	}
 
 
-	for (i = 0; i < $('tbody tr').length; i++) {
-		$('tbody tr:eq(' + i + ') td:eq(0) input').attr('name', 'list[' + i + '].product');
-		$('tbody tr:eq(' + i + ') td:eq(1) input').attr('name', 'list[' + i + '].division');
-		$('tbody tr:eq(' + i + ') td:eq(2) input').attr('name', 'list[' + i + '].unit');
-		$('tbody tr:eq(' + i + ') td:eq(3) input').attr('name', 'list[' + i + '].qty');
-		$('tbody tr:eq(' + i + ') td:eq(3) input').val(
-			$('tbody tr:eq(' + i + ') td:eq(3) input').val().replaceAll(',', ''));
-		$('tbody tr:eq(' + i + ') td:eq(4) input').attr('name', 'list[' + i + '].unitprice');
-		$('tbody tr:eq(' + i + ') td:eq(4) input').val(
-			$('tbody tr:eq(' + i + ') td:eq(4) input').val().replaceAll(',', ''));
-		$('tbody tr:eq(' + i + ') td:eq(6) input').attr('name', 'list[' + i + '].comments');
+	for (i = 0; i < $('#pps_table tbody tr').length; i++) {
+		$('#pps_table tbody tr:eq(' + i + ') td:eq(0) input').attr('name', 'list[' + i + '].product');
+		$('#pps_table tbody tr:eq(' + i + ') td:eq(1) input').attr('name', 'list[' + i + '].division');
+		$('#pps_table tbody tr:eq(' + i + ') td:eq(2) input').attr('name', 'list[' + i + '].unit');
+		$('#pps_table tbody tr:eq(' + i + ') td:eq(3) input').attr('name', 'list[' + i + '].qty');
+		$('#pps_table tbody tr:eq(' + i + ') td:eq(3) input').val(
+			$('#pps_table tbody tr:eq(' + i + ') td:eq(3) input').val().replaceAll(',', ''));
+		$('#pps_table tbody tr:eq(' + i + ') td:eq(4) input').attr('name', 'list[' + i + '].unitprice');
+		$('#pps_table tbody tr:eq(' + i + ') td:eq(4) input').val(
+			$('#pps_table tbody tr:eq(' + i + ') td:eq(4) input').val().replaceAll(',', ''));
+		$('#pps_table tbody tr:eq(' + i + ') td:eq(6) input').attr('name', 'list[' + i + '].comments');
 	}
 }
 
@@ -98,15 +108,19 @@ function GetSum(e) {
 function GetTotal() {
 	var total = 0;
 
-	for (i = 0; i < $('tbody tr').length; i++) {
-		total += Number($('tbody tr:eq(' + i + ') td:eq(5) input').val().replaceAll(',', ''));
+	for (i = 0; i < $('#pps_table tbody tr').length; i++) {
+		total += Number($('#pps_table tbody tr:eq(' + i + ') td:eq(5) input').val().replaceAll(',', ''));
 	}
 
 	var comTotal = total.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 	$('.total').val(comTotal);
 }
 
-
+// 전화번호
+function userPhone(){
+	phone = phone.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+	$('#user_phone').html(phone);
+}
 // 첨부 파일 다운로드 
 function fileDownload(fileList) {
 	for (i = 0; i < fileList.length; i++) {
