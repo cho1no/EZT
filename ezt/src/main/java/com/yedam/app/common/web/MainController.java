@@ -14,6 +14,7 @@ public class MainController {
 	@GetMapping("main")
 	public String main(Model model) {
 		model.addAttribute("reviews", mainMap.select4Review()); // 후기 높은순 5개
+		model.addAttribute("ports", mainMap.select4Port());
 		return "gongtong/main";
 	}
 	@GetMapping("/")

@@ -30,5 +30,21 @@
 	WHERE ROWNUM <= 4
 	]]>
 </select>
-
+<select id="select4Port" resultType="PortfolioVO">
+	SELECT p.*
+			, (SELECT u.users_name
+			   FROM users u
+			   WHERE u.users_no = p.users_no) users_name
+	        , f.*
+	FROM portfolio p
+	JOIN (SELECT *
+	      FROM file_detail_info
+	      WHERE boss_tf = 'Y') f
+	ON p.file_id = f.file_id
+	WHERE 
+	<![CDATA[
+	ROWNUM <= 4
+	]]>
+	ORDER BY p.portfolio_no DESC
+</select>
 </mapper>
