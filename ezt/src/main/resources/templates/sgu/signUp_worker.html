@@ -75,8 +75,8 @@ form span {
 									<span th:errors="*{usersName}" class="error"></span>
 								</div>
 								<div class="col-md-6 mb-3 mb-md-0" >
-									<label class="text-block" for="issuDate">발급일자</label>
-									<input type="text" id="issuDate" name="issuDate" class="form-control" placeholder="19001108">
+									<label class="text-block" for="issuDate">주민등록증 발급일자</label>
+									<input type="text" id="issuDate" name="issuDate" class="form-control" placeholder="19001108" maxlength="8">
 								</div>
 							</div>
 							<div class="row form-group">
@@ -108,7 +108,7 @@ form span {
 									<label class="text-black" for="usersPhone">전화번호</label> <input
 										name="usersPhone" type="text" id="usersPhone"
 										th:field="*{usersPhone}" class="form-control"
-										placeholder="-제외 숫자만 입력해주세요"> <span
+										placeholder="-제외 숫자만 입력해주세요" maxlength="11"><span></span> <span
 										th:errors="*{usersPhone}" class="error"></span>
 								</div>
 							</div>
@@ -252,14 +252,13 @@ form span {
 		var rnn = jumin1 + jumin2; 
 		var issuDate = $('#issuDate').val();
 		//console.log(userName, rnn, issuDate);
-		
 		if(userName == ''){
 			$('#juminChk').text('성명을 입력해주세요.');
 			$('#juminChk').addClass('error');
 			return false;
 		}
 		if(issuDate == ''){
-			$('#juminChk').text('발급일자를 입력해주세요.');
+			$('#juminChk').text('주민등록증 발급일자를 입력해주세요.');
 			$('#juminChk').addClass('error');
 			return false;
 		}
@@ -274,52 +273,73 @@ form span {
 			$('#juminChk').addClass('error');
 			return false;
 		}
-		
 		var reqExp = /^[0-9]*$/;
-		if(!reqExp.test(jumin2)){
-			$('#JUMIN2').next().text('숫자를 입력해주세요.');
-			$('#JUMIN2').next().addClass('error');
-			return ;
+		if(!reqExp.test(jumin1) || !reqExp.test(jumin2) || !reqExp.test(issuDate)){
+			$('#juminChk').text('주민번호, 발급일자는 숫자를 입력해주세요.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
+		
+		var reqExp2 = /^[0-9]{8}$/;
+		if(!reqExp2.test(issuDate)){
+			$('#juminChk').text('발급일자는 8자리숫자입니다.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
+		
+		var reqExp3 = /^[0-9]{6}$/;
+		if(!reqExp3.test(jumin1)){
+			$('#juminChk').text('생년월일은 6자리숫자입니다.');
+			$('#juminChk').addClass('error');
+			return false;
+		}
+		var reqExp4 = /^[0-9]{7}$/;
+		if(!reqExp4.test(jumin2)){
+			$('#juminChk').text('뒷자리는 7자리숫자입니다.');
+			$('#juminChk').addClass('error');
+			return false;
 		}
 		$('#rnnChkBtn').css('display', 'none');
 		$('#loadChk').css('display', 'block');
-		$.ajax({
-				url : "/api/idCardCheck",
-				type : "POST",
-				contentType : "application/json;charset=UTF-8",
-				data : JSON.stringify({
-						NAME : userName,
-						JUMIN : rnn,
-						ISSUEDATE : issuDate
-				}),
-				success : function(re){
-					if(re.result == "SUCCESS"){
-						$('input[name=checked_jumin]').val("y");
-						$('#rnnChkBtn').css('display', 'block');
-						$('#rnnChkBtn').attr('disabled', 'true');
-						$('#loadChk').css('display', 'none');
-						Swal.fire({
-							text: '실명인증 완료',
-							icon: 'success'
-						})
-					}else {
-						Swal.fire({
-							text: '입력오류',
-							icon: 'error'
-						})
-						$('#rnnChkBtn').css('display', 'block');
-						$('#loadChk').css('display', 'none');
-					}
-				},
-				error : function(er){
-					Swal.fire({
-						text: 'error',
-						icon: 'error'
-					})
-					$('#rnnChkBtn').css('display', 'none');
-					$('#loadChk').css('display', 'block');
-				}
-			})
+		
+//		실명인증api(횟수제한,실검증시 주석해제)
+// 		$.ajax({
+// 				url : "/api/idCardCheck",
+// 				type : "POST",
+// 				contentType : "application/json;charset=UTF-8",
+// 				data : JSON.stringify({
+// 						NAME : userName,
+// 						JUMIN : rnn,
+// 						ISSUEDATE : issuDate
+// 				}),
+// 				success : function(re){
+// 					if(re.result == "SUCCESS"){
+// 						$('input[name=checked_jumin]').val("y");
+// 						$('#rnnChkBtn').css('display', 'block');
+// 						$('#rnnChkBtn').attr('disabled', 'true');
+// 						$('#loadChk').css('display', 'none');
+// 						Swal.fire({
+// 							text: '실명인증 완료',
+// 							icon: 'success'
+// 						})
+// 					}else {
+// 						Swal.fire({
+// 							text: '입력오류',
+// 							icon: 'error'
+// 						})
+// 						$('#rnnChkBtn').css('display', 'block');
+// 						$('#loadChk').css('display', 'none');
+// 					}
+// 				},
+// 				error : function(er){
+// 					Swal.fire({
+// 						text: 'error',
+// 						icon: 'error'
+// 					})
+// 					$('#rnnChkBtn').css('display', 'none');
+// 					$('#loadChk').css('display', 'block');
+// 				}
+// 			})
 	}
 	
 	//자격증 진위여부 
@@ -399,7 +419,26 @@ form span {
 		
 	}
 	
+	//전화번호
+	var phone = $('#usersPhone');
+	checkPhone();
 	
+	function checkPhone() {
+		phone.on("change", function(){
+			var reqExp = /^[0-9]*$/;
+			
+			if(!reqExp.test(phone.val())){
+				phone.next().text('숫자를 입력해주세요')
+				phone.next().addClass('error')
+				return ;
+			}else{
+				phone.next().text('')
+				phone.next().removeClass('error')
+			} 
+						
+		})
+		
+	} 
 	
 	//닉네임 중복체크
 	var nick = $('#usersNick');

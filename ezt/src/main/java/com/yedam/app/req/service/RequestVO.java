@@ -55,5 +55,6 @@ public class RequestVO {
 	private String comments;
 	private int proposalNo;
 	List<FileVO> fileVO;
-
+	
+	private int reviewNo;
 }

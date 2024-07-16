@@ -136,7 +136,7 @@
 					      JOIN request rq
 				  	      ON re.request_no = rq.request_no
 					  WHERE re.writer = #{writer}
-					  ORDER BY re.write_dt desc 
+					  ORDER BY re.write_dt DESC 
 					  ) a 
 			<where>
 				<if test="type != ''.toString">
@@ -158,17 +158,21 @@
 	   FROM ( 
    	   		 SELECT ROWNUM as rn
    	   		 		, a.*
-   	   		 FROM ( SELECT request_no
-						   , title
-						   , category_code
-						   , FIND_COMMONCODE(category_code) as category_code_nm
-						   , request_state
-						   , FIND_COMMONCODE(request_state) as request_state_nm
-						   , file_id
-						   , write_dt
-					FROM request
-					WHERE requester = #{usersNo}
-					ORDER BY write_dt 	desc ) a 
+   	   		 FROM ( SELECT r.request_no
+						   , r.title
+						   , r.category_code
+						   , FIND_COMMONCODE(r.category_code) as category_code_nm
+						   , r.request_state
+						   , FIND_COMMONCODE(r.request_state) as request_state_nm
+						   , r.file_id
+						   , r.write_dt
+						   , NVL((SELECT rv.review_no
+					         	  FROM review rv
+					         	  WHERE rv.request_no = r.request_no
+					         	  AND rownum = 1),0) review_no
+					FROM request r
+					WHERE r.requester = #{usersNo}
+					ORDER BY r.write_dt DESC ) a 
 			<where>
 			<if test="type != ''.toString">
 				AND category_code = #{type}
@@ -218,6 +222,7 @@
 
 	<sql id="findWorker">
 	   WHERE users_role = 'ROLE_WORKER'
+	   AND users_state = 'active'
 	   <if test="categoryCode != null and categoryCode.size != 0">   
 	    AND EXISTS (SELECT 1
                  FROM active_category ca
@@ -247,7 +252,8 @@
    	   		 		  , a.*
 			   FROM (SELECT *
 				     FROM users
-				    
+				     LEFT JOIN file_detail_info f
+				     	  ON users.file_id = f.file_id
 				     <include refid="findWorker"></include>		
 				     
 				     ORDER BY users_join_dt DESC ) a 
