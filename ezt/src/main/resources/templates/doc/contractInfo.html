@@ -337,8 +337,8 @@
 								th:onClick="|location.href='@{/conUpdate(contractNo=${con.contractNo})}'|">수정</button>
 						</div>
 						<div class="col-6">
-							<button type="button" class="btn btn-block btn-primary btn-md"
-								th:onClick="|location.href='@{/sendCon(contractNo=${con.contractNo}, type=0)}'|">보내기</button>
+							<button type="button" class="btn btn-block btn-primary btn-md" id="sendCon_work"
+								th:data-contractno="${con.contractNo}">보내기</button>
 						</div>
 						</th:block>
 						
@@ -350,8 +350,8 @@
 								th:onClick="|location.href='@{/ptnconWrite(contractNo=${con.contractNo})}'|">수정</button>
 						</div>
 						<div class="col-6">
-							<button type="button" class="btn btn-block btn-primary btn-md"
-								th:onClick="|location.href='@{/sendCon(contractNo=${con.contractNo}, type=1)}'|">서명하기</button>
+							<button type="button" class="btn btn-block btn-primary btn-md" id="approveCon_mem"
+								th:data-contractno="${con.contractNo}">서명하기</button>
 						</div>
 						</th:block>
 						
@@ -363,8 +363,8 @@
 						</div>
 						
 						<div class="col-6">
-									<button type="button" class="btn btn-block btn-primary btn-md"
-								th:onClick="|location.href='@{/sendCon(contractNo=${con.contractNo}, type=1)}'|">서명 완료</button>
+									<button type="button" class="btn btn-block btn-primary btn-md" id="approveCon_req"
+								th:data-contractno="${con.contractNo}">서명 완료</button>
 						</div>
 						</th:block>
 						
@@ -375,8 +375,17 @@
 						</div>
 						
 						<div class="col-6">
+									<button type="button" class="btn btn-block btn-primary btn-md" id="sendCon_leader"
+								th:data-contractno="${con.contractNo}">보내기</button>
+						</div>
+						</th:block>
+						<th:block th:if="${#authentication.principal.userNo == con.requesterInfo} and ${con.contractState == 'G02'} and ${leaderCode == null}">
+						<div class="col-6">
+						</div>
+						
+						<div class="col-6">
 									<button type="button" class="btn btn-block btn-primary btn-md"
-								th:onClick="|location.href='@{/sendCon(contractNo=${con.contractNo}, type=0)}'|">보내기</button>
+								th:onClick="|location.href='@{/pay(contractNo=${con.contractNo})}'|">결제하기</button>
 						</div>
 						</th:block>
 					</div>
@@ -510,14 +519,136 @@
             ctx.lineTo(point.lx, point.ly);
         }
         ctx.stroke();
-        
-        
     }
 
+    $('#sendCon_work').on('click', function(event){
+		let contractNo = $(this).data('contractno');
+		event.stopPropagation();
+		Swal.fire({
+			title: '이대로 진행하시겠습니까?',
+			text: '다시 되돌릴 수 없습니다.',
+			icon: 'warning',
+
+			showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+			confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+			cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+			confirmButtonText: '보내기', // confirm 버튼 텍스트 지정
+			cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+		}).then(result => {
+			// 만약 Promise리턴을 받으면,
+			if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+				Swal.fire({
+					icon: "success",
+					title: "완료되었습니다",
+					allowOutsideClick: false
+				}).then(e => {
+					// 만약 Promise리턴을 받으면,
+					if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+						location.href='/sendCon?contractNo=' +contractNo+'&type=0';
+					}
+				});
+				$(this).unbind('click').click();
+			}
+		});
+	})
+	   $('#approveCon_req').on('click', function(event){
+		let contractNo = $(this).data('contractno');
+		event.stopPropagation();
+		Swal.fire({
+			title: '이대로 진행하시겠습니까?',
+			text: '다시 되돌릴 수 없습니다.',
+			icon: 'warning',
+
+			showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+			confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+			cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+			confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+			cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+		}).then(result => {
+			// 만약 Promise리턴을 받으면,
+			if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+				Swal.fire({
+					icon: "success",
+					title: "승인 완료되었습니다",
+					allowOutsideClick: false
+				}).then(e => {
+					// 만약 Promise리턴을 받으면,
+					if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+						location.href='/approveCon?contractNo=' +contractNo+'&type=1';
+					}
+				});
+				$(this).unbind('click').click();
+			}
+		});
+	})
+	   $('#sendCon_leader').on('click', function(event){
+		let contractNo = $(this).data('contractno');
+		event.stopPropagation();
+		Swal.fire({
+			title: '이대로 진행하시겠습니까?',
+			text: '다시 되돌릴 수 없습니다.',
+			icon: 'warning',
+
+			showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+			confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+			cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+			confirmButtonText: '보내기', // confirm 버튼 텍스트 지정
+			cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+		}).then(result => {
+			// 만약 Promise리턴을 받으면,
+			if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+				Swal.fire({
+					icon: "success",
+					title: "완료되었습니다",
+					allowOutsideClick: false
+				}).then(e => {
+					// 만약 Promise리턴을 받으면,
+					if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+						location.href='/sendConPtn?contractNo=' +contractNo+'&type=0';
+					}
+				});
+				$(this).unbind('click').click();
+			}
+		});
+	})
+	   $('#approveCon_mem').on('click', function(event){
+		let contractNo = $(this).data('contractno');
+		event.stopPropagation();
+		Swal.fire({
+			title: '이대로 진행하시겠습니까?',
+			text: '다시 되돌릴 수 없습니다.',
+			icon: 'warning',
+
+			showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+			confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+			cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+			confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+			cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+		}).then(result => {
+			// 만약 Promise리턴을 받으면,
+			if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+				Swal.fire({
+					icon: "success",
+					title: "승인 완료되었습니다",
+					allowOutsideClick: false
+				}).then(e => {
+					// 만약 Promise리턴을 받으면,
+					if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+						location.href='/approveConPtn?contractNo=' +contractNo+'&type=1';
+					}
+				});
+				$(this).unbind('click').click();
+			}
+		});
+	})
+    
+    
+    
 	</script>
-	
-	<!-- 공통 js 파일 -->
-	<script type="text/javascript" th:src="@{/js/doc/con_common.js}"></script>
 
 </body>
 </html>

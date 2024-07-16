@@ -90,8 +90,16 @@ $('#uploadBtn').on("click", function() {
 				async: false
 
 			})
-			Swal.fire('승인 완료되었습니다', '', 'success');
-			location.reload();
+			Swal.fire({
+				icon: "success",
+				title: "승인 완료되었습니다",
+				allowOutsideClick: false
+			}).then(e => {
+				// 만약 Promise리턴을 받으면,
+				if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+					location.reload();
+				}
+			});
 		}
 	});
 });
@@ -129,8 +137,17 @@ $('#deleteBtn').on("click", function() {
 				async: false
 
 			})
-			Swal.fire('삭제 완료되었습니다', '', 'success');
-			location.href = '/main';
+
+			Swal.fire({
+				icon: "success",
+				title: "삭제 완료되었습니다",
+				allowOutsideClick: false
+			}).then(e => {
+				// 만약 Promise리턴을 받으면,
+				if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+					location.href = '/main';
+				}
+			});
 		}
 	});
 })

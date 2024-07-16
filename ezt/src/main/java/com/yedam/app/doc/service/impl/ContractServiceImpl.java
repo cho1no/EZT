@@ -199,6 +199,10 @@ public class ContractServiceImpl implements ContractService {
 	public CommonCodeVO workCodeSelect(int teamNo, int usersNo) {
 		return conMapper.selectTeamWorkCode(teamNo, usersNo);
 	}
+	@Override
+	public CommonCodeVO leaderCodeSelect(int requestNo) {
+		return conMapper.selectTeamLeaderCode(requestNo);
+	}
 	// 동업 계약서 등록
 	@Override
 	public int ptnConInsert(PartnershipContractVO partnershipContractVO) {

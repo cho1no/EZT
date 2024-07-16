@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.alm.service.AlarmVO;
+import com.yedam.app.alm.web.StompAlarmController;
 import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.common.service.FileVO;
 import com.yedam.app.doc.service.ContractService;
@@ -41,11 +43,12 @@ public class ContractController {
 	@Autowired
 	FileService fileService;
 
+	@Autowired
+	StompAlarmController sac;
+
 	// 계약서 등록
 	@GetMapping("conInsert")
-	public String conInsert(ProposalVO proposalVO
-							, Model model
-							, @AuthenticationPrincipal LoginUserVO user) {
+	public String conInsert(ProposalVO proposalVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
 
 		model.addAttribute("contractVO", new ContractVO());
 
@@ -77,9 +80,8 @@ public class ContractController {
 
 	@PostMapping(value = "/conInsert", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public int uploadAjaxPost(MultipartFile[] uploadFile
-							  , ContractVO contractVO) {
-		if(uploadFile != null && uploadFile.length > 0) {
+	public int uploadAjaxPost(MultipartFile[] uploadFile, ContractVO contractVO) {
+		if (uploadFile != null && uploadFile.length > 0) {
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
 			int i = 0;
 			for (FileVO e : list) {
@@ -101,9 +103,7 @@ public class ContractController {
 
 	// 계약서 상세
 	@GetMapping("conInfo")
-	public String conInfo(ContractVO contractVO
-						  , Model model
-						  , @AuthenticationPrincipal LoginUserVO user) {
+	public String conInfo(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
 
 		// 계약서 정보 조회
 		ContractVO findVO = conService.conInfo(contractVO);
@@ -125,24 +125,21 @@ public class ContractController {
 		// 통일 계약서 조회
 		UnityContractVO unityVO = conService.IncludeUnityCon(findVO.getContractNo());
 		model.addAttribute("unity", unityVO);
-		
 
 		// 분야 코드 조회
-		if(conService.ptnConSelect(findVO.getContractNo()) != null) {
+		if (conService.ptnConSelect(findVO.getContractNo()) != null) {
 			PartnershipContractVO workCode = conService.ptnConSelect(findVO.getContractNo());
 			model.addAttribute("leaderCode", workCode.getLeaderCategoryCode());
 			model.addAttribute("memberCode", workCode.getMemberCategoryCode());
 		}
-		
+
 		return "doc/contractInfo";
 
 	}
 
 	// 계약서 수정
 	@GetMapping("conUpdate")
-	public String conUpdate(ContractVO contractVO
-							, Model model
-							, @AuthenticationPrincipal LoginUserVO user) {
+	public String conUpdate(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
 
 		// 계약서 정보 조회
 		ContractVO findVO = conService.conInfo(contractVO);
@@ -185,7 +182,7 @@ public class ContractController {
 		}
 
 		// 수정
-		if (uploadFile != null  && uploadFile.length > 0) {
+		if (uploadFile != null && uploadFile.length > 0) {
 
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
 			int i = 0;
@@ -208,9 +205,7 @@ public class ContractController {
 
 	// 계약서 수정
 	@GetMapping("conWrite")
-	public String conWrite(ContractVO contractVO
-						   , Model model
-						   , @AuthenticationPrincipal LoginUserVO user) {
+	public String conWrite(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
 
 		// 계약서 정보 조회
 		ContractVO findVO = conService.conInfo(contractVO);
@@ -237,12 +232,12 @@ public class ContractController {
 		model.addAttribute("unity", unityVO);
 
 		// 분야 코드 조회
-		if(conService.ptnConSelect(findVO.getContractNo()) != null) {
+		if (conService.ptnConSelect(findVO.getContractNo()) != null) {
 			PartnershipContractVO workCode = conService.ptnConSelect(findVO.getContractNo());
 			model.addAttribute("leaderCode", workCode.getLeaderCategoryCode());
 			model.addAttribute("memberCode", workCode.getMemberCategoryCode());
 		}
-		
+
 		return "doc/contractWrite";
 
 	}
@@ -251,16 +246,70 @@ public class ContractController {
 	@GetMapping("sendCon")
 	public String conSend(ContractVO contractVO) {
 		int no = conService.conSend(contractVO);
+		// 계약서 정보 조회
+		ContractVO findVO = conService.conInfo(contractVO);
+
+		AlarmVO alarm = new AlarmVO();
+		alarm.setUsersNo(findVO.getRequesterInfo());
+		alarm.setTitle("계약서 전송 확인");
+		alarm.setContent("확인이 필요한 계약서가 있습니다.");
+		sac.message(alarm);
+
+		return "redirect:conInfo?contractNo=" + no;
+	}
+
+	// 계약서 전송
+	@GetMapping("sendConPtn")
+	public String conSendPtn(ContractVO contractVO) {
+		int no = conService.conSend(contractVO);
+		// 계약서 정보 조회
+		ContractVO findVO = conService.conInfo(contractVO);
+
+		AlarmVO alarm = new AlarmVO();
+		alarm.setUsersNo(findVO.getWorkerInfo());
+		alarm.setTitle("계약서 전송 확인");
+		alarm.setContent("확인이 필요한 계약서가 있습니다.");
+		sac.message(alarm);
+
+		return "redirect:conInfo?contractNo=" + no;
+	}
+
+	// 계약서 승인
+	@GetMapping("approveCon")
+	public String approveCon(ContractVO contractVO) {
+		int no = conService.conSend(contractVO);
+		// 계약서 정보 조회
+		ContractVO findVO = conService.conInfo(contractVO);
+
+		AlarmVO alarm = new AlarmVO();
+		alarm.setUsersNo(findVO.getWorkerInfo());
+		alarm.setTitle("계약서 승인 확인");
+		alarm.setContent("승인된 계약서가 있습니다. 확인해주세요.");
+		sac.message(alarm);
+
+		return "redirect:conInfo?contractNo=" + no;
+	}
+
+	// 계약서 승인
+	@GetMapping("approveConPtn")
+	public String approveConPtn(ContractVO contractVO) {
+		int no = conService.conSend(contractVO);
+		// 계약서 정보 조회
+		ContractVO findVO = conService.conInfo(contractVO);
+
+		AlarmVO alarm = new AlarmVO();
+		alarm.setUsersNo(findVO.getRequesterInfo());
+		alarm.setTitle("계약서 승인 확인");
+		alarm.setContent("승인된 계약서가 있습니다. 확인해주세요.");
+		sac.message(alarm);
+
 		return "redirect:conInfo?contractNo=" + no;
 	}
 
 	// 동업 계약서 등록
 	@GetMapping("ptnconInsert")
-	public String ptnconInsert(ContractVO contractVO
-							   , int teamNo
-							   , int userNo
-							   , Model model
-							   , @AuthenticationPrincipal LoginUserVO user) {
+	public String ptnconInsert(ContractVO contractVO, int teamNo, int userNo, Model model,
+			@AuthenticationPrincipal LoginUserVO user) {
 
 		model.addAttribute("contractVO", new ContractVO());
 
@@ -278,12 +327,6 @@ public class ContractController {
 		model.addAttribute("memberName", requester.getUsersName());
 		model.addAttribute("memberNo", requester.getUsersNo());
 
-		// 분야 코드 조회
-		CommonCodeVO workCode = conService.workCodeSelect(teamNo, user.getUserNo());
-		model.addAttribute("leaderCode", workCode);
-		CommonCodeVO m_workCode = conService.workCodeSelect(teamNo, userNo);
-		model.addAttribute("memberCode", m_workCode);
-
 		// 견적서 정보 조회
 		ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
 		model.addAttribute("ppsInfo", ppsVO);
@@ -291,6 +334,12 @@ public class ContractController {
 		// 의뢰 정보 조회
 		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
+
+		// 분야 코드 조회
+		CommonCodeVO workCode = conService.leaderCodeSelect(reqVO.getRequestNo());
+		model.addAttribute("leaderCode", workCode);
+		CommonCodeVO m_workCode = conService.workCodeSelect(teamNo, userNo);
+		model.addAttribute("memberCode", m_workCode);
 
 		// 은행 코드 조회
 		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
@@ -307,11 +356,9 @@ public class ContractController {
 
 	@PostMapping(value = "/ptnconInsert", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public int ptnconInsert(MultipartFile[] uploadFile
-							, ContractVO contractVO
-							, TeamVO teamVO
-							, PartnershipContractVO partnershipContractVO) {
-		if(uploadFile != null && uploadFile.length > 0) {
+	public int ptnconInsert(MultipartFile[] uploadFile, ContractVO contractVO, TeamVO teamVO,
+			PartnershipContractVO partnershipContractVO) {
+		if (uploadFile != null && uploadFile.length > 0) {
 			List<FileVO> list = fileService.uploadFiles(uploadFile);
 			int i = 0;
 			for (FileVO e : list) {
@@ -335,45 +382,43 @@ public class ContractController {
 
 		return no;
 	}
-	
-		// 동업 계약서 수정(멤버)
-		@GetMapping("ptnconWrite")
-		public String ptnconWrite(ContractVO contractVO
-							   , Model model
-							   , @AuthenticationPrincipal LoginUserVO user) {
 
-			// 계약서 정보 조회
-			ContractVO findVO = conService.conInfo(contractVO);
-			model.addAttribute("con", findVO);
+	// 동업 계약서 수정(멤버)
+	@GetMapping("ptnconWrite")
+	public String ptnconWrite(ContractVO contractVO, Model model, @AuthenticationPrincipal LoginUserVO user) {
 
-			// 유저 정보
-			UserVO worker = ppsSerivce.userInfo(findVO.getWorkerInfo());
-			model.addAttribute("worker", worker);
-			UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
-			model.addAttribute("requester", requester);
-			model.addAttribute("user", user.getUserNo());
+		// 계약서 정보 조회
+		ContractVO findVO = conService.conInfo(contractVO);
+		model.addAttribute("con", findVO);
 
-			ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
+		// 유저 정보
+		UserVO worker = ppsSerivce.userInfo(findVO.getWorkerInfo());
+		model.addAttribute("worker", worker);
+		UserVO requester = ppsSerivce.userInfo(findVO.getRequesterInfo());
+		model.addAttribute("requester", requester);
+		model.addAttribute("user", user.getUserNo());
 
-			// 의뢰 정보 조회
-			RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
-			model.addAttribute("reqInfo", reqVO);
+		ProposalVO ppsVO = ppsSerivce.ppsInfo(findVO.getProposalNo());
 
-			// 은행 코드 조회
-			List<CommonCodeVO> codeVO = conService.bankcodeSelect();
-			model.addAttribute("code", codeVO);
-			// 통일 계약서 조회
-			UnityContractVO unityVO = conService.IncludeUnityCon(findVO.getContractNo());
-			model.addAttribute("unity", unityVO);
+		// 의뢰 정보 조회
+		RequestVO reqVO = ppsSerivce.reqInfo(ppsVO.getRequestNo());
+		model.addAttribute("reqInfo", reqVO);
 
-			// 분야 코드 조회
-			if(conService.ptnConSelect(findVO.getContractNo()) != null) {
-				PartnershipContractVO workCode = conService.ptnConSelect(findVO.getContractNo());
-				model.addAttribute("leaderCode", workCode.getLeaderCategoryCode());
-				model.addAttribute("memberCode", workCode.getMemberCategoryCode());
-			}
-			
-			return "doc/ptncontractWrite";
+		// 은행 코드 조회
+		List<CommonCodeVO> codeVO = conService.bankcodeSelect();
+		model.addAttribute("code", codeVO);
+		// 통일 계약서 조회
+		UnityContractVO unityVO = conService.IncludeUnityCon(findVO.getContractNo());
+		model.addAttribute("unity", unityVO);
+
+		// 분야 코드 조회
+		if (conService.ptnConSelect(findVO.getContractNo()) != null) {
+			PartnershipContractVO workCode = conService.ptnConSelect(findVO.getContractNo());
+			model.addAttribute("leaderCode", workCode.getLeaderCategoryCode());
+			model.addAttribute("memberCode", workCode.getMemberCategoryCode());
 		}
+
+		return "doc/ptncontractWrite";
+	}
 
 }

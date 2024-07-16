@@ -93,12 +93,12 @@ public class ProposalController {
 			
 			model.addAttribute("msg", "견적서 등록 완료");
 		    model.addAttribute("icon", "success");
-		    model.addAttribute("url", "redirect:ppsInfo?proposalNo=" + no);
+		    model.addAttribute("url", "/ppsInfo?proposalNo=" + no);
 		    return "gongtong/message";
 		} else {
 			model.addAttribute("msg", "견적서 등록 실패");
  	        model.addAttribute("icon", "warning");
- 	        model.addAttribute("url", "redirect:ppsInsert?requestNo=" + proposalVO.getRequestNo());
+ 	        model.addAttribute("url", "/ppsInsert?requestNo=" + proposalVO.getRequestNo());
  	        return "gongtong/message"; 
 		}
 	}
@@ -132,9 +132,14 @@ public class ProposalController {
 
 	// 견적서 삭제
 	@GetMapping("ppsDelete")
-	public String ppsDelete(Integer proposalNo) {
+	public String ppsDelete(Integer proposalNo
+							, Model model) {
 		ppsSerivce.ppsDelete(proposalNo);
-		return "redirect:main";
+		
+		model.addAttribute("msg", "견적서 삭제 완료");
+	    model.addAttribute("icon", "success");
+	    model.addAttribute("url", "/main");
+	    return "gongtong/message";
 	}
 	
 	// 파일 업로드
@@ -215,12 +220,12 @@ public class ProposalController {
 		
 	        model.addAttribute("msg", "견적서 승인 완료");
 	        model.addAttribute("icon", "success");
-	        model.addAttribute("url", "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo());
+	        model.addAttribute("url", "/ppsInfo?proposalNo=" + proposalVO.getProposalNo());
 	        return "gongtong/message";
 	    }else {
 	    	model.addAttribute("msg", "다시 확인해 주세요");
  	        model.addAttribute("icon", "warning");
- 	        model.addAttribute("url", "redirect:ppsInfo?proposalNo=" + proposalVO.getProposalNo());
+ 	        model.addAttribute("url", "/ppsInfo?proposalNo=" + proposalVO.getProposalNo());
  	        return "gongtong/message"; 
 	    }
 	}

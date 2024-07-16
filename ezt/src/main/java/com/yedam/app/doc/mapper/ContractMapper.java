@@ -52,6 +52,7 @@ public interface ContractMapper {
 	// -- 동업 계약서
 	// 분야 코드 조회
 	public CommonCodeVO selectTeamWorkCode(@Param("teamNo")int teamNo, @Param("usersNo")int usersNo);
+	public CommonCodeVO selectTeamLeaderCode(@Param("requestNo")int requestNo);
 	// 동업 계약서 등록
 	public int InsertPartnerCon(PartnershipContractVO partnershipContractVO);
 	// 동업 계약서 조회

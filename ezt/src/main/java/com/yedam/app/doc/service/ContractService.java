@@ -34,6 +34,8 @@ public interface ContractService {
 	// 동업 계약서
 	// 분야 코드 조회
 	public CommonCodeVO workCodeSelect(int teamNo, int usersNo);
+	public CommonCodeVO leaderCodeSelect(int requestNo);
+	
 	// 동업 계약서 등록
 	public int ptnConInsert(PartnershipContractVO partnershipContractVO);
 	// 동업 계약서 조회
