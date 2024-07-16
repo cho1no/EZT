@@ -56,7 +56,23 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 <!-- 전체 게시물 수 -->
 <select id="getTotalCount" resultType="int">
 	SELECT COUNT(*)
-	FROM (SELECT *
+	FROM (SELECT r.review_no
+				,r.request_no
+				,FIND_COMMONCODE(q.region_code) as region_code
+				,FIND_COMMONCODE(q.category_code) as category_code
+				,r.writer
+				,r.worker
+				,USERNAME(r.writer) as writer_name
+	            ,USERNAME(r.worker) as worker_name
+				,r.star
+				,r.content
+				,r.write_dt
+				,r.review_division
+				,r.file_id
+	            ,f.save_name
+	            ,f.original_file_name
+	            ,f.save_path
+	            ,f.ext
 		  FROM review r
 		  	JOIN request q 	ON r.request_no = q.request_no
 	        LEFT OUTER JOIN file_detail_info f ON( r.file_id = f.file_id and f.boss_tf = 'Y')) a

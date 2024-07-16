@@ -50,7 +50,7 @@ img{
           <div class="col-md-6 col-lg-3 mb-5">
             <a th:onclick="|location.href='@{/request/info(requestNo=${request.requestNo})}'|">
             <th:block>
-             <img th:if ="${request.fileId == 0}"  th:src="@{/images/interior.jpg}" alt="Image" class="rounded mb-4">
+             <img th:if ="${request.fileId == 0}"  th:src="@{/images/req/default_img.png}" alt="Image" class="rounded mb-4">
     	     <img th:unless ="${request.fileId == 0}"th:src="|@{${'/display?fileName=' + request.savePath.replaceAll('\\','/') +'/'+ request.saveName + '_' + request.originalFileName + '.' + request.ext}}|"  alt="Image" class=" rounded mb-4">
             </th:block>
             </a>

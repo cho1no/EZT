@@ -73,7 +73,29 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 <select id="getTotalCount" resultType="int">
 	
 	SELECT COUNT(*)
-	FROM (SELECT *
+	FROM (SELECT r.request_no
+              ,r.requester
+              ,FIND_COMMONCODE(r.ctt_place) as ctt_place
+              ,r.ctt_place_area
+              ,FIND_COMMONCODE(r.ctt_place_situation) as ctt_place_situation
+              ,r.hope_ctt_budget
+              ,r.hope_ctt_start_dt
+              ,r.hope_ctt_end_dt
+              ,r.postcode
+              ,r.address
+              ,r.detail_address
+              ,r.title
+              ,r.content
+              ,r.write_dt
+              ,FIND_COMMONCODE(r.request_state) as request_state
+              ,r.file_id
+              ,f.save_name
+              ,f.original_file_name
+              ,f.save_path
+              ,f.ext
+              ,FIND_COMMONCODE(r.category_code) as category_code
+              ,FIND_COMMONCODE(r.region_code) as region_code
+              ,u.users_name
         FROM request r
         JOIN users u 
           ON r.requester = u.users_no

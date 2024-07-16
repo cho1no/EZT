@@ -38,7 +38,7 @@ img{
 
 
 <h2 >후기 목록</h2>
-<form id="searchForm" th:action="@{/review/List}" method="get">
+<form id="searchForm" th:action="@{/review/list}" method="get">
 	<div>
 		<div class="search">
 			<select name="type" th:value=${page.cri.type}>
@@ -77,6 +77,8 @@ img{
           </div>
          </th:block>
         </div>
+</form>
+		<!-- 페이징 -->
         <div class="row pagination-wrap mt-5">
           <div class="col-md-12 text-center ">
             <div class="custom-pagination ml-auto">
@@ -94,7 +96,6 @@ img{
         </div>
 
       </div>
-</form>
 <script>
 	for(let i=0; i<$(".star").length; i++){
 		for(let j=0; j<parseInt($(".star:eq("+i+")").text()); j++){
