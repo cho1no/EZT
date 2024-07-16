@@ -1,7 +1,6 @@
 package com.yedam.app.wkr.service;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,6 +15,7 @@ public class PortfolioVO {
 	private int price; //금액
 	private int usersNo; //유저번호
 	private int fileId; //파일아이디
+	private String usersName;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date writeDt; //작성일

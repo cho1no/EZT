@@ -19,7 +19,7 @@
 }
 .site-navbar {
   margin-bottom: 0px;
-  z-index: 2;
+  z-index: 0;
   position: absolute;
   width: 100%;
   top: 2rem;
@@ -606,7 +606,7 @@ body:after {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
-  z-index: 100;
+  z-index: 0;
   opacity: 0;
   visibility: hidden;
   -webkit-transition: 0.3s all ease;
@@ -632,7 +632,7 @@ h4 {
   padding-top: 7rem;
   padding-bottom: 7rem;
   position: relative;
-  z-index: 2;
+  z-index: 0;
 }
 @media (max-width: 991.98px) {
   .site-section {
@@ -649,7 +649,7 @@ h4 {
   position: relative;
 }
 .home-section > .container {
-  z-index: 2;
+  z-index: 0;
   position: relative;
 }
 .home-section h1 {
@@ -1697,7 +1697,7 @@ h4 {
 }
 
 .site-footer {
-  padding: 7rem 0;
+  padding: 3rem 0;
   position: relative;
   background: #555;
 }
@@ -1766,6 +1766,7 @@ h4 {
 }
 
 .copyright {
+  margin: 0;
   color: rgba(255, 255, 255, 0.5);
 }
 .copyright a {

@@ -5,7 +5,7 @@
   layout:fragment="Content"
 >
   <head>
-    <title>이지테리어 | EZT</title>
+    <title>이지테리어 | 2ZT</title>
     <style>
       .background-section {
         position: relative;
@@ -15,9 +15,9 @@
       }
       .content-section {
         position: relative;
-        margin-top: -400px; /*상단 섹션 높이의 절반만큼 마진을 음수로 주어 겹치게 만듭니다*/
-        z-index: 1; /* 컨텐츠를 배경 섹션 위로 올립니다 */
-        padding: 70px 15px 15px; /* 상단 여백을 추가하여 컨텐츠가 잘리지 않게 합니다 */
+        margin-top: -400px;
+        z-index: 1;
+        padding: 70px 15px 15px;
       }
       .card-main {
         box-shadow: rgba(48, 52, 65, 0.1) 0px 0px 20px 5px;
@@ -54,6 +54,18 @@
         display: inline-block;
         margin-right: -3px;
       }
+      .wkr-banner {
+        position: relative;
+        overflow: hidden;
+      }
+      .worker-join-banner {
+        bottom: -30px;
+        right: 0;
+        position: absolute;
+      }
+      .worker-join-banner img {
+        filter: brightness(40%);
+      }
     </style>
   </head>
   <body>
@@ -64,10 +76,13 @@
       </section>
     </div>
     <div class="container">
-      <section class="mb-3 content-section">
+      <section class="mb-5 content-section">
         <div>
           <div class="d-flex justify-content-between">
-            <div class="mt-3" style="line-height: 1.2; color: black">
+            <div
+              class="mt-5"
+              style="line-height: 1.2; color: black; width: 38rem"
+            >
               <h2 class="" style="font-weight: 900">내게 필요한 시공 전문가</h2>
               <p class="">
                 누적 의뢰 건!<br />
@@ -81,14 +96,14 @@
                   <h5>빠른 커뮤니케이션</h5>
                   <p>
                     전문가와 실시간 대화로<br />
-                    빠르게 문의하고 거래할 수 있어요.
+                    빠르게 문의 할 수 있어요.
                   </p>
                 </div>
                 <div class="col card-main rounded-3 bg-white py-4 px-5">
                   <h5>만족스러운 결과물</h5>
                   <p>
-                    평균 만족도 98.8%<br />
-                    많은 회원들이 만족하고 있어요.
+                    높은 퀄리티의 결과물로<br />
+                    회원들이 만족하고 있어요.
                   </p>
                 </div>
               </div>
@@ -414,27 +429,30 @@
                 />
               </div>
             </div>
-            <div class="mt-3" style="line-height: 1.2; color: black">
+            <div
+              class="mt-5"
+              style="line-height: 1.2; color: black; width: 38rem"
+            >
               <h2 class="" style="font-weight: 900">나를 찾는 의뢰자</h2>
               <p class="">
-                당신의 전문 기술을 필요로 하는 고객들을 만나고<br />
-                전문가로서 역량을 발휘할 수 있는 기회를 얻어보세요.
+                전문 기술을 필요로 하는 고객들을 만나고<br />
+                자신의 역량을 발휘할 수 있는 기회를 얻어보세요.
               </p>
               <div class="row row-col-1 g-3 mt-5">
-                <div
-                  class="col card-main rounded-3 bg-white py-4 px-5 ms-3 me-4"
-                >
-                  <h5>빠른 커뮤니케이션</h5>
+                <div class="col card-main rounded-3 bg-white py-4 px-5">
+                  <h5>다양한 의뢰</h5>
                   <p>
-                    전문가와 실시간 대화로<br />
-                    빠르게 문의하고 거래할 수 있어요.
+                    수 많은 의뢰를<br />
+                    쉽게 확인 해보세요.
                   </p>
                 </div>
-                <div class="col card-main rounded-3 bg-white py-4 px-5">
-                  <h5>만족스러운 결과물</h5>
+                <div
+                  class="col card-main rounded-3 bg-white py-4 px-5 ms-4 me-3"
+                >
+                  <h5>나를 알릴 기회</h5>
                   <p>
-                    평균 만족도 98.8%<br />
-                    많은 회원들이 만족하고 있어요.
+                    포트폴리오와 의뢰<br />
+                    후기로 어필해보세요.
                   </p>
                 </div>
               </div>
@@ -452,7 +470,7 @@
             <h4 class="p-2">작업자들의 포트폴리오</h4>
           </div>
           <div class="row row-cols-1 row-cols-lg-5 g-2 g-lg-3">
-            <th:block th:each="review : ${reviews}">
+            <th:block th:each="port : ${ports}">
               <div class="col-3">
                 <a>
                   <div>
@@ -465,32 +483,25 @@
                   </div>
                   <div>
                     <div class="d-flex flex-column revw-text">
-                      <div class="p-0 mt-2" style="width: 100%">
+                      <div class="p-0 mt-2 mb-1" style="width: 100%">
                         <strong
                           style="font-size: 14px"
                           class="p-0 m-0 text-nowrap text-dark"
-                          >[[${review.content}]]</strong
+                          >[[${port.title}]]</strong
                         >
                       </div>
-                      <div class="p-0 star-spacing">
-                        <ul>
-                          <th:block th:each="n : ${#numbers.sequence(1,5)}">
-                            <li>
-                              <img
-                                th:if="${n <= review.star}"
-                                style="width: 10px"
-                                src="/images/main/star.svg"
-                                class="star"
-                              />
-                              <img
-                                th:unless="${n <= review.star}"
-                                style="width: 10px"
-                                src="/images/main/star-null.svg"
-                                class="star"
-                              />
-                            </li>
-                          </th:block>
-                        </ul>
+                      <div class="p-0">
+                        <p
+                          class="text-nowrap text-dark mb-1"
+                          style="font-size: 14px"
+                        >
+                          [[${port.content}]]
+                        </p>
+                      </div>
+                      <div class="p-0">
+                        <p class="text-dark" style="font-size: 14px">
+                          [[${port.usersName}]]
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -500,8 +511,25 @@
           </div>
         </div>
       </section>
-      <section class="mb-5" style="width: 100%">
-        <div>asdf</div>
+      <section class="my-5 py-5" style="width: 100%">
+        <div class="p-5 bg-dark rounded-4 wkr-banner">
+          <div>
+            <div class="worker-join-banner">
+              <img
+                src="https://img.icons8.com/?size=300&id=aUiThmwNs5sO&format=png&color=000000"
+                alt="null"
+              />
+            </div>
+            <div>
+              <h3 class="m-0" style="font-weight: 600; color: white">
+                작업자 등록하고
+              </h3>
+              <h3 class="m-0" style="font-weight: 600; color: white">
+                의뢰자를 만나보세요 >
+              </h3>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
     <script>
