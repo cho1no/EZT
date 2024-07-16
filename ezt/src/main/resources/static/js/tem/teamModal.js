@@ -77,7 +77,6 @@ $(document).ready(function() {
 
 
 	$('.endBtn').click(function(){
-		
 		if(confirm('정말 팀원 모집이 완료되었나요?')){
 			
 		}

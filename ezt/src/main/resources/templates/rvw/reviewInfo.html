@@ -13,7 +13,8 @@
 <form name="rvInfoForm" th:object="${review}">
 <div id="container" class="row">
 	<div class="col">
-		<img src="/images/rvw/interior1.jpg" alt="photo" id="mainPhoto">
+	<p></p>
+		<img th:if="${review.fileVO != null}" th:src="|/display?fileName=${review.fileVO[0].savePath.replaceAll('\\','/')}/${review.fileVO[0].saveName}_${review.fileVO[0].originalFileName}.${review.fileVO[0].ext}|" alt="photo" id="mainPhoto">
 		<div class="star-rating">
           	<div>
            	<p th:text="${review.star}" class="star" style="display:none" ></p>
@@ -37,7 +38,7 @@
 	<div class="col">
 		<ul id="gallery">
 			<li>
-				<img th:each="img : ${review.fileVO}" alt="thumbnail">
+				<img th:each="img : ${review.fileVO}"  th:src="|/display?fileName=${img.savePath.replaceAll('\\','/')}/${img.saveName}_${img.originalFileName}.${img.ext}|" alt="thumbnail">
 			</li>
 
 		</ul>
@@ -73,39 +74,8 @@
 			<th>내용</th>
 			<td colspan="4"><textarea class="writerContent" name="content" th:text="${review.content}" readonly></textarea></td>
 		</tr>
-		<p>[[${review.fileVO}]]</p>
 		</table>
-		
-		<h4>작업자 한줄 평</h4>
-		<th:block th:if="${reply == null}">
-			<form name="reply" th:action="@{/replyInsert}"method="post">
-				<input type="hidden"  name="workerReplyNo"  >
-				<input type="hidden" name="replyNo">
-				<input type="hidden" name="writer"  >
-				<table class="table">
-					<tbody>
-					<tr> 
-					<th>내용</th>
-						<td><textarea name="reply" ></textarea></td>
-					</tr>
-					</tbody>
-				</table>
-				<button class="btnn" > 댓글등록 </button>
-			</form>
-		</th:block>
-		<th:block th:unless="${reply == null}">
-			<table class="table">
-				<tbody>
-				<tr>
-				<th>내용</th>
-					<td><textarea readonly th:text="${reply.reply}"  ></textarea></td>
-					<td><button class="btnn">수정</button></td>
-					<td><button class="btnn">삭제</button></td>
-				</tr>
-				
-				</tbody>
-			</table>
-		</th:block>
+	
 	</div>
 	<button type="button" class="btn btn-secondary upBtn update">수정</button>
     <button type="button" class="btn btn-secondary delBtn" th:onClick = "'deleteReview(' + ${review.reviewNo} + ')'">삭제</button>

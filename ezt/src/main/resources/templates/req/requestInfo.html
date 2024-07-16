@@ -82,7 +82,7 @@
             </button>
           </div>
 		  </th:block>
-		  <th:block th:if="${#authentication.principal.userVO.usersRole == 'ROLE_WORKER'}" >
+		  <th:block sec:authorize="hasRole('ROLE_WORKER')" >
 		  	<button type="button" class="btn btn-primary" th:onClick="|location.href='@{/ppsInsert(requestNo=${request.requestNo})}'|">견적서 쓰기</button>
 		  </th:block>
         </div>
@@ -283,7 +283,6 @@
       <div class="d-flex justify-content-between">
         <div>
           <h4>견적서</h4>
-          <p>[[${request}]] 건</p>
         </div>
         <div>
           <select class="form-select">
@@ -472,6 +471,7 @@
       </table>
     </div>
     </th:block>
+    
   </div>
     <div class="row">
       <button

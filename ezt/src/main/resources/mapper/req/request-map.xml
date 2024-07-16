@@ -51,6 +51,8 @@ FROM (
               ,FIND_COMMONCODE(r.request_state) as request_state
               ,r.file_id
               ,f.save_name
+              ,f.original_file_name
+              ,f.save_path
               ,f.ext
               ,FIND_COMMONCODE(r.category_code) as category_code
               ,FIND_COMMONCODE(r.region_code) as region_code
