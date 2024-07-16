@@ -8,7 +8,6 @@
 <title>작업자 마이페이지</title>
 </head>
 <body>
-<hr>
 <h4>포트폴리오 등록</h4>
 	<form th:action="@{/worker/portfolioInsert}" th:object="${PortfolioVO}"
 		method="post" class="p-4 border rounded" name="insertCareer" enctype="multipart/form-data">
@@ -62,7 +61,7 @@
 			<label for="uploadFile" class="text-black">파일첨부</label>
 			</div>
 			<div class="col-md-10"> 
-			<input name="uploadFile" type="file" multiple="multiple" id="uploadFile" class="form-control">
+			<input name="uploadFile" type="file" multiple="multiple" id="uploadFile" class="form-control" accept=".jpg, .png, .jfif">
 			</div>		
 		</div>
 		

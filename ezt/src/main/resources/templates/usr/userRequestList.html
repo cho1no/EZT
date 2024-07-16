@@ -46,11 +46,13 @@
 			        <button type="button" th:onclick="|location.href='@{/request/info(requestNo=${req.requestNo})}'|"
 			         class="btn btn-primary border-width-2 d-none d-lg-inline-block">상세</button>
 		        </div>
+		        <th:block th:if="${req.reviewNo <= 0}">
 		        <div class="col-md-6">
 			        <button id="modalBtn" th:onclick="reqModal([[${req.requestNo}]])" 
 			        th:if="${req.requestState} == 'S05' or ${req.requestState} == 'S06'" 
 			        class="btn btn-primary border-width-2 d-none d-lg-inline-block">후기작성</button>
 		        </div>
+		        </th:block>
 	        </div>
 	      </div>
 	    </div>

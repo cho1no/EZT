@@ -28,7 +28,7 @@
 						   , file_id
 					FROM career
 					WHERE users_no = #{usersNo}
-					ORDER BY write_dt) a 
+					ORDER BY write_dt DESC) a 
 			<where>
 			<if test="type != ''.toString">
 				AND career_access_tf = #{type}
@@ -62,7 +62,7 @@
 			  FROM ( SELECT *
 					 FROM review
 					 WHERE worker = #{usersNo}
-					 ORDER BY write_dt desc ) a 
+					 ORDER BY write_dt DESC ) a 
 			 ) c
 		<![CDATA[
 		WHERE c.rn <= #{pageNum} * #{amount} AND
@@ -91,7 +91,7 @@
 		                                  		   WHERE users_no = #{usersNo}
 		                                  		   )
 		        				)
-		        ORDER BY write_dt desc
+		        ORDER BY write_dt DESC
 		        ) a 
 		  ) c
 		<![CDATA[
@@ -128,7 +128,7 @@
 			                     		 FROM proposal
 			                     		 WHERE proposal_state = 'A02'
 			                     		 AND worker = #{usersNo})
-			        ORDER BY write_dt desc
+			        ORDER BY write_dt DESC
 			        )  a 
 			  ) c
 			<![CDATA[
@@ -198,7 +198,7 @@
 	              AND rownum = 1) contract_no
 				FROM proposal p
 				WHERE worker = #{usersNo}
-				ORDER BY update_dt desc
+				ORDER BY update_dt DESC
 				)  a 
 			<where>
 			  <if test="type != ''.toString">
@@ -238,7 +238,7 @@
 			  FROM (SELECT c.*, FIND_COMMONCODE(c.contract_state) as contract_state_nm
 					FROM contract c
 					WHERE worker_info = #{usersNo}
-					ORDER BY update_dt desc)  a 
+					ORDER BY update_dt DESC)  a 
 			<where>
 			  <if test="type != ''.toString">
 					AND contract_state = #{type}
@@ -267,7 +267,7 @@
 			  FROM (SELECT *
 					FROM portfolio
 					WHERE users_no = #{usersNo}
-					ORDER BY write_dt desc)  a 
+					ORDER BY write_dt DESC)  a 
 			  ) c
 			<![CDATA[
 			WHERE c.rn <= #{pageNum} * #{amount} AND
@@ -292,7 +292,7 @@
 					SELECT *
 					FROM license
 					WHERE users_no = #{usersNo}
-					ORDER BY write_dt desc ) a ) c
+					ORDER BY write_dt DESC ) a ) c
 		<![CDATA[
 		WHERE c.rn <= #{pageNum} * #{amount} AND
 			  c.rn > (#{pageNum} -1 ) * #{amount}

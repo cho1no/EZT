@@ -13,20 +13,24 @@
 	<form th:action="@{/worker/careerInsert}" th:object="${CareerVO}"
 		method="post" class="p-4 border rounded" name="insertCareer" enctype="multipart/form-data">
 		<input type="hidden" th:field="${userVO.usersNo}">
+		
 		<div class="row mb-2">
 			<div class="col-md-2">
 				<label class="text-black" for="careerStartDt">근무기간</label>
 			</div>
 			<div class="col-md-4">
-				<input name="careerStartDt" type="date" id="careerStartDt" class="form-control" th:field="${car.careerStartDt}" placeholder="YYYY-MM-DD(시작일)">
+				<input name="careerStartDt" type="date" id="careerStartDt" 
+				class="form-control" th:field="${car.careerStartDt}" placeholder="YYYY-MM-DD(시작일)">
 			</div>
 			
 				<strong class="col-md-2 text-center"> - </strong>
 			
 			<div class="col-md-4">
-				<input name="careerEndDt" type="date" id="careerEndDt" class="form-control" th:field="${car.careerEndDt}" placeholder="YYYY-MM-DD(종료일)">
+				<input name="careerEndDt" type="date" id="careerEndDt" 
+				class="form-control" th:field="${car.careerEndDt}" placeholder="YYYY-MM-DD(종료일)">
 			</div>
 		</div>
+		
 		<div class="row mb-2">
 			<div class="col-md-2">
 				<label for="careerInfo" class="text-black">작업내용</label>
@@ -83,6 +87,15 @@
 		}
 		$(insertCareer).submit();
 	};
+	
+		$('#careerEndDt').on('change', function(){
+			if($('#careerStartDt').val() > $('#careerEndDt').val()){
+				return ;
+			}
+			
+		});
+		
+	
 </script>
 </body>
 </html>

@@ -10,13 +10,17 @@
 div.careerList {
 	margin-top: 20px;
 }
+a:hover {
+	text-decoration: none;
+}
 </style>
 </head>
 <body>
 <h4>포트폴리오 목록</h4>
 <div class="row row-cols-1 row-cols-md-3 g-3">
 	<th:block th:each="ptf : ${portfolioList}">
-			<div class="card col-4" >
+			<div class="card col-4">
+			  <a th:href="|@{/find/workerPortfolio(portfolioNo=${ptf.portfolioNo})}|">
 				<div class="card-body">
 					<h5 class="card-title">
 						<label for="ptfTitle">제목</label>
@@ -28,7 +32,9 @@ div.careerList {
 				</div>
 				<ul class="list-group list-group-flush">
 					<li class="list-group-item">
-					  <label for="ptfContent">내용</label>
+					<div>내용:</div>
+					<span>[[${ptf.content}]]</span>
+					<label for="ptfContent">내용</label>
 					  <input class="form-control d-inline-flex col-7" type="text"
 					  	 id="ptfContent" th:value="${ptf.content}" disabled><br>
 					  <label for="ptfPyung">평수</label>
@@ -46,13 +52,10 @@ div.careerList {
 					    disabled readonly>
 					</li>
 				</ul>
-				<div class="card-body">
-					<a href="#" class="card-link">File link</a>
-					<a th:href="|@{/find/workerPortfolio(portfolioNo=${ptf.portfolioNo})}|" class="card-link">상세</a>
-				</div>
+	  	  </a>
 			</div>
-		</div>
 	</th:block>
+		</div>
 	
 	<!-- 페이징 구현 -->
    <div class="row pagination-wrap mt-5" >

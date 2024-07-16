@@ -39,7 +39,8 @@
 	      <a th:href="|@{/find/workerMoreInfo(usersNo=${wkl.usersNo})}|">
 	        <div class="card">
 	          <div class="card-body">
-	            <img src="/images/rvw/team.jpg" class="card-img-top" alt="...">
+	            <img th:src="|/display?fileName=${#strings.replace(wkl.savePath, '\', '/')}/${wkl.saveName}_${wkl.originalFileName}.${wkl.ext}|"
+	             class="card-img-top" alt="...">
 	            <h5 class="card-title">이름:[[${wkl.usersName}]]</h5>
 	            <span>분야:</span>
 	            <th:block th:each="ctc : ${wkl.categoryCode}">
