@@ -162,7 +162,7 @@ function showUpFile(uploadResultArr) {
 	$(uploadResultArr)
 		.each(
 			function(i, obj) {
-				str += imageshow(obj);
+				str += imageshowModal(obj);
 			});
 
 	uploadUL.append(str);
@@ -534,7 +534,7 @@ function modalInfo(result) {
 
 	result.fileList.forEach(e => {
 
-		str += imageshow(e);
+		str += imageshowModal(e);
 	})
 	uploadUL.append(str);
 }
@@ -561,7 +561,7 @@ function modalInsertInfo(result) {
 
 	result.fileList.forEach(e => {
 
-		str += imageshow(e);
+		str += imageshowModal(e);
 
 	})
 	uploadUL.append(str);
@@ -573,7 +573,7 @@ function modalInsertInfo(result) {
 }
 
 // 첨부 파일 이미지 표시
-function imageshow(obj) {
+function imageshowModal(obj) {
 	var str = "";
 
 	var savePath = obj.savePath.replaceAll("\\", "/")

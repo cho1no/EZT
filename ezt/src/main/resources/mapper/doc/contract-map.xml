@@ -273,6 +273,15 @@
 	</select>
 	<!-- 분야 코드 조회 -->
 	
+	<!-- 분야 코드 조회 -->
+	<select id="selectTeamLeaderCode" resultType="CommonCodeVO">
+		SELECT CATEGORY_CODE as codeNo
+			, FIND_COMMONCODE(CATEGORY_CODE) as codeName
+		FROM request
+		WHERE request_no = #{requestNo}
+	</select>
+	<!-- 분야 코드 조회 -->	
+	
 	<!-- 동업 계약서 등록 -->
 	<insert id="InsertPartnerCon" parameterType="PartnershipContractVO">
 	<selectKey keyProperty="partnershipContractNo" resultType="Integer"

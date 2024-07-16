@@ -224,8 +224,7 @@
 								</th:block>
 								<th:block th:unless="${ppsInfo.fileId != 0}">
 									<div class="col-6">
-										<button type="button" class="btn btn-block btn-primary btn-md"
-											th:onClick="|location.href='@{/ppsDelete(proposalNo=${ppsInfo.proposalNo})}'|">삭제</button>
+										<button type="button" class="btn btn-block btn-primary btn-md" id="nofile_delBtn" th:data-proposalno="${ppsInfo.proposalNo}">삭제</button>
 									</div>
 								</th:block>
 							</th:block>
@@ -234,8 +233,16 @@
 							th:if="${#authentication.principal.userNo == ppsInfo.requester} and ${ppsInfo.proposalState == 'A01'}">
 							<div class="col-6"></div>
 							<div class="col-6">							
-								<button type="button" class="btn btn-block btn-primary btn-md" 
-									th:onClick="|location.href='@{/ppsApprove(proposalNo=${ppsInfo.proposalNo}, requestNo=${ppsInfo.requestNo})}'|">승인</button>
+								<button type="button" class="btn btn-block btn-primary btn-md" id="pps_approve"
+									th:data-proposalno="${ppsInfo.proposalNo}" th:data-requestno="${ppsInfo.requestNo}">승인</button>
+							</div>
+						</th:block>
+						<th:block
+							th:if="${#authentication.principal.userNo == userInfo.usersNo} and ${ppsInfo.proposalState == 'A02'}">
+							<div class="col-6"></div>
+							<div class="col-6">							
+								<button type="button" class="btn btn-block btn-primary btn-md"
+									th:onClick="|location.href='@{/conInsert(proposalNo=${ppsInfo.proposalNo})}'|">계약서 작성</button>
 							</div>
 						</th:block>
 
@@ -303,7 +310,6 @@
 		}
 		if ($('#comments').html() == '') {
 			$('#comments').html('입력된 내용이 없습니다');
-			$('#comments').attr('class', 'text-danger');
 		}
 		// 총 예상금액 계산
 		var total = 0;
@@ -325,6 +331,52 @@
 		window.onload = function(){
 			fileDownload(fileList);
 		}
+		
+		$('#nofile_delBtn').on('click', function(event){
+			let proposalNo = $(this).data('proposalno');
+			event.stopPropagation();
+			Swal.fire({
+				title: '이대로 진행하시겠습니까?',
+				text: '다시 되돌릴 수 없습니다.',
+				icon: 'warning',
+
+				showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+				confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+				cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+				confirmButtonText: '삭제', // confirm 버튼 텍스트 지정
+				cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+			}).then(result => {
+				// 만약 Promise리턴을 받으면,
+				if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+					location.href="/ppsDelete?proposalNo="+proposalNo;
+					$(this).unbind('click').click();
+				}
+			});
+		})
+		$('#pps_approve').on('click', function(event){
+			let proposalNo = $(this).data('proposalno');
+			let requestNo = $(this).data('requestno');
+			event.stopPropagation();
+			Swal.fire({
+				title: '이대로 진행하시겠습니까?',
+				text: '다시 되돌릴 수 없습니다.',
+				icon: 'warning',
+
+				showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+				confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+				cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+				confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+				cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+			}).then(result => {
+				// 만약 Promise리턴을 받으면,
+				if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+					location.href="/ppsApprove?proposalNo=" + proposalNo + "&requestNo=" + requestNo;
+					$(this).unbind('click').click();
+				}
+			});
+		})
 	</script>
 
 	<!-- uploadAjax -->
