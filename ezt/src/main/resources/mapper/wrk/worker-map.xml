@@ -28,19 +28,17 @@
 						   , file_id
 					FROM career
 					WHERE users_no = #{usersNo}
+					<if test="careerAccessTf != null and careerAccessTf != ''.toString()">
+						AND career_access_tf = #{careerAccessTf}
+					</if>
 					ORDER BY write_dt DESC) a 
-			<where>
-			<if test="type != ''.toString">
-				AND career_access_tf = #{type}
-			</if>
-			</where>	
 			 ) c
 		<![CDATA[
 		WHERE c.rn <= #{pageNum} * #{amount} AND
 			  c.rn > (#{pageNum} -1 ) * #{amount}
 		]]>
 	</select>
-	
+	<!-- 경력증명서 데이터갯수  -->
 	<select id="getWorkerTotalCareerList" resultType="int">
 		SELECT COUNT(*)
 		FROM (SELECT career_start_dt
@@ -49,8 +47,11 @@
 						   , career_info
 						   , FIND_COMMONCODE(career_access_tf) as career_access_tf
 						   , file_id
-					FROM career
-					WHERE users_no = #{usersNo}
+				FROM career
+				WHERE users_no = #{usersNo}
+				<if test="careerAccessTf != null and careerAccessTf != ''.toString()">
+					AND career_access_tf = #{careerAccessTf}
+				</if>
 			  )
 	</select>
 	<!-- 후기목록 조회 -->
@@ -62,7 +63,12 @@
 			  FROM ( SELECT *
 					 FROM review
 					 WHERE worker = #{usersNo}
-					 ORDER BY write_dt DESC ) a 
+					 <choose>
+					   <when test="starState != null and starState != ''.toString()">ORDER BY star ${starState}</when>
+					   <otherwise>ORDER BY write_dt DESC</otherwise>	 
+					 </choose>
+					 
+			       ) a 
 			 ) c
 		<![CDATA[
 		WHERE c.rn <= #{pageNum} * #{amount} AND
@@ -74,7 +80,11 @@
 		SELECT COUNT(*)
 		FROM (SELECT *
 			  FROM review
-			  WHERE worker = #{usersNo})
+			  WHERE worker = #{usersNo}
+			  <choose>
+			    <when test="starState != null and starState != ''.toString()">ORDER BY star ${starState}</when>
+			    <otherwise>ORDER BY write_dt DESC</otherwise>	 
+			  </choose>)
 	</select>
 	<!-- 팀 후기목록 조회 -->
 	<select id="selectWorkerTeamReviewList" resultType="ReviewVO">
@@ -136,7 +146,7 @@
 				  c.rn > (#{pageNum} -1 ) * #{amount}
 			]]>    		                     		
 	</select>
-	
+	<!-- 의뢰목록 데이터갯수조회 -->
 	<select id="getWorkerTotalRequestCount" resultType="int">
 		SELECT COUNT(*)
 		FROM (SELECT title
@@ -170,6 +180,7 @@
 				  c.rn > (#{pageNum} -1 ) * #{amount}
 			]]>    
 	</select>
+	<!-- 팀의뢰목록 데이터갯수 -->
 	<select id="selectWorkerTeamRequestCount" resultType="int">
 		SELECT COUNT(*)
 		FROM ( SELECT r.*
@@ -188,30 +199,28 @@
 	FROM (SELECT ROWNUM as rn
 		  		, a.*
 		  FROM (SELECT p.*
-			   , FIND_COMMONCODE(p.proposal_state) as proposal_state_nm
-        	   , (SELECT SUM(pd.unitprice * pd.qty)
-	              FROM proposal_detail pd
-	              WHERE pd.proposal_no = p.proposal_no) as total
-	           , (SELECT contract_no
-	              FROM contract c
-	              WHERE c.proposal_no = p.proposal_no
-	              AND rownum = 1) contract_no
+					   , FIND_COMMONCODE(p.proposal_state) as proposal_state_nm
+			       	   , (SELECT SUM(pd.unitprice * pd.qty)
+			              FROM proposal_detail pd
+			              WHERE pd.proposal_no = p.proposal_no) as total
+			           , (SELECT contract_no
+				          FROM contract c
+				          WHERE c.proposal_no = p.proposal_no
+				          AND rownum = 1) contract_no
 				FROM proposal p
 				WHERE worker = #{usersNo}
+			    <if test="proposalState != null and proposalState != ''.toString()">
+					  AND proposal_state = #{proposalState}
+			    </if>
 				ORDER BY update_dt DESC
 				)  a 
-			<where>
-			  <if test="type != ''.toString">
-					AND proposal_state = #{type}
-			  </if>
-			</where>		
 		  ) c
 		<![CDATA[
 		WHERE c.rn <= #{pageNum} * #{amount} AND
 			  c.rn > (#{pageNum} -1 ) * #{amount}
 		]]>  
 	</select>
-	
+	<!-- 견적서 목록데이터 갯수조회 -->
 	<select id="getWorkerTotalProposalCount" resultType="int">
 	SELECT COUNT(*)
 	FROM (SELECT p.*
@@ -221,6 +230,9 @@
 	                  WHERE pd.proposal_no = p.proposal_no) as total
 		  FROM proposal p
 		  WHERE worker = #{usersNo}
+	      <if test="proposalState != null and proposalState != ''.toString()">
+			    AND proposal_state = #{proposalState}
+	      </if>
 		 )
 	</select>
 	
@@ -238,24 +250,25 @@
 			  FROM (SELECT c.*, FIND_COMMONCODE(c.contract_state) as contract_state_nm
 					FROM contract c
 					WHERE worker_info = #{usersNo}
+					  <if test="contractState != null and contractState != ''.toString()">
+							AND contract_state = #{contractState}
+					  </if>
 					ORDER BY update_dt DESC)  a 
-			<where>
-			  <if test="type != ''.toString">
-					AND contract_state = #{type}
-			  </if>
-			</where>
 			  ) c
 			<![CDATA[
 			WHERE c.rn <= #{pageNum} * #{amount} AND
 				  c.rn > (#{pageNum} -1 ) * #{amount}
 			]]>  
 	</select>
-	
+	<!-- 계약서 데이터 갯수 -->
 	<select id="getWorkerTotalContractCount" resultType="int">
 		SELECT COUNT (*)
 		FROM (SELECT c.*, FIND_COMMONCODE(c.contract_state) as contract_state_nm
 			  FROM contract c
 		 	  WHERE worker_info = #{usersNo}
+		 	  <if test="contractState != null and contractState != ''.toString()">
+					AND contract_state = #{contractState}
+			  </if>
 			 )
 	</select>
 	
@@ -286,6 +299,9 @@
 				            WHERE boss_tf = 'Y') f
 				      ON p.file_id = f.file_id
 					WHERE p.users_no = #{usersNo}
+					<if test="title != null and title != ''.toString()">
+						AND title like '%'||#{title}||'%' 
+					</if>
 					ORDER BY p.write_dt DESC)  a 
 			  ) c
 			<![CDATA[

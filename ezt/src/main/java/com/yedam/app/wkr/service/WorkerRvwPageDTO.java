@@ -19,7 +19,9 @@ public class WorkerRvwPageDTO {
 		this.endPage = (int) (Math.ceil(cri.getPageNum() / 5.0)) * 5;
 		this.startPage = this.endPage -4;
 		int realEnd = (int) (Math.ceil((total * 1.0)/cri.getAmount()));
-		
+		if(realEnd == 0) {
+			realEnd = 1;
+		}
 		if(realEnd < this.endPage) {
 			this.endPage = realEnd;
 			

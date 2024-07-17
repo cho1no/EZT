@@ -5,9 +5,13 @@ import lombok.Data;
 @Data
 public class UserRvwCriteria {
 	//페이징
-	private int pageNum;
+	private Integer pageNum;
 	private int amount;
 	private int writer;
+	private String categoryCode;
+	private String regionCode;
+	
+	
 	
 	//검색
 	private String type;

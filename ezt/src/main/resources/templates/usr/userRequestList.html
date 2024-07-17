@@ -10,6 +10,12 @@
  <link rel="stylesheet" href="/css/rvw/reviewInsert.css">
 </head>
 <body>
+<form name="usrReqList" id="usrReqList">
+<input type="hidden" name="categoryCode" th:value="${cri.categoryCode}">
+<input type="hidden" name="requestState" th:value="${cri.requestState}">
+<input type="hidden" name="pageNum">
+</form>
+
 <div class="d-flex mb-3">
   <div class="me-auto p-2">
   <h4>의뢰 목록</h4>
@@ -17,7 +23,8 @@
   <div class="p-2">
      <select id="categoryCategory">
      	<option value="">분야</option>
-  	<option th:each="cate : ${categoryCode}" th:value="${cate.codeNo}">
+  	<option th:each="cate : ${categoryCode}" th:value="${cate.codeNo}"
+  		th:selected="${cri.categoryCode} == ${cate.codeNo}">
   		[[${cate.codeName}]]
   	</option>    
      </select>
@@ -25,7 +32,8 @@
    <div class="p-2">
       <select id="requestState">
      	<option value="">상태</option>
-  	<option th:each="reqSta : ${requestState}" th:value="${reqSta.codeNo}">
+  	<option th:each="reqSta : ${requestState}" th:value="${reqSta.codeNo}"
+  		th:selected="${cri.requestState} == ${reqSta.codeNo}">
   		[[${reqSta.codeName}]]
   	</option>    
      </select>
@@ -37,42 +45,45 @@
 	    <div class="card">
 <!-- 	      <img src="..." class="card-img-top" alt="..."> -->
 	      <div class="card-body">
-	        <h5 class="card-title">제목 : [[${req.title}]]</h5>
-	        <p class="card-text">[[${req.categoryCodeNm}]]</p>
+	        <div class="d-flex justify-content-between">
+	        <h5 class="card-title">[[${#strings.abbreviate(req.title,10)}]]</h5>
+	        <p class="card-text reqState"><span>[[${req.requestStateNm}]]</span></p>
+	        </div>
+	        <div class="d-flex justify-content-between">
+	        <p class="card-text"><strong>[[${req.categoryCodeNm}]]</strong></p>
 	        <p class="card-text">[[${#dates.format(req.writeDt, 'yyyy-MM-dd')}]]</p>
-	        <p class="card-text reqState">진행상태 : <span>[[${req.requestStateNm}]]</span></p>
-	        <div class="row">
-	        	<div class="col-md-6" style="text-align:center;">
+	        </div>
+	        <div class="d-flex justify-content-end">
+	        	<div class="">
 			        <button type="button" th:onclick="|location.href='@{/request/info(requestNo=${req.requestNo})}'|"
-			         class="btn btn-primary border-width-2 d-none d-lg-inline-block">상세</button>
-		        </div>
+			         class="btn btn-sm btn-primary border-width-2 d-none d-lg-inline-block">상세</button>
 		        <th:block th:if="${req.reviewNo <= 0}">
-		        <div class="col-md-6">
 			        <button id="modalBtn" th:onclick="reqModal([[${req.requestNo}]])" 
 			        th:if="${req.requestState} == 'S05' or ${req.requestState} == 'S06'" 
-			        class="btn btn-primary border-width-2 d-none d-lg-inline-block">후기작성</button>
-		        </div>
+			        class="btn btn-sm btn-primary border-width-2 d-none d-lg-inline-block">후기작성</button>
 		        </th:block>
+		        </div>
 	        </div>
 	      </div>
 	    </div>
 	  </div>
-  </th:block>	
+  </th:block>
+  <!-- 데이터가 없을시 출력문구 -->
+  <div th:if="${page.total == 0}">데이터가 없습니다.</div>	
 </div>
-<!--  후기작성끝나면 후기작성버튼 없어져야됨-->
     
    <div class="row pagination-wrap mt-5">
    <div class="col-md-12 text-center ">
      <div class="custom-pagination ml-auto">
-       <a th:if="${page.prev}" th:href="@{/user/reqList(pageNum=${page.startPage - 1})}" class="prev">Prev</a>
+       <a th:if="${page.prev}" href="#" th:data-pagenum="${page.startPage - 1}" class="prev">Prev</a>
        <div class="d-inline-block">
        <th:block th:each="num : ${#numbers.sequence(page.startPage, page.endPage)}">
-       	<a th:class="${page.cri.pageNum == num ? 'active' : ''}" th:href="|@{/user/reqList(pageNum=${num})}|" >
+       	<a th:class="${page.cri.pageNum == num ? 'active' : ''}" href="#" th:data-pagenum="${num}">
 			[[${num}]]</a>
 	  </th:block> 
           
         </div>
-        <a th:if="${page.next}" th:href="@{/user/reqList(pageNum=${page.endPage + 1})}" class="next">Next</a>
+        <a th:if="${page.next}" href="#" th:data-pagenum="${page.endPage + 1}" class="next">Next</a>
       </div>
     </div>
   </div>
@@ -125,19 +136,31 @@
    		});
    	}
 	
-	const urlParams = new URL(location.href).searchParams;
+// 	const urlParams = new URL(location.href).searchParams;
 		
-	const cate =  urlParams.get('type') == null ? '' : urlParams.get('type');
-	const reqSta =  urlParams.get('keyword') == null ? '' : urlParams.get('keyword');
-	const pageNum = urlParams.get('pageNum') == null ? '1' : urlParams.get('pageNum');
-	$('#categoryCategory').val(cate);
-	$('#requestState').val(reqSta);
+// 	const cate =  urlParams.get('type') == null ? '' : urlParams.get('type');
+// 	const reqSta =  urlParams.get('keyword') == null ? '' : urlParams.get('keyword');
+// 	const pageNum = urlParams.get('pageNum') == null ? '1' : urlParams.get('pageNum');
+// 	$('#categoryCategory').val(cate);
+// 	$('#requestState').val(reqSta);
+	
 	
 	$('#categoryCategory').on('change', (ev)=>{
-		location.href="/user/reqList?pageNum=" + pageNum + "&type=" + ev.target.value + "&keyword=" + reqSta; 
+		$('[name="categoryCode"]').val(ev.target.value)
+		$('#usrReqList').submit();
 	});
+	
 	$('#requestState').on('change', (ev)=>{
-		location.href="/user/reqList?pageNum=" + pageNum + "&type=" + cate + "&keyword=" + ev.target.value; 
+		$('[name="requestState"]').val(ev.target.value)
+		$('#usrReqList').submit();
 	});
+	
+	$('.pagination-wrap a').on('click', function(){
+		$('[name="pageNum"]').val($(this).data("pagenum"))
+		$('#usrReqList').submit();
+	})
+	
+	
+	
 </script>
 </html>

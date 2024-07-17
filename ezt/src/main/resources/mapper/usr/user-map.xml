@@ -142,22 +142,41 @@
 					      JOIN request rq
 				  	      ON re.request_no = rq.request_no
 					  WHERE re.writer = #{writer}
-					  ORDER BY re.write_dt DESC 
-					  ) a 
-			<where>
-				<if test="type != ''.toString">
-					AND category_code = #{type}
-				</if>
-				<if test="keyword != ''.toString">
-					AND region_code = #{keyword}
-				</if>
-			</where>
+					<if test="categoryCode != null and categoryCode != ''.toString()">
+						AND category_code = #{categoryCode}
+					</if>
+					<if test="regionCode != null and regionCode != ''.toString()">
+						AND region_code = #{regionCode}
+					</if>
+					  ORDER BY re.write_dt DESC ) a 
 			  ) c
 		 <![CDATA[
 		 WHERE c.rn <= #{pageNum} * #{amount} AND
 		 	   c.rn > (${pageNum} -1 ) * #{amount}
 		 ]]>
 	</select>
+	
+	<!-- 후기(리뷰)목록 데이터갯수 조회 -->
+	<select id="getTotalReviewCount" resultType="int">
+		SELECT COUNT(*)
+		FROM (SELECT re.star
+			   , re.content 
+			   , USERNAME(re.worker) as worker_name
+			   , re.review_division
+			   , FIND_COMMONCODE(rq.category_code) as category_code
+			   , FIND_COMMONCODE(rq.region_code) as region_code
+			  FROM review re
+		    	  JOIN request rq
+		    	  ON re.request_no = rq.request_no
+			  WHERE re.writer = #{writer}
+		  	<if test="categoryCode != null and categoryCode != ''.toString()">
+					AND category_code = #{categoryCode}
+			</if>
+			<if test="regionCode != null and regionCode != ''.toString()">
+					AND region_code = #{regionCode}
+			</if>)
+	</select>
+	
 	<!-- 의뢰목록 -->
 	<select id="selectUserReqList" resultType="RequestVO">
 	   SELECT c.*		  
@@ -178,41 +197,21 @@
 					         	  AND rownum = 1),0) review_no
 					FROM request r
 					WHERE r.requester = #{usersNo}
+					<if test="categoryCode != null and categoryCode != ''.toString()">
+						AND category_code = #{categoryCode}
+					</if>
+					<if test="requestState != null and requestState != ''.toString()">
+						AND request_state = #{requestState}
+					</if>
 					ORDER BY r.write_dt DESC ) a 
-			<where>
-			<if test="type != ''.toString">
-				AND category_code = #{type}
-			</if>
-			<if test="keyword != ''.toString">
-				AND request_state = #{keyword}
-			</if>
-			</where>) c
+			 ) c
 		<![CDATA[
 		WHERE c.rn <= #{pageNum} * #{amount} AND
 			  c.rn > (#{pageNum} -1 ) * #{amount}
 		]]>
 	</select>
-	<!-- 회원 탈퇴 -->
-	<update id="updateUserState" parameterType="UserVO">
-		UPDATE users
-		SET users_state = 'quit'
-		WHERE users_id = #{usersId}
-	</update>
 	
-	<select id="getTotalReviewCount" resultType="int">
-		SELECT COUNT(*)
-		FROM (SELECT re.star
-			   , re.content 
-			   , USERNAME(re.worker) as worker_name
-			   , re.review_division
-			   , FIND_COMMONCODE(rq.category_code) as category_code
-			   , FIND_COMMONCODE(rq.region_code) as region_code
-			  FROM review re
-		    	  JOIN request rq
-		    	  ON re.request_no = rq.request_no
-			  WHERE re.writer = #{writer})
-	</select>
-	
+	<!-- 의뢰목록 데이터갯수 조회 -->
 	<select id ="getTotalRequestCount" resultType="int">
 		SELECT COUNT(*)
 		FROM (SELECT request_no
@@ -223,9 +222,23 @@
 					   , FIND_COMMONCODE(request_state) as request_state_nm
 					   , file_id
 				FROM request
-				WHERE requester = #{usersNo})
+				WHERE requester = #{usersNo}
+				<if test="categoryCode != null and categoryCode != ''.toString()">
+						AND category_code = #{categoryCode}
+				</if>
+				<if test="requestState != null and requestState != ''.toString()">
+					AND request_state = #{requestState}
+				</if>)
 	</select>
-
+	
+	<!-- 회원 탈퇴 -->
+	<update id="updateUserState" parameterType="UserVO">
+		UPDATE users
+		SET users_state = 'quit'
+		WHERE users_id = #{usersId}
+	</update>
+	
+	<!-- 작업자 찾기Where절 -->
 	<sql id="findWorker">
 	   WHERE users_role = 'ROLE_WORKER'
 	   AND users_state = 'active'
@@ -270,6 +283,7 @@
 	    ]]>
 	</select>
 	
+	<!-- 작업자 총 수계산 -->
 	<select id="getTotalWorkerCount" resultType="int">
 		SELECT COUNT(*)
 		FROM (SELECT *

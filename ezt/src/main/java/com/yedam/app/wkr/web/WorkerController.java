@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -143,13 +144,16 @@ public class WorkerController {
    
    //경력증명서 목록
    @GetMapping("/careerList")
-   public String workerCareerList (@AuthenticationPrincipal LoginUserVO vo, Model model, MultipartFile[] uploadFile, WorkerPFCriteria cri) {
+   public String workerCareerList (@AuthenticationPrincipal LoginUserVO vo,
+		   							Model model,
+		   							MultipartFile[] uploadFile,
+		   							@ModelAttribute("cri") WorkerPFCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
 	   
 	   model.addAttribute("careerAccessTf", commonCodeService.selectCommonCodeAll("0A"));
 	   cri.setUsersNo(vo.getUserVO().getUsersNo());
-	   if (cri.getType() == null) {
-			cri.setType("");
+	   if (cri.getPageNum() == null) {
+			cri.setPageNum(1);
 		}
 	   List<CareerVO> list = workerService.selectCareerList(cri);
 	   model.addAttribute("careerList", list); 
@@ -180,9 +184,15 @@ public class WorkerController {
    
    //작업자 후기 목록조회
    @GetMapping("/reviewList")
-   public String workerReviewList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri) {
+   public String workerReviewList(@AuthenticationPrincipal LoginUserVO vo,
+		   						  Model model,
+		   						  @ModelAttribute("cri") WorkerRvwCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
 	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   
+	   if(cri.getPageNum() == null) {
+		   cri.setPageNum(1);
+ 	   }
 	   List<ReviewVO> list = workerService.selectWorkerReviewList(cri);
 	   model.addAttribute("reviewList", list);
 	   //페이징
@@ -233,12 +243,14 @@ public class WorkerController {
    
    //작업자 견적서 목록조회
    @GetMapping("/proposalList")
-   public String workerProposalList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri) {
+   public String workerProposalList(@AuthenticationPrincipal LoginUserVO vo,
+		   						    Model model,
+		   						    @ModelAttribute("cri") WorkerRvwCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
 	   model.addAttribute("proposalState", commonCodeService.selectCommonCodeAll("0A"));
 	   cri.setUsersNo(vo.getUserVO().getUsersNo());
-	   if (cri.getType() == null) {
-			cri.setType("");
+	   if (cri.getPageNum() == null) {
+			cri.setPageNum(1);
 	   }
 	   
 	   List<ProposalVO> pList = workerService.selectWorkerProposalList(cri);
@@ -264,14 +276,17 @@ public class WorkerController {
    
    //작업자 계약서 목록조회
    @GetMapping("/contractList")
-   public String workerContractList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerRvwCriteria cri, RedirectAttributes redirectAttributes) {
+   public String workerContractList(@AuthenticationPrincipal LoginUserVO vo,
+		   						    Model model,
+		   						    @ModelAttribute("cri") WorkerRvwCriteria cri,
+		   						    RedirectAttributes redirectAttributes) {
        // 로그인 사용자 정보 가져오기
        model.addAttribute("userVO", vo.getUserVO());
        model.addAttribute("contractState", commonCodeService.selectCommonCodeAll("0E"));
        // 현재 사용자의 계약 목록 조회를 위한 조건 설정
        cri.setUsersNo(vo.getUserVO().getUsersNo());
-       if (cri.getType() == null) {
-			cri.setType("");
+       if (cri.getPageNum() == null) {
+			cri.setPageNum(1);
 		}
        // 계약 목록 조회
        List<ContractVO> cList = workerService.selectWorkerContractList(cri);
@@ -297,9 +312,14 @@ public class WorkerController {
    
    //작업자 포트폴리오 목록조회
    @GetMapping("/portfolioList")
-   public String workerpfList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerPFCriteria cri) {
+   public String workerpfList(@AuthenticationPrincipal LoginUserVO vo,
+		   					  Model model,
+		   					  @ModelAttribute("cri") WorkerPFCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
 	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   if (cri.getPageNum() == null) {
+			cri.setPageNum(1);
+	   }
 	   List<PortfolioVO> list = workerService.selectWorkerPortfolioList(cri);
 	   model.addAttribute("portfolioList", list);
 	   

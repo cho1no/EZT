@@ -9,6 +9,18 @@
       th:replace="common/configs/default_config :: ConfigFragment"
     ></th:block>
     <scr th:insert="common/fragments/default_scr :: scrFragment"></scr>
+    <style>
+      a.nav-link {
+        padding: 0;
+        font-size: 14px;
+      }
+      button.accordion-button {
+        padding: 12px 16px;
+      }
+      div.accordion-body {
+        padding: 12px 16px;
+      }
+    </style>
   </head>
   <body id="top">
     <div class="site-wrap">
@@ -23,14 +35,22 @@
         class="section-hero inner-page"
         style="background-color: white"
         id="home-section"
-      >
-      </section>
+      ></section>
       <section class="back-smooth"></section>
-      <section class="site-section">
+      <section class="site-section pt-5 mt-5">
         <div class="container">
+         <div class="p-5 border rounded-4 border-light-subtle bg-white">
+          <div
+              class="ezt-section-title pb-5 mb-5"
+              style="border-bottom: 1px solid #dee2e6"
+            >
+              <div class="text-center">
+                <h2 class="m-0">마이페이지</h2>
+                <b style="font-size: 14px; color: #89ba16">내 정보 조회하기</b>
+              </div>
+            </div>
           <div class="row">
-            <div class="col-3">
-              <section class="pt-4">
+            <div class="col-3 pe-4">
                 <div
                   class="accordion accordion-flush"
                   id="accordionFlushExample"
@@ -183,12 +203,12 @@
                     </div>
                   </div>
                 </div>
-              </section>
             </div>
-            <div class="col-9 pt-4 pb-4">
+            <div class="col-9 px-4 pb-4">
               <main layout:fragment="Content"></main>
             </div>
           </div>
+         </div>
         </div>
       </section>
       <footer

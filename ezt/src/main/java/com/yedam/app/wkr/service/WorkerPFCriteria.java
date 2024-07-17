@@ -5,10 +5,11 @@ import lombok.Data;
 @Data
 public class WorkerPFCriteria {
 	//페이징
-	private int pageNum;
+	private Integer pageNum;
 	private int amount;
 	private int usersNo;
-	
+	private String title;
+	private String careerAccessTf;
 	//검색
 	private String type;
 	private String keyword;

@@ -5,9 +5,12 @@ import lombok.Data;
 @Data
 public class WorkerRvwCriteria {
 	//페이징
-	private int pageNum;
+	private Integer pageNum;
 	private int amount;
 	private int usersNo;
+	private String proposalState;
+	private String starState;
+	private String contractState;
 	
 	//검색
 	private String type;
