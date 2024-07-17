@@ -26,10 +26,10 @@ public class SpringSecurityConfig {
 	@Bean
 	SecurityFilterChain filterChin(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests()
-				.antMatchers("/", "/main", "/find/**", "/review/**", "/admin", "/request/**", "/cht/**", "/alm/**", "/adm/**", "/api/**", "/verify/**", "/login/**", "/signUp/**", "/css/**", "/fonts/**", "/images/**", "/js/**").permitAll()
+				.antMatchers("/", "/main", "/find/**", "/review/**", "/request/**", "/cht/**", "/alm/**", "/adm/**", "/api/**", "/verify/**", "/login/**", "/signUp/**", "/css/**", "/fonts/**", "/images/**", "/js/**").permitAll()
 				.antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				.antMatchers("/worker/**").hasAnyRole("WORKER", "ADMIN")
-				.antMatchers("/admin/**").hasAnyAuthority("ROLE ADMIN")
+				.antMatchers("/admin/**").hasAnyRole("ADMIN")
 				.anyRequest().authenticated()
 			.and()
 			.formLogin().loginPage("/login").usernameParameter("id")
@@ -38,6 +38,8 @@ public class SpringSecurityConfig {
 			.and()
 			.logout()
 				.logoutSuccessUrl("/main")
+			.and()
+			.exceptionHandling().accessDeniedPage("/error/403")
 			.and()
 			.csrf().disable();
 		return http.build();

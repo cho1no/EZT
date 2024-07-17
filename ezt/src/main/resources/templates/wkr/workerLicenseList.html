@@ -10,6 +10,9 @@
 .modal-backdrop{
 	display: none;
 }
+.modal-content {
+	box-shadow:50px !important;
+}
 </style>
 </head>
 <body>
@@ -26,7 +29,7 @@
         <span class="badge"><button type="button" class="btn btn-primary" data-bs-toggle="modal" th:attr="data-bs-target=${'#exampleModal'+lic.licenseNo}">상세보기</button></span>
         <!-- Modal -->
 		<div class="modal fade" th:attr="id='exampleModal'+${lic.licenseNo}" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog">
+		  <div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <h1 class="modal-title fs-5" id="exampleModalLabel">자격증 정보</h1>
@@ -35,8 +38,8 @@
 		      <div class="modal-body">
 		        <ul class="list-group list-group-flush">
 				  <li class="list-group-item">[[${lic.licenseInfo}]]</li>
-<!-- 				  <li class="list-group-item">[[${lic.fileId}]]</li> -->
-				  <li class="list-group-item">발급일 : [[${#dates.format(lic.licenseGetDt, 'yyyy-MM-dd')}]]</li>
+				  <li class="list-group-item">자격증 번호 : [[${lic.licenseDetailNo}]]</li>
+				  <li class="list-group-item">취득일 : [[${#dates.format(lic.licenseGetDt, 'yyyy-MM-dd')}]]</li>
 				  <li class="list-group-item">인증기관 : [[${lic.checkCenter}]]</li>
 				  <li class="list-group-item">등록일 : [[${#dates.format(lic.writeDt, 'yyyy-MM-dd')}]]</li>
 				</ul>

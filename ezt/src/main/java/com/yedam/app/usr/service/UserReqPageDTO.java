@@ -1,7 +1,5 @@
 package com.yedam.app.usr.service;
 
-import com.yedam.app.req.service.Criteria;
-
 import lombok.Data;
 
 @Data
@@ -22,6 +20,9 @@ public class UserReqPageDTO {
 		this.startPage = this.endPage -4;
 		int realEnd = (int) (Math.ceil((total * 1.0)/cri.getAmount()));
 		
+		if(realEnd == 0) {
+			realEnd = 1;
+		}
 		if(realEnd < this.endPage) {
 			this.endPage = realEnd;
 			

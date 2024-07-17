@@ -16,6 +16,11 @@ button.teamBtn {
 </style>
 </head>
 <body>
+<form name="wkrPpsList" id="wkrPpsList">
+<input type="hidden" name="proposalState" th:value="${cri.proposalState}">
+<input type="hidden" name="pageNum">
+</form>
+
 	<div class="d-flex mb-3">
 	  <div class="me-auto p-2">
 	  <h4>내가 쓴 견적서</h4>
@@ -23,7 +28,8 @@ button.teamBtn {
 	  <div class="p-2">
 	    <select id="proposalStateCategory">
 	    	<option value="">구분</option>
-			<option th:each="proSta : ${proposalState}" th:value="${proSta.codeNo}">
+			<option th:each="proSta : ${proposalState}" th:value="${proSta.codeNo}"
+				th:selected="${cri.proposalState} == ${proSta.codeNo}">
 				[[${proSta.codeName}]]
 			</option>    
 	    </select>
@@ -32,13 +38,12 @@ button.teamBtn {
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
   	<th:block th:each="pps : ${proposalList}">
-		<div class="list-group m-3">
+		<div class="list-group m-3" style="font-size:14px;">
 		  <a th:href="@{/ppsInfo(proposalNo=${pps.proposalNo})}" class="list-group-item list-group-item-action">
-		    <span>비고 : [[${pps.comments}]]</span><br>
-		    <span>단가 : </span><span class="totalPrice">[[${pps.total}]]</span><span> (원)/</span>
-		    <span>공사 일정: [[${#dates.format(pps.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(pps.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
-		    <span>작성일 : [[${#dates.format(pps.writeDt, 'yyyy-MM-dd')}]] / 수정일 : [[${#dates.format(pps.updateDt, 'yyyy-MM-dd')}]]</span>
-		    <span th:if="${pps.proposalState} != null">/  구분 : [[${pps.proposalStateNm}]]</span>
+		    <strong>[[${pps.comments}]]</strong> <span class="state" style="float:right;" th:if="${pps.proposalState} != null"><strong>[[${pps.proposalStateNm}]]</strong></span></h5> <br>
+		    <span>[[${#numbers.formatDecimal(pps.total, 0, 'COMMA', 0,'POINT')}]]원</span>
+		    <span style="float:right;">[[${#dates.format(pps.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(pps.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
+		    
 		  </a>
 		  <th:block th:if="${pps.contractNo <= 0}">
 			  <button class="teamBtn" type="button" th:onclick="|location.href='@{/conInsert(proposalNo=${pps.proposalNo})}'|" 
@@ -46,47 +51,47 @@ button.teamBtn {
 		  </th:block>
 		</div>
 	</th:block>
+	<!-- 데이터가 없을시 출력문구 -->
+  <div th:if="${page.total == 0}">데이터가 없습니다.</div>
   </div>
 </div>
 <!-- 페이징 구현 -->
 <div class="row pagination-wrap mt-5" >
       <div class="col-md-12 text-center ">
         <div class="custom-pagination ml-auto">
-          <a th:if="${page.prev}" th:href="@{/worker/proposalList(pageNum=${page.startPage - 1})}" class="prev">Prev</a>
+          <a th:if="${page.prev}" href="#" th:data-pagenum="${page.startPage - 1}" class="prev">Prev</a>
           <div class="d-inline-block" id="pagination">
             <th:block th:each="num : ${#numbers.sequence(page.startPage, page.endPage)}">
-       	      <a th:class="${page.cri.pageNum == num ? 'active' : ''}" th:href="|@{/worker/proposalList(pageNum=${num})}|" >[[${num}]]</a>
+       	      <a th:class="${page.cri.pageNum == num ? 'active' : ''}" href="#" th:data-pagenum="${num}">[[${num}]]</a>
 	  	 	</th:block> 
           </div>
-          <a th:if="${page.next}" th:href="@{/worker/proposalList(pageNum=${page.endPage + 1})}" class="next">Next</a>
+          <a th:if="${page.next}" href="#" th:data-pagenum="${page.endPage + 1}" class="next">Next</a>
         </div>
       </div>
     </div>
 </body>
 <script th:inline="javascript">
-// let price = $(".totalPrice").text();
-// console.log(price);
-// $(document).ready(function () {
-// $(function(){
-// 	var num = $(".totalPrice").text()
-//     	//아이디 tag인 태그의 text를 읽어온다 
-// 	num2 = $.numberWithCommas(parseInt(num));
-//   	// 받아온 text값을 정수로 변환하여 numberwithCommas 함수의 인자값으로 넣는다
-// })
-
-// $.numberWithCommas = function (x) {
-// 	  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-// 	}
-// })
-
-const urlParams = new URL(location.href).searchParams;
-	
-	const proSta =  urlParams.get('type') == null ? '' : urlParams.get('type');
-	const pageNum = urlParams.get('pageNum') == null ? '1' : urlParams.get('pageNum');
-	$('#proposalStateCategory').val(proSta);
-	
+	$(document).ready(function () {
+		$('span.state').each((i, e) => {
+			if ($(e).text() == '승인'){
+				$(e).css('color','blue');
+			}
+			if ($(e).text() == '대기'){
+				$(e).css('color','green');
+			}
+			if ($(e).text() == '반려'){
+				$(e).css('color','red');
+			}
+		})
+	});
 	$('#proposalStateCategory').on('change', (ev) => {
-		location.href="/worker/proposalList?pageNum=" + pageNum + "&type=" + ev.target.value ;
+		$('[name="proposalState"]').val(ev.target.value)
+		$('#wkrPpsList').submit();
+	});
+	$('.pagination-wrap a').on('click', function(){
+		$('[name="pageNum"]').val($(this).data("pagenum"))
+		$('#wkrPpsList').submit();
 	})
+	
 </script>
 </html>

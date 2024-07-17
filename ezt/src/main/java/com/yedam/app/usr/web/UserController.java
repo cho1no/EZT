@@ -134,17 +134,14 @@ public class UserController {
 	
 	//사용자 후기목록 조회
 	@GetMapping("/rvwList")
-	public String userReviewList(Model model, UserRvwCriteria cri, @AuthenticationPrincipal LoginUserVO vo) {
+	public String userReviewList(Model model, @ModelAttribute("cri") UserRvwCriteria cri, @AuthenticationPrincipal LoginUserVO vo) {
 		model.addAttribute("userVO", vo.getUserVO());
 		
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
 		model.addAttribute("regionCode", commonCodeService.selectCommonCodeAll("0B"));		
 		cri.setWriter(vo.getUserVO().getUsersNo());
-		if (cri.getKeyword() == null) {
-			cri.setKeyword("");
-		}
-		if (cri.getType() == null) {
-			cri.setType("");
+		if(cri.getPageNum() == null) {
+			cri.setPageNum(1);
 		}
 		List<ReviewVO> list = userService.userReviewList(cri);
 		model.addAttribute("reviewList", list);
@@ -159,17 +156,16 @@ public class UserController {
 	
 	//사용자 의뢰 목록 조회
 	@GetMapping("/reqList")
-	public String userReqList(Model model,UserReqCriteria cri, @AuthenticationPrincipal LoginUserVO vo) {
+	public String userReqList(Model model,
+			                  @ModelAttribute("cri") UserReqCriteria cri,
+			                  @AuthenticationPrincipal LoginUserVO vo) {
 		model.addAttribute("userVO", vo.getUserVO());
 		
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));
 		model.addAttribute("requestState", commonCodeService.selectCommonCodeAll("0R"));
 		cri.setUsersNo(vo.getUserNo());
-		if (cri.getKeyword() == null) {
-			cri.setKeyword("");
-		}
-		if (cri.getType() == null) {
-			cri.setType("");
+		if(cri.getPageNum() == null) {
+			cri.setPageNum(1);
 		}
 		List<RequestVO> list = userService.userReqList(cri);
 		model.addAttribute("requestList", list);

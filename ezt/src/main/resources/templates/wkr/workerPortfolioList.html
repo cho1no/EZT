@@ -31,10 +31,19 @@
     </style>
   </head>
   <body>
-    <div class="mb-3 d-flex justify-content-between">
+ 
+ 	
+ 	  
+    <div class="mb-4 d-flex justify-content-between">
       <h4>포트폴리오 목록</h4>
-      <span style="font-size: 14px">나의 포트폴리오</span>
+      <form name="wkrPpoList" id="wkrPpoList" class="d-flex">
+		<input type="search" name="title" class="form-control me-1" style="width:80%;" th:value="${cri.title}" 
+		aria-label="Search" th:selected>
+		<input type="hidden" name="pageNum">
+		<button class="btn btn-outline-success ">검색</button>
+	  </form>
     </div>
+    
     <div class="row g-3 ezt-font-size">
       <th:block th:each="ptf : ${portfolioList}">
         <div class="col-4 px-2">
@@ -95,5 +104,12 @@
         </div>
       </div>
     </div>
+    
+<script type="text/javascript">
+$('.pagination-wrap a').on('click', function(){
+	$('[name="pageNum"]').val($(this).data("pagenum"))
+	$('#wkrPpoList').submit();
+});
+</script>
   </body>
 </html>
