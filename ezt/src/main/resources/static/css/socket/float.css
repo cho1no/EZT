@@ -6,39 +6,7 @@
   position: fixed;
   bottom: 35px;
   right: 35px;
-  input[type="checkbox"] {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    margin: 0;
-    opacity: 0;
-    cursor: pointer;
-    &:checked {
-      & ~ .plus-icon {
-        transform: rotate(135deg);
-      }
-      & ~ .floating-nav {
-        li {
-          &:nth-child(1) {
-            transform: translatey(-48px);
-          }
-          &:nth-child(2) {
-            transform: translatey(-88px);
-          }
-          &:nth-child(3) {
-            transform: translatey(-128px);
-          }
-          &:nth-child(4) {
-            transform: translatey(-168px);
-          }
-        }
-      }
-    }
-    & ~ .plus-icon {
-      transform: rotate(0);
-    }
-  }
-  & > .plus-icon {
+  & > .chatButton {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -47,42 +15,11 @@
     font-size: 24px;
     line-height: 1;
     color: #ffffff;
-    background: #89ba16;
-    border-radius: 50%;
     transform: rotate(0);
     transition: all 0.5s ease;
-    pointer-events: none;
+    /* pointer-events: none; */
     position: absolute;
-    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
-  }
-  & > .floating-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: -1;
-    li {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      background: #89ba16;
-      cursor: pointer;
-      position: absolute;
-      transition: all 0.5s ease;
-      span {
-        font-size: 14px;
-        line-height: 1;
-        color: #ffffff;
-      }
-    }
+    cursor: pointer;
   }
 }
 .chatTime {
@@ -116,12 +53,17 @@
 .cpointer {
   cursor: pointer;
 }
+.floatedTitle {
+  font-weight: 700;
+}
 .floated-window {
+  z-index: 1000;
   display: none;
   position: fixed;
-  bottom: 30px;
+  bottom: 100px;
   right: 20px;
   width: 300px;
+  font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -166,4 +108,9 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+#currC {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

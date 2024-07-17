@@ -4,17 +4,16 @@
 	<!-- 통계관련 -->
 	<select id="selectJoinStatistics" resultType="java.util.HashMap">
 		SELECT COUNT(1) num
-		        , TO_CHAR(users_join_dt+1, 'yyyy/MM/dd') dt
+		        , TO_CHAR(users_join_dt+1, 'yyyy-MM-dd') dt
 		        , users_role role
 		FROM users
 		WHERE 
-<!--		    users_join_dt >= TO_CHAR(sysdate - 7) AND-->
 			<![CDATA[
 		    users_join_dt < TO_CHAR((SELECT MAX(users_join_dt)+1 FROM users), 'yyyy/MM/dd')
 		    ]]>
 		    AND users_role IN ('ROLE_USER', 'ROLE_WORKER')
-		GROUP BY TO_CHAR(users_join_dt+1,'yyyy/MM/dd'), users_role
-		ORDER BY TO_CHAR(users_join_dt+1,'yyyy/MM/dd')
+		GROUP BY TO_CHAR(users_join_dt+1,'yyyy-MM-dd'), users_role
+		ORDER BY TO_CHAR(users_join_dt+1,'yyyy-MM-dd')
 	</select>
 	
 	<select id="selectReqCategoryStatistics" resultType="java.util.HashMap">
