@@ -23,6 +23,6 @@ public class MainController {
 	}
 	@GetMapping("admin")
 	public String admin() {
-		return "forward:/adm/index.html";
+		return "adm/index";
 	}
 }

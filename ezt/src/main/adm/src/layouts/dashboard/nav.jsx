@@ -18,6 +18,7 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { account } from 'src/_mock/account';
 
+import SvgColor from 'src/components/svg-color';
 import Scrollbar from 'src/components/scrollbar';
 
 // eslint-disable-next-line import/no-cycle
@@ -69,6 +70,23 @@ export default function Nav({ openNav, onCloseNav }) {
       {navConfig.map((item) => (
         <NavItem key={item.title} item={item} />
       ))}
+      <ListItemButton
+        href="/main"
+        sx={{
+          minHeight: 44,
+          borderRadius: 0.75,
+          typography: 'body2',
+          color: 'text.secondary',
+          textTransform: 'capitalize',
+          fontWeight: 'fontWeightMedium',
+        }}
+      >
+        <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
+          <SvgColor src="/assets/icons/navbar/ic_home.svg" sx={{ width: 1, height: 1 }} />
+        </Box>
+
+        <Box component="span">메인으로</Box>
+      </ListItemButton>
     </Stack>
   );
 

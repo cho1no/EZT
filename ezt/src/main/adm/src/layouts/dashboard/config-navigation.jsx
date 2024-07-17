@@ -9,38 +9,33 @@ const icon = (name) => (
 const navConfig = [
   {
     title: '대시보드',
-    path: '/',
+    path: '/admin',
     icon: icon('ic_analytics'),
   },
   {
     title: '통합 의뢰 관리',
-    path: '/request',
+    path: '/admin/request',
     icon: icon('ic_data'),
   },
   {
     title: '결제 관리',
-    path: '/payment',
+    path: '/admin/payment',
     icon: icon('ic_card'),
   },
   {
     title: '통일 계약서 관리',
-    path: '/contract',
+    path: '/admin/contract',
     icon: icon('ic_file'),
   },
   {
     title: '사용자 관리',
-    path: '/user',
+    path: '/admin/user',
     icon: icon('ic_user'),
   },
   {
     title: '경력 인증 관리',
-    path: '/career',
+    path: '/admin/career',
     icon: icon('ic_userCheck'),
-  },
-  {
-    title: '메인으로',
-    path: 'http://localhost:8080/main',
-    icon: icon('ic_home'),
   },
 ];
 

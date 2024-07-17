@@ -14,6 +14,9 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    outDir: '../resources/static/', // Spring Boot 프로젝트의 정적 리소스 디렉토리로 설정
+  },
   resolve: {
     alias: [
       {
