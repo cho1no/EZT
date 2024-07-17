@@ -500,6 +500,11 @@ function maxLength() {
 // 모달 정보 표기
 function modalInfo(result) {
 	$('#reportModal').modal('hide');
+	
+	$('#rpt_updateBtn').removeAttr('style', 'display:none');
+	$('#rpt_deleteBtn').removeAttr('style', 'display:none');
+	$('#rpt_approveBtn').removeAttr('style', 'display:none');
+	$('#rpt_requestBtn').removeAttr('style', 'display:none');
 
 	$('input[name="cttReportNo"]').val(result.cttReportNo);
 	$('input[name="contractNo"]').val(result.contractNo);
@@ -516,16 +521,16 @@ function modalInfo(result) {
 	$('#cttReportDt').html(result.cttReportDt.substring(0, 10));
 
 	if (result.accessState == 'Y') {
-		$('#rpt_updateBtn').remove();
-		$('#rpt_deleteBtn').remove();
-		$('#rpt_approveBtn').remove();
-		$('#rpt_requestBtn').remove();
+		$('#rpt_updateBtn').attr('style', 'display:none');
+		$('#rpt_deleteBtn').attr('style', 'display:none');
+		$('#rpt_approveBtn').attr('style', 'display:none');
+		$('#rpt_requestBtn').attr('style', 'display:none');
 	} else if (user == result.workerInfo) {
-		$('#rpt_approveBtn').remove();
+		$('#rpt_approveBtn').attr('style', 'display:none');
 	} else if (user == result.requesterInfo) {
-		$('#rpt_updateBtn').remove();
-		$('#rpt_deleteBtn').remove();
-		$('#rpt_requestBtn').remove();
+		$('#rpt_updateBtn').attr('style', 'display:none');
+		$('#rpt_deleteBtn').attr('style', 'display:none');
+		$('#rpt_requestBtn').attr('style', 'display:none');
 	}
 
 	var uploadUL = $('#reportInfoModal .uploadModal .row');

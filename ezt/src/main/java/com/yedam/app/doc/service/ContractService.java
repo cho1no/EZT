@@ -35,10 +35,12 @@ public interface ContractService {
 	// 분야 코드 조회
 	public CommonCodeVO workCodeSelect(int teamNo, int usersNo);
 	public CommonCodeVO leaderCodeSelect(int requestNo);
-	
 	// 동업 계약서 등록
 	public int ptnConInsert(PartnershipContractVO partnershipContractVO);
 	// 동업 계약서 조회
 	public PartnershipContractVO ptnConSelect(int contractNo);
+	
+	// 결제 여부
+	public Integer payCount(int contractNo);
 	
 }

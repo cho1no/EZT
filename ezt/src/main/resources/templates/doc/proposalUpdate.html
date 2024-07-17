@@ -65,7 +65,7 @@
 							<!-- datepicker -->
 
 							<div class="row form-group" style="padding-top: 20px">
-								<div class="col-auto">
+								<div class="col-auto ">
 									<b class="text-black fs-5 mb-2">[작업장 주소]</b>
 								</div>
 							</div>
@@ -105,7 +105,7 @@
 								style="margin-top: 30px; margin-bottom: 30px">
 								<div class="col">
 								<label><b>비고</b></label>
-								<textarea name="comments" class="form-control" onkeyup="chkword(this,500);">[[${ppsInfo.comments}]]</textarea>
+								<textarea name="comments" class="form-control" onkeyup="chkword(this,500);">[(${ppsInfo.comments})]</textarea>
 								</div>
 							</div>
 
@@ -131,7 +131,7 @@
 											종료일 :</strong> [[${#dates.format(reqInfo.hopeCttEndDt,
 										'yyyy-MM-dd')}]]</li>
 									<li class="mb-2"><strong class="text-black">내용</strong></li>
-									<li class="mb-2">[[${reqInfo.content}]]</li>
+									<li class="mb-2">[(${reqInfo.content})]</li>
 								</ul>
 							</div>
 						</div>
@@ -203,6 +203,9 @@
 	<script th:inline="javascript">
 	// 변수
 	var phone = /*[[${userInfo.usersPhone}]]*/""
+	var startDay = /*[[${#dates.format(ppsInfo.cttStartDt, 'yyyy-MM-dd')}]]*/"";
+	var endDay = /*[[${#dates.format(ppsInfo.cttEndDt, 'yyyy-MM-dd')}]]*/"";
+	var hopePrice = /*[[${#numbers.formatInteger(reqInfo.hopeCttBudget,1)}]]*/""
 	
 	// 기존 상세 내역에 클래스&함수 추가 || 내역 바탕으로 총 예상금액 계산
 	let num_ = 1;
@@ -218,11 +221,19 @@
     }
 	
 	// 웹 페이지 로드 된 후
-	window.onload = function(){
+	$(function(){
 		GetTotal();
     	num = num_;
     	userPhone();
-	}
+    	
+    	// 날짜 표기
+		if(endDay != '1900-01-01'){
+			$('#startDt').datepicker( "option", "maxDate", new Date( endDay ) );
+		}
+		if(startDay != '1900-01-01'){
+			$('#endDt').datepicker( "option", "minDate", new Date( startDay ) );
+		} 
+	})
 	
 	// 날짜 : 입력 안 함 = '1900-01-01' => 빈 값 처리
 	if ($('#startDt').val() == '1900-01-01') {
@@ -235,6 +246,9 @@
 	
 	// 날짜 빈 값 처리 & 상세 내역 name 추가
 	$('#updateBtn').on('click', function(e){
+	
+		if(!tableNullCheck()) return false;
+		if(!totalCheck()) return false;
 		
 		dataProcessPps();
 	});

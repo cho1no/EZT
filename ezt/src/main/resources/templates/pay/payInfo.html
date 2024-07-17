@@ -59,10 +59,16 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label class="col-2 col-form-label"><b>계좌번호</b></label>
+								<label class="col-2 col-form-label"><b>내 계좌번호</b></label>
 								<div class="col">
 									<input type="text" readonly class="form-control-plaintext"
 										name="requester" th:value="${'[' + con.requesterBankcode + '] ' + con.requesterAccount}">
+								</div>
+							</div>
+							<div class="row form-group">
+								<label class="col-2 col-form-label"><b>입금 계좌번호</b></label>
+								<div class="col">
+									<input type="text" readonly class="form-control-plaintext"  th:value="${pay.virtualAccount}">
 								</div>
 							</div>
 
@@ -120,7 +126,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label class="col-2 col-form-label"><b>주소</b></label>
+								<label class="col-2 col-form-label"><b>작업장 주소</b></label>
 								<div class="col">
 									<input type="text" readonly class="form-control-plaintext"
 										th:value="${'(' + ppsInfo.workerPostcode + ') '
@@ -160,7 +166,7 @@
 						</div>
 						<div class="row form-group mt-4">
 						<div class="col-5"></div>
-						<div class="col-3">
+						<div class="col-auto">
 						<h4 class="text-black mt-1">
 							<b> 총 결제금액 :</b>
 						</h4>

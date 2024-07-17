@@ -13,7 +13,7 @@ import lombok.Data;
 public class ContractVO {
 	private Integer contractNo; // 계약서 번호
 	private String cttName; // 공사 명
-	private int cttPrice; // 공사 금액
+	private long cttPrice; // 공사 금액
 	private int requesterInfo; // 의뢰자 정보
 	private String requesterAddress; // 의뢰자 주소
 	private String requesterAccount; // 의뢰자 계좌
