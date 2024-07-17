@@ -57,4 +57,7 @@ public interface ContractMapper {
 	public int InsertPartnerCon(PartnershipContractVO partnershipContractVO);
 	// 동업 계약서 조회
 	public PartnershipContractVO selectPtnSelect(@Param("contractNo")int contractNo);
+	
+	// 결제 여부
+	public Integer payCount(@Param("contractNo")int contractNo);
 }

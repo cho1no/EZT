@@ -18,7 +18,7 @@
 <!-- 공통 스타일 -->
 <link rel="stylesheet" href="/css/doc/doc_common.css">
 
-<title>계약서 수정</title>
+<title>계약서 작성</title>
 
 </head>
 <body>
@@ -59,7 +59,7 @@
 								</div>
 								<div class="col-2">
 									<label><b>공사면적</b></label>
-									<p class="text-black">[[${reqInfo.cttPlaceArea}]]</p>
+									<p class="text-black">[[${reqInfo.cttPlaceArea + ' 평'}]]</p>
 								</div>
 							</div>
 
@@ -67,21 +67,21 @@
 							<div class="row form-group">
 								<div class="col-4">
 									<label for="startDt"><b>공사시작날짜</b></label> <input type="text"
-										class="form-control" id="startDt"
+										class="form-control bg-white" id="startDt"
 										th:value="${#dates.format(con.cttStartDt,
 											'yyyy-MM-dd')}"
 										name="cttStartDt" readonly placeholder="날짜 선택">
 								</div>
 								<div class="col-4">
 									<label for="endDt"><b>공사마감날짜</b></label> <input type="text"
-										class="form-control" id="endDt"
+										class="form-control bg-white" id="endDt"
 										th:value="${#dates.format(con.cttEndDt,
 											'yyyy-MM-dd')}"
 										name="cttEndDt" readonly placeholder="날짜 선택">
 								</div>
 								<div class="col-4">
 									<label><b>하자보수기간</b></label> <input type="text"
-										class="form-control">
+										class="form-control" id="repairDay" readonly>
 								</div>
 							</div>
 							<!-- datepicker -->
@@ -96,22 +96,26 @@
 										<b>총 공사금액 </b>
 									</h5>
 								</div>
-								<div class="col">
-									<p class="text-black h5" style="margin-top: 8px">
-										[[${#numbers.formatInteger(con.cttPrice,1,'COMMA')}]]<b> 원</b>
-									</p>
-								</div>
+								<div class="col-4">
+								<input type="text" class="form-control text-right" name="cttPrice" 
+									th:value="${#numbers.formatInteger(con.cttPrice,1,'COMMA')}" readonly>
 							</div>
+							<div class="col-auto">
+								<h5 class="text-black" style="padding-top: 10px">
+									<b>원</b>
+								</h5>
+							</div>
+								
 							<p class="text-black">
 								<b>대금 지급 시기</b>
 							</p>
 							<div class="p-4 mb-3 bg-white border p-4 rounded">
-								<table class="table table-hover">
+								<table class="table table-hover" id="con_table">
 									<thead>
 										<tr class="text-center">
 											<th scope="col" width="60px">횟수</th>
-											<th scope="col" width="150px">금액</th>
-											<th scope="col" width="150px">일시</th>
+											<th scope="col" width="180px">금액</th>
+											<th scope="col" width="140px">일시</th>
 											<th scope="col">내역</th>
 											<th width="53px"><button type="button"
 													class="btn btn-primary"
@@ -122,16 +126,16 @@
 										<th:block th:each=" list : ${con.dList}">
 											<tr>
 												<td><input type="text" style="border: 0; width: 100%;"
-													th:value="${list.round}" /></td>
+													th:value="${list.round}" readonly /></td>
 												<td><input type="text" style="border: 0; width: 100%;"
-													onKeyup="this.value=this.value.replace(/[^-0-9]/g,'').replace('-','').replace(/^0+/, '');"
-													th:value="${#numbers.formatInteger(list.price,1)}"
-													maxlength="12" class="price_${num}" /></td>
-												<td><input type="text" style="border: 0; width: 100%;"
+													onKeyup="inputNumberFormat(this);" 
+													th:value="${#numbers.formatInteger(list.price,1, 'COMMA')}"
+													maxlength="15" /></td>
+												<td><input type="date" style="border: 0; width: 100%;"
 													th:value="${#dates.format(list.paymentDt,
-											'yyyy-MM-dd')}" /></td>
+											'yyyy-MM-dd')}" onChange="dayCheck()" /></td>
 												<td><input type="text" style="border: 0; width: 100%;"
-													th:value="${list.history}" /></td>
+													th:value="${list.history}" onkeyup="chkword(this,200)" /></td>
 												<td><button type="button" class="btn btn-outline-dark"
 														name="deleteBtn"
 														style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">-</button></td>
@@ -256,7 +260,7 @@
 													<strong class="text-black">전화번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${worker.usersPhone}]]</p>
+													<p class="text-black" style="margin: 5px 0" id="worker_phone"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">우편번호</strong>
@@ -285,7 +289,7 @@
 													<strong class="text-black">주민등록번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${worker.usersRnn}]]</p>
+													<p class="text-black" style="margin: 5px 0" id="worker_Rnn"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
@@ -302,7 +306,7 @@
 												</div>
 												<div class="col">
 													<input type="text" class="form-control"
-														name="workerAccount" th:value="${con.workerAccount}">
+														name="workerAccount" th:value="${con.workerAccount}" onKeyup="onlyNumberFormat(this);" maxlength="14">
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
@@ -330,7 +334,8 @@
 									<b><span class="me-5 cur_year">2024년</span><span
 										class="me-5 cur_month">06월</span><span class="me-5 cur_day">28일</span></b>
 								</p>
-								<p class="uploadTitle mt-5">첨부 파일 업로드</p>
+								<p class="uploadTitle mt-5">첨부 파일 업로드(최대 5개)</p>
+								<p>예시: 인테리어 공사 계약서 파일 등(이미지는 불가)</p>
 								<div class="uploadDiv">
 									<label for="multiFile">파일찾기</label> <input type="file"
 										multiple="multiple" name="uploadFile" id="multiFile"
@@ -353,12 +358,12 @@
 				<div class="col-lg-4 ml-auto" style="padding-top: 30px">
 					<div class="row">
 						<div class="col-6">
-							<button type="button" class="btn btn-block btn-light btn-md"
-								id="updateBtn">수정 완료</button>
+							<button class="btn btn-block btn-light btn-md"
+								onClick="history.back();">뒤로가기</button>
 						</div>
 						<div class="col-6">
-							<button class="btn btn-block btn-primary btn-md"
-								onClick="history.back();">뒤로가기</button>
+							<button type="button" class="btn btn-block btn-primary btn-md"
+								id="updateBtn">수정 완료</button>
 						</div>
 					</div>
 				</div>
@@ -405,90 +410,98 @@
 	<script th:inline="javascript">
 	
 	// 변수
-	var unity_origin = /*[[${unity.contractTermsContent}]]*/""
-	
-	// 날짜&통일 계약서 표시
-	window.onload = function(){
-		Curday();
-		UnityDoc();
-	}
-
-    // 주소 표기
-     if(/*[[${con.workerAddress}]]*/"" != null){
-    var work_addr = /*[[${con.workerAddress}]]*/""
-	var work_num1=  work_addr.indexOf('_');
-	var work_num2 = work_addr.indexOf('_', work_num1 + 1)
-	$('#input_postcode').val(work_addr.substring(0, work_num1));
-    $('#input_addr').val(work_addr.substring(work_num1 + 1, work_num2));
-    $('#input_detailAddr').val(work_addr.substring(work_num2 + 1,));
-     }
-    
-    if(/*[[${con.requesterAddress}]]*/"" != null){
-    var req_addr = /*[[${con.requesterAddress}]]*/""
-	var req_num1=  req_addr.indexOf('_');
-	var req_num2 = req_addr.indexOf('_', req_num1 + 1)
-	$('#input_postcode_req').html(req_addr.substring(0, req_num1));
-    $('#input_addr_req').html(req_addr.substring(req_num1 + 1, req_num2));
-    $('#input_detailAddr_req').html(req_addr.substring(req_num2 + 1,));
-    }
-    
-    // 은행 표기
-   if(/*[[${con.workerBankcode}]]*/"" != null){
-    	for(i=0; i<$('option').length ; i++){
-   			if( $('option:eq('+i+')').val().includes(/*[[${con.workerBankcode}]]*/"")){
-   			 $('option:eq('+i+')').prop("selected",true);
-    		}
-    	}
- 	}
-	
 	var contractNo = /*[[${con.contractNo}]]*/"";
+	var unity_origin = /*[[${unity.contractTermsContent}]]*/""
+	var startDay = /*[[${#dates.format(con.cttStartDt, 'yyyy-MM-dd')}]]*/"";
+	var endDay = /*[[${#dates.format(con.cttEndDt, 'yyyy-MM-dd')}]]*/"";
+	var workerPhone = /*[[${worker.usersPhone}]]*/"";
+	var workerRnn = /*[[${worker.usersRnn}]]*/""
+	var workNewSign = '';
+	var workBankCode = /*[[${con.workerBankcode}]]*/"";
+	var workSign = /*[[${con.worSign.signsContent}]]*/"";
+	
+	let now = new Date();
+	now = now.toISOString().substring(0, 10);
+	
+	$(function(){
+	
+		// 현재 날짜
+		Curday();
+		
+		// 통일 계약서 표기
+		UnityDoc();
+		
+		// 날짜 표기 : 입력하지 않았을 때
+		dtUpdateInfo();
+		
+		// 날짜 표기
+		if(endDay != '1900-01-01'){
+			$('#startDt').datepicker( "option", "maxDate", new Date( endDay ) );
+		}
+		if(startDay != '1900-01-01'){
+			$('#endDt').datepicker( "option", "minDate", new Date( startDay ) );
+		} 
+		
+		// 하자 보수 기간
+    	if($('#startDt').html() != ''){
+		let date = new Date(/*[[${con.cttStartDt}]]*/"");
+			repairDay(date);
+    	}
+		
+    	// 전화번호 "-"
+		workerPhone = userPhone(workerPhone);
+		$('#worker_phone').html(workerPhone);
+
+		// 주민번호 "-"
+		workerRnn = userRnn(workerRnn);
+		$('#worker_Rnn').html(workerRnn);		
+		
+    	 // 주소 표기
+        if(/*[[${con.workerAddress}]]*/"" != null){
+        var work_addr = /*[[${con.workerAddress}]]*/""
+        	 workerInputAddr(work_addr);
+         }
+        
+        // 은행 표기
+        if(workBankCode != null){
+         	workerBank(workBankCode);
+      	}
+        
+        // 서명 표기
+    	if(workSign != null){
+    	 signView(workSign, 1);
+    	}
+    	
+    	$('.content input[type="date"]').attr('min', now);
+	})
 	
 	// 업데이트
 	$('#updateBtn').on('click', insertAjax );
 	
 	function insertAjax(e){
+		
+		// 대금 지급 시기 총 금액 확인
+		if(!GetTotal()) return;
+		
 		// 이미지&오디오 파일 제약
-		if(!onlyFile())return;
+		if(!onlyFile()) return;
 		
 		//폼 데이터 처리
-		$('input[name="workerAddress"]').val($('#input_postcode').val() + '_' 
-				+ $('#input_addr').val() + '_' + $('#input_detailAddr').val())
+		con_insert_data();
+		cttPriceData();
+		workerBankCodeUpdate(workBankCode);
 	
-		var bankcode = $('select').val();
-		var bank_num1 = bankcode.indexOf('(');
-		if(bankcode == '은행 선택'){
-			$('input[name="workerBankcode"]').val(null);
-		}else if(bankcode != /*[[${con.workerBankcode}]]*/"" && bankcode != '은행 선택'){
-			$('input[name="workerBankcode"]').val(bankcode.substring(bank_num1+1).replace(')', ''));
-		}
-			
-	
-		let startDt = $('#startDt');
-		let endDt = $('#endDt');
-		
-		if(startDt.val() == ''){
-			startDt.val('1900-01-01');
-		}
-		if(endDt.val() == ''){
-			endDt.val('1900-01-01');
-		}
-	
-	
-    	for(i=0; i < $('tbody tr').length; i++){
-    		$('tbody tr:eq('+i+') td:eq(0) input').attr('name', 'dList['+i+'].round');
-    		$('tbody tr:eq('+i+') td:eq(1) input').attr('name', 'dList['+i+'].price');
-    		$('tbody tr:eq('+i+') td:eq(2) input').attr('name', 'dList['+i+'].paymentDt');
-    		$('tbody tr:eq('+i+') td:eq(3) input').attr('name', 'dList['+i+'].history');
-    	}
-		
 		// 폼 데이터 전송
    		var formData = new FormData(document.conUpdateForm);
 		
-		formData.append("worSign.signsContent", workNewSign);
-		
-		for (const pair of formData.entries()) {
+		if(workNewSign != ''){
+			formData.append("worSign.signsContent", workNewSign);
+		}else{
+			formData.append("worSign.signsContent", workSign);
+		}
+		/*for (const pair of formData.entries()) {
 			  console.log(pair[0], pair[1]);
-			}
+		}*/
 		
 		$.ajax({
 			url: '/conUpdate',
@@ -497,94 +510,25 @@
 			data : formData,
 			type :'Post',
 			async : false
-			
 		})
-			
 		location.href='/conInfo?contractNo='+contractNo;
 	}
 
-	
-	// 서명 표기
-	var workSign = /*[[${con.worSign.signsContent}]]*/"";
-	var workNewSign = '';
+	// 서명
+	$('.sigPad').signaturePad({drawOnly:true});
 
-	
-	if(workSign != null){
-	 signView(workSign, 1);
-	}
-	
-	var reqSign = /*[[${con.reqSign.signsContent}]]*/"";
-
-	
-	if(reqSign != null){
-	 signView(reqSign, 0);
-	}
-	
-function signView(compressedSignatureData, num) {
-    //console.log("compressedSignatureData = " + compressedSignatureData);
-
-    // 압축된 데이터 복원
-    let decompressedSignatureData 
-              = LZString.decompressFromBase64(compressedSignatureData);
-
-    // 복원된 서명을 JSON화
-    let signatureData = JSON.parse(decompressedSignatureData);
-
-    // 서명 그리기
-    drawSignature(signatureData, num);
-}
-
-function drawSignature(data, num) {
-    // Canvas / 컨텍스트
-    let canvas;
-    
-    if(num == 0){
-    	canvas = document.getElementById('signatureCanvas_req');
-    }else{
-    	canvas = document.getElementById('signatureCanvas_work');
-    }
-    
-    let ctx = canvas.getContext('2d');
-    
- 	// 캔버스 초기화
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    for (let i = 0; i < data.length; i++) {
-        let point = data[i];
-        ctx.moveTo(point.mx, point.my);
-        ctx.lineTo(point.lx, point.ly);
-    }
-    ctx.stroke();
-    if(num == 3){
-        $('#sendModal').modal('hide');
-    }
-    
-}
-	
-$('.sigPad').signaturePad({drawOnly:true});
-
-$('#saveModal').click(function(e) {
-	event.preventDefault(); // 폼의 기본 제출 동작을 방지
+	$('#saveModal').click(function(e) {
+		event.preventDefault(); // 폼의 기본 제출 동작을 방지
 		
-    // 서명 데이터를 JSON 형식으로 가져오기
-    var signatureData = $('.sigPad').signaturePad().getSignatureString();
+		DataCompress(); // 데이터 압축
+
+    	workNewSign = compressedData;
+    	signView(compressedData, 3);
     
-    // 서명 데이터를 압축
-    compressedData = LZString.compressToBase64(signatureData);
+	});
 
-    // 압축된 데이터를 숨겨진 input에 저장
-    $('input.output').val(compressedData);
-
-    // 압축된 데이터 출력 (선택 사항)
-    //console.log(compressedData); 
-
-    workNewSign = compressedData;
-    signView(compressedData, 3);
-    
-});
-
-	
 	</script>
+	
 	<!-- datepicker -->
 	<script type="text/javascript" th:src="@{/js/doc/datepicker.js}"></script>
 
@@ -593,13 +537,14 @@ $('#saveModal').click(function(e) {
 	<script
 		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-	<!-- uploadAjax -->
+	<!-- uploadAjax : 파일 처리 -->
 	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
 
 	<!-- 서명 -->
 	<script src="/js/doc/json2.min.js"></script>
 	
-	<!-- 공통 js 파일 -->
+	<!-- js 파일 -->
 	<script type="text/javascript" th:src="@{/js/doc/con_common.js}"></script>
+	<script type="text/javascript" th:src="@{/js/doc/con_sign.js}"></script>
 </body>
 </html>

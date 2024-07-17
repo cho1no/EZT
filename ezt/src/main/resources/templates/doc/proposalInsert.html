@@ -152,6 +152,7 @@
 	
 	// 변수
 	var phone = /*[[${userInfo.usersPhone}]]*/"";
+	var hopePrice = /*[[${#numbers.formatInteger(reqInfo.hopeCttBudget,1)}]]*/""
 	
 	// 웹 페이지 로드 된 후
 	window.onload = function(){
@@ -159,6 +160,9 @@
 	};
 	
 	$('button[type="submit"]').on('click', function(e) {
+		
+		if(!totalCheck()) return false;
+		
 		dataProcessPps();
 	});	
 

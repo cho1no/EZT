@@ -132,6 +132,10 @@ public class ContractController {
 			model.addAttribute("leaderCode", workCode.getLeaderCategoryCode());
 			model.addAttribute("memberCode", workCode.getMemberCategoryCode());
 		}
+		
+		// 결제 여부
+		Integer no = conService.payCount(contractVO.getContractNo());
+		model.addAttribute("pcount", no);
 
 		return "doc/contractInfo";
 

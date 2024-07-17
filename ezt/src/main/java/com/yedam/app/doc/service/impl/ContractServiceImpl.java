@@ -135,8 +135,8 @@ public class ContractServiceImpl implements ContractService {
 		// 계약서 수정
 		int result = conMapper.updateConInfo(contractVO);
 		// 계약서 상세 삭제 후 등록
+		conMapper.deleteConDetailInfo(contractVO.getContractNo());
 		if (contractVO.getDList() != null) {
-			conMapper.deleteConDetailInfo(contractVO.getContractNo());
 			contractVO.getDList().forEach(e -> {
 				e.setContractNo(contractVO.getContractNo());
 				conMapper.insertConDetailInfo(e);
@@ -159,17 +159,18 @@ public class ContractServiceImpl implements ContractService {
 
 		// 서명 등록
 		if (contractVO.getWorSign() != null) {
+			conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getWorkerInfo());
 			if (contractVO.getWorSign().getSignsContent().length() > 10) {
-				conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getWorkerInfo());
 				SignsVO sign = contractVO.getWorSign();
 				sign.setContractNo(contractVO.getContractNo());
 				sign.setUsersNo(contractVO.getWorkerInfo());
 				conMapper.insertSignInfo(sign);
 			}
 		}
+		
 		if (contractVO.getReqSign() != null) {
+			conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getRequesterInfo());
 			if (contractVO.getReqSign().getSignsContent().length() > 10) {
-				conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getRequesterInfo());
 				SignsVO sign = contractVO.getReqSign();
 				sign.setContractNo(contractVO.getContractNo());
 				sign.setUsersNo(contractVO.getRequesterInfo());
@@ -213,5 +214,11 @@ public class ContractServiceImpl implements ContractService {
 	@Override
 	public PartnershipContractVO ptnConSelect(int contractNo) {
 		return conMapper.selectPtnSelect(contractNo);
+	}
+	
+	// 결제 여부
+	@Override
+	public Integer payCount(int contractNo) {
+		return conMapper.payCount(contractNo);
 	}
 }

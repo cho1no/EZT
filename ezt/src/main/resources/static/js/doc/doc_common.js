@@ -73,6 +73,41 @@ function dataProcessPps() {
 		$('#pps_table tbody tr:eq(' + i + ') td:eq(6) input').attr('name', 'list[' + i + '].comments');
 	}
 }
+// 테이블 체크
+function tableNullCheck(){
+	var length = $('#pps_table tbody tr').length;
+	for (i = 0; i < length; i++) {
+		
+		var product = $('#pps_table tbody tr:eq(' + i + ') td:eq(0) input').val();
+		var division = $('#pps_table tbody tr:eq(' + i + ') td:eq(1) input').val();
+		var unit = $('#pps_table tbody tr:eq(' + i + ') td:eq(2) input').val();
+		var qty = $('#pps_table tbody tr:eq(' + i + ') td:eq(3) input').val();
+		var unitprice = $('#pps_table tbody tr:eq(' + i + ') td:eq(4) input').val();
+		var comments = $('#pps_table tbody tr:eq(' + i + ') td:eq(6) input').val();
+
+		if( product == '' || division == '' || unit == '' || qty  == 0 || unitprice == 0 || comments == '' ) {
+			sweetModalError("작성되지 않은 내용이 있습니다. 확인해 주세요.");
+			return false;
+		};
+	}
+	return true;
+}
+
+function tableNullRemove(){
+	var length = $('#pps_table tbody tr').length;
+	for (i = Number(length-1); i < 0; i--) {
+		var product = $('#pps_table tbody tr:eq(' + i + ') td:eq(0) input').val();
+		var division = $('#pps_table tbody tr:eq(' + i + ') td:eq(1) input').val();
+		var unit = $('#pps_table tbody tr:eq(' + i + ') td:eq(2) input').val();
+		var qty = $('#pps_table tbody tr:eq(' + i + ') td:eq(3) input').val();
+		var unitprice = $('#pps_table tbody tr:eq(' + i + ') td:eq(4) input').val();
+		var comments = $('#pps_table tbody tr:eq(' + i + ') td:eq(6) input').val();
+		
+		if( product == '' && division == '' && unit == '' && qty == 0 && unitprice == 0 && comments == '' ) {
+			$('#pps_table tbody tr:eq(' + i + ')').remove();
+		};
+	}
+}
 
 // 숫자 콤마 함수
 function comma(str) {
@@ -114,6 +149,21 @@ function GetTotal() {
 
 	var comTotal = total.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 	$('.total').val(comTotal);
+}
+
+// 총 금액 == 희망 공사 예산
+function totalCheck(){
+	var total = 0;
+
+	for (i = 0; i < $('#pps_table tbody tr').length; i++) {
+		total += Number($('#pps_table tbody tr:eq(' + i + ') td:eq(5) input').val().replaceAll(',', ''));
+	}
+		
+	if(hopePrice != total){
+		sweetModalError("총 예상금액이 희망 공사 예산 보다 많습니다");
+		return false;
+	}
+	return true;
 }
 
 // 전화번호
@@ -164,4 +214,13 @@ function chkword(obj, maxlength) {
         obj.value = str2;
 	}
 	obj.focus();
+}
+
+// alert
+function sweetModalError(text) {
+	Swal.fire({
+		icon: "error",
+		title: "다시 확인해 주세요",
+		text: text
+	});
 }

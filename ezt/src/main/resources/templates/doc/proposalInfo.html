@@ -133,7 +133,7 @@
 										<b class="text-black">비고</b>
 									</div>
 									<div class="col">
-										<p id="comments">[[${ppsInfo.comments}]]</p>
+										<p id="comments">[(${ppsInfo.comments})]</p>
 									</div>
 								</div>
 								<th:block th:if="${ppsInfo.fileId != 0}">
@@ -168,7 +168,7 @@
 												공사 종료일 :</strong> [[${#dates.format(reqInfo.hopeCttEndDt,
 											'yyyy-MM-dd')}]]</li>
 										<li class="mb-2"><strong class="text-black">내용</strong></li>
-										<li class="mb-2">[[${reqInfo.content}]]</li>
+										<li class="mb-2">[(${reqInfo.content})]</li>
 									</ul>
 								</div>
 							</div>

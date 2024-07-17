@@ -49,7 +49,7 @@
 						<div class="row form-group">
 							<div class="col-6">
 								<label><b>공사명</b></label> <input type="text"
-									class="form-control" th:field="*{cttName}">
+									class="form-control" th:field="*{cttName}" onkeyup="chkword(this,50)">
 							</div>
 						</div>
 
@@ -61,7 +61,7 @@
 							</div>
 							<div class="col-2">
 								<label><b>공사면적</b></label>
-								<p class="text-black">[[${reqInfo.cttPlaceArea}]]</p>
+								<p class="text-black">[[${reqInfo.cttPlaceArea + ' 평'}]]</p>
 							</div>
 						</div>
 
@@ -69,17 +69,17 @@
 						<div class="row form-group">
 							<div class="col-4">
 								<label for="startDt"><b>공사시작날짜</b></label> <input type="text"
-									class="form-control" id="startDt" th:field="*{cttStartDt}"
+									class="form-control bg-white" id="startDt" th:field="*{cttStartDt}"
 									readonly placeholder="날짜 선택">
 							</div>
 							<div class="col-4">
 								<label for="endDt"><b>공사마감날짜</b></label> <input type="text"
-									class="form-control" id="endDt" th:field="*{cttEndDt}" readonly
+									class="form-control bg-white" id="endDt" th:field="*{cttEndDt}" readonly
 									placeholder="날짜 선택">
 							</div>
 							<div class="col-4">
 								<label><b>하자보수기간</b>(시작 날짜로부터 1년)</label> <input type="text"
-									class="form-control bg-white" id="repairDay" readonly>
+									class="form-control" id="repairDay" readonly>
 							</div>
 						</div>
 						<!-- datepicker -->
@@ -95,7 +95,7 @@
 								</h5>
 							</div>
 							<div class="col-4">
-								<input type="text" class="form-control" name="cttPrice" readonly>
+								<input type="text" class="form-control text-right" name="cttPrice" readonly>
 							</div>
 							<div class="col-auto">
 								<h5 class="text-black" style="padding-top: 10px">
@@ -108,12 +108,12 @@
 							<b>대금 지급 시기</b>
 						</p>
 						<div class="p-4 mb-3 bg-white border p-4 rounded">
-							<table class="table table-hover">
+							<table class="table table-hover" id="con_table">
 								<thead>
 									<tr class="text-center">
 										<th scope="col" width="60px">횟수</th>
-										<th scope="col" width="150px">금액</th>
-										<th scope="col" width="150px">일시</th>
+										<th scope="col" width="180px">금액</th>
+										<th scope="col" width="140px">일시</th>
 										<th scope="col">내역</th>
 										<th width="53px"><button type="button"
 												class="btn btn-primary"
@@ -155,8 +155,6 @@
 								</div>
 							</div>
 						</section>
-
-
 
 						<div class="row form-group">
 
@@ -210,7 +208,7 @@
 							</div>
 
 
-							<div class="col-6" style="padding-top: 60px">
+							<div class="col-6 info_worker" style="padding-top: 60px">
 								<div class="p-4 mb-3 bg-white border p-4 rounded">
 									<h3 class="mt-3 h5 pl-3 mb-3 ">수급자(시공자) "을"</h3>
 									<ul class="list-unstyled pl-3 mb-0 con_ul">
@@ -224,7 +222,7 @@
 												<strong class="text-black">전화번호</strong>
 											</div>
 											<div class="col">
-												<p class="text-black m-0 mt-1">[[${userPhone}]]</p>
+												<p class="text-black m-0 mt-1" id="worker_phone"></p>
 											</div></li>
 										<li class="mb-2 row form-group"><div class="col-4">
 												<strong class="text-black">우편번호</strong>
@@ -247,13 +245,13 @@
 											</div>
 											<div class="col">
 												<input type="text" class="form-control"
-													id="input_detailAddr">
+													id="input_detailAddr" onkeyup="chkword(this,20)">
 											</div></li>
 										<li class="mb-2 row form-group"><div class="col-4">
 												<strong class="text-black">주민등록번호</strong>
 											</div>
 											<div class="col">
-												<p class="text-black m-0 mt-1">[[${userRnn}]]</p>
+												<p class="text-black m-0 mt-1" id="worker_Rnn"></p>
 											</div></li>
 
 										<li class="mb-2 row form-group"><div class="col-4">
@@ -271,7 +269,7 @@
 											</div>
 											<div class="col">
 												<input type="text" class="form-control"
-													th:field="*{workerAccount}">
+													th:field="*{workerAccount}" onKeyup="onlyNumberFormat(this);" maxlength="14">
 											</div></li>
 										<li class="mb-2 row form-group"><div class="col-4">
 												<strong class="text-black">서명</strong>
@@ -283,7 +281,7 @@
 													하기</button>
 											</div></li>
 										<li><div id="input_sign" class="text-center mt-2">
-												<canvas id="signatureCanvas"></canvas>
+												<canvas id="signatureCanvas_work"></canvas>
 											</div></li>
 
 									</ul>
@@ -302,7 +300,8 @@
 								<b><span class="me-5 cur_year">2024년</span><span
 									class="me-5 cur_month">06월</span><span class="me-5 cur_day">28일</span></b>
 							</p>
-							<p class="uploadTitle mt-5">첨부 파일 업로드</p>
+							<p class="uploadTitle mt-5">첨부 파일 업로드(최대 5개)</p>
+							<p>예시: 인테리어 공사 계약서 파일 등(이미지는 불가)</p>
 							<div class="uploadDiv">
 								<label for="multiFile">파일찾기</label> <input type="file"
 									multiple="multiple" name="uploadFile" id="multiFile"
@@ -323,7 +322,7 @@
 					<div class="col-6"></div>
 					<div class="col-6">
 						<button type="button" class="btn btn-block btn-primary btn-md"
-							id="insertBtn">저장</button>
+							id="insertBtn">등록</button>
 					</div>
 				</div>
 			</div>
@@ -368,14 +367,27 @@
 	<script th:inline="javascript">
 	
 	// 변수
-	let priceList = /*[[${ppsInfo.list}]]*/"";
+	var priceList = /*[[${ppsInfo.list}]]*/"";
 	var unity_origin = /*[[${unity.contractTermsContent}]]*/""
+	var workerPhone = /*[[${userPhone}]]*/"";
+	var workerRnn = /*[[${userRnn}]]*/""
 	
 	// 날짜&통일 계약서 표시
-	window.onload = function(){
+	$(function(){
+		// 현재 날짜
 		Curday();
+		
+		// 통일 계약서 표기
 		UnityDoc();
-	}
+		
+		// 전화번호 "-"
+		workerPhone = userPhone(workerPhone);
+		$('#worker_phone').html(workerPhone);
+		
+		// 주민번호 "-"
+		workerRnn = userRnn(workerRnn);
+		$('#worker_Rnn').html(workerRnn);
+	})
 	// 공사 대금 표기
 	var totalPrice = 0;
 
@@ -398,14 +410,17 @@
 		
 		// 폼 데이터 처리
 		con_insert_data();
+		cttPriceData();
+		workerBankCodeInsert();
 		
 		// 폼 데이터 전송
 		var formData = new FormData(document.conInsertForm);
 		formData.append("worSign.signsContent", compressedData);
 		
-		for (const pair of formData.entries()) {
+		/*for (const pair of formData.entries()) {
 			console.log(pair[0], pair[1]);
-		}
+		}*/
+		
 		$.ajax({
 			url: '/conInsert',
 			processData : false,
@@ -427,10 +442,22 @@
 				location.href='/conInfo?contractNo='+result;
 			 }});
 			}
-		
 		})
 	}
+	
+	// 서명
+	var compressedData;
 
+	$('.sigPad').signaturePad({ drawOnly: true });
+
+	$('#saveModal').click(function(event) {
+		event.preventDefault(); // 폼의 기본 제출 동작을 방지
+		
+		DataCompress(); // 데이터 압축
+		
+		signView(compressedData, 3);
+	})
+	
 	</script>
 	<!-- datepicker -->
 	<script type="text/javascript" th:src="@{/js/doc/datepicker.js}"></script>
@@ -440,12 +467,12 @@
 	<script
 		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-	<!-- uploadAjax -->
+	<!-- uploadAjax : 파일 처리 -->
 	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
 
 	<!-- 서명 -->
 	<script src="/js/doc/json2.min.js"></script>
-	<script type="text/javascript" th:src="@{/js/doc/doc_sign.js}"></script>
+	<script type="text/javascript" th:src="@{/js/doc/con_sign.js}"></script>
 	
 	<!-- 공통 js 파일 -->
 	<script type="text/javascript" th:src="@{/js/doc/con_common.js}"></script>

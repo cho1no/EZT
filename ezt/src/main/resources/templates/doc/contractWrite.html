@@ -19,7 +19,7 @@
 <!-- 공통 스타일 -->
 <link rel="stylesheet" href="/css/doc/doc_common.css">
 
-<title>계약서 수정</title>
+<title>계약서 작성</title>
 
 </head>
 <body>
@@ -59,25 +59,26 @@
 								</div>
 								<div class="col-2">
 									<label><b>공사면적</b></label>
-									<p class="text-black">[[${reqInfo.cttPlaceArea}]]</p>
+									<p class="text-black">[[${reqInfo.cttPlaceArea + ' 평'}]]</p>
 								</div>
 							</div>
 
 							<!-- datepicker : id&type="text"-->
 							<div class="row form-group">
 								<div class="col-4">
-									<label for="startDt"><b>공사시작날짜</b></label>
+									<label><b>공사시작날짜</b></label>
 									<p class="text-black">[[${#dates.format(con.cttStartDt,
 										'yyyy-MM-dd')}]]</p>
 								</div>
 								<div class="col-4">
-									<label for="endDt"><b>공사마감날짜</b></label>
+									<label><b>공사마감날짜</b></label>
 									<p class="text-black">[[${#dates.format(con.cttEndDt,
 										'yyyy-MM-dd')}]]</p>
 								</div>
 								<div class="col-4">
-									<label><b>하자보수기간</b></label> <input type="text"
-										class="form-control">
+									<label><b>하자보수기간</b></label> <input th:unless="${leaderCode == null}" type="text"
+										class="form-control" id="repairDay" readonly>
+									<p th:if="${leaderCode == null}" class="text-black" id="repairDay"></p>
 								</div>
 							</div>
 							<!-- datepicker -->
@@ -106,8 +107,8 @@
 									<thead>
 										<tr class="text-center">
 											<th scope="col" width="60px">횟수</th>
-											<th scope="col" width="150px">금액</th>
-											<th scope="col" width="150px">일시</th>
+											<th scope="col" width="180px">금액</th>
+											<th scope="col" width="140px">일시</th>
 											<th scope="col">내역</th>
 										</tr>
 									</thead>
@@ -161,7 +162,7 @@
 
 							<div class="row form-group">
 
-								<div class="col-6 info_requester" style="padding-top: 60px">
+								<div class="col-6 info_req" style="padding-top: 60px">
 									<div class="p-4 mb-3 bg-white border p-4 rounded">
 										<h3 class="mt-3 h5 pl-3 mb-3" th:if="${leaderCode == null}">발주자(시행자) "갑"</h3>
 										<h3 class="mt-3 h5 pl-3 mb-3" th:unless="${leaderCode == null}">동업자 "갑"</h3>
@@ -177,7 +178,7 @@
 													<strong class="text-black">전화번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${requester.usersPhone}]]</p>
+													<p class="text-black" style="margin: 5px 0" id="requester_phone"></p>
 												</div></li>
 												<li class="mb-2 row form-group" th:unless="${leaderCode == null}"><div class="col-4">
 													<strong class="text-black">공사 담당 분야</strong>
@@ -212,7 +213,7 @@
 													<strong class="text-black">주민등록번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0">[[${requester.usersRnn}]]</p>
+													<p class="text-black" style="margin: 5px 0" id="requester_Rnn"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
@@ -266,7 +267,7 @@
 													<strong class="text-black">전화번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0" th:if="${leaderCode == null}">[[${worker.usersPhone}]]</p>
+													<p class="text-black" style="margin: 5px 0" th:if="${leaderCode == null}" id="worker_phone"></p>
 												</div></li>
 												<li class="mb-2 row form-group" th:unless="${leaderCode == null}"><div class="col-4">
 													<strong class="text-black">공사 담당 분야</strong>
@@ -299,7 +300,7 @@
 													<strong class="text-black">주민등록번호</strong>
 												</div>
 												<div class="col">
-													<p class="text-black" style="margin: 5px 0" th:if="${leaderCode == null}">[[${worker.usersRnn}]]</p>
+													<p class="text-black" style="margin: 5px 0" th:if="${leaderCode == null}" id="worker_Rnn"></p>
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">계좌번호</strong>
@@ -335,6 +336,23 @@
 									<b><span class="me-5 cur_year">2024년</span><span
 										class="me-5 cur_month">06월</span><span class="me-5 cur_day">28일</span></b>
 								</p>
+								<th:block th:unless="${leaderCode == null}">
+								<p class="uploadTitle mt-5">첨부 파일 업로드(최대 5개)</p>
+								<p>예시: 인테리어 공사 계약서 파일 등(이미지는 불가)</p>
+								<div class="uploadDiv">
+									<label for="multiFile">파일찾기</label> <input type="file"
+										multiple="multiple" name="uploadFile" id="multiFile"
+										onChange="nameList()">
+								</div>
+								<div class="uploadResult">
+									<ul style="padding: 0">
+										<th:block th:each=" list : ${con.fileList}">
+											<li style='list-style: none'>[['- ' +
+												${list.originalFileName + '.' + list.ext}]]</li>
+										</th:block>
+									</ul>
+								</div>
+								</th:block>
 							</div>
 						</div>
 					</div>
@@ -344,12 +362,12 @@
 				<div class="col-lg-4 ml-auto" style="padding-top: 30px">
 					<div class="row">
 						<div class="col-6">
-							<button type="button" class="btn btn-block btn-light btn-md"
-								id="updateBtn">수정 완료</button>
+							<button class="btn btn-block btn-light btn-md"
+								onClick="history.back();">뒤로가기</button>
 						</div>
 						<div class="col-6">
-							<button class="btn btn-block btn-primary btn-md"
-								onClick="history.back();">뒤로가기</button>
+							<button type="button" class="btn btn-block btn-primary btn-md"
+								id="updateBtn">수정 완료</button>
 						</div>
 					</div>
 				</div>
@@ -394,76 +412,87 @@
 
 
 	<script th:inline="javascript">
-	// 조회 데이터 표기
-	date = new Date();
-    year = date.getFullYear();
-    month = date.getMonth() + 1;
-    day = date.getDate();
 	
-    $('.cur_year').html(year + '년');
-    $('.cur_month').html(month + '월');
-    $('.cur_day').html(day + '일');
+	// 변수
+	var contractNo = /*[[${con.contractNo}]]*/"";
+	var unity_origin = /*[[${unity.contractTermsContent}]]*/""
+	
+	var workerPhone = /*[[${worker.usersPhone}]]*/"";
+	var workerRnn = /*[[${worker.usersRnn}]]*/""
+	var workSign = /*[[${con.worSign.signsContent}]]*/"";
+	var requesterPhone = /*[[${requester.usersPhone}]]*/"";
+	var requesterRnn = /*[[${requester.usersRnn}]]*/""
+	var reqBankCode = /*[[${con.requesterBankcode}]]*/"";
+	var reqSign = /*[[${con.reqSign.signsContent}]]*/"";
+	var reqNewSign = '';
+	
+	var leaderCode = /*[[${leaderCode}]]*/"";
+	
+	$(function(){
+		// 현재 날짜
+		Curday();
+		
+		// 통일 계약서 표기
+		UnityDoc();
+		
+		// 전화번호 "-"
+		workerPhone = userPhone(workerPhone);
+		$('#worker_phone').html(workerPhone);
+		requesterPhone = userPhone(requesterPhone);
+		$('#requester_phone').html(requesterPhone);
 
-    // 주소 표기
-    if([[${con.workerAddress}]] != null){
-    var work_addr = [[${con.workerAddress}]]
-	var work_num1=  work_addr.indexOf('_');
-	var work_num2 = work_addr.indexOf('_', work_num1 + 1)
-	$('#input_postcode_work').html(work_addr.substring(0, work_num1));
-    $('#input_addr_work').html(work_addr.substring(work_num1 + 1, work_num2));
-    $('#input_detailAddr_work').html(work_addr.substring(work_num2 + 1,));
-    }
-    
-    if([[${con.requesterAddress}]] != null){
-    var req_addr = [[${con.requesterAddress}]]
-	var req_num1=  req_addr.indexOf('_');
-	var req_num2 = req_addr.indexOf('_', req_num1 + 1)
-	$('#input_postcode').val(req_addr.substring(0, req_num1));
-    $('#input_addr').val(req_addr.substring(req_num1 + 1, req_num2));
-    $('#input_detailAddr').val(req_addr.substring(req_num2 + 1,));
-    }
-    
- 	// 은행 표기
- 	if(/*[[${con.requesterBankcode}]]*/"" != null){
-    	for(i=0; i<$('option').length ; i++){
-   			if( $('option:eq('+i+')').val().includes(/*[[${con.requesterBankcode}]]*/"")){
-   			 $('option:eq('+i+')').prop("selected",true);
-    		}
-    	}
- 	}
+		// 주민번호 "-"
+		workerRnn = userRnn(workerRnn);
+		$('#worker_Rnn').html(workerRnn);
+		requesterRnn = userRnn(requesterRnn);
+		$('#requester_Rnn').html(requesterRnn);
+		
+		// 주소 표기
+	    if(/*[[${con.workerAddress}]]*/"" != null){
+	    	var work_addr = /*[[${con.workerAddress}]]*/""
+	    	workerPAddr(work_addr);
+	    }
+		if(/*[[${con.requesterAddress}]]*/"" != null){
+		   var req_addr = /*[[${con.requesterAddress}]]*/""
+		   requesterInputAddr(req_addr);
+		}
+		
+		// 은행 표기
+	 	if(reqBankCode != null){
+	 		requesterBank(reqBankCode);
+	 	}
+		
+	 	// 서명 표기
+		if(workSign != null){
+		 signView(workSign, 1);
+		}
+		if(reqSign != null){
+		 signView(reqSign, 0);
+		}
+		
+	})
 
- 	// 통일 계약서 표기
-    var unity_origin = /*[[${unity.contractTermsContent}]]*/""
-    var unity_content = unity_origin.replaceAll('\n', '<br />');
-    $('.unity p').html(unity_content);
-	
-	var contractNo = [[${con.contractNo}]];
-	
-	
+   
 	// 업데이트
 	$('#updateBtn').on('click', insertAjax );
 	
 	function insertAjax(e){
 		// 폼 데이터 처리
-		$('input[name="requesterAddress"]').val($('#input_postcode').val() + '_' 
-				+ $('#input_addr').val() + '_' + $('#input_detailAddr').val());
-		
-		var bankcode = $('select').val();
-		var bank_num1 = bankcode.indexOf('(');
-		if(bankcode == '은행 선택'){
-			$('input[name="requesterBankcode"]').val(null);
-		}else if(bankcode != /*[[${con.requesterBankcode}]]*/"" && bankcode != '은행 선택'){
-			$('input[name="requesterBankcode"]').val(bankcode.substring(bank_num1+1).replace(')', ''));
-		}
+		requesterAddrData();
+		requesterBankCodeUpdate(reqBankCode);
 		
 		// 폼 데이터 전송
 		var formData = new FormData(document.conUpdateForm);
 		
-		formData.append("reqSign.signsContent", reqNewSign);
+		if(reqNewSign != ''){
+			formData.append("reqSign.signsContent", reqNewSign);
+		}else{
+			formData.append("reqSign.signsContent", reqSign);
+		}
 		
-		for (const pair of formData.entries()) {
+		/*for (const pair of formData.entries()) {
 			  console.log(pair[0], pair[1]);
-			}
+		}*/
 		
 		$.ajax({
 			url: '/conUpdate',
@@ -472,92 +501,22 @@
 			data : formData,
 			type :'Post',
 			async : false
-			
 		})
 			
 		location.href='/conInfo?contractNo='+contractNo;
 	}
 
-	var leaderCode = /*[[${leaderCode}]]*/"";
-	
-	// 서명 표기
-	var workSign = [[${con.worSign.signsContent}]];
-	
-	if(workSign != null){
-	 signView(workSign, 0);
-	}
-	
-	var reqSign = [[${con.reqSign.signsContent}]];
-	var reqNewSign = '';
-	
-	if(reqSign != null){
-	 signView(reqSign, 1);
-	}
-	
-function signView(compressedSignatureData, num) {
-    //console.log("compressedSignatureData = " + compressedSignatureData);
-    console.log(num);
-    // 압축된 데이터 복원
-    let decompressedSignatureData 
-              = LZString.decompressFromBase64(compressedSignatureData);
+	// 서명
+	$('.sigPad').signaturePad({drawOnly:true});
 
-    // 복원된 서명을 JSON화
-    let signatureData = JSON.parse(decompressedSignatureData);
-
-    // 서명 그리기
-    drawSignature(signatureData, num);
-}
-
-function drawSignature(data, num) {
-    // Canvas / 컨텍스트
-    let canvas;
-    
-    if(num == 0){
-    	canvas = document.getElementById('signatureCanvas_work');
-    }else{
-    	canvas = document.getElementById('signatureCanvas_req');
-    }
-    
-    let ctx = canvas.getContext('2d');
-    
- 	// 캔버스 초기화
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.beginPath();
-    for (let i = 0; i < data.length; i++) {
-        let point = data[i];
-        ctx.moveTo(point.mx, point.my);
-        ctx.lineTo(point.lx, point.ly);
-    }
-    ctx.stroke();
-    if(num == 3){
-    $('#sendModal').modal('hide');
-    }
-    
-}
-	
-$('.sigPad').signaturePad({drawOnly:true});
-
-$('#saveModal').click(function(e) {
-	event.preventDefault(); // 폼의 기본 제출 동작을 방지
-
+	$('#saveModal').click(function(e) {
+		event.preventDefault(); // 폼의 기본 제출 동작을 방지
 		
-    // 서명 데이터를 JSON 형식으로 가져오기
-    var signatureData = $('.sigPad').signaturePad().getSignatureString();
-    
-    // 서명 데이터를 압축
-    compressedData = LZString.compressToBase64(signatureData);
+		DataCompress(); // 데이터 압축
 
-    // 압축된 데이터를 숨겨진 input에 저장
-    $('input.output').val(compressedData);
-
-    // 압축된 데이터 출력 (선택 사항)
-    //console.log(compressedData);
-   
-
-    reqNewSign = compressedData;
-    signView(compressedData, 3);
-   
-});
+    	reqNewSign = compressedData;
+    	signView(compressedData, 2);
+	});
 
 	
 	</script>
@@ -569,10 +528,14 @@ $('#saveModal').click(function(e) {
 	<script
 		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-	<!-- uploadAjax -->
+	<!-- uploadAjax : 파일 처리 -->
 	<script type="text/javascript" th:src="@{/js/doc/uploadAjax.js}"></script>
 
 	<!-- 서명 -->
 	<script src="/js/doc/json2.min.js"></script>
+	
+	<!-- js 파일 -->
+	<script type="text/javascript" th:src="@{/js/doc/con_common.js}"></script>
+	<script type="text/javascript" th:src="@{/js/doc/con_sign.js}"></script>
 </body>
 </html>

@@ -311,5 +311,15 @@
 		WHERE CONTRACT_NO = #{contractNo}
 	</select>
 	<!-- 동업 계약서 조회 -->
-
+	
+	<!-- 결제 내역 여부 -->
+	<select id="payCount" resultType="Integer">
+		SELECT
+        	 p.pay_no
+		FROM contract c
+        JOIN pay p
+        ON p.contract_no = c.contract_no
+		WHERE c.CONTRACT_NO = #{contractNo}
+	</select>
+	<!-- 결제 내역 여부 -->
 </mapper>

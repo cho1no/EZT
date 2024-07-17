@@ -37,6 +37,7 @@
 			, p.PAY_DT
 			, p.CONTRACT_NO
 			, c.PROPOSAL_NO
+			, p.VIRTUAL_ACCOUNT
 		FROM pay p
 		JOIN contract c
 		ON c.CONTRACT_NO = p.CONTRACT_NO

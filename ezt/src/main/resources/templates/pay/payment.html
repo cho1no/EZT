@@ -12,12 +12,8 @@
 <title>결제 작성</title>
 </head>
 <body>
-
-
 		<div class="container">
-
 			<div class="row mb-5 mt-5">
-
 				<div class="col-lg-8">
 					<form class="p-4 p-md-5 border rounded" name="payment">
 						<input type="hidden" name="price" th:value="${con.cttPrice}">
@@ -110,7 +106,7 @@
 								</div>
 							</div>
 							<div class="row form-group">
-								<label class="col-2 col-form-label"><b>주소</b></label>
+								<label class="col-3 col-form-label"><b>작업장 주소</b></label>
 								<div class="col">
 									<input type="text" readonly class="form-control-plaintext"
 										th:value="${'(' + ppsInfo.workerPostcode + ') '
@@ -201,18 +197,18 @@
 			success : function(result){	
 				
 				$('input[name="virtualAccount"]').val(result);
-				Payment();
+				Payment(result);
 			},
 			error : function(){alert("통신실패")}
 		})
 		
 	})
 	
-	function Payment(){	
+	function Payment(virtualAccount){	
 		
 		Swal.fire({
-			title: '이대로 진행하시겠습니까?',
-			text: '다시 되돌릴 수 없습니다.',
+			title: '이대로 결제하시겠습니까?',
+			text: '입금 계좌번호 : ' + virtualAccount,
 			icon: 'warning',
 			
 			allowOutsideClick: false,
