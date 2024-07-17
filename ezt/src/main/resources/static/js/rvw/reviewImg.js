@@ -121,7 +121,7 @@ function imageshow(obj) {
 
 	str += `<img src='/display?fileName=${originPath}' class="img-fluid img-thumbnail">`;
 	str += `</div>`;
-	console.log('dfsd');
+
 	return str;
 }
 
@@ -140,7 +140,7 @@ function insert(){
 		type: 'Post',
 		dataType: 'JSON' 
 		, success : function(result){
-			console.log(result);
+	
 			if(reviewImg != ''){
 			deleteFile(reviewImg);
 			reviewImg = '';

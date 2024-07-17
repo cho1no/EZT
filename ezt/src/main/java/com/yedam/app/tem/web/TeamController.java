@@ -88,28 +88,29 @@ public class TeamController {
         return "tem/teamRequestInsert";
     }
 
-    // 팀 신청 등록 처리
+ // 팀 신청 등록 처리
     @PostMapping("/requestInsert")
     @ResponseBody
     public boolean teamRequestInsert(@RequestBody TeamVO teamVO) {
-        
-            // 팀 정보 삽입
-           int number =  teamService.insertTeam(teamVO);
-           System.out.println(teamVO);
-           System.out.println(number);
-            // 카테고리 정보 삽입
-            List<TeamWorkCategoryVO> workCategoryVOList = teamVO.getWorkCategoryVO();
-            if (workCategoryVOList != null) {
-                for (TeamWorkCategoryVO twcVO : workCategoryVOList) {
-                    twcVO.setTwcTeamNo(number);
-                    System.out.println(twcVO);
-                    teamService.insertCategory(twcVO);
-                    
-                }
-            }
+        // 팀 정보 삽입
+        int number = teamService.insertTeam(teamVO);
+        teamVO.setTeamNo(number);  // 반환된 teamNo 값을 설정
+        System.out.println("Generated teamNo: " + number); // 디버깅용 로그 추가
 
-            return true;
-        } 
+        // 카테고리 정보 삽입
+        List<TeamWorkCategoryVO> workCategoryVOList = teamVO.getWorkCategoryVO();
+        if (workCategoryVOList != null) {
+            for (TeamWorkCategoryVO twcVO : workCategoryVOList) {
+                System.out.println("Inserting category for teamNo: " + number); // 디버깅용 로그 추가
+                twcVO.setTwcTeamNo(number);
+                teamService.insertCategory(twcVO);
+            }
+        } else {
+            System.out.println("No work categories found."); // 디버깅용 로그 추가
+        }
+
+        return true;
+    }
     
     // 팀 신청 수정
     @PostMapping("/requestUpdate")
@@ -155,7 +156,7 @@ public class TeamController {
         twcVO.setWorkCode(workCode);
 
         teamService.deleteCategory(twcVO);
-        return "tem/teamRequestInfo";
+        return "redirect:/team/requestInfo?teamNo=" + teamNo ;
     }
     
     //신청자 반려

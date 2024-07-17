@@ -83,9 +83,15 @@ $(document).ready(function(){
             })
             .done(result => {
                 if (result) {
-                    alert('정상적으로 수정되었습니다.');
+                    Swal.fire({
+					  text:'정상적으로 수정되었습니다.',
+					  icon:'success'
+					});
                 } else {
-                    alert('정보 수정에 실패하였습니다.');
+                    Swal.fire({
+					  text:'정보 수정에 실패하였습니다.',
+					  icon:'error'
+					});
                 }
             })
             .fail(err => console.log(err));
@@ -104,7 +110,10 @@ $(document).ready(function(){
 		    function validateInfoDetail(info) {
 		        // 숫자 유효성 검사
 		        if (isNaN(info.headcount)) {
-		            alert("숫자만 입력해주세요.");
+		            Swal.fire({
+					  text:'숫자만 입력해주세요.',
+					  icon:'warning'
+					});
 		            return false;
 		        }
 		
@@ -116,7 +125,10 @@ $(document).ready(function(){
 		        });
 		
 		        if (existingCodes.filter(code => code === info.categoryCode).length > 1) {
-		            alert("이미 존재하는 항목입니다.");
+		            Swal.fire({
+					  text:'이미 입력된 항목입니다..',
+					  icon:'warning'
+					});
 		            return false;
 		        }
 		

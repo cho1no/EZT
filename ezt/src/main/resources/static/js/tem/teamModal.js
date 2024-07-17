@@ -49,6 +49,12 @@ $(document).ready(function() {
         });
     });
     
+    $('#infoBtn').click(function(e){
+		let usersNo = $('#usersNo').val();
+		
+		window.open('/find/workerMoreInfo?usersNo=' + usersNo);
+	})
+    
       $('.approveBtn').click(function() {
         let enrollNo = $('#enrollNo').val();
         let usersNo = $('#usersNo').val(); 

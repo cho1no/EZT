@@ -332,7 +332,7 @@
               colspan="2"
               th:text="|${#dates.format(proposal.cttStartDt, 'yyyy-MM-dd')} ~ ${#dates.format(proposal.cttEndDt, 'yyyy-MM-dd')}|"
             />
-            <td>ddd</td>
+            <td id="totalPrice"></td>
             <td th:text="${proposal.usersPhone}" />
             <td th:text="${proposal.comments}" />
             <td>
@@ -348,7 +348,7 @@
                 >
                   상세보기
                 </button>
-                <table class="table mb-2 ">
+                <table id="estimateTable" class="table mb-2 ">
                   <tr>
                     <th>품명</th>
                     <th>단위</th>
@@ -361,8 +361,8 @@
                     <tr>
                       <td th:text="${ppd.product}"></td>
                       <td th:text="${ppd.unit}"></td>
-                      <td th:text="${ppd.qty}"></td>
-                      <td th:text="${ppd.unitprice}"></td>
+                      <td th:text="${ppd.qty}" class="qty"></td>
+                      <td th:text="${ppd.unitprice}" class="unitprice"></td>
                       <td th:text="${ppd.qty} * ${ppd.unitprice}"></td>
                       <td th:text="${ppd.comments}"></td>
                     </tr>
@@ -585,6 +585,21 @@
       }else{
     	  var uploadImg = null;
       }
+	  
+	  $(document).ready(function () {
+	          var total = 0;
+	          /* 각 행의 qty와 unitprice를 가져와서 총 금액을 계산합니다 */
+	          $("#estimateTable tbody tr").each(function () {
+	              var qty = parseFloat($(this).find(".qty").text()) || 0;
+	              var unitprice = parseFloat($(this).find(".unitprice").text()) || 0;
+	              var totalprice = qty * unitprice;
+	              total += totalprice;
+	              /* 계산된 총 금액을 각 행의 totalprice 엘리먼트에 출력합니다 */
+	              $(this).find(".totalprice").text(totalprice.toFixed(2).replace(/\.?0+$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+	          });
+	          /* 총 금액을 화면에 출력합니다 */
+	          $("#totalPrice").text(total.toFixed(2).replace(/\.?0+$/, '').replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+	      });
     </script>
     <script src="/js/req/img.js"></script>
   </body>

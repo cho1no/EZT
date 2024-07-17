@@ -78,25 +78,33 @@
                     </button>
                 </td>
                 <td th:unless="${#authentication.principal.userVO.usersNo == team.writer}">
-                	<button type="button" class="btnn" data-bs-toggle="modal" data-bs-target="#apply" th:attr="onclick=|openApplyModal('${twc.teamNo}','${twc.categoryCode}','${twc.workCode}')|">신청하기</button>
+					
+                	<button th:if="${twc.partCount != twc.headcount}"
+							type="button" class="btnn" data-bs-toggle="modal" 
+							data-bs-target="#apply" 
+							th:attr="onclick=|openApplyModal('${twc.teamNo}','${twc.categoryCode}','${twc.workCode}')|">
+					신청하기
+				</button>
                 </td>
             </tr>
         </th:block>
     </table>
     
 </form>
-<th:block th:if="${#authentication.principal.userNo == team.writer }">
-<button type="button" class="btn btn-primary upBtn update">수정</button>
-<button type="button" class="btn btn-primary"
-        th:onclick="|location.href='@{/team/requestDelete(teamNo=${team.teamNo})}'|">삭제
-</button>
-<button type="button" class="btn btn-primary endBtn">
-팀 모집 완료하기
-</button>
+<th:block th:if="${#authentication.principal.userNo == team.writer }" >
+	<div style="text-align: right;">	
+	<button type="button" class="btn btn-primary upBtn update">수정</button>
+	<button type="button" class="btn btn-primary"
+	        th:onclick="|location.href='@{/team/requestDelete(teamNo=${team.teamNo})}'|">삭제
+	</button>
+	<button type="button" class="btn btn-primary endBtn">
+	팀 모집 완료하기
+	</button>
+	</div>
 </th:block>
 <!-- 카테고리 별 신청자 확인 Modal -->
 <div class="modal fade" id="volunteer" tabindex="-1" aria-labelledby="volunteerLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="volunteerLabel">신청 목록</h1>
@@ -124,23 +132,23 @@
             		<tbody>
             			<tr>
             				<th>신청인</th>
-            				<td id="worker"></td>
+            				<td id="worker" colspan="2"></td>
             			</tr>
             			<tr>
             				<th>내용</th>
             				<td id="content"></td>
-            			</tr>
-            			<tr>
-	            			<td colspan="2">
+							<td>           			
 								<input type="hidden" id="usersNo">
-								<input type="hidden" id="workCode">
-	            				<button class="btn btn-primary" >정보보기</button>
-	            				<button class="btn btn-primary approveBtn">추가하기</button>
-	            				<button data-bs-toggle="modal" data-bs-target="#deny" class="btn btn-primary">반려하기</button>
-	            			</td>
+								<input type="hidden" id="workCode">								
+							</td>
             			</tr>
             		</tbody>
             		</table>
+					<div style="text-align: center;">
+	    				<button class="btn btn-primary" id="infoBtn">정보보기</button>
+	    				<button class="btn btn-primary approveBtn">추가하기</button>
+	    				<button data-bs-toggle="modal" data-bs-target="#deny" class="btn btn-primary">반려하기</button>						
+					</div>
             	</div>
             </div>	
             </div>
