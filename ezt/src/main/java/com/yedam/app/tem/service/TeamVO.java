@@ -13,6 +13,8 @@ public class TeamVO {
 	private int writer;	//팀신청자
 	private Date writeDt;	//팀신청 작성일
 	private int contractNo;	//계약서 번호
+	private String deleteTf;//삭제여부
+	private String completeTf;//모집완료여부
 	
 	
 	//조인컬럼

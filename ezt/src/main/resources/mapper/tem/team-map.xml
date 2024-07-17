@@ -132,44 +132,19 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
           WHERE m.work_code = w.work_code) part_count
         ,(SELECT COUNT(*)
 		  FROM member_enroll
-		  WHERE work_code = w.work_code and process_result = 'A01') as v_count
+		  WHERE work_code = w.work_code and process_result = 'A01' and team_no = w.team_no) as v_count
 	FROM team_work_category w    
 	WHERE team_no = #{teamNo}
 </select>
 
 <!-- 팀 신청하기 -->
-<insert id="insertTeam" parameterType="TeamVO">
-	<selectKey keyProperty="teamNo"
-				resultType="Integer"
-				order="BEFORE">
-	
-		SELECT seq_team.NEXTVAL
-		FROM dual			
-	</selectKey>
-
-	INSERT	INTO team 
-	
-		(	team_no
-			,work_title
-			,work_content
-			,writer
-			,write_dt
-			,contract_no
-			,delete_tf
-		)
-		
-	VALUES
-		(
-			#{teamNo}
-			,#{workTitle}
-			,#{workContent}
-			,#{writer}
-			,sysdate
-			,#{contractNo}
-			,'N'
-		)
-		
-	
+<insert id="insertTeam" statementType="CALLABLE" parameterType="TeamVO">
+    {CALL INSERTTEAM(#{workTitle}, 
+					 #{workContent}, 
+					 #{writer}, 
+					 #{contractNo}, 
+					 #{teamNo, mode=OUT, jdbcType=INTEGER})
+				}
 </insert>
 <!-- 팀신청 수정하기(제목, 내용) -->
 <update id="updateTeam" parameterType="TeamVO">
