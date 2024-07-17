@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
-import { RouterLink } from 'src/routes/components';
+// import { RouterLink } from 'src/routes/components';
 
 // import Logo from 'src/components/logo';
 
@@ -63,10 +63,10 @@ export default function NotFoundView() {
           />
 
           <Button
-            href="http://localhost:8080/main"
+            href="/main"
             size="large"
             variant="contained"
-            component={RouterLink}
+            // component={RouterLink}
           >
             사이트로 돌아가기
           </Button>
