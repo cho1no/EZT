@@ -92,7 +92,6 @@ function alarmHistoryAjax() {
           })
         );
       });
-      console.log(response);
     },
   });
 }

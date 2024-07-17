@@ -22,6 +22,7 @@
   align-items: center;
 }
 .alarm-window {
+  font-size: 14px;
   display: none;
   position: absolute;
   right: 200px;
@@ -65,7 +66,9 @@
   font-size: 10pt;
   color: #aaa;
 }
-
+.alarmTitle {
+  font-weight: 700;
+}
 .alarm-notification {
   max-width: 300px;
   margin: 0 auto;

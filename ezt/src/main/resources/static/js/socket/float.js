@@ -47,7 +47,7 @@ $(document).ready(function () {
           $(".floated-body").append(
             $(`<div class="chatRoomDiv cpointer" data-cno='${e.chatRoomNo}'>
             <p><b>${e.title}</b><span class="chatTime float-end">${date}</span></p>
-            <p><span id="currChat">${e.content}</span><span class="float-end">1</span></p>
+            <p id="currC"><span id="currChat">${e.content}</span></p>
             </div>`).click(() => {
               chatRoomClickEvent(e);
             })
@@ -100,15 +100,23 @@ $(document).ready(function () {
     </div>`;
   }
 
-  // 메뉴 클릭마다 창띄우기
-  $(".floating-nav li").each((i, e) => {
-    $(e).click(
-      () => (document.getElementById("floatedWindow").style.display = "flex")
-    );
-  });
   // 채팅버튼 클릭 시 채팅방 그리기
   $("#chatButton").click(() => {
-    CCRLW();
+    if (!$("#chatButton").hasClass("cshow")) {
+      CCRLW();
+      document.getElementById("floatedWindow").style.display = "flex";
+      $("#chat-icon").removeClass("fa-comment-dots");
+      $("#chat-icon").removeClass("fa");
+      $("#chat-icon").addClass("fa-solid");
+      $("#chat-icon").addClass("fa-x");
+    } else {
+      closeChat();
+      $("#chat-icon").removeClass("fa-solid");
+      $("#chat-icon").removeClass("fa-x");
+      $("#chat-icon").addClass("fa-comment-dots");
+      $("#chat-icon").addClass("fa");
+    }
+    $("#chatButton").toggleClass("cshow");
   });
 
   // Send Event
@@ -116,10 +124,10 @@ $(document).ready(function () {
     sendMessage();
   });
   // 닫기 버튼 클릭
-  $("#closeFloatedWindow").click(() => {
+  function closeChat() {
     $(".floated-body").html("");
     $("#floatedWindow").css("display", "none");
-  });
+  }
 
   // 연결종료
   window.onbeforeunload = function () {
