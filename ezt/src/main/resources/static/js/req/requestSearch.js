@@ -7,8 +7,14 @@ $(document).ready(function(){
     $(".insertBtn").on("click", function(e){
         e.preventDefault();
         if (login == 'anonymousUser') {
-            alert("로그인을 하세요");
-            location.href = '/login'; // 로그인페이지로 이동
+            Swal.fire({
+			  text:'로그인 하세요',
+			  icon:'warning'
+			}).then(function(){
+				
+	            location.href = '/login'; // 로그인페이지로 이동
+			})
+			;
         } else {
             location.href = '/request/insert';
         }

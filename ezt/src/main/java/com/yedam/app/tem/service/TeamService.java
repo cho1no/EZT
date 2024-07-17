@@ -21,6 +21,9 @@ public interface TeamService {
 	//팀신청 삭제
 	public int deleteTeam(int teamNO);
 	
+	//의뢰 찾기
+	public TeamVO findRequest(TeamVO teamVO);
+	
 	//전체 데이터 갯수
 	public int getTotal(Criteria cri);
 

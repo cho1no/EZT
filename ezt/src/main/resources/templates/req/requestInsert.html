@@ -47,7 +47,7 @@
 		</tr>
 		<tr>
 			<th>희망시공예산</th>
-			<td colspan="3"><input type="text" name="hopeCttBudget"/>
+			<td colspan="3"><input type="number" min="0" name="hopeCttBudget"/>
 		</tr>
 		<tr>
 			<th>시공공간</th>
@@ -67,11 +67,12 @@
 		</tr>
 		<tr>
 			<th>시공공간면적</th>
-			<td colspan="3"><input type="text" name="cttPlaceArea" style="width:50px;">평</td>
+			<td colspan="3"><input type="number" min="0" name="cttPlaceArea" style="width:50px;">평</td>
 		</tr>		
 		<tr>
 			<th>의뢰 상세 내용</th>
-			<td colspan="3"><textarea name="content" style="width:500px; height:200px;"></textarea></td>
+			<td colspan="3"><textarea name="content" maxlength="2000"
+                  placeholder="최대 2000자까지 입력됩니다. 위에서 기타를 선택하셨다면 이곳에 상세하게 적어주세요! " style="width:500px; height:200px;"></textarea></td>
 		</tr>
 		<tr>
            <th>우편번호</th>
@@ -103,5 +104,6 @@
 <script src="/js/req/img.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="/js/doc/postcode.js"></script>
+
 </body>
 </html>

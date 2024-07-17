@@ -16,7 +16,9 @@ img{
  	width:250px; 
  	height:200px; 
  } 
-
+.cursor{
+	cursor:pointer; 
+ }
 </style>
 <head>
 <meta charset="UTF-8">
@@ -40,21 +42,21 @@ img{
 			<input type="hidden" th:name="${amount}" th:value="${page.cri.amount}">
 			<button class="btn btn-primary">검색</button>	
 		</div>
-		<div style="text-align:right" >
-			<a class="btn btn-primary insertBtn" th:href='@{/insert}'>글쓰기</a>
+		<div sec:authorize="hasRole('ROLE_USER')" style="text-align:right" >
+			<button class="btn btn-primary insertBtn" type="button">글쓰기</button>
 		</div>
 	</div>
       <div class="container">
         <div class="row mb-5">
         <th:block th:each="request : ${requestList}">
           <div class="col-md-6 col-lg-3 mb-5">
-            <a th:onclick="|location.href='@{/request/info(requestNo=${request.requestNo})}'|">
+            <a class="cursor" th:onclick="|location.href='@{/request/info(requestNo=${request.requestNo})}'|">
             <th:block>
              <img th:if ="${request.fileId == 0}"  th:src="@{/images/req/default_img.png}" alt="Image" class="rounded mb-4">
     	     <img th:unless ="${request.fileId == 0}"th:src="|@{${'/display?fileName=' + request.savePath.replaceAll('\\','/') +'/'+ request.saveName + '_' + request.originalFileName + '.' + request.ext}}|"  alt="Image" class=" rounded mb-4">
             </th:block>
             </a>
-            <h3><a th:onclick="|location.href='@{/request/info(requestNo=${request.requestNo})}'|" class="text-black">[[${request.title}]] </a></h3>
+            <h3><a th:onclick="|location.href='@{/request/info(requestNo=${request.requestNo})}'|" class="cursor text-black">[[${request.title}]] </a></h3>
             <div>[[${request.regionCode}]] <span class="mx-2">|</span>[[${request.categoryCode}]]</div>
             <div>[[${#dates.format(request.writeDt,'yy.MM.dd')}]] <span class="mx-2">|</span>[[${request.usersName}]] </div>
           </div>

@@ -35,6 +35,7 @@ public class TeamController {
     @Autowired
     CommonCodeService commonCodeService;
 
+
     // 팀 신청 전체 조회
     @GetMapping("/requestList")
     public String teamRequestList(Criteria cri, Model model) {
@@ -71,6 +72,10 @@ public class TeamController {
     // 팀 신청 등록 페이지
     @GetMapping("/requestInsert")
     public String teamRequestInsert(Model model, TeamVO teamVO) {
+    	//의뢰 찾기
+    	TeamVO findVO = teamService.findRequest(teamVO);
+    	model.addAttribute("request",findVO);
+    	
     	
         model.addAttribute("team", new TeamVO());
         model.addAttribute("twc", new TeamWorkCategoryVO());
@@ -196,7 +201,8 @@ public class TeamController {
     @ResponseBody
     public boolean approveMember(@RequestBody MemberVO memberVO) {
     	System.out.println("=====" + memberVO);
-        return teamService.approveMember(memberVO);
+        teamService.approveMember(memberVO);
+        return memberVO.getResult()==1? true:false;
     }
 }
 
