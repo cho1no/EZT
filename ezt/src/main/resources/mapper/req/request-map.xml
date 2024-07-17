@@ -308,7 +308,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		LEFT OUTER JOIN request r
 		ON r.request_no = p.request_no
 		
-	WHERE r.request_no =#{requestNo}
+	WHERE r.request_no =#{requestNo} and (p.proposal_state = 'A01' or p.proposal_state = 'A02')
 	
 	ORDER BY contract_no desc, p.proposal_no desc
 </select>

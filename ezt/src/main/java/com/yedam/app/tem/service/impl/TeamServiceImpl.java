@@ -54,7 +54,12 @@ public class TeamServiceImpl implements TeamService {
 
 		return teamMapper.deleteTeam(teamNo);
 	}
-
+	//의뢰 찾기
+	@Override
+	public TeamVO findRequest(TeamVO teamVO) {
+		
+		return teamMapper.findRequest(teamVO);
+	}
 	//전체 페이지 수
 	@Override
 	public int getTotal(Criteria cri) {
@@ -111,6 +116,7 @@ public class TeamServiceImpl implements TeamService {
 		
 		return teamMapper.approveMember(memberVO) == 1;
 	}
+
 
 
 

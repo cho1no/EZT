@@ -14,4 +14,6 @@ public class MemberVO {
 	private int partnershipContractNo; //동업계약서 번호
 	private int teamNo;//팀번호
 	private int enrollNo;//신청번호
+	
+	private int result;
 }

@@ -16,4 +16,6 @@ public class MemberEnrollVO {
 	private int usersNo;
 	private int career; //지원자 경력계산
 	private int headcount; //카테고리별 지원자 수 
+	
+	
 }

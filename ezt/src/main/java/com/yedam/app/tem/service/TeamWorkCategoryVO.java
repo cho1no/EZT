@@ -13,4 +13,5 @@ public class TeamWorkCategoryVO {
 	
 	
 	private int twcTeamNo;
+	private int vCount; //카테고리별 신청자 수
 }

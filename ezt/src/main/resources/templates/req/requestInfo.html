@@ -58,6 +58,9 @@
 		font-size: 14px;
 		color: red;
 	  }
+	  .active{
+	  	background-color : #7ba714;
+	  }
     </style>
     <title>의뢰 상세페이지</title>
   </head>
@@ -172,7 +175,8 @@
               <td>
                 <input
                   class="form-control"
-                  type="text"
+                  type="number" 
+                  min="0"
                   name="hopeCttBudget"
                   th:value="${request.hopeCttBudget}"
                   readonly
@@ -259,7 +263,8 @@
               <td>
                 <input
                   class="form-control"
-                  type="text"
+                  type="number"
+                  min="0"
                   name="cttPlaceArea"
                   th:value="|${request.cttPlaceArea}|"
                   readonly
@@ -273,6 +278,9 @@
                   class="input form-control"
                   name="content"
                   th:text="${request.content}"
+                  maxlength="2000"
+                  placeholder="최대 2000자까지 입력됩니다. 위에서 기타를 선택하셨다면 이곳에 상세하게 적어주세요! "
+                  style="height:200px;"
                   readonly
                 ></textarea>
               </td>
@@ -285,7 +293,11 @@
     
     
     <!-- 견적서 -->
-    <div class="row gap-2" sec:authorize="isAuthenticated()"
+    <div th:if="${proposalList == null}">
+      <p>제시받은 견적서가 존재하지 않습니다.</p>
+    </div>
+    <div th:unless="${proposalList == null}" class="row gap-2">
+      <th:block  sec:authorize="isAuthenticated()"
     	 th:if="${#authentication.principal.userVO.usersRole == 'ROLE_WORKER' or #authentication.principal.userNo == request.requester}">
       <div class="d-flex justify-content-between">
         <div>
@@ -298,7 +310,7 @@
           </select>
         </div>
       </div>
-      <table class="table">
+      <table class="table table-striped">
         <tr>
           <th>담당자명</th>
           <th colspan="2">공사기간</th>
@@ -308,7 +320,7 @@
         </tr>
         <th:block th:each="proposal : ${proposalList}">
           <tr
-            th:class="${proposal.contractNo>0}? 'active' : ''"
+            th:class="${proposal.proposalState == 'A02'}? 'active' : ''"
             data-bs-toggle="collapse"
             th:data-bs-target="'#collapse' + ${proposal.proposalNo}"
             aria-expanded="false"
@@ -318,7 +330,7 @@
             <td th:text="${proposal.usersName}" />
             <td
               colspan="2"
-              th:text="|${#dates.format(proposal.cttStartDt, 'yyyy/MM/dd')} ~ ${#dates.format(proposal.cttEndDt, 'yyyy/MM/dd')}|"
+              th:text="|${#dates.format(proposal.cttStartDt, 'yyyy-MM-dd')} ~ ${#dates.format(proposal.cttEndDt, 'yyyy-MM-dd')}|"
             />
             <td>ddd</td>
             <td th:text="${proposal.usersPhone}" />
@@ -336,7 +348,7 @@
                 >
                   상세보기
                 </button>
-                <table class="table mb-2">
+                <table class="table mb-2 ">
                   <tr>
                     <th>품명</th>
                     <th>단위</th>
@@ -362,15 +374,16 @@
         </th:block>
       </table>
     </div>
+    </th:block>
     <!-- 견적서 -->
     <!-- 계약서 -->
+    <div th:if="${contract == null}">
+      <p>체결 된 계약건이 아직 없습니다.</p>
+    </div>
     <th:block th:if="${contract != null}">
     <div sec:authorize="isAuthenticated()" 
     	 th:if="${#authentication.principal.userNo == request.requester or #authentication.principal.userNo == contract.workerInfo}">
     <div class="row">
-      <div th:if="${contract == null}">
-        <p>체결 된 계약건이 아직 없습니다.</p>
-      </div>
       <div class="row" th:unless="${contract == null}">
         <table class="table col">
           <tr>
@@ -391,7 +404,7 @@
             <th colspan="2">공사기간</th>
             <td
               colspan="2"
-              th:text="|${#dates.format(contract.cttStartDt, 'yyyy/MM/dd')} ~ ${#dates.format(contract.cttEndDt, 'yyyy/MM/dd')}|"
+              th:text="|${#dates.format(contract.cttStartDt, 'yyyy-MM-dd')} ~ ${#dates.format(contract.cttEndDt, 'yyyy-MM-dd')}|"
             />
           </tr>
           <tr>
@@ -483,7 +496,7 @@
     </th:block>
     </div>
     </th:block>
-    <div class="row">
+    <div style="text-align:right">
       <button
         type="button"
         class="btn btn-secondary delBtn"

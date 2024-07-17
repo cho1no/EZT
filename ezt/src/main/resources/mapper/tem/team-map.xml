@@ -105,7 +105,21 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
 		
 	WHERE t.team_no = #{teamNo}
 </select>
-
+<!-- 의뢰 찾기 -->
+<select id="findRequest" resultType="TeamVO">
+	SELECT 
+           r.request_no
+           
+    FROM   contract c
+    
+        JOIN proposal p
+        ON p.proposal_no = c.proposal_no
+        JOIN request r
+        ON r.request_no = p.request_no
+        
+   WHERE contract_no = #{contractNo}
+    
+</select>
 <!-- 팀신청 카테고리 별 인원 -->
 <select id="countMember" resultType="TeamWorkCategoryVO">
 	SELECT   FIND_COMMONCODE(w.work_code) as work_code
@@ -116,8 +130,10 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
         ,(SELECT COUNT(*)
           FROM member m 
           WHERE m.work_code = w.work_code) part_count
-	FROM team_work_category w
-	
+        ,(SELECT COUNT(*)
+		  FROM member_enroll
+		  WHERE work_code = w.work_code and process_result = 'A01') as v_count
+	FROM team_work_category w    
 	WHERE team_no = #{teamNo}
 </select>
 
@@ -219,9 +235,6 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
                 SUM(trunc ( ( months_between ( c.career_end_dt, c.career_start_dt ) ) / 12 ))
               FROM career
               WHERE users_no = m.worker)as career
-            ,(SELECT COUNT(*)
-			  FROM member_enroll
-			  WHERE work_code = 'm.work_code' and process_result = 'A01') as headcount
 	FROM member_enroll m
 		JOIN users u
 		ON u.users_no = m.worker
@@ -269,7 +282,11 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
 <!-- 지원자 승인 member - insert, member_enroll - update -->
 <update id="approveMember" statementType="CALLABLE" parameterType="MemberVO">
 	{CALL
-		memberinsert(#{enrollNo},#{usersNo},#{workCode},#{teamNo})
+		memberinsert(#{enrollNo},
+					 #{usersNo},
+					 #{workCode},
+					 #{teamNo},
+					 #{result ,mode=OUT,jdbcType=INTEGER})
 	}
 </update>
 </mapper>

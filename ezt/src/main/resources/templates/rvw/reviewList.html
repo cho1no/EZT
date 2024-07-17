@@ -29,6 +29,9 @@ img{
 	color:#ebebeb;
 	font-size:30px;
 }
+.cursor{
+	cursor:pointer; 
+ }
 </style>
 <head>
 <meta charset="UTF-8">
@@ -57,14 +60,14 @@ img{
         <div class="row mb-5">
         <th:block th:each=" rv : ${rvList}">
           <div class="col-md-6 col-lg-3 mb-5">
-            <a th:onclick="|location.href='@{/review/info(reviewNo=${rv.reviewNo})}'|" >
+            <a class="cursor" th:onclick="|location.href='@{/review/info(reviewNo=${rv.reviewNo})}'|" >
              <th:block>
              <img th:if ="${rv.fileId == 0}"  th:src="@{/images/interior.jpg}" alt="Image" class="rounded mb-4">
     	     <img th:unless ="${rv.fileId == 0}" th:src="|@{${'/display?fileName=' + rv.savePath.replaceAll('\\','/') +'/'+ rv.saveName + '_' + rv.originalFileName + '.' + rv.ext}}|"   alt="Image" class=" rounded mb-4">
             </th:block>
             </a>
             <div >
-	            <h5 class="text-truncate"><a class="text-black" th:onclick="|location.href='@{/review/info(reviewNo=${rv.reviewNo})}'|">[[${rv.content}]]</a></h5>
+	            <h5 class="text-truncate"><a class="text-black cursor" th:onclick="|location.href='@{/review/info(reviewNo=${rv.reviewNo})}'|">[[${rv.content}]]</a></h5>
             </div>
             <div class="star-rating">
             	<div>

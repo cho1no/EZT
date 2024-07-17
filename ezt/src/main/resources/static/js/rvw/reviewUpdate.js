@@ -35,9 +35,15 @@ $(document).ready(function(){
 			})
 			.done(result =>{
 				if(result){
-					alert('정상적으로 수정되었습니다.');
+					Swal.fire({
+					  text:'정상적으로 수정되었습니다.',
+					  icon:'success'
+					});
 				}else{
-					alert('정보 수정에 실패하였습니다.')
+					Swal.fire({
+					  text:'수정에 실패하였습니다.',
+					  icon:'error'
+					});
 				}
 			})
 			.fail(err => console.log(err));

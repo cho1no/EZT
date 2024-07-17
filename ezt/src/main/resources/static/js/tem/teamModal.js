@@ -11,7 +11,10 @@ $(document).ready(function() {
         
          // content가 null이면 alert
         if (content == null ) {
-            alert("반려 사유를 입력해주세요.");
+            Swal.fire({
+					  text:'반려사유를 입력해주세요.',
+					  icon:'warning'
+					});
             return;
         }
 
@@ -28,22 +31,28 @@ $(document).ready(function() {
             data: JSON.stringify(data),
             success: function(response) {
                 if (response) {
-                    alert("반려 처리되었습니다.");
+                    Swal.fire({
+					  text:'반려 처리되었습니다..',
+					  icon:'success'
+					});
                     $('#deny').modal('hide');
 					$('textarea[name="content"]').val('');
                 }
             },
             error: function(error) {
                 console.log(error);
-                alert("오류가 발생했습니다.");
+                Swal.fire({
+					  text:'오류가 발생하였습니다.',
+					  icon:'error'
+					});
             }
         });
     });
     
       $('.approveBtn').click(function() {
         let enrollNo = $('#enrollNo').val();
-        let usersNo = $('#worker').data('usersNo'); 
-        let workCode = $('#modalCategoryCode').val();
+        let usersNo = $('#usersNo').val(); 
+        let workCode = $('#workCode').val();
         let teamNo = $('#teamNo').val();
 
 
@@ -63,13 +72,19 @@ $(document).ready(function() {
                 data: JSON.stringify(data),
                 success: function(response) {
                     if (response) {
-                        alert("팀원으로 추가 되었습니다.");
+                        Swal.fire({
+					  text:'팀원으로 추가되었습니다.',
+					  icon:'success'
+					});
                         $('#volunteer').modal('hide');
                     }
                 },
                 error: function(error) {
                     console.log(error);
-                    alert("오류가 발생했습니다.");
+                    Swal.fire({
+					  text:'오류가 발생하였습니다.',
+					  icon:'error'
+					});
                 }
             });
         }
@@ -77,15 +92,33 @@ $(document).ready(function() {
 
 
 	$('.endBtn').click(function(){
-		if(confirm('정말 팀원 모집이 완료되었나요?')){
-			
-		}
-	})
+		Swal.fire({
+				   title: '팀원 모집이 완료되었나요?',
+				   text: '승인 시 이후 추가 팀원 모집은 불가합니다.',
+				   icon: 'question',
+				   
+				   showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+				   confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+				   cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+				   confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+				   cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+				   
+				   
+				   
+				}).then(result => {
+				   // 만약 Promise리턴을 받으면,
+				   if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+				   
+				      Swal.fire('팀원모집이 완료되었습니다.', '', 'success');
+				   }
+				});
+				
+					})
 });
 
- function openModal(teamNo, workCode){
+ function openModal(teamNo, workCode, categoryCode){
 	 // span 태그에 workCode 값 설정
-    $('#modalCategoryCode').text(workCode);
+    $('#modalCategoryCode').text(workCode); 
 
     // AJAX 요청 보내기
     $.ajax({
@@ -97,8 +130,9 @@ $(document).ready(function() {
             for (let i = 0; i < result.length; i++) {
                 let table = `<tr data-eno="${result[i].enrollNo}" 
                                   data-worker="${result[i].worker}" 
-                                  data-usersNo="${result[i].usersNo}" 
+                                  data-usersno="${result[i].usersNo}" 
                                   data-content="${result[i].content}" 
+                                  data-workcode="${workCode}"
                                   onclick="detail(this)">
                                 <td>${i + 1}</td>
                                 <td>${result[i].worker}</td>
@@ -118,18 +152,20 @@ $(document).ready(function() {
     });
 }
 	
-	function detail(){
-		$('#content').text($(event.currentTarget).data("content"));
-		$('#denyUser').val($(event.currentTarget).data("worker"));
-		$('#enrollNo').val($(event.currentTarget).data("eno"));
-		$('#worker').text($(event.currentTarget).data("worker"));
+	function detail(tr){
+		$('#content').text($(tr).data("content"));
+		$('#denyUser').val($(tr).data("worker"));
+		$('#enrollNo').val($(tr).data("eno"));
+		$('#worker').text($(tr).data("worker"));
+		$('#workCode').val($(tr).data("workcode"));
+		$('#usersNo').val($(tr).data("usersno"));
 	}
 	
 	function openApplyModal(teamNo, categoryCode, workCode) {
     // 모달이 열릴 때 categoryCode를 설정하는 부분
     $('#apply').on('shown.bs.modal', function () {
-        $('#categoryCode').val(categoryCode);  // 모달 내의 입력 필드에 카테고리 코드 설정
-        $('#workCode').val(workCode);  
+    $('#categoryCode').val(categoryCode); 
+    $('#category').text(workCode);  
             });
 
 }

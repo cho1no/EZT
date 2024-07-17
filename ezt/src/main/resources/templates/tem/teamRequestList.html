@@ -17,7 +17,10 @@
 img{ 
  	width:250px; 
  	height:200px; 
- } 
+ }
+.cursor{
+	cursor:pointer; 
+ }
 </style>
 </head>
 <body>
@@ -43,14 +46,11 @@ img{
 	</div>
       <div class="container">
         <div class="row mb-5">
-         <a>
          <th:block th:each="team : ${teamList}">
           <div class="col-md-6 col-lg-3 mb-5">
-            
-             <img th:src="@{/images/rvw/team.jpg}" th:onclick="|location.href='@{/team/requestInfo(teamNo=${team.teamNo})}'|">
-            
+             <img class="cursor" th:src="@{/images/rvw/team.jpg}" th:onclick="|location.href='@{/team/requestInfo(teamNo=${team.teamNo})}'|">
             <h5  class="text-truncate">
-            <a class="text-black" th:onclick="|location.href='@{/team/requestInfo(teamNo=${team.teamNo})}'|">[[${team.workTitle}]]</a>
+            <a class="text-black cursor" th:onclick="|location.href='@{/team/requestInfo(teamNo=${team.teamNo})}'|">[[${team.workTitle}]]</a>
             </h5>
             <div>작성자 : [[${team.writerName}]]<span class="mx-2">|</span>지역 : [[${team.regionCode}]]</div>
             <div class="text-truncate">
@@ -59,11 +59,10 @@ img{
             	<span >[[${twc.workCode}]]</span>
             	</th:block> 
             </div>
-
             <div>총 모집 인원 : [[${team.headCount}]] 명 <span class="mx-2">|</span> 모집중 </div>            
           </div>
          </th:block>
-         </a>
+
         </div>
       </div>
   <!-- 페이징 -->
@@ -94,5 +93,6 @@ $(document).ready(function(){
     });
 });
 </script>
+<script src="/js/reviewSearch.js"></script>
 </body>
 </html>
