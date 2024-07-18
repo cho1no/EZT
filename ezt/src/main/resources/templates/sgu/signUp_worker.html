@@ -90,7 +90,7 @@ form span {
 									<input  type="password" id="JUMIN2" maxlength="7" class="form-control col-md-4 d-inline-flex"
 										name="usersRnn" placeholder="1234567" th:field="*{usersRnn}"><span></span>
 									<input type="button" style="float: right" id="rnnChkBtn" value="실명인증"
-										class="btn  btn-primary text-white"> <!-- disabled -->
+										class="btn  btn-primary text-white" disabled> <!-- disabled -->
 										
 										<input type="hidden" name="checked_jumin" value="">
 										<button class="btn btn-primary" style="float: right; display:none;" id="loadChk" type="button">
@@ -161,7 +161,7 @@ form span {
 																		<label class="text-black" for="lNo">자격증 번호</label>
 																	</div>
 																	<div class="col-md-7">
-																		<input type="text" id="lNo" class="form-control" th:field="${lcs.licenseDetailNo}" >
+																		<input type="text" id="lNo" class="form-control" th:field="${lcs.licenseDetailNo}" maxlength="12">
 																	</div>
 																</div>
 																<div class="row mb-2">
@@ -595,13 +595,13 @@ form span {
 			})
 			return false;
 		//실명인증 제한(나중에 주석풀기)
-		if($('input[name=checked_jumin]').val() == ''){
-			Swal.fire({
-				 text:'실명인증이 완료되지않았습니다.',
-				 icon: 'warning'
-				})
-				return false;
-		}
+// 		if($('input[name=checked_jumin]').val() == ''){
+// 			Swal.fire({
+// 				 text:'실명인증이 완료되지않았습니다.',
+// 				 icon: 'warning'
+// 				})
+// 				return false;
+// 		}
 		//자격증인증 제한(나중에 주석풀기)
 		if($('input[name=checked_license]').val() == ''){
 			Swal.fire({

@@ -12,9 +12,15 @@
 
   <div class="d-flex mb-3">
 	<div class="card col-md-4 userImg" >
-  	  <img class="card-img-top"
+	
+  	  <img class="card-img-top" th:if="${userVO.fileId != 0}" 
   	   th:src="|/display?fileName=${#strings.replace(userVO.savePath, '\', '/')}/${userVO.saveName}_${userVO.originalFileName}.${userVO.ext}|"
   	   alt="사용자 프로필 이미지">
+  	   
+  	  <img class="card-img-top" th:unless="${userVO.fileId != 0}" 
+  	   	src="/images/main/construction.png"
+  	   alt="사용자 프로필 이미지">
+  	   
 	</div>
 	<div class="col-md-8 ml-5">
 		<div>
@@ -25,7 +31,7 @@
 		<div>
 		  <label for="usersPhone">전화번호</label>
 		  <input class="form-control col-md-6" type="text" 
-		  id="usersPhone" th:value="${userVO.usersPhone}" disabled readonly>
+		  id="usersPhone"  disabled readonly>
 		</div>
 		<div>
 		  <label for="usersEmail">이메일</label>
@@ -34,5 +40,18 @@
 		</div>
 	</div>
   </div>
+<script th:inline="javascript">
+var phone = /*[[${userVO.usersPhone}]]*/"";
+// 전화번호
+function userPhone(phone) {
+	phone = phone.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+	return phone;
+}
+
+$(function(){
+	phone = userPhone(phone)
+	$('#usersPhone').val(phone);
+})	
+</script>
 </body>
 </html>

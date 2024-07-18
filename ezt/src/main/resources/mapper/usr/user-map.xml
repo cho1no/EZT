@@ -59,10 +59,10 @@
 		</selectKey>
 		INSERT INTO users(users_no, users_role, users_id, users_pw, users_name
 							, users_phone, users_nick, users_email, users_rnn
-							, users_state, users_gender, users_birth, users_state_change_dt, file_id )
+							, users_state, users_gender, users_birth, users_state_change_dt)
 		VALUES(#{usersNo}, #{usersRole}, #{usersId}, #{usersPw}, #{usersName}
 				, #{usersPhone}, #{usersNick}, #{usersEmail}, #{usersRnn}
-				, 'active', #{usersGender}, #{usersBirth}, sysdate, 664 )
+				, 'active', #{usersGender}, #{usersBirth}, sysdate)
 	</insert>
 	
 	<!-- 작업자 회원가입 -->
@@ -75,10 +75,10 @@
 		INSERT ALL 
 		INTO users(users_no, users_role, users_id, users_pw, users_name, users_phone
 					, users_nick, users_email, users_birth, users_rnn, users_state
-					, users_gender, users_state_change_dt, file_id )
+					, users_gender, users_state_change_dt)
 		VALUES(#{usersNo}, #{usersRole}, #{usersId}, #{usersPw}, #{usersName}
 				, #{usersPhone}, #{usersNick}, #{usersEmail}, #{usersBirth}
-				, #{usersRnn}, 'active', #{usersGender}, sysdate, 664 )
+				, #{usersRnn}, 'active', #{usersGender}, sysdate)
 					
 		INTO license( license_no, license_detail_no, users_no,  write_dt, file_id) 
 		VALUES ( SEQ_LICENSE.NEXTVAL, #{licenseVO.licenseDetailNo}, #{usersNo}, sysdate, #{licenseVO.fileId} )
@@ -116,7 +116,10 @@
 	<!-- 사용자 정보변경 -->
 	<update id="updateUserInfo" parameterType="UserVO">
 		UPDATE users
-		SET file_id = #{fileId},
+		SET 
+			<if test="fileId != 0">
+		      file_id = #{fileId},
+		    </if>
 			users_nick = #{usersNick},
 			users_phone = #{usersPhone},
 			users_email = #{usersEmail}
