@@ -120,14 +120,12 @@
 		$('#careerStartDt').datepicker({
 			 dateFormat: 'yy-mm-dd',
 			 // 0 : 오늘 날짜
-			  minDate: 0
 			})
 			.on( "change", function() {
 				$( "#careerEndDt" ).datepicker( "option", "minDate", getDate( this ) )
 			});
 		$( "#careerEndDt" ).datepicker({
 			dateFormat: 'yy-mm-dd',
-	  	  	minDate: 0
 	        })
 	    	.on( "change", function() {
 	    	$('#careerStartDt').datepicker( "option", "maxDate", getDate( this ) );

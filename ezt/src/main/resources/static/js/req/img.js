@@ -158,7 +158,7 @@ function insert() {
 function deleteRequest(rno) {
 	let proposalList = /*[[${proposalList}]] */""; 
 	let contract = /*[[${contract}]] */"";
-	if(proposalList <= 0){
+	if(proposalList.isEmpty()){
 		$.ajax({
 			url: '/request/delete?requestNo=' + rno,
 			type: 'Get'
@@ -193,7 +193,7 @@ function deleteRequest(rno) {
 			}
 		})
 		
-	}else if(proposalList > 0 ){
+	}else if(!proposalList.isEmpty()){
 		if(contract == ""){
 		$.ajax({
 			url: '/request/stateUpdate?requestNo=' + rno,
