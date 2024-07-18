@@ -76,9 +76,8 @@
 										'yyyy-MM-dd')}]]</p>
 								</div>
 								<div class="col-4">
-									<label><b>하자보수기간</b></label> <input th:unless="${leaderCode == null}" type="text"
-										class="form-control" id="repairDay" readonly>
-									<p th:if="${leaderCode == null}" class="text-black" id="repairDay"></p>
+									<label><b>하자보수기간</b>(시작 날짜로부터 1년)</label> 
+									<p class="text-black" id="repairDay"></p>
 								</div>
 							</div>
 							<!-- datepicker -->
@@ -366,10 +365,10 @@
 								onClick="history.back();">뒤로가기</button>
 						</div>
 						<div class="col-6">
-							<button th:if="${leaderCode == null} type="button" class="btn btn-block btn-primary btn-md"
-								id="updateBtn">작성 완료</button>
-							<button th:unless="${leaderCode == null} type="button" class="btn btn-block btn-primary btn-md"
-								id="updatePtnBtn">작성 완료</button>
+							<button th:if="${leaderCode == null}" type="button" class="btn btn-block btn-primary btn-md"
+								id="updateBtn" onClick="insertAjax()">작성 완료</button>
+							<button th:unless="${leaderCode == null}" type="button" class="btn btn-block btn-primary btn-md"
+								id="updatePtnBtn" onClick="insertPtnAjax()">작성 완료</button>
 						</div>
 					</div>
 				</div>
@@ -418,6 +417,7 @@
 	// 변수
 	var contractNo = /*[[${con.contractNo}]]*/"";
 	var unity_origin = /*[[${unity.contractTermsContent}]]*/""
+	var startDay = /*[[${#dates.format(con.cttStartDt, 'yyyy-MM-dd')}]]*/"";
 	
 	var workerPhone = /*[[${worker.usersPhone}]]*/"";
 	var workerRnn = /*[[${worker.usersRnn}]]*/""
@@ -436,6 +436,10 @@
 		
 		// 통일 계약서 표기
 		UnityDoc();
+		
+		// 하자 보수 기간
+		let date = new Date(startDay);
+		repairDayInfo(date);
 		
 		// 전화번호 "-"
 		workerPhone = userPhone(workerPhone);
@@ -476,7 +480,7 @@
 
    
 	// 업데이트
-	$('#updateBtn').on('click', insertAjax );
+	//$('#updateBtn').on('click', insertAjax );
 	
 	function insertAjax(e){
 		// 폼 데이터 처리
@@ -491,6 +495,8 @@
 		}else{
 			formData.append("reqSign.signsContent", reqSign);
 		}
+		
+		formData.append("noFile", 0);
 		
 		/*for (const pair of formData.entries()) {
 			  console.log(pair[0], pair[1]);
@@ -521,7 +527,7 @@
 	});
 	
 	// 업데이트
-	$('#updatePtnBtn').on('click', inserPtntAjax );
+	//$('#updatePtnBtn').on('click', inserPtntAjax );
 	
 	function insertPtnAjax(e){
 		// 폼 데이터 처리
@@ -549,7 +555,7 @@
 		}*/
 		
 		$.ajax({
-			url: '/conUpdate',
+			url: '/conNoFileUpdate',
 			processData : false,
 			contentType : false,
 			data : formData,

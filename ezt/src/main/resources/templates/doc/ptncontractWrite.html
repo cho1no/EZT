@@ -456,9 +456,11 @@
 		
 		formData.append("worSign.signsContent", workNewSign);
 		
-		for (const pair of formData.entries()) {
+		formData.append("noFile", 0);
+		
+		/*for (const pair of formData.entries()) {
 			  console.log(pair[0], pair[1]);
-			}
+			}*/
 		
 		$.ajax({
 			url: '/conNoFileUpdate',
