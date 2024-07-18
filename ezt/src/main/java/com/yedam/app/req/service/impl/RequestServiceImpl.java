@@ -111,6 +111,11 @@ public class RequestServiceImpl implements RequestService {
 		
 		return requestMapper.deleteFile(fileId);
 	}
+	//견적서 있는경우 삭제('삭제중'으로 update)
+	@Override
+	public boolean updateRequestState(RequestVO requestVO) {
+		return requestMapper.updateRequestState(requestVO) == 1;
+	}
 
 
 	

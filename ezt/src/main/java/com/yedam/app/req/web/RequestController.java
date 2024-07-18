@@ -166,6 +166,7 @@ public class RequestController {
 	@GetMapping("/delete")
 	@ResponseBody
 	public int requestDelet(Integer requestNo) {
+		
 		RequestVO requestVO = new RequestVO(); 
 		requestVO.setRequestNo(requestNo);
 		RequestVO findVO = requestService.requestInfo(requestVO);
@@ -180,6 +181,13 @@ public class RequestController {
 		return 1;
 	}
 	
+	//견적서 있을 시 의뢰삭제('삭제중'상태으로 update)
+	@PostMapping("/stateUpdate")
+	@ResponseBody
+	public boolean stateUpdate(RequestVO requestVO) {
+		
+		return requestService.updateRequestState(requestVO);	
+	}
 	// 첨부 파일 삭제
 	@PostMapping("/fileDelete")
 	@ResponseBody

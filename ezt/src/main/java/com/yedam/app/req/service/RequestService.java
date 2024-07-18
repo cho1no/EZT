@@ -21,6 +21,8 @@ public interface RequestService {
 	public boolean updateRequest(RequestVO requestVO);
 	//삭제
 	public int deleteRequest(int requestNo);
+	//견적서 있는경우 삭제('삭제중' 상태로 update)
+	public boolean updateRequestState(RequestVO requestVO);
 	//견적서 단건조회
 	public List<ProposalVO> proposalList(ProposalVO proposalVO);
 	//계약서 조회

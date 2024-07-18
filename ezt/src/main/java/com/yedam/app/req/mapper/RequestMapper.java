@@ -24,11 +24,12 @@ public interface RequestMapper {
 	public int updateRequestInfo(RequestVO requestVO);
 	//의뢰 삭제
 	public int deleteRequest(int requestNo);
+	
+	//견적서 있는경우 삭제('삭제중' 상태로 update)
+	public int updateRequestState(RequestVO requestVO);
+	
 	//견적서 조회
 	public List<ProposalVO> selectProposalAll(ProposalVO proposalVO);
-	
-	//견적서 상세 조회
-	//public List<ProposalDetailVO> selectPpDetailAll(int proposalNo);
 	
 	//계약서 조회
 	public ContractVO selectContract(ContractVO contractVO);

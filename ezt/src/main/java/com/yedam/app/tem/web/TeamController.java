@@ -126,6 +126,13 @@ public class TeamController {
 
         return "redirect:/team/requestList";
     }
+    
+    //팀신청완료
+    @PostMapping("/completeTeam")
+    @ResponseBody
+    public boolean completeTeam(TeamVO teamVO) {
+    	return teamService.completeTeam(teamVO);
+    }
 
     // 팀 신청 상세 등록
     @GetMapping("/teamDetailInsert")

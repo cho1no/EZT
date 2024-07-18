@@ -24,6 +24,9 @@ public interface TeamService {
 	//의뢰 찾기
 	public TeamVO findRequest(TeamVO teamVO);
 	
+	//팀모집완료
+	public boolean completeTeam(TeamVO teamVO);
+	
 	//전체 데이터 갯수
 	public int getTotal(Criteria cri);
 
