@@ -179,9 +179,13 @@ ReqAddr.propTypes = {
 };
 function ReqImg({ img }) {
   const [currentIndex, setCurrentIndex] = useState();
-  const renderSlides = img.map((image) => (
-    <div key={image.alt}>
-      <img src={image.url} alt={image.alt} style={{ borderRadius: '15px' }} />
+  const renderSlides = img.map((image, idx) => (
+    <div key={idx}>
+      <img
+        src={`/display?fileName=${image.savePath}${image.saveName}_${image.originalFileName}.${image.ext}`}
+        alt={image.originalFileName}
+        style={{ borderRadius: '15px' }}
+      />
     </div>
   ));
   function handleChange(index) {

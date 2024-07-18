@@ -11,8 +11,8 @@
 		        , r.request_no
 		FROM pay p
 		JOIN contract c ON p.contract_no = c.contract_no
-		JOIN proposal pr ON c.contract_no = pr.proposal_no
-		JOIN request r ON pr.proposal_no = r.request_no
+		JOIN proposal pr ON c.proposal_no = pr.proposal_no
+		JOIN request r ON pr.request_no = r.request_no
 		WHERE r.request_state = 'S02'
 		ORDER BY p.pay_dt DESC
 	</select>
