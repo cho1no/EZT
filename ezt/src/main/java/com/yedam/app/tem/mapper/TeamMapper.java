@@ -29,6 +29,9 @@ public interface TeamMapper {
 	//전체 게시물 갯수
 	public int getTotalCount(Criteria cri);
 	
+	//팀 모집 완료
+	public int completeTeam(TeamVO teamVO);
+	
 	//의뢰찾기
 	public TeamVO findRequest(TeamVO teamVO);
 	

@@ -25,8 +25,15 @@
 						   , write_dt
 						   , career_info
 						   , FIND_COMMONCODE(career_access_tf) as career_access_tf
-						   , file_id
-					FROM career
+						   , c.file_id
+						   , f.save_path
+						   , f.save_name
+						   , f.original_file_name
+						   , f.ext
+						   , f.boss_tf
+					FROM career c
+						LEFT JOIN file_detail_info f
+						ON c.file_id = f.file_id
 					WHERE users_no = #{usersNo}
 					<if test="careerAccessTf != null and careerAccessTf != ''.toString()">
 						AND career_access_tf = #{careerAccessTf}

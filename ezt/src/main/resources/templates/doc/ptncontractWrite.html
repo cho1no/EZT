@@ -310,7 +310,7 @@
 												<div class="col">
 												<button type="button"
 														class="btn btn-outline-success sendBtn"
-														data-bs-toggle="modal" data-bs-target="#sendModal">서명
+														data-bs-toggle="modal" data-bs-target="#sendSignModal">서명
 														하기</button>
 												</div>
 												<div class="h-75">
@@ -354,7 +354,7 @@
 
 
 	<!-- Modal -->
-	<div class="modal fade" id="sendModal" tabindex="-1"
+	<div class="modal fade" id="sendSignModal" tabindex="-1"
 		aria-labelledby="sendModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered  modal-sm">
 			<div class="modal-content">
@@ -400,8 +400,8 @@
     $('.cur_day').html(day + '일');
 
     // 주소 표기
-    if([[${con.workerAddress}]] != null){
-    var work_addr = [[${con.workerAddress}]]
+    if(/*[[${con.workerAddress}]]*/"" != null){
+    var work_addr = /*[[${con.workerAddress}]]*/""
 	var work_num1=  work_addr.indexOf('_');
 	var work_num2 = work_addr.indexOf('_', work_num1 + 1)
 	$('#input_postcode').val(work_addr.substring(0, work_num1));
@@ -409,8 +409,8 @@
     $('#input_detailAddr').val(work_addr.substring(work_num2 + 1,));
     }
     
-    if([[${con.requesterAddress}]] != null){
-    var req_addr = [[${con.requesterAddress}]]
+    if(/*[[${con.requesterAddress}]]*/"" != null){
+    var req_addr = /*[[${con.requesterAddress}]]*/""
 	var req_num1=  req_addr.indexOf('_');
 	var req_num2 = req_addr.indexOf('_', req_num1 + 1)
 	$('#input_postcode_req').html(req_addr.substring(0, req_num1));
@@ -432,7 +432,7 @@
     var unity_content = unity_origin.replaceAll('\n', '<br />');
     $('.unity p').html(unity_content);
 	
-	var contractNo = [[${con.contractNo}]];
+	var contractNo = /*[[${con.contractNo}]]*/"";
 	
 	
 	// 업데이트
@@ -461,7 +461,7 @@
 			}
 		
 		$.ajax({
-			url: '/conUpdate',
+			url: '/conNoFileUpdate',
 			processData : false,
 			contentType : false,
 			data : formData,
@@ -475,14 +475,14 @@
 
 	
 	// 서명 표기
-	var workSign = [[${con.worSign.signsContent}]];
+	var workSign = /*[[${con.worSign.signsContent}]]*/"";
 	var workNewSign = '';
 	
 	if(workSign != null){
 	 signView(workSign, 1);
 	}
 	
-	var reqSign = [[${con.reqSign.signsContent}]];
+	var reqSign = /*[[${con.reqSign.signsContent}]]*/"";
 	
 	if(reqSign != null){
 	 signView(reqSign, 0);
@@ -524,7 +524,7 @@ function drawSignature(data, num) {
     }
     ctx.stroke();
     if(num == 3){
-    $('#sendModal').modal('hide');
+    $('#sendSignModal').modal('hide');
     }
     
 }

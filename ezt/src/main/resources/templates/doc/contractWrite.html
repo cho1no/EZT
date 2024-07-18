@@ -238,7 +238,7 @@
 												<div class="col">
 													<button type="button"
 														class="btn btn-outline-success sendBtn"
-														data-bs-toggle="modal" data-bs-target="#sendModal">서명
+														data-bs-toggle="modal" data-bs-target="#sendSignModal">서명
 														하기</button>
 												</div>
 												<div class="h-75">
@@ -366,8 +366,10 @@
 								onClick="history.back();">뒤로가기</button>
 						</div>
 						<div class="col-6">
-							<button type="button" class="btn btn-block btn-primary btn-md"
-								id="updateBtn">수정 완료</button>
+							<button th:if="${leaderCode == null} type="button" class="btn btn-block btn-primary btn-md"
+								id="updateBtn">작성 완료</button>
+							<button th:unless="${leaderCode == null} type="button" class="btn btn-block btn-primary btn-md"
+								id="updatePtnBtn">작성 완료</button>
 						</div>
 					</div>
 				</div>
@@ -377,7 +379,7 @@
 
 
 	<!-- Modal -->
-	<div class="modal fade" id="sendModal" tabindex="-1"
+	<div class="modal fade" id="sendSignModal" tabindex="-1"
 		aria-labelledby="sendModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered  modal-sm">
 			<div class="modal-content">
@@ -495,7 +497,7 @@
 		}*/
 		
 		$.ajax({
-			url: '/conUpdate',
+			url: '/conNoFileUpdate',
 			processData : false,
 			contentType : false,
 			data : formData,
@@ -517,7 +519,47 @@
     	reqNewSign = compressedData;
     	signView(compressedData, 2);
 	});
-
+	
+	// 업데이트
+	$('#updatePtnBtn').on('click', inserPtntAjax );
+	
+	function insertPtnAjax(e){
+		// 폼 데이터 처리
+		requesterAddrData();
+		requesterBankCodeUpdate(reqBankCode);
+		
+		// 폼 데이터 전송
+		var inp = document.getElementById("multiFile");
+		var formData = new FormData(document.conUpdateForm);
+		
+		if(reqNewSign != ''){
+			formData.append("reqSign.signsContent", reqNewSign);
+		}else{
+			formData.append("reqSign.signsContent", reqSign);
+		}
+		
+		if (inp.files.length == 0) {
+			formData.append("noFile", 0);
+		} else{
+			formData.append("noFile", 1);
+		}
+		
+		/*for (const pair of formData.entries()) {
+			  console.log(pair[0], pair[1]);
+		}*/
+		
+		$.ajax({
+			url: '/conUpdate',
+			processData : false,
+			contentType : false,
+			data : formData,
+			type :'Post',
+			async : false
+		})
+			
+		location.href='/conInfo?contractNo='+contractNo;
+	}
+	
 	
 	</script>
 	<!-- datepicker -->

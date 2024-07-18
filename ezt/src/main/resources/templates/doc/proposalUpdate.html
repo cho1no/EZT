@@ -188,7 +188,7 @@
 					<div class="row">
 						<div class="col-6">
 							<button type="submit" Form="ppsUpdateForm" id="updateBtn"
-								class="btn btn-block btn-light btn-md">수정 완료</button>
+								class="btn btn-block btn-light btn-md">작성 완료</button>
 						</div>
 						<div class="col-6">
 							<button type="button" onClick="history.back();"
@@ -243,12 +243,10 @@
 		$('#endDt').val('');
 	}
 	
-	
-	// 날짜 빈 값 처리 & 상세 내역 name 추가
 	$('#updateBtn').on('click', function(e){
-	
+		tableNullRemove()
 		if(!tableNullCheck()) return false;
-		if(!totalCheck()) return false;
+		if(!totalCheck(hopePrice)) return false;
 		
 		dataProcessPps();
 	});

@@ -70,7 +70,7 @@ form span{
 		  </div>
      	</div>
 	  </div>
-		<button type="button" id="updateBtn" class="btn btn-primary border-width-2 d-none d-lg-inline-block" style="float:right;">수정하기</button>
+		<button type="button" id="updateBtn" class="btn btn-primary border-width-2 d-lg-inline-block" style="float:right;">수정하기</button>
 	</form>
 <script th:inline="javascript">
 	$('#updateBtn').on('click', updateUser);
@@ -79,7 +79,7 @@ form span{
 	var formData = new FormData(document.userUpd);
 		
 		let dataObj = getUsrObj();
-		console.log(dataObj);
+		//console.log(dataObj);
 		
 		$.ajax('/user/update', {
 			type : 'post',
@@ -94,7 +94,7 @@ form span{
 				icon: 'success',
 				showConfirmButton: false,
 			})
-			setTimeout(()=>window.location.href="/user/info", 1000);
+			//setTimeout(()=>window.location.href="/user/info", 1000);
 		})
 		.fail(err => console.log(err));
 	};

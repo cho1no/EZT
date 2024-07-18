@@ -47,8 +47,12 @@ function fileDownload(fileList){
 		var orgname = fileList[i].originalFileName;
 		var name = fileList[i].saveName;
 		var ext = fileList[i].ext;
-		//console.log(path+'/'+name);
-		$('#fileDownload').append(`<p><a href="download?fileName=${path}/${name}_${orgname}.${ext}">${orgname}.${ext}</a></p> `)
+
+		var fileCallPath = encodeURIComponent(path
+		+ "/" + name + "_"
+		+ orgname + "." + ext);
+		
+		$('#fileDownload').append(`<p><a href="download?fileName=${fileCallPath}">${orgname}.${ext}</a></p> `)
 	}
 }
 

@@ -8,6 +8,7 @@
 		FROM contract_detail
 		WHERE contract_no = #{contractNo}
 		AND PAYMENT_TF = 'N'
+		ORDER BY contract_detail_no
 	</select>
 	<!-- 공사 보고 유형 조회 -->
 	

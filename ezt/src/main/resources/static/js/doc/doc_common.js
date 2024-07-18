@@ -83,9 +83,8 @@ function tableNullCheck(){
 		var unit = $('#pps_table tbody tr:eq(' + i + ') td:eq(2) input').val();
 		var qty = $('#pps_table tbody tr:eq(' + i + ') td:eq(3) input').val();
 		var unitprice = $('#pps_table tbody tr:eq(' + i + ') td:eq(4) input').val();
-		var comments = $('#pps_table tbody tr:eq(' + i + ') td:eq(6) input').val();
 
-		if( product == '' || division == '' || unit == '' || qty  == 0 || unitprice == 0 || comments == '' ) {
+		if( product == '' || division == '' || unit == '' || qty  == 0 || unitprice == 0) {
 			sweetModalError("작성되지 않은 내용이 있습니다. 확인해 주세요.");
 			return false;
 		};
@@ -95,7 +94,8 @@ function tableNullCheck(){
 
 function tableNullRemove(){
 	var length = $('#pps_table tbody tr').length;
-	for (i = Number(length-1); i < 0; i--) {
+	var num = [];
+	for (i = 0; i < length ; i++) {
 		var product = $('#pps_table tbody tr:eq(' + i + ') td:eq(0) input').val();
 		var division = $('#pps_table tbody tr:eq(' + i + ') td:eq(1) input').val();
 		var unit = $('#pps_table tbody tr:eq(' + i + ') td:eq(2) input').val();
@@ -104,9 +104,13 @@ function tableNullRemove(){
 		var comments = $('#pps_table tbody tr:eq(' + i + ') td:eq(6) input').val();
 		
 		if( product == '' && division == '' && unit == '' && qty == 0 && unitprice == 0 && comments == '' ) {
-			$('#pps_table tbody tr:eq(' + i + ')').remove();
+			num.push(i);
 		};
 	}
+	num.reverse();
+	num.forEach(e=>{
+		$('#pps_table tbody tr:eq(' + e + ')').remove();
+	})
 }
 
 // 숫자 콤마 함수
@@ -152,14 +156,14 @@ function GetTotal() {
 }
 
 // 총 금액 == 희망 공사 예산
-function totalCheck(){
+function totalCheck(hopePrice){
 	var total = 0;
 
 	for (i = 0; i < $('#pps_table tbody tr').length; i++) {
 		total += Number($('#pps_table tbody tr:eq(' + i + ') td:eq(5) input').val().replaceAll(',', ''));
 	}
 		
-	if(hopePrice != total){
+	if(hopePrice < total){
 		sweetModalError("총 예상금액이 희망 공사 예산 보다 많습니다");
 		return false;
 	}

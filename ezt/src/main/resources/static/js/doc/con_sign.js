@@ -46,7 +46,7 @@ function drawSignature(data, num) {
     }
     ctx.stroke();
     if(num == 3 || num == 2){
-        $('#sendModal').modal('hide');
+        $('#sendSignModal').modal('hide');
     }
     
 }

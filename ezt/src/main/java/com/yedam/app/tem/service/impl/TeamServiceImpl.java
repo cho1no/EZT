@@ -88,7 +88,13 @@ public class TeamServiceImpl implements TeamService {
 		return teamMapper.deleteCategory(twcVO);
 	}
 	
-	//팀 
+	//팀 모집 완료
+	@Override
+	public boolean completeTeam(TeamVO teamVO) {
+		
+		return teamMapper.completeTeam(teamVO) == 1;
+	}
+	//카테고리별 지원자
 	@Override
 	public List<MemberEnrollVO> volunteerList(MemberEnrollVO memberEnrollVO) {
 		
@@ -116,6 +122,7 @@ public class TeamServiceImpl implements TeamService {
 		
 		return teamMapper.approveMember(memberVO) == 1;
 	}
+
 
 
 

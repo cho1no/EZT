@@ -160,8 +160,9 @@
 	};
 	
 	$('button[type="submit"]').on('click', function(e) {
-		
-		if(!totalCheck()) return false;
+		tableNullRemove()
+		if(!tableNullCheck()) return false;
+		if(!totalCheck(hopePrice)) return false;
 		
 		dataProcessPps();
 	});	

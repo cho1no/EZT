@@ -47,6 +47,7 @@ div.careerList {
 </div>
 	 
 	
+ 
   
   <div class="row g-3 ezt-font-size">
       <th:block th:each="career : ${careerList}">
@@ -65,6 +66,8 @@ div.careerList {
                   [[${#dates.format(career.careerStartDt,'yyyy-MM-dd')}]]~
                   [[${#dates.format(career.careerEndDt,'yyyy-MM-dd')}]]
                 </li>
+               <li><a th:href="|/download?fileName=${#strings.replace(career.savePath, '\', '/')}/${career.saveName}_${career.originalFileName}.${career.ext}|">
+               [[${career.originalFileName}]].[[${career.ext}]]</a></li>
               </ul>
             </div>
           </div>

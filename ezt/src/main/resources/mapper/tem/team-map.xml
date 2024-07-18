@@ -48,6 +48,7 @@ FROM (
 		ON p.proposal_no = c.proposal_no
 		JOIN request r
 		ON r.request_no = p.request_no
+	WHERE t.complete_tf = 'N'
 	ORDER BY write_dt DESC) a
 	<where><include refid="criteria"></include></where>) d
 <![CDATA[
@@ -162,6 +163,12 @@ WHERE d.rn <= #{pageNum} * #{amount} AND
 	WHERE team_no = #{teamNo}
 </delete>
 
+<!-- 팀모집완료 -->
+<update id="completeTeam" parameterType="TeamVO">
+	UPDATE team
+	SET complete_tf = 'Y'
+	WHERE team_no = #{teamNo}
+</update>
 <!-- 팀신청 상세 등록(카테고리,카테고리 별 인원) -->
 <insert id="insertCategory" parameterType="TeamWorkCategoryVO">
 	INSERT INTO team_work_category
