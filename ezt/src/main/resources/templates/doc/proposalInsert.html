@@ -102,9 +102,9 @@
               <ul class="list-unstyled pl-3 mb-0">
                 <li class="mb-2"><strong class="text-black">시공분야 :</strong> [[${reqInfo.categoryCode}]]</li>
                 <li class="mb-2"><strong class="text-black">공사공간 :</strong> [[${reqInfo.cttPlace}]]</li>
-                <li class="mb-2"><strong class="text-black">공사공간 면적 :</strong> [[${reqInfo.cttPlaceArea}]]</li>
+                <li class="mb-2"><strong class="text-black">공사공간 면적 :</strong> [[${reqInfo.cttPlaceArea + ' 평'}]]</li>
                 <li class="mb-2"><strong class="text-black">공사공간 상황 :</strong> [[${reqInfo.cttPlaceSituation}]]</li>
-                <li class="mb-2"><strong class="text-black">희망 공사 예산 :</strong> [[${#numbers.formatInteger(reqInfo.hopeCttBudget,1,'COMMA')}]]</li>
+                <li class="mb-2"><strong class="text-black">희망 공사 예산 :</strong> [[${#numbers.formatInteger(reqInfo.hopeCttBudget,1,'COMMA') + ' 원'}]]</li>
                 <li class="mb-2"><strong class="text-black">희망 공사 시작일 :</strong> [[${#dates.format(reqInfo.hopeCttStartDt, 'yyyy-MM-dd')}]]</li>
                 <li class="mb-2"><strong class="text-black">희망 공사 종료일 :</strong> [[${#dates.format(reqInfo.hopeCttEndDt, 'yyyy-MM-dd')}]]</li>
                 <li class="mb-2"><strong class="text-black">내용</strong></li>
