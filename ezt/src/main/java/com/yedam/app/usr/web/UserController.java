@@ -65,6 +65,7 @@ public class UserController {
 	@GetMapping("/info")
 	public String userInfo(@AuthenticationPrincipal LoginUserVO vo, Model model) {
 		model.addAttribute("userVO", vo.getUserVO());
+		//model.addAttribute("uvo", userService.userInfo(vo.getUserVO().getUsersId()));
 		log.info(vo.toString());
 		return "usr/userInfo";
 	}

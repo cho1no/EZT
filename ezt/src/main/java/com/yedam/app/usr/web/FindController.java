@@ -67,11 +67,12 @@ public class FindController {
 		// 유저찾기
 		UserVO vo =  adminService.getUser(usersNo);
 		
+		
 		// 카테고리, 지역 코드
 		model.addAttribute("categories", workerService.selectCategoryInfo(vo.getUsersNo()));
 		model.addAttribute("regions", workerService.selectRegionInfo(vo.getUsersNo()));
 		// 작업자 정보
-		model.addAttribute("userInfo", vo);
+		model.addAttribute("userInfo", userService.userInfo(vo.getUsersId()));
 		
 		model.addAttribute("careers", fwMap.selectCareers(usersNo));
 		model.addAttribute("licenses", fwMap.selectLicenes(usersNo));

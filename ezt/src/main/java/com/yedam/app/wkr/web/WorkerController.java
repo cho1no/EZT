@@ -351,9 +351,14 @@ public class WorkerController {
    
    //작업자 자격증 목록조회
    @GetMapping("licenseList")
-   public String workerLicenseList(@AuthenticationPrincipal LoginUserVO vo, Model model, WorkerLcsCriteria cri) {
+   public String workerLicenseList(@AuthenticationPrincipal LoginUserVO vo,
+		   						   Model model,
+		   						   @ModelAttribute("cri") WorkerLcsCriteria cri) {
 	   model.addAttribute("userVO", vo.getUserVO());
 	   cri.setUsersNo(vo.getUserVO().getUsersNo());
+	   if(cri.getPageNum() == 0) {
+		   cri.setPageNum(1);
+	   }
 	   List<LicenseVO> list = workerService.selectWorkerLicenseList(cri);
 	   model.addAttribute("licenseList", list);
 	   
