@@ -62,7 +62,8 @@ public class FindController {
 	
 	//작업자 상세
 	@GetMapping("/workerMoreInfo")
-	public String workerInfo(@RequestParam int usersNo, Model model) {
+	public String workerInfo(@RequestParam int usersNo,
+							 Model model) {
 		// 유저찾기
 		UserVO vo =  adminService.getUser(usersNo);
 		

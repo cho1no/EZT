@@ -87,8 +87,10 @@ public class WorkerController {
 		   						Model model,
 		   						@RequestParam("uploadFile")MultipartFile[] uploadFile,
 		   						@AuthenticationPrincipal LoginUserVO vo){
+	  if(uploadFile != null && uploadFile.length > 0 && uploadFile[0].getSize() > 0) {
 	  int result = simpleFileService.uploadFiles(uploadFile);
 	  userVO.setFileId(result);
+	  }
 	  
       workerService.updateWorker(userVO);
 

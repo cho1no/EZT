@@ -90,7 +90,7 @@ form span {
 									<input  type="password" id="JUMIN2" maxlength="7" class="form-control col-md-4 d-inline-flex"
 										name="usersRnn" placeholder="1234567">
 									<input type="button" style="float: right; " id="rnnChkBtn" value="실명인증" 
-										class="btn px-4 btn-primary text-white" > <!-- disabled -->
+										class="btn px-4 btn-primary text-white" disabled> <!-- disabled -->
 										
 										<input type="hidden" name="checked_jumin" value="">
 										<button class="btn btn-primary" id="loadChk" style="float: right; display:none;" type="button" disabled>
@@ -238,44 +238,44 @@ form span {
 		
 		
 //		실명인증api(횟수제한,실검증시 주석해제)
-// 		$.ajax({
-// 				url : "/api/idCardCheck",
-// 				type : "POST",
-// 				contentType : "application/json;charset=UTF-8",
-// 				data : JSON.stringify({
-// 						NAME : userName,
-// 						JUMIN : rnn,
-// 						ISSUEDATE : issuDate
-// 				}),
-// 				success : function(re){
-// 					console.log(re);
-// 					if(re.data.AGREEMENTYNE == "Y"){
-// 						$('input[name=checked_jumin]').val("y");
-// 						$('#rnnChkBtn').css('display', 'block');
-// 						$('#rnnChkBtn').attr('disabled', 'true');
-// 						$('#loadChk').css('display', 'none');
-// 						Swal.fire({
-// 							text: '실명인증 완료',
-// 							icon: 'success'
-// 						})
-// 					}else {
-// 						Swal.fire({
-// 							text: '입력오류',
-// 							icon: 'error'
-// 						})
-// 						$('#rnnChkBtn').css('display', 'block');
-// 						$('#loadChk').css('display', 'none');
-// 					}
-// 				},
-// 				error : function(er){
-// 					Swal.fire({
-// 						text: 'error',
-// 						icon: 'error'
-// 					})
-// 					$('#rnnChkBtn').css('display', 'none');
-// 					$('#loadChk').css('display', 'block');
-// 				}
-// 			})
+		$.ajax({
+				url : "/api/idCardCheck",
+				type : "POST",
+				contentType : "application/json;charset=UTF-8",
+				data : JSON.stringify({
+						NAME : userName,
+						JUMIN : rnn,
+						ISSUEDATE : issuDate
+				}),
+				success : function(re){
+					console.log(re);
+					if(re.data.AGREEMENTYNE == "Y"){
+						$('input[name=checked_jumin]').val("y");
+						$('#rnnChkBtn').css('display', 'block');
+						$('#rnnChkBtn').attr('disabled', 'true');
+						$('#loadChk').css('display', 'none');
+						Swal.fire({
+							text: '실명인증 완료',
+							icon: 'success'
+						})
+					}else {
+						Swal.fire({
+							text: '입력오류',
+							icon: 'error'
+						})
+						$('#rnnChkBtn').css('display', 'block');
+						$('#loadChk').css('display', 'none');
+					}
+				},
+				error : function(er){
+					Swal.fire({
+						text: 'error',
+						icon: 'error'
+					})
+					$('#rnnChkBtn').css('display', 'none');
+					$('#loadChk').css('display', 'block');
+				}
+			})
 				}
 			}
 		})
@@ -416,13 +416,13 @@ form span {
 			return false;
 		}
 		//실명인증 제한(나중에 주석풀기)
-		if($('input[name=checked_jumin]').val() == ''){
-			Swal.fire({
-				 text:'실명인증이 완료되지않았습니다.',
-				 icon: 'warning'
-				})
-				return false;
-		}
+// 		if($('input[name=checked_jumin]').val() == ''){
+// 			Swal.fire({
+// 				 text:'실명인증이 완료되지않았습니다.',
+// 				 icon: 'warning'
+// 				})
+// 				return false;
+// 		}
 		
 		if($('#JUMIN2').val()[0] == 1 || $('#JUMIN2').val()[0] == 3){
 			$('#usersGender').val('남');

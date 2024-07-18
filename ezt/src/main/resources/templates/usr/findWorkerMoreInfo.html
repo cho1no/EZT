@@ -86,9 +86,10 @@
   <body>
     <div>
       <div class="row">
-        <div class="col-4"><img src="/images/interior.jpg" alt="" /></div>
+        <div class="col-4"><img th:src="|/display?fileName=${#strings.replace(userInfo.savePath, '\', '/')}/${userInfo.saveName}_${userInfo.originalFileName}.${userInfo.ext}|" alt="작업자 프로필" /></div>
         <div class="col-4">
           <p class="mb-1">이름: [[${userInfo.usersName}]]</p>
+          <p class="mb-1">이름: [[${userInfo}]]</p>
           <p class="mt-3 mb-1">주 시공분야</p>
           <th:block th:each="cate : ${categories}">
             <span class="border rounded-4 pt-1 pb-1 px-2 bg-success text-light"
@@ -123,7 +124,7 @@
               <div  class="card swiper-slide">
                 <div class="image-content" >
                   <div class="card-image" th:onclick="|location.href='@{/find/workerPortfolio(portfolioNo=${pf.portfolioNo})}'|">
-                    <img src="/images/interior.jpg" class="card-img-top" alt="...">
+                    <img th:src="|/display?fileName=${#strings.replace(pf.savePath, '\', '/')}/${pf.saveName}_${pf.originalFileName}.${pf.ext}|" class="card-img-top" alt="...">
                   </div>
                 </div>
                 <div class="card-content">
@@ -147,7 +148,7 @@
                   <div  class="card swiper-slide">
                     <div class="image-content">
                       <div class="card-image" th:onclick="|location.href='@{/review/info(reviewNo=${rev.reviewNo})}'|">
-                        <img src="/images/interior.jpg" class="card-img-top" alt="...">
+                        <img th:src="|/display?fileName=${#strings.replace(rev.savePath, '\', '/')}/${rev.saveName}_${rev.originalFileName}.${rev.ext}|" class="card-img-top" alt="...">
                       </div>
                     </div>
                     <div class="card-content">
