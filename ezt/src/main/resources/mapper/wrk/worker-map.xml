@@ -82,7 +82,7 @@
 			  c.rn > (#{pageNum} -1 ) * #{amount}
 		]]>
 	</select>
-	
+	<!--후기목록 데이터 갯수-->
 	<select id="getWorkerTotalReviewCount" resultType="int">
 		SELECT COUNT(*)
 		FROM (SELECT *
@@ -116,7 +116,7 @@
 			  c.rn > (#{pageNum} -1 ) * #{amount}
 		]]>
 	</select>
-	
+	<!--팀 후기목록 데이터 갯수-->
 	<select id="getWorkerTotalTeamReviewCount" resultType="int">
 		SELECT COUNT(*)
 		FROM (SELECT *

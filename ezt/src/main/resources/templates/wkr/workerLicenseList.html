@@ -17,6 +17,9 @@
 </head>
 <body>
 <h4>자격증 목록</h4>
+<form name="wkrlicList" id="wkrlicList">
+<input type="hidden" name="pageNum">	
+</form>
 
 <ul class="list-group list-group-flush">
   <th:block th:each="lic : ${licenseList}" varStatus="vs">
@@ -53,6 +56,7 @@
       </li>
     </ol>
   </th:block>
+  <div th:if="${page.total == 0}">자격증이 없습니다.</div>
 </ul>
 
 
@@ -60,18 +64,22 @@
    <div class="row pagination-wrap mt-5" >
       <div class="col-md-12 text-center ">
         <div class="custom-pagination ml-auto">
-          <a th:if="${page.prev}" th:href="@{/worker/licenseList(pageNum=${page.startPage - 1})}" class="prev">Prev</a>
+          <a th:if="${page.prev}" href="#" th:data-pagenum="${page.startPage - 1}" class="prev">Prev</a>
           <div class="d-inline-block" id="pagination">
             <th:block th:each="num : ${#numbers.sequence(page.startPage, page.endPage)}">
-       	      <a th:class="${page.cri.pageNum == num ? 'active' : ''}" th:href="|@{/worker/licenseList(pageNum=${num})}|" >[[${num}]]</a>
+       	      <a th:class="${page.cri.pageNum == num ? 'active' : ''}" href="#" th:data-pagenum="${num}">[[${num}]]</a>
 	  	 	</th:block> 
           </div>
-          <a th:if="${page.next}" th:href="@{/worker/licenseList(pageNum=${page.endPage + 1})}" class="next">Next</a>
+          <a th:if="${page.next}" href="#" th:data-pagenum="${page.endPage + 1}" class="next">Next</a>
         </div>
       </div>
     </div>
   
- <!-- Button trigger modal -->
-
+<script th:inline="javascript">
+	$('.pagination-wrap a').on('click', function(){
+		$('[name="pageNum"]').val($(this).data("pagenum"))
+		$('#wkrlicList').submit();
+	})
+</script>
 </body>
 </html>
