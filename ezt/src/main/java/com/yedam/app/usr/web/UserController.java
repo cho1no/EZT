@@ -87,11 +87,6 @@ public class UserController {
 			int result = simpleFileService.uploadFiles(uploadFile);
 			userVO.setFileId(result);
 		}
-//		if (uploadFile != null && !uploadFile.isEmpty()) {
-//	        // 파일이 업로드된 경우
-//	        int result = simpleFileService.uploadFiles(uploadFile);  // uploadFiles 대신 uploadFile 사용
-//	        userVO.setFileId(result);
-//	    }
 		userService.updateUser(userVO);
 		UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
 		vo.setUserVO(uvo);
