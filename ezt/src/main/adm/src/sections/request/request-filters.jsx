@@ -54,7 +54,7 @@ export default function RequestFilters({
     const regions = await axios.get('/adm/getCommonCodes/0B'); // 지역
     const reqState = await axios.get('/adm/getCommonCodes/0R'); // 상태
     const categories = await axios.get('/adm/getCommonCodes/0C'); // 분야
-    const cttPlace = await axios.get('adm/getCommonCodes/0P'); // 주거공간
+    const cttPlace = await axios.get('/adm/getCommonCodes/0P'); // 주거공간
     setRegionOpt(setData(regions.data));
     setReqStateOpt(setData(reqState.data));
     setCategoryOpt(setData(categories.data));
