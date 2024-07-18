@@ -1,66 +1,105 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{common/layouts/worker_mypage_layout}"
-	layout:fragment="Content">
-<head>
-<meta charset="UTF-8">
-<title>작업자 마이페이지</title>
-</head>
-<body>
-	<h4>회원 정보</h4>
-	
-	<div class="d-flex mb-3">
-	<div class="card col-md-4 workerImg" >
-  	  <img class="card-img-top"
-  	   th:src="|/display?fileName=${#strings.replace(userVO.savePath, '\', '/')}/${userVO.saveName}_${userVO.originalFileName}.${userVO.ext}|"
-  	   alt="작업자 프로필 이미지">
-	</div>
-		<div class="col-md-8 ml-5">
-			<div>
-				<label for="usersNick">닉네임</label>
-				<input class="form-control col-md-6" type="text" 
-				id="usersNick" th:value="${userVO.usersNick}" disabled readonly>
-			</div>
-			<div>
-				<label for="usersPhone">전화번호</label>
-				<input class="form-control col-md-6" type="text" 
-				id="usersPhone" th:value="${userVO.usersPhone}" disabled readonly>
-			</div>
-			<div>
-				<label for="usersEmail">이메일</label>
-				<input class="form-control col-md-6" type="email" 
-				id="usersEmail" th:value="${userVO.usersEmail}" disabled readonly>
-			</div>
-		</div>
-		</div>
-		<div>
-			<div class="row mb-3">
-				<label class="text-black" for="regions">주 활동지역</label>
-				<div class="d-flex flex-wrap" id="region0">
-				  <!-- 지역 -->
-				</div>
-			</div>
-			<div class="row mb-3">
-				<label class="text-black" for="categories">작업 분야</label>
-				<div class="d-flex flex-wrap" id="categories0">
-				  <!-- 분야 -->
-				</div>	
-			</div>
-		</div>
-	
-</body>
-<script th:inline="javascript">
-	let categories = /*[[${categories}]]*/"";
-	let regions = /*[[${regions}]]*/"";
-	regions.forEach((ele, idx)=>{
-		$('#region0').append(`<span class="border rounded-4 pt-1 pb-1 pl-2 pr-2 m-1 bg-success text-light">${ele.REGION_CODE}</span>`)
-	})
-	
-	categories.forEach((e, i) => {
-		$('#categories0').append(`<span class="border rounded-4 pt-1 pb-1 pl-2 pr-2 m-1 bg-success text-light">${e.CATEGORY_CODE}</span>`)
-	})
-	
-	
-</script>
+<html
+  xmlns:th="https://www.thymeleaf.org/"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{common/layouts/worker_mypage_layout}"
+  layout:fragment="Content"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>작업자 마이페이지</title>
+    <style>
+      .ezt-my-info {
+        font-size: 14px;
+      }
+      .workerImg {
+        width: 200px;
+        height: 200px;
+        border: 2px solid #dee2e6;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+      .workerImg > img {
+        width: 100%;
+      }
+
+      #ezt-tag {
+        font-weight: 300 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="me-auto p-2 mb-3">
+      <h4>회원 정보</h4>
+    </div>
+    <div class="ezt-my-info">
+      <div class="row mb-3">
+        <div class="col-md-4 col-sm-12">
+          <div class="workerImg p-0" style="margin: 0 auto">
+            <img
+              th:src="|/display?fileName=${#strings.replace(userVO.savePath, '\', '/')}/${userVO.saveName}_${userVO.originalFileName}.${userVO.ext}|"
+              alt="작업자 프로필 이미지"
+            />
+          </div>
+        </div>
+        <div class="col-md-8 sol-sm-12">
+          <div class="ezt-table">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th>이름</th>
+                  <td>[[${userVO.usersName}]]</td>
+                </tr>
+                <tr>
+                  <th>닉네임</th>
+                  <td>[[${userVO.usersNick}]]</td>
+                </tr>
+                <tr>
+                  <th>전화번호</th>
+                  <td>[[${userVO.usersPhone}]]</td>
+                </tr>
+                <tr>
+                  <th>이메일</th>
+                  <td>[[${userVO.usersEmail}]]</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="text-black mb-1" for="regions">주 활동지역></label>
+            <div class="d-flex flex-wrap" id="region0">
+              <!-- 지역 -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <label class="text-black mb-1" for="categories">작업 분야</label>
+            <div class="d-flex flex-wrap" id="categories0">
+              <!-- 분야 -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script th:inline="javascript">
+    let categories = /*[[${categories}]]*/ "";
+    let regions = /*[[${regions}]]*/ "";
+    regions.forEach((ele, idx) => {
+      $("#region0").append(
+        `<span id="ezt-tag" class="border rounded-4 py-1 px-2 m-1 bg-success text-light">${ele.REGION_CODE}</span>`
+      );
+    });
+
+    categories.forEach((e, i) => {
+      $("#categories0").append(
+        `<span id="ezt-tag" class="border rounded-4 py-1 px-2 m-1 bg-success text-light">${e.CATEGORY_CODE}</span>`
+      );
+    });
+  </script>
 </html>

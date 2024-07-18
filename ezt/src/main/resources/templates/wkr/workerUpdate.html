@@ -3,113 +3,180 @@
   xmlns:th="https://www.thymeleaf.org/"
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{common/layouts/worker_mypage_layout}"
-  layout:fragment="Content">
-<head>
-<meta charset="utf-8" />
-<title>작업자 마이페이지</title>
-<style>
-form span.error {
-  color: red;
-  font-size: 10pt;
-}
+  layout:fragment="Content"
+>
+  <head>
+    <meta charset="utf-8" />
+    <title>작업자 마이페이지</title>
+    <style>
+      form span.error {
+        color: red;
+        font-size: 10pt;
+      }
 
-form span {
-  color: blue;
-  font-size: 10pt;
-}
+      form span {
+        color: blue;
+        font-size: 10pt;
+      }
 
-.workerImg {
-	position:relative;
-}
-.overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: inherit;
-            height: inherit;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgb(0, 0, 0, 0.5);
-            opacity: 0;
-            transition: opacity 0.2s;
-	}
-.workerImg:hover .overlay {
-            opacity: 1;
- 	}
-</style>
-</head>
-<body>
-  <h4>회원정보 수정</h4>
-  <form
+      .workerImg {
+        position: relative;
+      }
+      .overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: inherit;
+        height: inherit;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgb(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .overlay > label {
+        text-align: center;
+        line-height: 200px;
+        width: 100%;
+        color: #89ba16 !important;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .workerImg:hover .overlay {
+        opacity: 1;
+      }
+      .ezt-my-info {
+        font-size: 14px;
+      }
+      .workerImg {
+        width: 200px;
+        height: 200px;
+        border: 2px solid #dee2e6;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+      .workerImg > img {
+        width: 100%;
+      }
+
+      #ezt-tag {
+        font-weight: 300 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="me-auto p-2 mb-3">
+      <h4>회원정보 수정</h4>
+    </div>
+    <form
       th:action="@{/worker/update}"
       th:object="${userVO}"
       method="post"
       name="workerUpdate"
       enctype="multipart/form-data"
-   >
-     <div>
-       <input type="hidden" th:field="*{usersNo}" />
-       <input type="hidden" th:field="*{usersId}" />
-     </div>
-     <div class="d-flex mb-3">
-        <div class="card col-md-4 workerImg">
-	  	  <img class="card-img-top" id="preview"
-  	   		th:src="|/display?fileName=${#strings.replace(userVO.savePath, '\', '/')}/${userVO.saveName}_${userVO.originalFileName}.${userVO.ext}|"
-  	   		alt="작업자 프로필 이미지">
-  	   	  <div class="overlay">
-		    <label for="uploadFile" class="text-black" style="cursor:pointer;">
- 	   		  <span style="color:#89ba16;">이미지 선택</span>
-	  	    </label>
- 	   	  </div>
-	  	  <input name="uploadFile" type="file" id="uploadFile" class="form-control" accept=".jpg, .png, .jfif" style="display:none;">
-	  	</div>
-        
-         <div class="col-md-8 ml-5">
-		  <div>
-			<label for="usersNick">닉네임</label>
-			<input class="form-control col-md-6" type="text" 
-			  id="usersNick"  th:field="*{usersNick}"><span></span>
-		  </div>
-		  <div>
-			<label for="usersPhone">전화번호</label>
-			<input class="form-control col-md-6" type="text" 
-			id="usersPhone" th:field="*{usersPhone}"><span></span>
-		  </div>
-		  <div>
-			<label for="usersEmail">이메일</label>
-			<input class="form-control col-md-6" type="email" 
-			id="usersEmail"  th:field="*{usersEmail}"><span></span>
-		  </div>
-     	</div>
-	  </div>
-        
-        <div class="row mb-3 form-group">
-          <label class="text-black" for="regions">주 활동지역</label>
-          <div class="d-flex flex-wrap gap-2" role="group" aria-label="Basic checkbox toggle button group"  id="region">
-          </div>
+    >
+      <div class="ezt-my-info">
+        <div>
+          <input type="hidden" th:field="*{usersNo}" />
+          <input type="hidden" th:field="*{usersId}" />
         </div>
-        <div class="row mb-3 form-group">
-          <label class="text-black" for="categories">작업 분야</label>
-          <div class="d-flex flex-wrap gap-2" role="group" id="category">
+        <div class="row mb-3">
+          <div class="col-md-4 col-sm-12">
+            <div class="workerImg p-0" style="margin: 0 auto">
+              <img
+                class=""
+                id="preview"
+                th:src="|/display?fileName=${#strings.replace(userVO.savePath, '\', '/')}/${userVO.saveName}_${userVO.originalFileName}.${userVO.ext}|"
+                alt="작업자 프로필 이미지"
+              />
+              <div class="overlay">
+                <label for="uploadFile" class="m-0">이미지 선택</label>
+              </div>
+              <input
+                name="uploadFile"
+                type="file"
+                id="uploadFile"
+                class="form-control"
+                accept=".jpg, .png, .jfif"
+                style="display: none"
+              />
+            </div>
+          </div>
+          <div class="col-md-8 sol-sm-12">
+            <div>
+              <label class="m-0 text-dark" for="usersNick"><b>닉네임</b></label>
+              <input
+                class="form-control"
+                type="text"
+                id="usersNick"
+                th:field="*{usersNick}"
+              /><span></span>
+            </div>
+            <div class="mt-2">
+              <label class="m-0 text-dark" for="usersPhone"
+                ><b>전화번호</b></label
+              >
+              <input
+                class="form-control"
+                type="text"
+                id="usersPhone"
+                th:field="*{usersPhone}"
+              /><span></span>
+            </div>
+            <div class="mt-2">
+              <label class="m-0 text-dark" for="usersEmail"
+                ><b>이메일</b></label
+              >
+              <input
+                class="form-control"
+                type="email"
+                id="usersEmail"
+                th:field="*{usersEmail}"
+              /><span></span>
+            </div>
           </div>
         </div>
 
-        <button type="button" id="updateBtn" class="btn btn-primary border-width-2 d-lg-inline-block">수정하기</button>
+        <div class="row mb-3 form-group">
+          <label class="text-black mb-1" for="regions">주 활동지역</label>
+          <div
+            class="d-flex flex-wrap gap-2"
+            role="group"
+            aria-label="Basic checkbox toggle button group"
+            id="region"
+          ></div>
+        </div>
+        <div class="row mb-3 form-group">
+          <label class="text-black mb-1" for="categories">작업 분야</label>
+          <div class="d-flex flex-wrap gap-2" role="group" id="category"></div>
+        </div>
+
+        <button
+          type="button"
+          id="updateBtn"
+          class="btn btn-sm btn-primary float-end"
+        >
+          수정하기
+        </button>
       </div>
     </form>
-</body>
-<script th:inline="javascript">
-  let regions = /*[[${regions}]]*/ "";
-  regions = regions.map((e) => e.REGION_CODE);
-  let regi = /*[[${regi}]]*/ "";
+  </body>
+  <script th:inline="javascript">
+    let regions = /*[[${regions}]]*/ "";
+    regions = regions.map((e) => e.REGION_CODE);
+    let regi = /*[[${regi}]]*/ "";
 
-  let categories = /*[[${categories}]]*/ "";
-  categories = categories.map((e) => e.CATEGORY_CODE);
-  let cate = /*[[${cate}]]*/ "";
-  regi.forEach((e, idx) => {
-      let input = $(`<input class="btn-check" type="checkbox" name="regionCode" value="${e.codeNo}" id="${e.codeNo}">`);
-      let label = $(`<label class="btn btn-outline-success" for="${e.codeNo}">${e.codeName}</label>`);
+    let categories = /*[[${categories}]]*/ "";
+    categories = categories.map((e) => e.CATEGORY_CODE);
+    let cate = /*[[${cate}]]*/ "";
+    regi.forEach((e, idx) => {
+      let input = $(
+        `<input class="btn-check" type="checkbox" name="regionCode" value="${e.codeNo}" id="${e.codeNo}">`
+      );
+      let label = $(
+        `<label class="btn btn-sm btn-outline-success m-0" for="${e.codeNo}">${e.codeName}</label>`
+      );
       if (regions.includes(e.codeName)) {
         input.prop("checked", true);
       }
@@ -118,61 +185,61 @@ form span {
 
     cate.forEach((e, idx) => {
       // [ asdf, 1234, qwer] - ele.codeName 있냐?
-      let input = $(`<input class="btn-check" type="checkbox" name="categoryCode" value="${e.codeNo}" id="${e.codeNo}">`);
-      let label = $(`<label class="btn btn-outline-success" for="${e.codeNo}">${e.codeName}</label>`);
+      let input = $(
+        `<input class="btn-check" type="checkbox" name="categoryCode" value="${e.codeNo}" id="${e.codeNo}">`
+      );
+      let label = $(
+        `<label class="btn btn-sm btn-outline-success m-0" for="${e.codeNo}">${e.codeName}</label>`
+      );
       if (categories.includes(e.codeName)) {
         input.prop("checked", true);
       }
       $("#category").append(input).append(label);
     });
-  
 
-    
-  $(document).ready(function () {
-    $("#updateBtn").click(() => {
-    	 if(!$('input[name=regionCode]').is(':checked')) {
-			  Swal.fire({
-				text: '1개이상의 지역은 필수입니다.',
-				icon: 'warning'
-			  })
-			  return false;
-		  }
-		  
-		  if(!$('input[name=categoryCode]').is(':checked')) {
-			  Swal.fire({
-					text: '1개이상의 분야는 필수입니다.',
-					icon: 'warning'
-			  })
-			  return false;
-		  }
-      
-      $(workerUpdate).submit();
+    $(document).ready(function () {
+      $("#updateBtn").click(() => {
+        if (!$("input[name=regionCode]").is(":checked")) {
+          Swal.fire({
+            text: "1개이상의 지역은 필수입니다.",
+            icon: "warning",
+          });
+          return false;
+        }
+
+        if (!$("input[name=categoryCode]").is(":checked")) {
+          Swal.fire({
+            text: "1개이상의 분야는 필수입니다.",
+            icon: "warning",
+          });
+          return false;
+        }
+
+        $(workerUpdate).submit();
+      });
     });
-  });
 
+    //    regions.forEach((ele, idx)=>{
+    //       console.log(ele.REGION_CODE);
 
+    //       $('#region0').append(`
+    //             <input type="checkbox" name="regionCode" th:value="${ele.REGION_CODE}" checked>
+    //             <label th:for="${ele.REGION_CODE}">${ele.REGION_CODE}</label>
 
-  //    regions.forEach((ele, idx)=>{
-  //       console.log(ele.REGION_CODE);
+    //             `)
+    //    })
+    //             //<span class="regionTag">${ele.REGION_CODE}</span>
 
-  //       $('#region0').append(`
-  //             <input type="checkbox" name="regionCode" th:value="${ele.REGION_CODE}" checked>
-  //             <label th:for="${ele.REGION_CODE}">${ele.REGION_CODE}</label>
+    //    categories.forEach((e, i) => {
+    //       console.log(e.CATEGORY_CODE);
+    //       $('#categories0').append(`
+    //             <input type="checkbox" name="categoryCode" th:value="${e.CATEGORY_CODE}" checked>
+    //             <label th:for="$${e.CATEGORY_CODE}">${e.CATEGORY_CODE}</label>
+    //             `)
+    //    })
 
-  //             `)
-  //    })
-  //             //<span class="regionTag">${ele.REGION_CODE}</span>
-
-  //    categories.forEach((e, i) => {
-  //       console.log(e.CATEGORY_CODE);
-  //       $('#categories0').append(`
-  //             <input type="checkbox" name="categoryCode" th:value="${e.CATEGORY_CODE}" checked>
-  //             <label th:for="$${e.CATEGORY_CODE}">${e.CATEGORY_CODE}</label>
-  //             `)
-  //    })
-
-  //<span class="regionTag">${e.CATEGORY_CODE}</span>
-/*  $("#updateBtn2").on("click", updateWk);
+    //<span class="regionTag">${e.CATEGORY_CODE}</span>
+    /*  $("#updateBtn2").on("click", updateWk);
   function updateWk(e) {
     $(workerUpdate).submit();
   }
@@ -198,114 +265,111 @@ form span {
       .fail((err) => console.log(err));
   }*/
 
-  function getUsrObj() {
-    let formAry = $("form").serializeArray();
+    function getUsrObj() {
+      let formAry = $("form").serializeArray();
 
-    let formObj = {};
-    formAry.forEach((inputTag) => {
-      formObj[inputTag.name] = inputTag.value;
-    });
-
-    return formObj;
-  }
-
-  //닉네임 중복체크
-  var nick = $("#usersNick");
-  var basicNick = $("#usersNick").val();
-  checkNick();
-  function checkNick() {
-    nick.on("change", function () {
-      var reqExp = /^[ㄱ-ㅎ가-힣A-Za-z0-9-_]{2,10}$/;
-
-      if (nick.val() == "") {
-        nick.next().text("닉네임을 입력해주세요");
-        nick.next().addClass("error");
-        nick.focus();
-        return;
-      }
-
-      if (!reqExp.test(nick.val())) {
-        nick.next().text("닉네임은 특수문자를 제외한 2~10자리여야 합니다.");
-        nick.next().addClass("error");
-        return;
-      }
-
-      if (basicNick == nick.val()) {
-        nick.next().text("");
-        nick.next().removeClass("error");
-      }
-
-      $.ajax({
-        type: "get",
-        url: "/signUp/checkNick/" + nick.val(),
-        success: function (dt) {
-          if (basicNick == nick.val()) {
-            nick.next().text("");
-            nick.next().removeClass("error");
-          } else if (dt == "중복") {
-            nick.next().text("이미 사용중인 닉네임입니다.");
-            nick.next().addClass("error");
-          } else {
-            nick.next().text("사용가능한 닉네임입니다.");
-            nick.next().removeClass("error");
-          }
-        },
+      let formObj = {};
+      formAry.forEach((inputTag) => {
+        formObj[inputTag.name] = inputTag.value;
       });
-    });
-  }
-  //이메일 중복체크
-  var email = $("#usersEmail");
-  var basicEmail = $("#usersEmail").val();
-  checkEmail();
 
-  function checkEmail() {
-    email.on("change", function () {
-      var reqExp =
-        /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+      return formObj;
+    }
 
-      if (email.val() == "") {
-        email.next().text("이메일을 입력해주세요");
-        email.next().addClass("error");
-        nick.focus();
-        return;
-      }
+    //닉네임 중복체크
+    var nick = $("#usersNick");
+    var basicNick = $("#usersNick").val();
+    checkNick();
+    function checkNick() {
+      nick.on("change", function () {
+        var reqExp = /^[ㄱ-ㅎ가-힣A-Za-z0-9-_]{2,10}$/;
 
-      if (!reqExp.test(email.val())) {
-        email.next().text("이메일 형식이 올바르지 않습니다.");
-        email.next().addClass("error");
-        nick.focus();
-        return;
-      }
+        if (nick.val() == "") {
+          nick.next().text("닉네임을 입력해주세요");
+          nick.next().addClass("error");
+          nick.focus();
+          return;
+        }
 
-      $.ajax({
-        type: "get",
-        url: "/signUp/checkEmail?email=" + email.val(),
-        success: function (dt) {
-          if (dt == "중복") {
-            email.next().text("이미 사용중인 이메일입니다.");
-            email.next().addClass("error");
-          } else {
-            email.next().text("사용가능한 이메일입니다.");
-            email.next().removeClass("error");
-          }
-        },
+        if (!reqExp.test(nick.val())) {
+          nick.next().text("닉네임은 특수문자를 제외한 2~10자리여야 합니다.");
+          nick.next().addClass("error");
+          return;
+        }
+
+        if (basicNick == nick.val()) {
+          nick.next().text("");
+          nick.next().removeClass("error");
+        }
+
+        $.ajax({
+          type: "get",
+          url: "/signUp/checkNick/" + nick.val(),
+          success: function (dt) {
+            if (basicNick == nick.val()) {
+              nick.next().text("");
+              nick.next().removeClass("error");
+            } else if (dt == "중복") {
+              nick.next().text("이미 사용중인 닉네임입니다.");
+              nick.next().addClass("error");
+            } else {
+              nick.next().text("사용가능한 닉네임입니다.");
+              nick.next().removeClass("error");
+            }
+          },
+        });
       });
+    }
+    //이메일 중복체크
+    var email = $("#usersEmail");
+    var basicEmail = $("#usersEmail").val();
+    checkEmail();
+
+    function checkEmail() {
+      email.on("change", function () {
+        var reqExp =
+          /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/;
+
+        if (email.val() == "") {
+          email.next().text("이메일을 입력해주세요");
+          email.next().addClass("error");
+          nick.focus();
+          return;
+        }
+
+        if (!reqExp.test(email.val())) {
+          email.next().text("이메일 형식이 올바르지 않습니다.");
+          email.next().addClass("error");
+          nick.focus();
+          return;
+        }
+
+        $.ajax({
+          type: "get",
+          url: "/signUp/checkEmail?email=" + email.val(),
+          success: function (dt) {
+            if (dt == "중복") {
+              email.next().text("이미 사용중인 이메일입니다.");
+              email.next().addClass("error");
+            } else {
+              email.next().text("사용가능한 이메일입니다.");
+              email.next().removeClass("error");
+            }
+          },
+        });
+      });
+    }
+
+    //이미지변경시 바로보여줌
+    $("#uploadFile").on("change", function (event) {
+      var file = event.target.files[0];
+
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $("#preview").attr("src", e.target.result);
+      };
+
+      reader.readAsDataURL(file);
     });
-  }
-  
-  //이미지변경시 바로보여줌
-  $("#uploadFile").on("change", function(event) {
-
-	    var file = event.target.files[0];
-
-	    var reader = new FileReader(); 
-	    reader.onload = function(e) {
-
-	        $("#preview").attr("src", e.target.result);
-	    }
-
-	    reader.readAsDataURL(file);
-	});
-  
-</script>
+  </script>
 </html>

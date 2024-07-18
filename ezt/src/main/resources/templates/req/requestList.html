@@ -125,7 +125,10 @@
       <div class="row mb-5">
         <th:block th:each="request : ${requestList}">
           <div class="col-md-6 col-lg-3 mb-5">
-            <div class="ezt-item-box cursor p-0">
+            <div
+              class="ezt-item-box cursor p-0"
+              th:onclick="|location.href='@{/request/info(requestNo=${request.requestNo})}'|"
+            >
               <div class="ezt-img-box rounded-4">
                 <div class="ezt-img">
                   <th:block>

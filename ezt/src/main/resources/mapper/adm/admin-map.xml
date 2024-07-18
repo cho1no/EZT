@@ -9,7 +9,7 @@
 		FROM users
 		WHERE 
 			<![CDATA[
-		    users_join_dt < TO_CHAR((SELECT MAX(users_join_dt)+1 FROM users), 'yyyy/MM/dd')
+		    users_join_dt < (SELECT TO_DATE(TO_CHAR(MAX(users_join_dt)+1, 'yyyy-MM-dd'), 'yyyy-MM-dd') FROM users)
 		    ]]>
 		    AND users_role IN ('ROLE_USER', 'ROLE_WORKER')
 		GROUP BY TO_CHAR(users_join_dt+1,'yyyy-MM-dd'), users_role
