@@ -40,6 +40,9 @@ public class FindController {
 	//작업자 찾기페이지(목록)
 	@GetMapping("/workerList")
 	public String findWorker(Model model, FindWorkerCriteria cri) {
+		if(cri.getPageNum() == null) {
+			cri.setPageNum(1);
+		}
 		List<UserVO> list = userService.selectFindWorkerList(cri);
 		
 		model.addAttribute("categoryCode", commonCodeService.selectCommonCodeAll("0C"));

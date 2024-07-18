@@ -20,25 +20,28 @@
   <div class="me-auto p-2">
   <h4>의뢰 목록</h4>
   </div>
+  
   <div class="p-2">
-     <select id="categoryCategory">
+     <select id="categoryCategory" class="form-select form-select-sm" aria-label=".form-select-sm example">
      	<option value="">분야</option>
-  	<option th:each="cate : ${categoryCode}" th:value="${cate.codeNo}"
-  		th:selected="${cri.categoryCode} == ${cate.codeNo}">
-  		[[${cate.codeName}]]
-  	</option>    
+	  	<option th:each="cate : ${categoryCode}" th:value="${cate.codeNo}"
+	  		th:selected="${cri.categoryCode} == ${cate.codeNo}">
+	  		[[${cate.codeName}]]
+	  	</option>    
      </select>
    </div>
+   
    <div class="p-2">
-      <select id="requestState">
+      <select id="requestState" class="form-select form-select-sm" aria-label=".form-select-sm example">
      	<option value="">상태</option>
-  	<option th:each="reqSta : ${requestState}" th:value="${reqSta.codeNo}"
-  		th:selected="${cri.requestState} == ${reqSta.codeNo}">
-  		[[${reqSta.codeName}]]
-  	</option>    
+	  	<option th:each="reqSta : ${requestState}" th:value="${reqSta.codeNo}"
+	  		th:selected="${cri.requestState} == ${reqSta.codeNo}">
+	  		[[${reqSta.codeName}]]
+	  	</option>    
      </select>
    </div>
 </div>
+
 <div class="row row-cols-3 row-cols-md-2 g-2">
   <th:block th:each="req : ${requestList}">
 	  <div class="col-lg-4 col-md-6 col-sm-12">
@@ -56,11 +59,11 @@
 	        <div class="d-flex justify-content-end">
 	        	<div class="">
 			        <button type="button" th:onclick="|location.href='@{/request/info(requestNo=${req.requestNo})}'|"
-			         class="btn btn-sm btn-primary border-width-2 d-none d-lg-inline-block">상세</button>
+			         class="btn btn-sm btn-primary border-width-2 d-lg-inline-block">상세</button>
 		        <th:block th:if="${req.reviewNo <= 0}">
 			        <button id="modalBtn" th:onclick="reqModal([[${req.requestNo}]])" 
 			        th:if="${req.requestState} == 'S05' or ${req.requestState} == 'S06'" 
-			        class="btn btn-sm btn-primary border-width-2 d-none d-lg-inline-block">후기작성</button>
+			        class="btn btn-sm btn-primary border-width-2 d-lg-inline-block">후기작성</button>
 		        </th:block>
 		        </div>
 	        </div>

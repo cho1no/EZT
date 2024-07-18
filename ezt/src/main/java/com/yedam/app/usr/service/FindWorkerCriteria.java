@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class FindWorkerCriteria {
 	//페이징
-	private int pageNum;
+	private Integer pageNum;
 	private int amount;
 	private int usersNo;
 	
