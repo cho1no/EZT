@@ -204,9 +204,7 @@ public class ContractController {
 					contractVO.setFileList(list);
 				}
 			}
-		} else {
-			contractVO.setFileList(fileList);
-		}
+		} 
 		conService.conUpdate(contractVO);
 
 		return new ResponseEntity<>("update", HttpStatus.OK);
@@ -242,8 +240,6 @@ public class ContractController {
 					contractVO.setFileList(list);
 				}
 			}
-		} else {
-			contractVO.setFileList(fileList);
 		}
 		conService.conNofileUpdate(contractVO);
 		return new ResponseEntity<>("update", HttpStatus.OK);
