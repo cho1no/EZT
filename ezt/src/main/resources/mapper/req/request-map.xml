@@ -405,4 +405,11 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	    p.proposal_state = 'A02' 
 	    AND p.request_no = #{requestNo}
 </select>
+
+<!-- 견적서 있을 시 의뢰 삭제 -->
+<update id="updateRequestState" parameterType="requestVO">
+	UPDATE request
+	SET request_state = 'S07'
+	WHERE request_no = #{requestNo}
+</update>
 </mapper>

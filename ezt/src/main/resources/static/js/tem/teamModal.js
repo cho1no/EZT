@@ -98,28 +98,35 @@ $(document).ready(function() {
 
 
 	$('.endBtn').click(function(){
-		Swal.fire({
-				   title: '팀원 모집이 완료되었나요?',
-				   text: '승인 시 이후 추가 팀원 모집은 불가합니다.',
-				   icon: 'question',
-				   
-				   showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
-				   confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
-				   cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-				   confirmButtonText: '승인', // confirm 버튼 텍스트 지정
-				   cancelButtonText: '취소', // cancel 버튼 텍스트 지정
-				   
-				   
-				   
-				}).then(result => {
-				   // 만약 Promise리턴을 받으면,
-				   if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
-				   
-				      Swal.fire('팀원모집이 완료되었습니다.', '', 'success');
-				   }
-				});
+		let tno = $('#tno').val();
+		$.ajax({
+			url: '/team/completeTeam?teamNo=' + tno,
+			type: 'post',
+			success: function(){
+				Swal.fire({
+						   title: '팀원 모집이 완료되었나요?',
+						   text: '승인 시 이후 추가 팀원 모집은 불가합니다.',
+						   icon: 'question',
+						   
+						   showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+						   confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+						   cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+						   confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+						   cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+						   
+						   
+						   
+					}).then(result => {
+					   // 만약 Promise리턴을 받으면,
+					   if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+					   
+					      Swal.fire('팀원모집이 완료되었습니다.', '', 'success');
+					   }
+					});
+			}
+		})
 				
-					})
+	})
 });
 
  function openModal(teamNo, workCode, categoryCode){
