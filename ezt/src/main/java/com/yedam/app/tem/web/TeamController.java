@@ -93,20 +93,18 @@ public class TeamController {
     @ResponseBody
     public boolean teamRequestInsert(@RequestBody TeamVO teamVO) {
         // 팀 정보 삽입
-        int number = teamService.insertTeam(teamVO);
-        teamVO.setTeamNo(number);  // 반환된 teamNo 값을 설정
-        System.out.println("Generated teamNo: " + number); // 디버깅용 로그 추가
+        teamService.insertTeam(teamVO);
+        int number = teamVO.getTeamNo();
+    
 
         // 카테고리 정보 삽입
         List<TeamWorkCategoryVO> workCategoryVOList = teamVO.getWorkCategoryVO();
         if (workCategoryVOList != null) {
             for (TeamWorkCategoryVO twcVO : workCategoryVOList) {
-                System.out.println("Inserting category for teamNo: " + number); // 디버깅용 로그 추가
+         
                 twcVO.setTwcTeamNo(number);
                 teamService.insertCategory(twcVO);
             }
-        } else {
-            System.out.println("No work categories found."); // 디버깅용 로그 추가
         }
 
         return true;

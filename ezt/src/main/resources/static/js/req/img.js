@@ -156,44 +156,41 @@ function insert() {
 }
 
 function deleteRequest(rno) {
-	let proposalList = /*[[${proposalList}]] */""; 
-	let contract = /*[[${contract}]] */"";
-	if(proposalList.isEmpty()){
-		$.ajax({
-			url: '/request/delete?requestNo=' + rno,
-			type: 'Get'
-			, success: function() {
-				console.log(proposalList)
-				console.log(contract + '------1');
-				if (uploadImg != null) {
-					deleteFile(uploadImg);
-				}
-				Swal.fire({
-					   title: '정말 삭제하시겠습니까?',
-					   text: '삭제 시 해당 게시글은 복구할 수 없습니다.',
-					   icon: 'question',
-					   
-					   showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
-					   confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
-					   cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-					   confirmButtonText: '삭제', // confirm 버튼 텍스트 지정
-					   cancelButtonText: '취소', // cancel 버튼 텍스트 지정
-	
-					}).then(result => {
-					   // 만약 Promise리턴을 받으면,
-					   if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
-					   
-					      Swal.fire('정상적으로 삭제되었습니다.', '', 'success');
-					   		}
-					   })
-					   .then(function(){					
-							location.href = "/request/list";
-					});
+
+	if(proposalList.length == 0){
+		
+			Swal.fire({
+				   title: '정말 삭제하시겠습니까?',
+				   text: '삭제 시 해당 게시글은 복구할 수 없습니다.',
+				   icon: 'question',
+				   
+				   showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+				   confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+				   cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+				   confirmButtonText: '삭제', // confirm 버튼 텍스트 지정
+				   cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+
+				}).then(result => {
+				   // 만약 Promise리턴을 받으면,
+				   if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+				   $.ajax({
+						url: '/request/delete?requestNo=' + rno,
+						type: 'Get'
+						, success: function() {
+							console.log(proposalList)
+							console.log(contract + '------1');
+							if (uploadImg != null) {
+								deleteFile(uploadImg);
+							}
+				      		Swal.fire('정상적으로 삭제되었습니다.', '', 'success');
+						//location.href = "/request/list";
+				   		}
+				   })				
 	
 			}
 		})
 		
-	}else if(!proposalList.isEmpty()){
+	}else if(proposalList.length > 0){
 		if(contract == ""){
 		$.ajax({
 			url: '/request/stateUpdate?requestNo=' + rno,
