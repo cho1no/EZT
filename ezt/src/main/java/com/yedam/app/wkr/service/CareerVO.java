@@ -19,9 +19,16 @@ public class CareerVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date careerEndDt;
 	
-	private int fileId;
 	private String careerAccessTf;
 	private String careerAccessTfNm;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date writeDt;
+	
+	private int fileId;
+	
+	private String savePath;
+	private String saveName;
+	private String originalFileName;
+	private String ext;
+	private String bossTf;
 }

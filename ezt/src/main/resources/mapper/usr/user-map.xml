@@ -113,7 +113,7 @@
 		WHERE users_no = #{usersNo}
 	</update>
 	
-	
+	<!-- 사용자 정보변경 -->
 	<update id="updateUserInfo" parameterType="UserVO">
 		UPDATE users
 		SET file_id = #{fileId},

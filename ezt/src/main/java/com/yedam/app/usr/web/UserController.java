@@ -71,7 +71,8 @@ public class UserController {
 	
 	//정보수정 -페이지
 	@GetMapping("/update")
-	public String userUpdateForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {
+	public String userUpdateForm(@AuthenticationPrincipal LoginUserVO vo,
+							     Model model) {
 		model.addAttribute("userVO", vo.getUserVO());
 		return "usr/userUpdate";
 	}
@@ -82,10 +83,15 @@ public class UserController {
 	public String userUpdate(UserVO userVO,
 							@RequestParam("uploadFile")MultipartFile[] uploadFile,
 							@AuthenticationPrincipal LoginUserVO vo){
-		
-		int result = simpleFileService.uploadFiles(uploadFile);
-		userVO.setFileId(result);
-		
+		if (uploadFile != null) {
+			int result = simpleFileService.uploadFiles(uploadFile);
+			userVO.setFileId(result);
+		}
+//		if (uploadFile != null && !uploadFile.isEmpty()) {
+//	        // 파일이 업로드된 경우
+//	        int result = simpleFileService.uploadFiles(uploadFile);  // uploadFiles 대신 uploadFile 사용
+//	        userVO.setFileId(result);
+//	    }
 		userService.updateUser(userVO);
 		UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
 		vo.setUserVO(uvo);
