@@ -213,7 +213,38 @@ public class ContractController {
 	}
 
 	@PostMapping(value = "/conNoFileUpdate", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> noFileUpdate(MultipartFile[] uploadFile, ContractVO contractVO) {
+	public ResponseEntity<String> noFileUpdate(MultipartFile[] uploadFile, ContractVO contractVO, int noFile) {
+		List<FileVO> fileList = conService.fileSelect(contractVO);
+		if (noFile == 1) {
+			// 파일 삭제
+			if (!fileList.isEmpty()) {
+				try {
+					fileService.deleteFile(fileList);
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+			}
+
+			// 수정
+			if (uploadFile != null && uploadFile.length > 0) {
+
+				List<FileVO> list = fileService.uploadFiles(uploadFile);
+				int i = 0;
+				for (FileVO e : list) {
+					if (i == 0) {
+						e.setBossTf("Y");
+					} else {
+						e.setBossTf("N");
+					}
+					i += 1;
+				}
+				if (!list.isEmpty()) {
+					contractVO.setFileList(list);
+				}
+			}
+		} else {
+			contractVO.setFileList(fileList);
+		}
 		conService.conNofileUpdate(contractVO);
 		return new ResponseEntity<>("update", HttpStatus.OK);
 	}

@@ -159,6 +159,14 @@ function repairDay(date) {
 		((date.getDate()) > 9 ? (date.getDate()) : ("0" + (date.getDate()))));
 }
 
+function repairDayInfo(date) {
+	date.setFullYear(date.getFullYear() + 1);
+	$('#repairDay').html(date.getFullYear() + "-"
+		+ ((date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1))) + "-"
+		+ ((date.getDate()) > 9 ? (date.getDate()) : ("0" + (date.getDate()))));
+}
+
+
 // 이미지&오디오 파일 제약
 function onlyFile() {
 	var inputFile = $("input[name='uploadFile']");

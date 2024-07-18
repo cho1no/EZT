@@ -70,7 +70,7 @@ public class ContractServiceImpl implements ContractService {
 				fileMapper.insertFileInfo(e);
 			});
 		}
-
+		System.out.println(contractVO);
 		// 서명 등록
 		if (contractVO.getWorSign() != null) {
 			if (contractVO.getWorSign().getSignsContent().length() > 10) {
@@ -82,7 +82,7 @@ public class ContractServiceImpl implements ContractService {
 		}
 		if (contractVO.getReqSign() != null) {
 			if (contractVO.getReqSign().getSignsContent().length() > 10) {
-				SignsVO sign = contractVO.getWorSign();
+				SignsVO sign = contractVO.getReqSign();
 				sign.setContractNo(contractVO.getContractNo());
 				sign.setUsersNo(contractVO.getRequesterInfo());
 				conMapper.insertSignInfo(sign);
@@ -187,7 +187,21 @@ public class ContractServiceImpl implements ContractService {
 	public int conNofileUpdate(ContractVO contractVO) {
 		// 계약서 수정
 		int result = conMapper.updateConInfo(contractVO);
-		
+
+		// 파일 상세 삭제 후 등록 or 등록된 파일 없으면 새로 등록
+		if (contractVO.getFileList() != null) {
+
+			if (contractVO.getFileId() != 0) {
+				fileMapper.deleteFileInfo(contractVO.getFileId());
+			} else {
+				fileMapper.insertFileAttrConInfo(contractVO);
+			}
+			contractVO.getFileList().forEach(e -> {
+				e.setFileId(contractVO.getFileId());
+				fileMapper.insertFileInfo(e);
+			});
+		}
+
 		// 서명 등록
 		if (contractVO.getWorSign() != null) {
 			conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getWorkerInfo());
