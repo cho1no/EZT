@@ -132,7 +132,7 @@ public class ContractController {
 			model.addAttribute("leaderCode", workCode.getLeaderCategoryCode());
 			model.addAttribute("memberCode", workCode.getMemberCategoryCode());
 		}
-		
+
 		// 결제 여부
 		Integer no = conService.payCount(contractVO.getContractNo());
 		model.addAttribute("pcount", no);
@@ -174,36 +174,47 @@ public class ContractController {
 	}
 
 	@PostMapping(value = "/conUpdate", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> uploadAjaxPostUpdate(MultipartFile[] uploadFile, ContractVO contractVO) {
-		// 파일 삭제
+	public ResponseEntity<String> uploadAjaxPostUpdate(MultipartFile[] uploadFile, ContractVO contractVO, int noFile) {
+
 		List<FileVO> fileList = conService.fileSelect(contractVO);
-		if (!fileList.isEmpty()) {
-			try {
-				fileService.deleteFile(fileList);
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-		}
-
-		// 수정
-		if (uploadFile != null && uploadFile.length > 0) {
-
-			List<FileVO> list = fileService.uploadFiles(uploadFile);
-			int i = 0;
-			for (FileVO e : list) {
-				if (i == 0) {
-					e.setBossTf("Y");
-				} else {
-					e.setBossTf("N");
+		if (noFile == 1) {
+			// 파일 삭제
+			if (!fileList.isEmpty()) {
+				try {
+					fileService.deleteFile(fileList);
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
 				}
-				i += 1;
 			}
-			if (!list.isEmpty()) {
-				contractVO.setFileList(list);
+
+			// 수정
+			if (uploadFile != null && uploadFile.length > 0) {
+
+				List<FileVO> list = fileService.uploadFiles(uploadFile);
+				int i = 0;
+				for (FileVO e : list) {
+					if (i == 0) {
+						e.setBossTf("Y");
+					} else {
+						e.setBossTf("N");
+					}
+					i += 1;
+				}
+				if (!list.isEmpty()) {
+					contractVO.setFileList(list);
+				}
 			}
+		} else {
+			contractVO.setFileList(fileList);
 		}
 		conService.conUpdate(contractVO);
 
+		return new ResponseEntity<>("update", HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/conNoFileUpdate", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> noFileUpdate(MultipartFile[] uploadFile, ContractVO contractVO) {
+		conService.conNofileUpdate(contractVO);
 		return new ResponseEntity<>("update", HttpStatus.OK);
 	}
 

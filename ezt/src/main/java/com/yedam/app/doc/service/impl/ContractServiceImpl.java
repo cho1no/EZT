@@ -35,19 +35,21 @@ public class ContractServiceImpl implements ContractService {
 		List<CommonCodeVO> codeVO = conMapper.selectBankcode();
 		return codeVO;
 	}
+
 	// 통일 계약서 조회
 	@Override
 	public UnityContractVO unityConSelect() {
 		UnityContractVO unityVO = conMapper.selectUnityCon();
 		return unityVO;
 	}
+
 	// 계약서 등록된 통일 계약서 조회
 	@Override
 	public UnityContractVO IncludeUnityCon(int contractNo) {
 		UnityContractVO unityVO = conMapper.selectIncludetUnityCon(contractNo);
 		return unityVO;
 	}
-	
+
 	// 계약서 등록
 	@Override
 	public int conInsert(ContractVO contractVO) {
@@ -167,7 +169,7 @@ public class ContractServiceImpl implements ContractService {
 				conMapper.insertSignInfo(sign);
 			}
 		}
-		
+
 		if (contractVO.getReqSign() != null) {
 			conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getRequesterInfo());
 			if (contractVO.getReqSign().getSignsContent().length() > 10) {
@@ -177,45 +179,75 @@ public class ContractServiceImpl implements ContractService {
 				conMapper.insertSignInfo(sign);
 			}
 		}
-		
+
 		return result == 1 ? contractVO.getContractNo() : -1;
 	}
-	
+
+	@Override
+	public int conNofileUpdate(ContractVO contractVO) {
+		// 계약서 수정
+		int result = conMapper.updateConInfo(contractVO);
+		
+		// 서명 등록
+		if (contractVO.getWorSign() != null) {
+			conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getWorkerInfo());
+			if (contractVO.getWorSign().getSignsContent().length() > 10) {
+				SignsVO sign = contractVO.getWorSign();
+				sign.setContractNo(contractVO.getContractNo());
+				sign.setUsersNo(contractVO.getWorkerInfo());
+				conMapper.insertSignInfo(sign);
+			}
+		}
+		if (contractVO.getReqSign() != null) {
+			conMapper.delelteSignInfo(contractVO.getContractNo(), contractVO.getRequesterInfo());
+			if (contractVO.getReqSign().getSignsContent().length() > 10) {
+				SignsVO sign = contractVO.getReqSign();
+				sign.setContractNo(contractVO.getContractNo());
+				sign.setUsersNo(contractVO.getRequesterInfo());
+				conMapper.insertSignInfo(sign);
+			}
+		}
+		return result == 1 ? contractVO.getContractNo() : -1;
+	}
+
 	// 파일 조회
 	@Override
 	public List<FileVO> fileSelect(ContractVO contractVO) {
 		return fileMapper.selectConFileList(contractVO.getContractNo());
 	}
-	
+
 	// 계약서 전송
 	@Override
 	public int conSend(ContractVO contractVO) {
 		int result = conMapper.sendConInfo(contractVO);
 		return result == 1 ? contractVO.getContractNo() : -1;
 	}
-	
+
 	// 동업 계약서
 	// 분야 코드 조회
 	@Override
 	public CommonCodeVO workCodeSelect(int teamNo, int usersNo) {
 		return conMapper.selectTeamWorkCode(teamNo, usersNo);
 	}
+
 	@Override
 	public CommonCodeVO leaderCodeSelect(int requestNo) {
 		return conMapper.selectTeamLeaderCode(requestNo);
 	}
+
 	// 동업 계약서 등록
 	@Override
 	public int ptnConInsert(PartnershipContractVO partnershipContractVO) {
 		conMapper.InsertPartnerCon(partnershipContractVO); // 프로시저
 		return partnershipContractVO.getContractNo();
 	}
+
 	// 동업 계약서 조회
 	@Override
 	public PartnershipContractVO ptnConSelect(int contractNo) {
 		return conMapper.selectPtnSelect(contractNo);
 	}
-	
+
 	// 결제 여부
 	@Override
 	public Integer payCount(int contractNo) {

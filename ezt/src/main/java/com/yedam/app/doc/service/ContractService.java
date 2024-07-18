@@ -24,6 +24,7 @@ public interface ContractService {
 	
 	// 계약서 수정
 	public int conUpdate(ContractVO contractVO);
+	public int conNofileUpdate(ContractVO contractVO);
 	
 	// 파일 조회
 	public List<FileVO> fileSelect(ContractVO contractVO);
