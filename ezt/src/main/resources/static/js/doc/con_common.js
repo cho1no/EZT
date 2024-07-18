@@ -131,7 +131,6 @@ function dayCheck(e) {
 	}
 }
 
-
 // 회차 표기
 function addRound() {
 	for (i = 0; i < $('#con_table tbody tr').length; i++) {
@@ -198,6 +197,24 @@ function GetTotal() {
 	}
 	return true
 }
+// 빈 테이블 제거
+function tableNullRemove() {
+	var length = $('#con_table tbody tr').length;
+	var num = [];
+	for (i = 0; i < length; i++) {
+		var price = $('#con_table tbody tr:eq(' + i + ') td:eq(1) input').val();
+		var history = $('#con_table tbody tr:eq(' + i + ') td:eq(3) input').val();
+
+		if (price == 0 && history == '') {
+			num.push(i);
+		};
+	}
+	num.reverse();
+	num.forEach(e => {
+		$('#con_table tbody tr:eq(' + e + ')').remove();
+	})
+}
+
 
 // 폼 데이터 처리
 function con_insert_data() {
@@ -240,6 +257,16 @@ function workerBankCodeInsert() {
 	}
 }
 
+function requesterBankCodeInsert() {
+	var bankcode = $('.info_req select').val();
+	var bank_num1 = bankcode.indexOf('(');
+	if (bankcode != '은행 선택') {
+		$('input[name="requesterBankcode"]').val(bankcode.substring(bank_num1 + 1).replace(')', ''));
+	} else {
+		$('input[name="requesterBankcode"]').val(null);
+	}
+}
+
 function workerBankCodeUpdate(workBankCode) {
 	var bankcode = $('.info_worker select').val();
 	var bank_num1 = bankcode.indexOf('(');
@@ -261,9 +288,9 @@ function requesterBankCodeUpdate(reqBankCode) {
 }
 
 // requester 주소 처리
-function requesterAddrData(){
-	$('input[name="requesterAddress"]').val($('#input_postcode').val() + '_' 
-				+ $('#input_addr').val() + '_' + $('#input_detailAddr').val());
+function requesterAddrData() {
+	$('input[name="requesterAddress"]').val($('#input_postcode').val() + '_'
+		+ $('#input_addr').val() + '_' + $('#input_detailAddr').val());
 }
 
 // alert

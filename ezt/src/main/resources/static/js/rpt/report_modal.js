@@ -244,7 +244,17 @@ function reportInsertAction() {
 			if (uploadFiles != '') {
 				fileDelete(uploadFiles);
 			}
-			location.reload();
+
+			Swal.fire({
+				icon: "success",
+				title: "등록되었습니다",
+				allowOutsideClick: false
+			}).then(e => {
+				// 만약 Promise리턴을 받으면,
+				if (e.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+					location.reload();
+				}
+			});
 		}
 	})
 }
@@ -500,7 +510,7 @@ function maxLength() {
 // 모달 정보 표기
 function modalInfo(result) {
 	$('#reportModal').modal('hide');
-	
+
 	$('#rpt_updateBtn').removeAttr('style', 'display:none');
 	$('#rpt_deleteBtn').removeAttr('style', 'display:none');
 	$('#rpt_approveBtn').removeAttr('style', 'display:none');
