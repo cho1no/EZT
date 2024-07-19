@@ -219,6 +219,7 @@
 		str = `<span class="spinner-border spinner-border" aria-hidden="true"></span>
 				<span role="status"><b>잠시 기다려 주세요...</b></span>`
 		$('button[type="button"]').html(str);
+		$('button[type="button"]').attr('disabled', 'disabled');
 		
 		
 		$.ajax({
@@ -237,6 +238,7 @@
 				});
 				
 				$('button[type="button"]').html(`<b>결제하기</b>`);
+				$('button[type="button"]').removeAttr('disabled');
 			}
 		})
 		
@@ -275,6 +277,7 @@
 					success : function(result){	
 						
 						$('button[type="button"]').html(`<b>결제완료</b>`);
+						$('button[type="button"]').removeAttr('disabled');
 						
 						Swal.fire({
 							icon: "success",
@@ -288,6 +291,9 @@
 						});
 					}
 				})
+			}else{
+				$('button[type="button"]').html(`<b>결제하기</b>`);
+				$('button[type="button"]').removeAttr('disabled');
 			} 
 		});
 	}

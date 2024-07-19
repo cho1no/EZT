@@ -213,4 +213,13 @@
 		#{requestNo} and worker= #{worker} and proposal_state IS NULL
 	</select>
 
+	<select id="contractCount" resultType="int">
+		SELECT
+        	 count(*)
+		FROM contract c
+        JOIN proposal p
+        ON p.proposal_no = c.proposal_no
+		WHERE c.proposal_no = #{proposalNo}
+	</select>
+
 </mapper>

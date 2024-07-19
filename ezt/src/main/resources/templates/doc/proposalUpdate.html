@@ -227,12 +227,13 @@
     	userPhone();
     	
     	// 날짜 표기
+		if(startDay != '1900-01-01'){
+			$('#startDt').datepicker( "option", "minDate", new Date( startDay ) );
+			$('#endDt').datepicker( "option", "minDate", new Date( startDay ) );
+		} 
 		if(endDay != '1900-01-01'){
 			$('#startDt').datepicker( "option", "maxDate", new Date( endDay ) );
 		}
-		if(startDay != '1900-01-01'){
-			$('#endDt').datepicker( "option", "minDate", new Date( startDay ) );
-		} 
 	})
 	
 	// 날짜 : 입력 안 함 = '1900-01-01' => 빈 값 처리
