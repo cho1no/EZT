@@ -176,7 +176,7 @@ export default function UserPage() {
                         id={row.usersId}
                         phone={row.usersPhone}
                         joinDt={row.usersJoinDt}
-                        role={row.usersRole}
+                        role={getRole(row.usersRole)}
                         state={row.usersState}
                         stateNm={row.usersStateNm}
                         avatarUrl={`/display?fileName=${row.savePath}/${row.saveName}_${row.originalFileName}.${row.ext}`}

@@ -37,7 +37,9 @@ export default function UserTableRow({
 
       <TableCell>{email}</TableCell>
       <TableCell>{id}</TableCell>
-      <TableCell>{phone.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`)}</TableCell>
+      <TableCell>
+        {phone ? phone.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`) : 'null'}
+      </TableCell>
       <TableCell>{fDateTime(joinDt, 'yy/MM/dd hh:mm')}</TableCell>
 
       <TableCell>{role}</TableCell>
