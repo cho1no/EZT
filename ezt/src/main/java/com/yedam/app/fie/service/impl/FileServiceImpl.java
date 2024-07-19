@@ -169,13 +169,15 @@ public class FileServiceImpl implements FileService {
 		
 		log.info("resource : " + resource);
 
-		String resourceName = resource.getFilename();
-
+		//String resourceName = resource.getFilename();
+		int no = fileName.indexOf("_") + 1;
+		String fName = fileName.substring(no);
+		
 		org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
 		try {
 			
 			headers.add("Content-Disposition",
-					"attachment; filename=" + new String(resourceName.getBytes("UTF-8"), "ISO-8859-1"));
+					"attachment; filename=" + new String(fName.getBytes("UTF-8"), "ISO-8859-1"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

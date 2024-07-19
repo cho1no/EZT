@@ -116,5 +116,11 @@ public class ProposalServiceImpl implements ProposalService {
 		ppsMapper.approvePpsInfo(proposalVO); // 프로시저
 		return 1;
 	}
+	
+	// 계약서 여부 조회
+	@Override
+	public int conCount(int proposalNo) {
+		return ppsMapper.contractCount(proposalNo);
+	}
 
 }

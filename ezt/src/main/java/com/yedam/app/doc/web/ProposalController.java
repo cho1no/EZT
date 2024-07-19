@@ -60,6 +60,10 @@ public class ProposalController {
 		// 견적서 의뢰정보조회
 		RequestVO reqVO = ppsSerivce.reqInfo(findVO.getRequestNo());
 		model.addAttribute("reqInfo", reqVO);
+		
+		// 계약서 여부 조회
+		int count = ppsSerivce.conCount(proposalVO.getProposalNo());
+		model.addAttribute("count", count);
 
 		return "doc/proposalInfo";
 	}

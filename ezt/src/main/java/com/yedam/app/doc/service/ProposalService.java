@@ -39,6 +39,9 @@ public interface ProposalService {
 	
 	// 견적서 승인
 	public int ppsApprove(ProposalVO proposalVO);
+	
+	// 계약서 여부 조회
+	public int conCount(int proposalNo);
 
 }
 

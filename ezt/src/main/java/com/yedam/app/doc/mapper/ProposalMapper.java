@@ -17,6 +17,8 @@ public interface ProposalMapper {
 	public UserVO selectUserInfo(int userNo);
 	// 견적서 의뢰정보조회
 	public RequestVO selectReqInfo(int requestNo);
+	// 계약서 여부 조회
+	public int contractCount(@Param("proposalNo")int proposalNo);
 	
 	// -- 견적서 조회 --
 	// 견적서 단건조회

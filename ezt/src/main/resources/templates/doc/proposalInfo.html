@@ -246,7 +246,7 @@
 							</div>
 						</th:block>
 						<th:block
-							th:if="${#authentication.principal.userNo == userInfo.usersNo} and ${ppsInfo.proposalState == 'A02'}">
+							th:if="${#authentication.principal.userNo == userInfo.usersNo} and ${ppsInfo.proposalState == 'A02'} and ${count == 0}">
 							<div class="col-6"></div>
 							<div class="col-6">							
 								<button type="button" class="btn btn-block btn-primary btn-md"

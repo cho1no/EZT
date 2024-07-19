@@ -229,7 +229,7 @@
 												</div>
 												<div class="col">
 													<input type="text" class="form-control"
-														name="requesterAccount" th:value="${con.requesterAccount}">
+														name="requesterAccount" th:value="${con.requesterAccount}" onKeyup="onlyNumberFormat(this);" maxlength="14">
 												</div></li>
 											<li class="mb-2 row form-group"><div class="col-4">
 													<strong class="text-black">서명</strong>
