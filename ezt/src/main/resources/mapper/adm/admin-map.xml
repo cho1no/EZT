@@ -118,7 +118,7 @@
 				, f.save_name
 				, f.original_file_name
 				, f.ext
-		FROM users
+		FROM users u
 		LEFT JOIN file_detail_info f
 		ON u.file_id = f.file_id
 		WHERE u.users_no = #{uno}
