@@ -212,16 +212,16 @@ form span {
 									<label class="text-black" for="regions">주 활동지역</label>
 								<div class="col-md-12 mb-3 mb-md-0">
 									<th:block th:each="region : ${regions}">
-										<input type="checkbox" name="regionCode" th:value="${region.codeNo}">
+										<input type="checkbox" th:id="${region.codeNo}" name="regionCode" th:value="${region.codeNo}">
 										<label th:for="${region.codeNo}">[[${region.codeName}]]</label>
 									</th:block>
 								</div>
 							</div>
 							<div class="row form-group">
-									<label class="text-black" for="categories">작업 분야</label>
+									 <label class="text-black" for="categories">작업 분야</label>
 								<div class="col-md-12 mb-3 mb-md-0">
 										<th:block th:each="category : ${categories}">
-											<input type="checkbox" name="categoryCode" th:value="${category.codeNo}">
+											<input type="checkbox" th:id="${category.codeNo}" name="categoryCode" th:value="${category.codeNo}">
 											<label th:for="${category.codeNo}">[[${category.codeName}]]</label>
 										</th:block>
 								</div>

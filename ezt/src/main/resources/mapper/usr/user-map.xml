@@ -234,6 +234,64 @@
 				</if>)
 	</select>
 	
+	<!-- 사용자계약서 목록조회 -->
+	<select id="selectUserContractList" parameterType="ContractVO">
+		 SELECT c.*		  
+	   FROM ( 
+   	   		 SELECT ROWNUM as rn
+   	   		 		, a.*
+   	   		 FROM ( SELECT c.ctt_name
+   	   		 			   , FIND_COMMONCODE(c.contract_state) as contract_state_nm
+   	   		 			   , c.ctt_start_dt
+   	   		 			   , c.ctt_end_dt
+   	   		 			   , c.write_dt
+   	   		 			   , c.update_dt
+   	   		 			   , r.title
+					FROM contract c
+					    LEFT JOIN proposal p ON c.proposal_no = p.proposal_no
+					    LEFT JOIN request r ON r.request_no = p.request_no
+					WHERE c.requester_info = #{usersNo}
+					ORDER BY c.contract_no DESC) a 
+			 ) c
+		<![CDATA[
+		WHERE c.rn <= #{pageNum} * #{amount} AND
+			  c.rn > (#{pageNum} -1 ) * #{amount}
+		]]>
+	</select>
+	<!-- 사용자 계약서데이터 갯수조회 -->
+	<select id="getTotalUserCtt" resultType="int">
+		SELECT COUNT(*)
+		FROM (SELECT *
+			  FROM contract
+			  WHERE requester_info = #{usersNo}
+			 )
+	</select>
+	
+	<!-- 사용자 결제명세서 목록조회 -->
+	<select id="selectUserPayList" parameterType="PayVO">
+		 SELECT c.*		  
+	   FROM ( 
+   	   		 SELECT ROWNUM as rn
+   	   		 		, a.*
+   	   		 FROM ( SELECT *
+					FROM pay
+					WHERE requester = #{usersNo}
+					ORDER BY pay_no DESC) a 
+			 ) c
+		<![CDATA[
+		WHERE c.rn <= #{pageNum} * #{amount} AND
+			  c.rn > (#{pageNum} -1 ) * #{amount}
+		]]>
+	</select>
+	<!-- 사용자 결제명세서 데이터갯수 조회 -->
+	<select id="getTotalUserPay" resultType="int">
+		SELECT COUNT(*)
+		FROM( SELECT *
+			  FROM pay
+			  WHERE requester = #{usersNo}
+	 		 )
+	</select>
+	
 	<!-- 회원 탈퇴 -->
 	<update id="updateUserState" parameterType="UserVO">
 		UPDATE users

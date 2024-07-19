@@ -11,6 +11,9 @@ public class WorkerRvwCriteria {
 	private String proposalState;
 	private String starState;
 	private String contractState;
+	private int requesterInfo;
+	private int requester;
+	
 	
 	//검색
 	private String type;

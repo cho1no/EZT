@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.yedam.app.alm.web.StompAlarmController;
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.common.service.SimpleFileService;
+import com.yedam.app.doc.service.ContractVO;
+import com.yedam.app.pay.service.PayVO;
 import com.yedam.app.req.service.RequestService;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewService;
@@ -32,8 +33,8 @@ import com.yedam.app.usr.service.UserRvwCriteria;
 import com.yedam.app.usr.service.UserRvwPageDTO;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
-
-import groovy.util.logging.Slf4j;
+import com.yedam.app.wkr.service.WorkerRvwCriteria;
+import com.yedam.app.wkr.service.WorkerRvwPageDTO;
 
 @Controller
 @RequestMapping("user")
@@ -179,6 +180,42 @@ public class UserController {
 		return "usr/userRequestList";
 	}
 	
+	//사용자 계약서목록 조회
+	@GetMapping("/contractList")
+	public String userCttList(Model model,
+							  @ModelAttribute("cri") WorkerRvwCriteria cri,
+							  @AuthenticationPrincipal LoginUserVO vo) {
+		model.addAttribute("userVO", vo.getUserVO());
+		cri.setUsersNo(vo.getUserNo());
+		if(cri.getPageNum() == null) {
+			cri.setPageNum(1);
+		}
+		
+		List<ContractVO> list = userService.selectUserContractList(cri);
+		model.addAttribute("contractList", list);
+		
+		int total = userService.getTotalUserCtt(cri);
+		model.addAttribute("page", new WorkerRvwPageDTO(cri, total));
+		return "usr/userContractList";
+	}
+	//사용자 결제명세서목록 조회
+	@GetMapping("/payList")
+	public String userPayList(Model model,
+							  @ModelAttribute("cri") WorkerRvwCriteria cri,
+							  @AuthenticationPrincipal LoginUserVO vo) {
+		model.addAttribute("userVO", vo.getUserVO());
+		cri.setUsersNo(vo.getUserNo());
+		if(cri.getPageNum() == null) {
+			cri.setPageNum(1);
+		}
+		
+		List<PayVO> list = userService.selectUserPayList(cri);
+		model.addAttribute("payList", list);
+		
+		int total = userService.getTotalUserPay(cri);
+		model.addAttribute("page", new WorkerRvwPageDTO(cri,total));
+		return "usr/userPayList";
+	}
 	//사용자 탈퇴 (상태 수정) 페이지
 	@GetMapping("/quit")
 	public String userStateUpdateForm(@AuthenticationPrincipal LoginUserVO vo, Model model) {

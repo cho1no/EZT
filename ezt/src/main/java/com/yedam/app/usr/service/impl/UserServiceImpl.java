@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.common.service.SimpleFileService;
+import com.yedam.app.doc.service.ContractVO;
+import com.yedam.app.pay.service.PayVO;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.usr.mapper.UserMapper;
@@ -17,6 +19,7 @@ import com.yedam.app.usr.service.UserReqCriteria;
 import com.yedam.app.usr.service.UserRvwCriteria;
 import com.yedam.app.usr.service.UserService;
 import com.yedam.app.usr.service.UserVO;
+import com.yedam.app.wkr.service.WorkerRvwCriteria;
 
 import lombok.RequiredArgsConstructor;
 
@@ -98,6 +101,17 @@ public class UserServiceImpl implements UserService{
 		return userMapper.selectUserReqList(cri);
 	}
 
+	//사용자 계약서목록
+	@Override
+	public List<ContractVO> selectUserContractList(WorkerRvwCriteria cri) {
+		return userMapper.selectUserContractList(cri);
+	}
+	//사용자 결제명세서목록
+	@Override
+	public List<PayVO> selectUserPayList(WorkerRvwCriteria cri) {
+		return userMapper.selectUserPayList(cri);
+	}
+	
 	//회원탈퇴(상태 수정)
 	@Override
 	public int userStateUpdate(UserVO userVO) {
@@ -116,6 +130,16 @@ public class UserServiceImpl implements UserService{
 		return userMapper.getTotalRequestCount(cri);
 	}
 	
+	//계약서목록 페이징()
+	@Override
+	public int getTotalUserCtt(WorkerRvwCriteria cri) {
+		return userMapper.getTotalUserCtt(cri);
+	}
+	//결제명세서목록 페이징()
+	@Override
+	public int getTotalUserPay(WorkerRvwCriteria cri) {
+		return userMapper.getTotalUserPay(cri);
+	}
 	
 	//작업자 찾기
 	@Override
@@ -127,6 +151,12 @@ public class UserServiceImpl implements UserService{
 	public int workerListGetTotal(FindWorkerCriteria cri) {
 		return userMapper.getTotalWorkerCount(cri);
 	}
+
+	
+
+	
+
+	
 
 	
 

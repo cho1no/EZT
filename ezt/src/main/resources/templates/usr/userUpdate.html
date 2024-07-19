@@ -20,66 +20,126 @@ form span{
 	position:relative;
 }
 .overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: inherit;
-            height: inherit;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgb(0, 0, 0, 0.5);
-            opacity: 0;
-            transition: opacity 0.2s;
-	}
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: inherit;
+  height: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.overlay > label {
+  text-align: center;
+  line-height: 200px;
+  width: 100%;
+  color: #89ba16 !important;
+  font-weight: 900;
+  cursor: pointer;
+}
 .userImg:hover .overlay {
-            opacity: 1;
- 	}
+  opacity: 1;
+}
+.ezt-my-info {
+  font-size: 14px;
+}
+.userImg {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #dee2e6;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.userImg > img {
+  width: 100%;
+}
+
+#ezt-tag {
+  font-weight: 300 !important;
+}
 </style>
 </head>
 <body>
+ <div class="me-auto p-2 mb-3">
   <h4>회원정보 수정</h4>
+  </div>
 	<form th:action="userUpdate" name="userUpd" th:object="${userVO}" enctype="multipart/form-data">
-	  <div><input type="hidden" th:field="*{usersId}"></div>
-	  <div class="d-flex mb-3">
-	    <div class="card col-md-4 userImg" >
-  	      <img
-		    class="card-img-top" id="preview" th:if="${userVO.fileId != 0}"
-  	        th:src="|/display?fileName=${#strings.replace(userVO.savePath, '\', '/')}/${userVO.saveName}_${userVO.originalFileName}.${userVO.ext}|"
-  	        alt="사용자 프로필 이미지"
-		  >
-  	      <img
-		    class="card-img-top" id="preview" th:unless="${userVO.fileId != 0}"
-  	        src="/images/usr/default_user.png"
-  	        alt="사용자 프로필 이미지"
-		  >
-			
-  	      <div class="overlay">
-  	        <label for="uploadFile" class="text-black" style="cursor:pointer;">
-	  	      <span style="color:#89ba16;">이미지 선택</span>
-	  	    </label>
-	  	    <input name="uploadFile" type="file" id="uploadFile" class="form-control" accept=".jpg, .png, .jfif" style="display:none;"></div>
-	      </div>
-	    <div class="col-md-8 ml-5">
-		  <div>
-			<label for="usersNick">닉네임</label>
-			<input class="form-control col-md-6" type="text" 
-			  id="usersNick"  th:field="*{usersNick}"><span></span>
-		  </div>
-		  <div>
-			<label for="usersPhone">전화번호</label>
-			<input class="form-control col-md-6" type="text" 
-			id="usersPhone" th:field="*{usersPhone}"><span></span>
-		  </div>
-		  <div>
-			<label for="usersEmail">이메일</label>
-			<input class="form-control col-md-6" type="email" 
-			id="usersEmail"  th:field="*{usersEmail}"><span></span>
-		  </div>
-     	</div>
-	  </div>
+	  <div class="ezt-my-info">
+        <div>
+          <input type="hidden" th:field="*{usersNo}" />
+          <input type="hidden" th:field="*{usersId}" />
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-4 col-sm-12">
+            <div class="userImg p-0" style="margin: 0 auto">
+              <img
+                th:if="${userVO.fileId != 0}"
+                class=""
+                id="preview"
+                th:src="|/display?fileName=${#strings.replace(userVO.savePath, '\', '/')}/${userVO.saveName}_${userVO.originalFileName}.${userVO.ext}|"
+                alt="사용자 프로필 이미지"
+              />
+              <img
+                th:unless="${userVO.fileId != 0}"
+                class=""
+                id="preview"
+                src="/images/usr/default_user.png"
+                alt="사용자 프로필 이미지"
+              />
+              <div class="overlay">
+                <label for="uploadFile" class="m-0">이미지 선택</label>
+              </div>
+              <input
+                name="uploadFile"
+                type="file"
+                id="uploadFile"
+                class="form-control"
+                accept=".jpg, .png, .jfif"
+                style="display: none"
+              />
+            </div>
+          </div>
+          <div class="col-md-8 sol-sm-12">
+            <div>
+              <label class="m-0 text-dark" for="usersNick"><b>닉네임</b></label>
+              <input
+                class="form-control"
+                type="text"
+                id="usersNick"
+                th:field="*{usersNick}"
+              /><span></span>
+            </div>
+            <div class="mt-2">
+              <label class="m-0 text-dark" for="usersPhone"
+                ><b>전화번호</b></label
+              >
+              <input
+                class="form-control"
+                type="text"
+                id="usersPhone"
+                th:field="*{usersPhone}"
+              /><span></span>
+            </div>
+            <div class="mt-2">
+              <label class="m-0 text-dark" for="usersEmail"
+                ><b>이메일</b></label
+              >
+              <input
+                class="form-control"
+                type="email"
+                id="usersEmail"
+                th:field="*{usersEmail}"
+              /><span></span>
+            </div>
+          </div>
+        </div>
 		<button type="button" id="updateBtn" class="btn btn-primary border-width-2 d-lg-inline-block" style="float:right;">수정하기</button>
+	  </div>
 	</form>
+	</body>
 <script th:inline="javascript">
 	$('#updateBtn').on('click', updateUser);
 	

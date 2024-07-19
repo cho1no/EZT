@@ -101,7 +101,7 @@ public class WorkerController {
       
       model.addAttribute("msg", "정보수정 완료!");
       model.addAttribute("icon", "success");
-      model.addAttribute("url", "/worker/update");
+      model.addAttribute("url", "/worker/info");
       return "gongtong/message";
    }
    

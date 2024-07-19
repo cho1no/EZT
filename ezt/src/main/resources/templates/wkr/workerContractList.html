@@ -37,17 +37,19 @@ button.teamBtn {
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
 	<th:block th:each="ctt : ${contractList}">
-		<div class="list-group m-3 list-group-item-action">
+		<div class="list-group m-3" style="font-size:14px;">
 		  <a th:href="@{/conInfo(contractNo=${ctt.contractNo})}" class="list-group-item list-group-item-action">
-		    <span>공사명 : [[${ctt.cttName}]]</span>/
-		    <span>공사 일정: [[${#dates.format(ctt.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(ctt.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
-		    
-		    <span>작성일 : [[${#dates.format(ctt.writeDt, 'yyyy-MM-dd')}]]</span>/
-		    <span>수정일 : [[${#dates.format(ctt.updateDt, 'yyyy-MM-dd')}]]</span>/
-		    <span>상태 : [[${ctt.contractStateNm}]]</span>
+		    <strong>공사명 : [[${ctt.cttName}]]</strong>
+		    <span class="state" style="float:right;" th:if="${ctt.contractStateNm} != null">
+		      <strong>[[${ctt.contractStateNm}]]</strong>
+		    </span><br>
+		    <span>작성일 : [[${#dates.format(ctt.writeDt, 'yyyy-MM-dd')}]]</span>
+		    <span style="float:right;">공사 일정: [[${#dates.format(ctt.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(ctt.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
 		  </a>
+		  <th:block th:if="${ctt.teamNo < 0}">
 		  <button class="teamBtn" type="button" th:onclick="|location.href='@{/team/requestInsert(contractNo=${ctt.contractNo})}'|" 
 		  th:if="${ctt.contractState} == 'G02'">팀이 필요하세요?</button>
+		  </th:block>
 		</div>
 	</th:block>
 	<!-- 데이터가 없을시 출력문구 -->
@@ -70,6 +72,16 @@ button.teamBtn {
     </div>
     
 <script th:inline="javascript">
+	$(document).ready(function () {
+		$('span.state').each((i, e) => {
+			if ($(e).text() == '서명 중'){
+				$(e).css('color','red');
+			}
+			if ($(e).text() == '서명 완료'){
+				$(e).css('color','blue');
+			}
+		})
+	});
 
 	$('#contractStateCategory').on('change', (ev) => {
 		$('[name="contractState"]').val(ev.target.value)
