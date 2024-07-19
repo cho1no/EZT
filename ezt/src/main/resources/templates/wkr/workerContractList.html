@@ -46,9 +46,9 @@ button.teamBtn {
 		    <span>작성일 : [[${#dates.format(ctt.writeDt, 'yyyy-MM-dd')}]]</span>
 		    <span style="float:right;">공사 일정: [[${#dates.format(ctt.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(ctt.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
 		  </a>
-		  <th:block th:if="${ctt.teamNo < 0}">
+		  <th:block th:if="${ctt.teamNo <= 0}">
 		  <button class="teamBtn" type="button" th:onclick="|location.href='@{/team/requestInsert(contractNo=${ctt.contractNo})}'|" 
-		  th:if="${ctt.contractState} == 'G02'">팀이 필요하세요?</button>
+		  th:if="${ctt.contractStateNm} == '서명 완료'">팀이 필요하세요?</button>
 		  </th:block>
 		</div>
 	</th:block>
