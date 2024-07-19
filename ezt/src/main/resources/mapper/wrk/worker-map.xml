@@ -254,9 +254,18 @@
 		SELECT c.*
 		FROM (SELECT ROWNUM as rn
 			  		, a.*
-			  FROM (SELECT c.*, FIND_COMMONCODE(c.contract_state) as contract_state_nm
+			  FROM (SELECT c.ctt_name
+			  			   , c.contract_no
+			  			   , c.write_dt
+			  			   , c.ctt_start_dt
+			  			   , c.ctt_end_dt
+			  			   , FIND_COMMONCODE(c.contract_state) as contract_state_nm
+			  			   , NVL((SELECT t.team_no
+			  			   		  FROM team t
+			  			   		  WHERE t.contract_no = c.contract_no
+			  			   		  AND rownum = 1), 0) team_no
 					FROM contract c
-					WHERE worker_info = #{usersNo}
+					WHERE c.worker_info = #{usersNo}
 					  <if test="contractState != null and contractState != ''.toString()">
 							AND contract_state = #{contractState}
 					  </if>
@@ -331,9 +340,10 @@
 			  SELECT ROWNUM as rn
 			  		, a.*
 			  FROM (
-					SELECT *
-					FROM license
-					WHERE users_no = #{usersNo}
+					SELECT l.*, f.save_path,  f.save_name, f.original_file_name, f.ext
+					FROM license l
+					    LEFT JOIN file_detail_info f ON l.file_id = f.file_id
+					WHERE users_no = #{usersNo} 
 					ORDER BY write_dt DESC ) a ) c
 		<![CDATA[
 		WHERE c.rn <= #{pageNum} * #{amount} AND

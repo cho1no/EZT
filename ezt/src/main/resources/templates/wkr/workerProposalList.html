@@ -40,7 +40,7 @@ button.teamBtn {
   	<th:block th:each="pps : ${proposalList}">
 		<div class="list-group m-3" style="font-size:14px;">
 		  <a th:href="@{/ppsInfo(proposalNo=${pps.proposalNo})}" class="list-group-item list-group-item-action">
-		    <strong>[[${pps.comments}]]</strong> <span class="state" style="float:right;" th:if="${pps.proposalState} != null"><strong>[[${pps.proposalStateNm}]]</strong></span></h5> <br>
+		    <strong>[[${pps.comments}]]</strong> <span class="state" style="float:right;" th:if="${pps.proposalState} != null"><strong>[[${pps.proposalStateNm}]]</strong></span><br>
 		    <span>[[${#numbers.formatDecimal(pps.total, 0, 'COMMA', 0,'POINT')}]]원</span>
 		    <span style="float:right;">[[${#dates.format(pps.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(pps.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
 		    

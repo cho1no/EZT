@@ -45,6 +45,11 @@
 				  <li class="list-group-item">취득일 : [[${#dates.format(lic.licenseGetDt, 'yyyy-MM-dd')}]]</li>
 				  <li class="list-group-item">인증기관 : [[${lic.checkCenter}]]</li>
 				  <li class="list-group-item">등록일 : [[${#dates.format(lic.writeDt, 'yyyy-MM-dd')}]]</li>
+				  <li class="list-group-item">
+				    <a th:href="|/download?fileName=${#strings.replace(lic.savePath, '\', '/')}/${lic.saveName}_${lic.originalFileName}.${lic.ext}|">
+                      [[${lic.originalFileName}]].[[${lic.ext}]]
+                    </a>
+				  </li>
 				</ul>
 		      </div>
 		      <div class="modal-footer">

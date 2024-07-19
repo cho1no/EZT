@@ -95,7 +95,7 @@
                 th:unless="${userVO.fileId != 0}"
                 class=""
                 id="preview"
-                th:src="|/display?fileName=${#strings.replace(userVO.savePath, '\', '/')}/${userVO.saveName}_${userVO.originalFileName}.${userVO.ext}|"
+                src="/images/usr/default_user.png"
                 alt="작업자 프로필 이미지"
               />
               <div class="overlay">

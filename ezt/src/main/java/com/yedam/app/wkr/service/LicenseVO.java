@@ -22,4 +22,9 @@ public class LicenseVO {
 	private Date writeDt; //작성일
 	
 	private String checkCenter; //인증기관
+	
+	private String savePath;
+	private String saveName;
+	private String originalFileName;
+	private String ext;
 }

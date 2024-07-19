@@ -5,12 +5,15 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.repository.query.Param;
 
+import com.yedam.app.doc.service.ContractVO;
+import com.yedam.app.pay.service.PayVO;
 import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.usr.service.FindWorkerCriteria;
 import com.yedam.app.usr.service.UserReqCriteria;
 import com.yedam.app.usr.service.UserRvwCriteria;
 import com.yedam.app.usr.service.UserVO;
+import com.yedam.app.wkr.service.WorkerRvwCriteria;
 
 @Mapper
 public interface UserMapper {
@@ -47,6 +50,11 @@ public interface UserMapper {
 	//사용자 의뢰목록
 	public List<RequestVO> selectUserReqList(UserReqCriteria cri);
 	
+	//사용자 계약서목록
+	public List<ContractVO> selectUserContractList(WorkerRvwCriteria cri);
+	//사용자 결제명세서목록
+	public List<PayVO> selectUserPayList(WorkerRvwCriteria cri);
+	
 	//사용자 탈퇴(상태 수정)
 	public int updateUserState(UserVO userVO);
 
@@ -57,6 +65,10 @@ public interface UserMapper {
 	//사용자 의뢰 갯수
 	public int getTotalRequestCount(UserReqCriteria cri);
 	
+	//계약서 갯수
+	public int getTotalUserCtt(WorkerRvwCriteria cri);
+	//결제명세서 갯수
+	public int getTotalUserPay(WorkerRvwCriteria cri);
 	//작업자 찾기
 	public List<UserVO> selectFindWorkerList(FindWorkerCriteria cri);
 	

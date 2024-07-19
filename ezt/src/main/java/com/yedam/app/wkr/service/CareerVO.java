@@ -1,8 +1,11 @@
 package com.yedam.app.wkr.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.yedam.app.common.service.FileVO;
 
 import lombok.Data;
 
@@ -25,6 +28,7 @@ public class CareerVO {
 	private Date writeDt;
 	
 	private int fileId;
+	private List<FileVO> fileVO;
 	
 	private String savePath;
 	private String saveName;

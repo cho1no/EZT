@@ -47,6 +47,8 @@ public class ContractVO {
 	private String usersPhone;
 	
 	private int type;
+	private String title;
+	private int teamNo;
 	
 	private String contractStateNm;
 }
