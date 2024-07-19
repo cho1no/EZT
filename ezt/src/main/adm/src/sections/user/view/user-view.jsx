@@ -179,6 +179,7 @@ export default function UserPage() {
                         role={row.usersRole}
                         state={row.usersState}
                         stateNm={row.usersStateNm}
+                        avatarUrl={`/display?fileName=${row.savePath}/${row.saveName}_${row.originalFileName}.${row.ext}`}
                         onClick={() => handleOpen(row.usersNo)}
                       />
                     ))}
@@ -265,7 +266,9 @@ export default function UserPage() {
                 <Grid item xs={12}>
                   <Typography variant="subtitle1">전화번호</Typography>
                   <Typography style={boxStyle} variant="body1">
-                    {userInfo.usersPhone ? userInfo.usersPhone : '전화번호 없음'}
+                    {userInfo.usersPhone
+                      ? userInfo.usersPhone.replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`)
+                      : '전화번호 없음'}
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>

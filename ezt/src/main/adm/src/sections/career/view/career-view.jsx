@@ -314,6 +314,11 @@ export default function CareerPage() {
                       </Grid>
                       <Grid item xs={12}>
                         <Typography variant="subtitle1">첨부 파일</Typography>
+                        <a
+                          href={`/download?fileName=${careerInfo.savePath}/${careerInfo.saveName}_${careerInfo.originalFileName}.${careerInfo.ext}`}
+                        >
+                          {careerInfo.originalFileName}
+                        </a>
                         <Typography style={boxStyle} variant="body1">
                           {careerInfo.fileId}
                         </Typography>

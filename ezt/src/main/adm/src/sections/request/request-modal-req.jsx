@@ -182,7 +182,7 @@ function ReqImg({ img }) {
   const renderSlides = img.map((image, idx) => (
     <div key={idx}>
       <img
-        src={`/display?fileName=${image.savePath}${image.saveName}_${image.originalFileName}.${image.ext}`}
+        src={`/display?fileName=${image.savePath}/${image.saveName}_${image.originalFileName}.${image.ext}`}
         alt={image.originalFileName}
         style={{ borderRadius: '15px' }}
       />
