@@ -15,10 +15,43 @@ $(document).ready(function () {
       $("input, textarea").css("background-color", "white");
       // 수정 완료로 변경
       $(this).text("수정 완료");
+      //datepicker 사용을 위한 id추가
+      $('input[name="hopeCttStartDt"]' ).attr('id','startDt');
+      $('input[name="hopeCttEndDt"]' ).attr('id','endDt');
       // 클래스명 변경
       $(this).removeClass("upBtn").addClass("saveBtn");
       //우편번호 찾기 버튼 보이게!!
       $(".postcode").css("display", "block");
+      
+      
+      
+      // 시작날짜, 마감날짜 datepicker
+	$('#startDt').datepicker({
+		 dateFormat: 'yy-mm-dd',
+		 // 0 : 오늘 날짜
+		  minDate: 0
+		})
+		.on( "change", function() {
+			$( "#endDt" ).datepicker( "option", "minDate", getDate( this ) )
+		});
+	$( "#endDt" ).datepicker({
+		dateFormat: 'yy-mm-dd',
+  	  	minDate: 0
+        })
+    	.on( "change", function() {
+    	$('#startDt').datepicker( "option", "maxDate", getDate( this ) );
+    });
+	function getDate( element ) {
+
+	      var date;
+	      try {
+	        date = element.value
+	      } catch( error ) {
+	        date = null;
+	      }
+	 
+	      return date;
+	    }
     } //수정완료 버튼 클릭시
     else {
       let info = getRequestInfo();
@@ -58,6 +91,9 @@ $(document).ready(function () {
       $("select").attr("disabled", true);
       //input css 흰색으로 변경
       $("input, textarea").css("background-color", "#eee");
+      //datepicker 사용을 막기 위한 id제거
+      $('input[name="hopeCttStartDt"]' ).removeAttr('id');
+      $('input[name="hopeCttEndDt"]' ).removeAttr('id');
       // 수정 완료로 변경
       $(this).text("수정");
       // 클래스명 변경

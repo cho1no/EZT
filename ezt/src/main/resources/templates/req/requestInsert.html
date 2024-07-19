@@ -7,6 +7,9 @@
 <head>
 
 <script src="https://kit.fontawesome.com/fdebdddca5.js" crossorigin="anonymous"></script>
+<!-- jQuery datePicker -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>   
 <meta charset="UTF-8">
 <title>의뢰 신청</title>
 <style>
@@ -41,9 +44,9 @@
 		</tr>
 		<tr>
 			<th>희망시공일정</th>
-			<td><input type="date" name="hopeCttStartDt" ></td>
+			<td><input id="startDt" type="text" name="hopeCttStartDt" ></td>
 			<td>~</td>
-			<td><input type="date" name="hopeCttEndDt"  ></td>
+			<td><input id="endDt" type="text" name="hopeCttEndDt"  ></td>
 		</tr>
 		<tr>
 			<th>희망시공예산</th>
@@ -104,6 +107,34 @@
 <script src="/js/req/img.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="/js/doc/postcode.js"></script>
+<script>
+// 시작날짜, 마감날짜 datepicker
+$('#startDt').datepicker({
+	 dateFormat: 'yy-mm-dd',
+	 // 0 : 오늘 날짜
+	  minDate: 0
+	})
+	.on( "change", function() {
+		$( "#endDt" ).datepicker( "option", "minDate", getDate( this ) )
+	});
+$( "#endDt" ).datepicker({
+	dateFormat: 'yy-mm-dd',
+	  	minDate: 0
+    })
+	.on( "change", function() {
+	$('#startDt').datepicker( "option", "maxDate", getDate( this ) );
+});
+function getDate( element ) {
 
+      var date;
+      try {
+        date = element.value
+      } catch( error ) {
+        date = null;
+      }
+ 
+      return date;
+    }
+</script>
 </body>
 </html>

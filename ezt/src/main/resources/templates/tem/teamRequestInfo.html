@@ -13,7 +13,7 @@
         border: none;
         font-size: 14px;
         margin: 1px;
-        width: 80px;
+ 
     }
 
     .modal-backdrop {
@@ -68,7 +68,7 @@
                 <td th:if="${#authentication.principal.userVO.usersNo == team.writer}">
                     <button type="button" class="btnn"
                             data-bs-toggle="modal" data-bs-target="#volunteer"
-                            th:attr="onclick=|openModal('${twc.teamNo}', '${twc.categoryCode}' ,'${twc.workCode}','${twc.workCode}' )|">
+                            th:attr="onclick=|openModal('${twc.teamNo}', '${twc.categoryCode}' ,'${twc.workCode}'}' )|">
                         신청자 확인하기([[${twc.vCount}]])
                     </button>
                     <button type="button" class="btnn deUpdate deUpBtn">수정</button>
@@ -111,7 +111,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            	<p>카테고리  : <span style="display: none" id="modalCategoryCode"/></p>
+            	<p>카테고리  : <span id="modalCategoryCode"/></p>
             <div class="row">
             	<div class="col">
                 <table class="table">

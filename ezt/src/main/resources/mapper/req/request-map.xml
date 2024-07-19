@@ -297,6 +297,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		  ,p.comments
 		  ,r.request_no
 		  ,p.proposal_no
+		  ,p.proposal_state
 		  ,NVL(( SELECT contract_no 
 		 		 FROM contract
 		 		 WHERE proposal_no = p.proposal_no ),0) as contract_no
@@ -355,7 +356,6 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		JOIN users u
 		  ON u.users_no = c.worker_info
 	WHERE p.request_no = #{requestNo}
-		and rownum =1
 </select>
 
 <!-- 공사보고 조회 -->
