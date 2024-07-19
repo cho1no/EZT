@@ -46,8 +46,8 @@ export default function RequestCard({ request, onClick }) {
   const renderImg = (
     <Box
       component="img"
-      alt={`${request.savePath}${request.saveName}_${request.originalFileName}.${request.ext}`}
-      src={`/display?fileName=${request.savePath}${request.saveName}_${request.originalFileName}.${request.ext}`}
+      alt={request.originalFileName}
+      src={`/display?fileName=${request.savePath}/${request.saveName}_${request.originalFileName}.${request.ext}`}
       // src="/assets/images/products/product_23.jpg"
       sx={{
         cursor: 'pointer',

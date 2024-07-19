@@ -76,40 +76,52 @@
 	
 	<!-- 유저관련 -->
 	<select id="selectUsers" resultType="UserVO">
-		SELECT users_no
-				, users_id
-				, users_email
-				, users_birth
-				, users_rnn
-				, users_gender
-				, users_name
-				, users_phone
-				, users_state
-				, FIND_COMMONCODE(users_state) users_state_nm
-				, users_nick
-				, users_role
-				, users_join_dt
-				, file_id
-		FROM users
-		ORDER BY users_join_dt DESC
+		SELECT u.users_no
+				, u.users_id
+				, u.users_email
+				, u.users_birth
+				, u.users_rnn
+				, u.users_gender
+				, u.users_name
+				, u.users_phone
+				, u.users_state
+				, FIND_COMMONCODE(u.users_state) users_state_nm
+				, u.users_nick
+				, u.users_role
+				, u.users_join_dt
+				, u.file_id
+				, f.save_path
+				, f.save_name
+				, f.original_file_name
+				, f.ext
+		FROM users u
+		LEFT JOIN file_detail_info f
+		ON u.file_id = f.file_id
+		ORDER BY u.users_join_dt DESC
 	</select>
 	<select id="selectUser" parameterType="int" resultType="UserVO">
-		SELECT users_no
-				, users_id
-				, users_email
-				, users_birth
-				, users_rnn
-				, users_gender
-				, users_name
-				, users_phone
-				, FIND_COMMONCODE(users_state) users_state
-				, users_nick
-				, users_role
-				, users_join_dt
-				, users_state_change_dt
-				, file_id
+		SELECT u.users_no
+				, u.users_id
+				, u.users_email
+				, u.users_birth
+				, u.users_rnn
+				, u.users_gender
+				, u.users_name
+				, u.users_phone
+				, u.users_state
+				, FIND_COMMONCODE(u.users_state) users_state_nm
+				, u.users_nick
+				, u.users_role
+				, u.users_join_dt
+				, u.file_id
+				, f.save_path
+				, f.save_name
+				, f.original_file_name
+				, f.ext
 		FROM users
-		WHERE users_no = #{uno}
+		LEFT JOIN file_detail_info f
+		ON u.file_id = f.file_id
+		WHERE u.users_no = #{uno}
 	</select>
 	
 	<update id="updateUsersStatePause" parameterType="int">
@@ -210,7 +222,13 @@
 				, c.career_access_tf
 				, FIND_COMMONCODE(c.career_access_tf) career_access_tf_Nm
 				, c.write_dt
+				, f.save_path
+				, f.save_name
+				, f.original_file_name
+				, f.ext
 		FROM career c
+		LEFT JOIN file_detail_info f
+		ON c.file_id = f.file_id
 		WHERE career_no = #{no}
 		ORDER BY write_dt DESC
 	</select>
