@@ -97,39 +97,42 @@ $(document).ready(function() {
     });
 
 
-	$('.endBtn').click(function(){
-		let tno = $('#tno').val();
-		$.ajax({
-			url: '/team/completeTeam?teamNo=' + tno,
-			type: 'post',
-			success: function(){
-				Swal.fire({
-						   title: '팀원 모집이 완료되었나요?',
-						   text: '승인 시 이후 추가 팀원 모집은 불가합니다.',
-						   icon: 'question',
-						   
-						   showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
-						   confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
-						   cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-						   confirmButtonText: '승인', // confirm 버튼 텍스트 지정
-						   cancelButtonText: '취소', // cancel 버튼 텍스트 지정
-						   
-						   
-						   
-					}).then(result => {
-					   // 만약 Promise리턴을 받으면,
-					   if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
-					   
-					      Swal.fire('팀원모집이 완료되었습니다.', '', 'success');
-					   }
+$('.endBtn').click(function(){
+	let tno = $('#tno').val();
+	
+		Swal.fire({
+			   title: '팀원 모집이 완료되었나요?',
+			   text: '승인 시 이후 추가 팀원 모집은 불가합니다.',
+			   icon: 'question',
+			   
+			   showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+			   confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+			   cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+			   confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+			   cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+			   
+			   
+			   
+		}).then(result => {
+		   // 만약 Promise리턴을 받으면,
+		   if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+		      	Swal.fire('팀원모집이 완료되었습니다.', '', 'success');
+			   $.ajax({
+					url: '/team/completeTeam?teamNo=' + tno,
+					type: 'post',
+					success: function(){
+			   			}
+					})
+					.then(function(){					
+							location.href = "/team/requestList";
+						
 					});
 			}
-		})
-				
+		})	
 	})
 });
 
- function openModal(teamNo, workCode, categoryCode){
+ function openModal(teamNo, workCode){
 	 // span 태그에 workCode 값 설정
     $('#modalCategoryCode').text(workCode); 
 
@@ -137,7 +140,7 @@ $(document).ready(function() {
     $.ajax({
         url: '/team/volunteerList',
         method: 'GET',
-        data: { teamNo: teamNo, workCode: workCode },
+        data: { teamNo: teamNo, workCode: workCode},
         success: function(result) {
             $('#volunteerBody').html('');
             for (let i = 0; i < result.length; i++) {
@@ -172,6 +175,7 @@ $(document).ready(function() {
 		$('#worker').text($(tr).data("worker"));
 		$('#workCode').val($(tr).data("workcode"));
 		$('#usersNo').val($(tr).data("usersno"));
+		$('#modalCategoryCode').text($(tr).data("workcode")); 
 	}
 	
 	function openApplyModal(teamNo, categoryCode, workCode) {
