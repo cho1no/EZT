@@ -43,6 +43,7 @@ FROM (
 	            ,f.save_path
 	            ,f.ext
 	            
+	            
 		  FROM review r
 		  	JOIN request q 	ON r.request_no = q.request_no
 	        LEFT OUTER JOIN file_detail_info f ON( r.file_id = f.file_id and f.boss_tf = 'Y')

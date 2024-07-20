@@ -62,10 +62,9 @@
 		font-size: 14px;
 		color: red;
 	  }
-	  .active{
-	  	background-color : rgb(192, 192, 192);
-	  	color:white;
-	  }
+	  .cursor {
+        cursor: pointer;
+      }
     </style>
     <title>의뢰 상세페이지</title>
   </head>
@@ -441,7 +440,7 @@
           </tr>
           <tr>
             <th>하자보수기간</th>
-            <td><input type="text" readonly /></td>
+            <td id="cttStartDtPlus"></td>
           </tr>
         </table>
       </div>
@@ -495,7 +494,7 @@
           <th>승인상태</th>
         </tr>
         <th:block th:each="cttReport : ${cttReports}">
-          <tr th:onClick="'window.reportInfoForm(' + ${cttReport.cttReportNo} + ')'">
+          <tr class="cursor" th:onClick="'window.reportInfoForm(' + ${cttReport.cttReportNo} + ')'">
             <td>[[${cttReport.cttReportNo}]]</td>
             <td>[[${cttReport.title}]]</td>
             <td>[[${cttReport.cttDivision}]]</td>
@@ -625,13 +624,28 @@
 	      });
 		let proposalList = [[${proposalList}]]; 
 		let contract = [[${contract}]];
-	
+		
 		
 	// 숫자 콤마 함수
 	function comma(str) {
 		str = String(str);
 		return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,').replace(/^0+/, '');
 	}
+	//하자보수기간계산
+	function cttStartDtPlus(cttStartDt){
+		cttStartDt.setFullYear(cttStartDt.getFullYear() + 1)
+		
+		// 날짜 형식 설정
+        var year = cttStartDt.getFullYear();
+        var month = (cttStartDt.getMonth() + 1).toString().padStart(2, '0');
+        var day = cttStartDt.getDate().toString().padStart(2, '0');
+        var dateFormat = year + '-' + month + '-' + day;
+
+		$('#cttStartDtPlus').text(dateFormat);
+	}
+		let cttStartDt = new Date([[${contract.cttStartDt}]]);
+
+	   cttStartDtPlus(cttStartDt);
     </script>
     <script src="/js/req/img.js"></script>
   </body>
