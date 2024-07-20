@@ -93,7 +93,7 @@ public class FindController {
 		
 		model.addAttribute("portfolioInfo", pvo);
 		model.addAttribute("userInfo",adminService.getUser(pvo.getUsersNo()));
-		model.addAttribute("categories", workerService.selectCategoryInfo(pvo.getUsersNo()));
+		//model.addAttribute("categories", workerService.selectCategoryInfo(pvo.getUsersNo()));
 		model.addAttribute("portFiles", fwMap.selectPortInfoFiles(pvo.getFileId()));
 		return "wkr/workerPortfolioInfo";
 	}
