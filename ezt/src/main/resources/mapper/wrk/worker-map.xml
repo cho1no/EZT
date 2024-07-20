@@ -214,6 +214,9 @@
 				          FROM contract c
 				          WHERE c.proposal_no = p.proposal_no
 				          AND rownum = 1) contract_no
+				       , (SELECT r.title
+                          FROM request r
+                          WHERE r.request_no = p.request_no) as title
 				FROM proposal p
 				WHERE worker = #{usersNo}
 			    <if test="proposalState != null and proposalState != ''.toString()">

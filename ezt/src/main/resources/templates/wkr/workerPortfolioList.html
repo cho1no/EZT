@@ -53,6 +53,8 @@
             th:onclick="|location.href='@{/find/workerPortfolio(portfolioNo=${ptf.portfolioNo})}'|"
           >
             <img
+            style="width: 100%"
+              class="card-img-top"
               th:src="|/display?fileName=${#strings.replace(ptf.savePath, '\', '/')}/${ptf.saveName}_${ptf.originalFileName}.${ptf.ext}|"
               alt="null"
             />
