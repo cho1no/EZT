@@ -62,15 +62,15 @@
 	            class="card-img-top" 
 				alt="..."
 			  >
-	          <h5 class="card-title">이름:[[${wkl.usersName}]]</h5>
+	          <strong class="card-title">[[${wkl.usersName}]]</strong>
 	          <div  style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
-	          <span>분야:</span>
+	          <strong>분야 </strong>
 	          <th:block th:each="ctc : ${wkl.categoryCode}">
 	            <span class="card-text">[[${ctc.CATEGORY_CODE}]] </span>
 	          </th:block>
 	          </div>
 	          <div  style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
-	          <span>지역:</span>
+	          <strong>지역 </strong>
 	          <th:block th:each="rcd : ${wkl.regionCode}">
 	            <span class="card-text">[[${rcd.REGION_CODE}]]</span>
 	          </th:block>

@@ -44,12 +44,12 @@
 
 <div class="row row-cols-3 row-cols-md-2 g-2">
   <th:block th:each="req : ${requestList}">
-	  <div class="col-lg-4 col-md-6 col-sm-12">
+	  <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
 	    <div class="card">
 <!-- 	      <img src="..." class="card-img-top" alt="..."> -->
 	      <div class="card-body">
 	        <div class="d-flex justify-content-between">
-	        <h5 class="card-title">[[${#strings.abbreviate(req.title,10)}]]</h5>
+	        <strong class="card-title">[[${#strings.abbreviate(req.title,10)}]]</strong>
 	        <p class="card-text reqState"><span>[[${req.requestStateNm}]]</span></p>
 	        </div>
 	        <div class="d-flex justify-content-between">
