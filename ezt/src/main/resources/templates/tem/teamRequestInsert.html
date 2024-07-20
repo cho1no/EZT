@@ -1,61 +1,104 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layouts/default_layout}"
-      layout:fragment="Content">
-<head>
-<style>
-.cursor {
-	cursor:pointer;
-	font-size:20px;
-	text-decoration: underline;
-}
-</style>
-    <meta charset="UTF-8">
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{common/layouts/default_layout}"
+  layout:fragment="Content"
+>
+  <head>
+    <style>
+      .cursor {
+        cursor: pointer;
+        font-size: 20px;
+        text-decoration: underline;
+      }
+    </style>
+    <meta charset="UTF-8" />
     <title>팀 모집 글쓰기</title>
-</head>
-<body>
-<form name="insertTeam">
-    <h4>팀원 모집 글 작성</h4>
-    <input type="hidden" name="contractNo" th:value="${contractNo}">
-    <table class="table">
-        <tbody>
-            <tr>
-                <td><input type="hidden"  name="writer" th:value="${#authentication.principal.userNo}"></td>
-            </tr>
-            <tr>
+  </head>
+  <body>
+    <div class="w-75" id="findWorkerInfo" style="margin: 0 auto">
+      <div class="p-5 border rounded-4 border-light-subtle bg-white">
+        <form name="insertTeam">
+          <div class="ezt-section-title mb-5">
+            <div class="text-center">
+              <h2 class="m-0">팀원 모집 글 작성</h2>
+              <b style="font-size: 14px; color: #89ba16; font-weight: 500"
+                >팀원 모집하기</b
+              >
+            </div>
+          </div>
+          <input type="hidden" name="contractNo" th:value="${contractNo}" />
+          <input
+            type="hidden"
+            name="writer"
+            th:value="${#authentication.principal.userNo}"
+          />
+          <input
+            type="hidden"
+            name="workCategoryVO[0].hireCompleteTf"
+            value="F"
+          />
+          <a
+            class="float-end me-2"
+            style="cursor: pointer; color: #89ba16"
+            th:onclick="|window.open('/request/info?requestNo=${request.requestNo}')|"
+            >의뢰 바로가기 ></a
+          >
+          <table class="table">
+            <tbody>
+              <tr>
                 <th>작업 제목</th>
-                <td colspan="4"><input type="text" class="form-control" name="workTitle"></td>
-            </tr>
-            <tr>
+                <td colspan="2">
+                  <input type="text" class="form-control" name="workTitle" />
+                </td>
+              </tr>
+              <tr>
                 <th>작업 내용</th>
-                <td colspan="4"><textarea name="workContent" class="form-control" ></textarea></td>
-            </tr>
-            <tr>
-                <th>의뢰 내용</th>
-                <td colspan="4" class="cursor">
-                <a th:onclick="|window.open('/request/info?requestNo=${request.requestNo}')|">의뢰 바로가기</a>
+                <td colspan="2">
+                  <textarea
+                    rows="10"
+                    name="workContent"
+                    class="form-control"
+                  ></textarea>
                 </td>
-            </tr>
-            <tr id="detail-template">
-                <th></th>
+              </tr>
+              <tr id="detail-template">
+                <th>카테고리</th>
                 <td>
-                    <select name="workCategoryVO[0].workCode">
-                        <option th:each="category : ${categoryCode}"
-                                th:value="${category.codeNo}"
-                                th:text="${category.codeName}">
-                        </option>
-                    </select>
+                  <select name="workCategoryVO[0].workCode" class="form-select">
+                    <option
+                      th:each="category : ${categoryCode}"
+                      th:value="${category.codeNo}"
+                      th:text="${category.codeName}"
+                    ></option>
+                  </select>
                 </td>
-                <td><input type="text"  name="workCategoryVO[0].headcount">명</td>
-                <input type="hidden" name="workCategoryVO[0].hireCompleteTf" value="F">
-            </tr>
-        </tbody>
-    </table>
-    <button type="button" class="btn btn-primary insert">등록</button>
-    <button id="btn-add-row" class="btn btn-primary" type="button">+</button>
-    <button id="btn-delete-row" class="btn btn-primary" type="button">ㅡ</button>
-</form>
-<script src="/js/tem/teamRequestInsert.js"></script>
-</body>
+                <td>
+                  <span class="w-25" style="display: inline-block">
+                    <input
+                      type="number"
+                      name="workCategoryVO[0].headcount"
+                      class="form-control"
+                    />
+                  </span>
+                  <span>명</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button id="btn-add-row" class="btn btn-primary" type="button">
+            +
+          </button>
+          <button id="btn-delete-row" class="btn btn-primary" type="button">
+            ㅡ
+          </button>
+          <button type="button" class="btn btn-primary insert float-end">
+            등록
+          </button>
+        </form>
+      </div>
+    </div>
+    <script src="/js/tem/teamRequestInsert.js"></script>
+  </body>
 </html>

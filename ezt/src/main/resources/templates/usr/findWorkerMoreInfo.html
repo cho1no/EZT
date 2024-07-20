@@ -9,169 +9,263 @@
     <meta charset="UTF-8" />
     <title>작업자 상세정보</title>
     <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.css"
+    />
     <style>
-      .slide-container{
+      .slide-container {
         width: 100%;
         padding: 40px 0;
       }
-      .slide-content{
+      .slide-content {
         margin: 0 40px;
         overflow: hidden;
       }
       .image-content,
-      .card-content{
+      .card-content {
         display: flex;
         flex-direction: column;
         align-items: center;
       }
-      .image-content{
+      .image-content {
         position: relative;
       }
-      .card-image{
+      .card-image {
         position: relative;
-        background: #FFF;
+        background: #fff;
       }
-      .card-image .card-img{
+      .card-image .card-img {
         height: 100%;
         width: 100%;
         object-fit: cover;
       }
-      .name{
+      .name {
         font-size: 18px;
         font-weight: 500;
         color: #333;
       }
-      .description{
+      .description {
         font-size: 14px;
         color: #707070;
         text-align: center;
       }
-      .swiper-navBtn{
+      .swiper-navBtn {
         color: #89ba16;
         transition: color 0.3s ease;
       }
-      .swiper-navBtn:hover{
+      .swiper-navBtn:hover {
         color: #7ba714;
       }
       .swiper-navBtn::before,
-      .swiper-navBtn::after{
+      .swiper-navBtn::after {
         font-size: 38px;
       }
-      .swiper-button-next{
+      .swiper-button-next {
         right: 0;
       }
-      .swiper-button-prev{
+      .swiper-button-prev {
         left: 0;
       }
-      .swiper-pagination-bullet{
+      .swiper-pagination-bullet {
         background-color: #89ba16;
         opacity: 1;
       }
-      .swiper-pagination-bullet-active{
+      .swiper-pagination-bullet-active {
         background-color: #7ba714;
       }
 
       @media screen and (max-width: 768px) {
-        .slide-content{
+        .slide-content {
           margin: 0 10px;
         }
-        .swiper-navBtn{
+        .swiper-navBtn {
           display: none;
         }
       }
+      .workerImg {
+        width: 250px;
+        height: 250px;
+        border: 2px solid #dee2e6;
+        border-radius: 50%;
+        overflow: hidden;
+      }
+      .workerImg > img {
+        width: 100%;
+      }
 
+      #ezt-tag {
+        font-weight: 300 !important;
+      }
+      #findWorkerInfo {
+        color: #000;
+      }
+      #ezt-table th {
+        text-wrap: nowrap;
+      }
+      #ezt-table td ul {
+        margin: 0;
+        padding: 0;
+      }
     </style>
   </head>
   <body>
-    <div>
-      <div class="row">
-        <div class="col-4">
-		  <div class="card">
-			  <img
-			    style="width: 100%; height: 100%;"
-			    th:if="${userInfo.fileId != 0}" 
-			    th:src="|/display?fileName=${#strings.replace(userInfo.savePath, '\', '/')}/${userInfo.saveName}_${userInfo.originalFileName}.${userInfo.ext}|" 
-				alt="작업자 프로필"
-			  >
-			  <img
-			    style="width: 100%; height: 100%;"
-			    th:unless="${userInfo.fileId != 0}"
-			    src="/images/usr/default_user.png" 
-				alt="작업자 프로필"
-			  >
-		  </div>
-		</div>
-          <div class="col-4">
-            <p class="mb-1">이름: [[${userInfo.usersName}]]</p>
-            <p class="mt-3 mb-1">주 시공분야</p>
-            <th:block th:each="cate : ${categories}">
-              <span class="border rounded-4 pt-1 pb-1 px-2 bg-success text-light">
-				[[${cate.CATEGORY_CODE}]]
-			  </span>
-            </th:block>
-            <p class="mt-3 mb-1">주 활동지역</p>
-            <th:block th:each="region : ${regions}">
-              <span class="border rounded-4 pt-1 pb-1 px-2 bg-success text-light">
-				[[${region.REGION_CODE}]]
-			  </span>
-            </th:block>
-          </div>
-          <div class="col-4">
-            <p>경력사항</p>
-            <th:block th:each="career : ${careers}">
-              <span>[[${career.careerInfo}]]</span>
-            </th:block>
-            <p>자격증</p>
-            <th:block th:each="licenses : ${licenses}">
-              <span>[[${licenses.licenseInfo}]]</span>
-            </th:block>
-            <p>후기평점 : [[${avgReview}]]/5([[${cntReview}]])</p>
+    <div class="w-75" id="findWorkerInfo" style="margin: 0 auto">
+      <div class="p-5 border rounded-4 border-light-subtle bg-white">
+        <div class="">
+          <div class="workerImg p-0" style="margin: 0 auto">
+            <img
+              style="width: 100%"
+              th:if="${userInfo.fileId != 0}"
+              th:src="|/display?fileName=${#strings.replace(userInfo.savePath,
+            '\',
+            '/')}/${userInfo.saveName}_${userInfo.originalFileName}.${userInfo.ext}|"
+              alt="작업자 프로필"
+            />
+            <img
+              style="width: 100%"
+              th:unless="${userInfo.fileId != 0}"
+              src="/images/usr/default_user.png"
+              alt="작업자 프로필"
+            />
           </div>
         </div>
-      <div class="row">
-        <h5>포트폴리오</h5>
-        <div class="slide-container swiper">
-          <div class="slide-content">
-            <div class="card-wrapper swiper-wrapper">
-            <th:block th:each="pf : ${portfolioList}">
-              <div  class="card swiper-slide">
-                <div class="image-content" >
-                  <div class="card-image" th:onclick="|location.href='@{/find/workerPortfolio(portfolioNo=${pf.portfolioNo})}'|">
-                    <img 
-					  th:src="|/display?fileName=${#strings.replace(pf.savePath, '\', '/')}/${pf.saveName}_${pf.originalFileName}.${pf.ext}|"
-					  class="card-img-top"
-					  alt="..."
-					>
-                  </div>
-                </div>
-                <div class="card-content">
-                  <p class="description">[[${pf.title}]]</p>
-                </div>
-              </div>
-            <div>[[${portfolioList}]]</div>
-            </th:block>
-          </div>
-          <div class="swiper-button-next swiper-navBtn"></div>
-          <div class="swiper-button-prev swiper-navBtn"></div>
-          <div class="swiper-pagination"></div>
+        <div class="">
+          <h2 class="mt-2 mb-5 text-center">[[${userInfo.usersName}]]</h2>
+          <table class="table mb-5" id="ezt-table">
+            <tbody>
+              <tr>
+                <th>주 시공분야</th>
+                <td>
+                  <ul>
+                    <th:block th:each="cate : ${categories}">
+                      <li
+                        style="display: inline-block"
+                        class="border rounded-4 pt-1 pb-1 px-2 bg-success text-light me-1"
+                      >
+                        [[${cate.CATEGORY_CODE}]]
+                      </li>
+                    </th:block>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <th>주 활동지역</th>
+                <td>
+                  <ul>
+                    <th:block th:each="region : ${regions}">
+                      <li
+                        style="display: inline-block"
+                        class="border rounded-4 pt-1 pb-1 px-2 bg-success text-light me-1"
+                      >
+                        [[${region.REGION_CODE}]]
+                      </li>
+                    </th:block>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <th nowrap>경력사항</th>
+                <td>
+                  <th:block th:if="${not #lists.isEmpty(careers)}">
+                    <th:block th:each="career : ${careers}">
+                      <span>[[${career.careerInfo}]]</span>
+                    </th:block>
+                  </th:block>
+                  <th:block th:unless="${not #lists.isEmpty(careers)}">
+                    경력 없음
+                  </th:block>
+                </td>
+              </tr>
+              <tr>
+                <th>자격증</th>
+                <td>
+                  <th:block th:if="${not #lists.isEmpty(licenses)}">
+                    <th:block th:each="licenses : ${licenses}">
+                      <span>[[${licenses.licenseInfo}]]</span>
+                    </th:block>
+                  </th:block>
+                  <th:block th:unless="${not #lists.isEmpty(licenses)}">
+                    자격증 없음
+                  </th:block>
+                </td>
+              </tr>
+              <tr>
+                <th>후기평점</th>
+                <td>[[${avgReview}]]/5([[${cntReview}]])</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-      </div>
-      <div class="row">
-        <h5>작업자가 받은 리뷰</h5>
-        <div class="slide-container swiper">
-          <div class="slide-content">
-            <div class="card-wrapper swiper-wrapper">
-                <th:block th:each="rev : ${reviewList}">
-                  <div  class="card swiper-slide">
+        <div class="row" th:if="${not #lists.isEmpty(portfolioList)}">
+          <h5>포트폴리오</h5>
+          <div class="slide-container swiper">
+            <div class="slide-content">
+              <div class="card-wrapper swiper-wrapper">
+                <th:block th:each="pf : ${portfolioList}">
+                  <div
+                    class="card swiper-slide"
+                    style="cursor: pointer; width: 100%"
+                  >
                     <div class="image-content">
-                      <div class="card-image" th:onclick="|location.href='@{/review/info(reviewNo=${rev.reviewNo})}'|">
-                        <img 
-						  th:src="|/display?fileName=${#strings.replace(rev.savePath, '\', '/')}/${rev.saveName}_${rev.originalFileName}.${rev.ext}|"
-						  class="card-img-top"
-						  alt="..."
-						>
+                      <div
+                        class="card-image"
+                        style="
+                          width: 100%;
+                          height: 150px;
+                          overflow: hidden;
+                          display: flex;
+                          align-items: center;
+                          border-bottom: 1px solid #ddd;
+                        "
+                        th:onclick="|location.href='@{/find/workerPortfolio(portfolioNo=${pf.portfolioNo})}'|"
+                      >
+                        <img
+                          style="width: 100%; margin: 0 auto"
+                          th:src="|/display?fileName=${#strings.replace(pf.savePath, '\', '/')}/${pf.saveName}_${pf.originalFileName}.${pf.ext}|"
+                          class="card-img-top"
+                          alt="..."
+                        />
+                      </div>
+                    </div>
+                    <div class="card-content">
+                      <p class="description">[[${pf.title}]]</p>
+                    </div>
+                  </div>
+                </th:block>
+              </div>
+              <div class="swiper-button-next swiper-navBtn"></div>
+              <div class="swiper-button-prev swiper-navBtn"></div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row" th:if="${not #lists.isEmpty(reviewList)}">
+          <h5>작업자가 받은 리뷰</h5>
+          <div class="slide-container swiper">
+            <div class="slide-content">
+              <div class="card-wrapper swiper-wrapper">
+                <th:block th:each="rev : ${reviewList}">
+                  <div class="card swiper-slide">
+                    <div class="image-content">
+                      <div
+                        class="card-image"
+                        style="
+                          width: 100%;
+                          height: 150px;
+                          overflow: hidden;
+                          display: flex;
+                          align-items: center;
+                          border-bottom: 1px solid #ddd;
+                        "
+                        th:onclick="|location.href='@{/review/info(reviewNo=${rev.reviewNo})}'|"
+                      >
+                        <img
+                          style="width: 100%; margin: 0 auto"
+                          th:src="|/display?fileName=${#strings.replace(rev.savePath, '\', '/')}/${rev.saveName}_${rev.originalFileName}.${rev.ext}|"
+                          class="card-img-top"
+                          alt="..."
+                        />
                       </div>
                     </div>
                     <div class="card-content">
@@ -179,28 +273,28 @@
                     </div>
                   </div>
                 </th:block>
+              </div>
+              <div class="swiper-button-next swiper-navBtn"></div>
+              <div class="swiper-button-prev swiper-navBtn"></div>
+              <div class="swiper-pagination"></div>
             </div>
-            <div class="swiper-button-next swiper-navBtn"></div>
-            <div class="swiper-button-prev swiper-navBtn"></div>
-            <div class="swiper-pagination"></div>
           </div>
         </div>
       </div>
-    </div>  
-      <!-- Swiper JS -->
-      <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.js"></script>
+    </div>
+    <!-- Swiper JS -->
+    <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.js"></script>
 
-      <!-- JavaScript -->
-      <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/script.js"></script>
-      <script th:inline="javascript">
-
+    <!-- JavaScript -->
+    <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/script.js"></script>
+    <script th:inline="javascript">
       var swiper = new Swiper(".slide-content", {
-        slidesPerView: 5,
+        slidesPerView: 4,
         spaceBetween: 25,
         loop: false,
-        centerSlide: 'true',
-        fade: 'true',
-        grabCursor: 'true',
+        centerSlide: "true",
+        fade: "true",
+        grabCursor: "true",
         pagination: {
           el: ".swiper-pagination",
           clickable: true,
@@ -211,25 +305,21 @@
           prevEl: ".swiper-button-prev",
         },
 
-        breakpoints:{
-            0: {
-                slidesPerView: 1,
-            },
-            200: {
-                slidesPerView: 2,
-            },
-            400: {
-                slidesPerView: 3,
-            },
-            600: {
-                slidesPerView: 4,
-            },
-            800: {
-                slidesPerView: 5,
-            },
+        breakpoints: {
+          0: {
+            slidesPerView: 1,
+          },
+          200: {
+            slidesPerView: 2,
+          },
+          400: {
+            slidesPerView: 3,
+          },
+          600: {
+            slidesPerView: 4,
+          },
         },
       });
-
     </script>
   </body>
 </html>
