@@ -28,12 +28,12 @@
           <div class="col">
             <div class="text-center workerImg" style="margin: 0 auto">
               <img
-                th:if="${request.fileId != 0}"
-                th:src="|/display?fileName=${#strings.replace(request.savePath, '\', '/')}/${request.saveName}_${request.originalFileName}.${request.ext}|"
+                th:if="${workerInfo.fileId != 0}"
+                th:src="|/display?fileName=${#strings.replace(workerInfo.savePath, '\', '/')}/${workerInfo.saveName}_${workerInfo.originalFileName}.${workerInfo.ext}|"
                 alt="작업자 프로필 이미지"
               />
               <img
-                th:unless="${request.fileId != 0}"
+                th:unless="${workerInfo.fileId != 0}"
                 src="/images/usr/default_user.png"
                 alt="작업자 프로필 이미지"
               />
