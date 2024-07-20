@@ -65,7 +65,16 @@
 	</select>
 	
 	<select id="selectPortfolioInfo" resultType="PortfolioVO">
-		SELECT *
+		SELECT portfolio_no
+			   , users_no
+			   , file_id
+			   , title
+			   , work_time
+			   , content
+			   , FIND_COMMONCODE(pyung) as pyung
+			   , price
+			   , write_dt
+			   , FIND_COMMONCODE(category_code) as category_code
 		FROM portfolio
 		WHERE portfolio_no = #{pno}
 	</select>

@@ -68,7 +68,7 @@
                 <td th:if="${#authentication.principal.userVO.usersNo == team.writer}">
                     <button type="button" class="btnn"
                             data-bs-toggle="modal" data-bs-target="#volunteer"
-                            th:attr="onclick=|openModal('${twc.teamNo}', '${twc.categoryCode}' ,'${twc.workCode}'}' )|">
+                            th:attr="onclick=|openModal('${twc.teamNo}', '${twc.categoryCode}' ,'${twc.workCode}')|">
                         신청자 확인하기([[${twc.vCount}]])
                     </button>
                     <button type="button" class="btnn deUpdate deUpBtn">수정</button>
@@ -178,7 +178,7 @@
                         </tr>
                         <tr>
                             <th>반려사유</th>
-                            <td><textarea name="content" id="content"></textarea></td>
+                            <td><textarea class="form-control" name="content" id="content"></textarea></td>
                         </tr>
                         <tr>
                             <td colspan="2"><button id="denyBtn" class="btn btn-primary">반려하기</button></td>

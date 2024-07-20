@@ -42,4 +42,5 @@ public class ProposalVO {
 	private long total;  //총금액
 	private int contractNo;
 	
+	private String title;
 }

@@ -134,9 +134,9 @@ $('.endBtn').click(function(){
 	})
 });
 
- function openModal(teamNo, workCode){
+ function openModal(teamNo, workCode, workCodeNm){
 	 // span 태그에 workCode 값 설정
-    $('#modalCategoryCode').text(workCode); 
+    $('#modalCategoryCode').text(workCodeNm); 
 
     // AJAX 요청 보내기
     $.ajax({

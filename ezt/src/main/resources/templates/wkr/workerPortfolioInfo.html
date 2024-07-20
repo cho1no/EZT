@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.css">
 <style>
       .slide-container{
-        width: 80%;
+        width: 100%;
         padding: 40px 0;
       }
       .slide-content{
@@ -29,11 +29,9 @@
       .card-image{
         position: relative;
         background: #FFF;
-      }
-      .card-image .card-img{
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
+        width:100%;
+        display:flex;
+        align-items: center;
       }
       .name{
         font-size: 18px;
@@ -44,6 +42,10 @@
         font-size: 14px;
         color: #707070;
         text-align: center;
+      }
+      .swiper{
+      	margin-left:0;
+      	margin-right:0;
       }
       .swiper-navBtn{
         color: #89ba16;
@@ -84,14 +86,17 @@
 <body>
 <h4>포트폴리오 상세</h4>
 <div class="row">
+  <div class="col-lg-6 col-md-12">
         <div class="slide-container swiper">
           <div class="slide-content">
             <div class="card-wrapper swiper-wrapper">
               <th:block th:each="pf : ${portFiles}">
-               <div  class="card swiper-slide">
-                   <div class="card-image">
-                     <img src="/images/interior.jpg" class="card-img-top" alt="...">
-                   </div>
+               <div  class="card swiper-slide" style="width:100%; display:flex; align-items: center;">
+                 <img
+                   style="width: 100%;"
+                   th:src="|/display?fileName=${#strings.replace(pf.savePath, '\', '/')}/${pf.saveName}_${pf.originalFileName}.${pf.ext}|"
+                   alt="..."
+                 >
                </div>
             </div>
             <div class="swiper-button-next swiper-navBtn"></div>
@@ -101,65 +106,88 @@
         </div>
       </th:block>
     </div>
-
-    <ul class="list-group list-group-flush">
-  	  <li class="list-group-item">작업자: [[${userInfo.usersName}]]</li>
-	  <li class="list-group-item">작업기간: [[${portfolioInfo.workTime}]]</li>
-	  <li class="list-group-item">
-	    작업분야: 
-		<th:block th:each="category : ${categories}">
-	      <span>[[${category.CATEGORY_CODE}]]</span>
-	    </th:block>
-      </li>
-	  <li id="portContent" class="list-group-item">내용: [[${portfolioInfo.content}]]</li>
-	</ul>
+    <div class="col-lg-6 col-md-12" style="margin-top:40px;">
+      <table id="info" class="table">
+        <tr style="display: none;">
+          <th></th>
+          <td></td>
+        </tr>
+        
+        <tr>
+          <th>작업자</th>
+          <td>[[${userInfo.usersName}]]</td>
+        <tr>
+        <tr>
+          <th>시공기간</th>
+          <td>[[${portfolioInfo.workTime}]]</td>
+        <tr>
+        <tr>
+          <th>제목</th>
+          <td>[[${portfolioInfo.title}]]</td>
+        <tr>
+        <tr>
+          <th>내용</th>
+          <td>[[${portfolioInfo.content}]]</td>
+        <tr>
+        <tr>
+          <th>평수</th>
+          <td>[[${portfolioInfo.pyung}]]</td>
+        <tr>
+        <tr>
+          <th>가격</th>
+          <td>[[${#numbers.formatDecimal(portfolioInfo.price, 0, 'COMMA', 0, 'POINT')}]]</td>
+        <tr>
+        <tr>
+          <th>시공분야</th>
+          <td>[[${portfolioInfo.categoryCode}]]</td>
+        <tr>
+        <tr>
+          <th>작성일</th>
+          <td>[[${#dates.format(portfolioInfo.writeDt, 'yyyy-MM-dd')}]]</td>
+        <tr>
+         
+      </table>
+   
+	</div>
+	</div>
  <!-- Swiper JS -->
-      <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.js"></script>
+ <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/swiper-bundle.min.js"></script>
 
-      <!-- JavaScript -->
-      <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/script.js"></script>
-      <script th:inline="javascript">
+ <!-- JavaScript -->
+ <script src="//cdn.jsdelivr.net/gh/freeps2/a7rarpress@main/script.js"></script>
+ <script th:inline="javascript">
 
-      var swiper = new Swiper(".slide-content", {
-        slidesPerView: 1,
-        spaceBetween: 25,
-        loop: false,
-        centerSlide: 'true',
-        fade: 'true',
-        grabCursor: 'true',
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-          dynamicBullets: true,
+  var swiper = new Swiper(".slide-content", {
+    slidesPerView: 1,
+    spaceBetween: 25,
+    loop: false,
+    centerSlide: 'true',
+    fade: 'true',
+    grabCursor: 'true',
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+      dynamicBullets: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+
+    breakpoints:{
+        0: {
+            slidesPerView: 1,
         },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
+        
+    },
+  });
 
-        breakpoints:{
-            0: {
-                slidesPerView: 1,
-            },
-            
-        },
-      });
+  function getHtml(){
+var html = $("#portContent").text().replace(/(?:\r\n|\r|\n)/g, '<br />');
+$("#portContent").html(html);
+}
 
-      function getHtml(){
-  		var html = $("#portContent").text().replace(/(?:\r\n|\r|\n)/g, '<br />');
-  		$("#portContent").html(html);
-	  	}
-	  	
-	  	getHtml();
-	 // 첨부 파일 다운로드 
-// 		for(i = 0; i < fileList.length; i++){
-// 			var path = fileList[i].savePath.replaceAll('\\', '/');
-// 			var orgname = fileList[i].originalFileName;
-// 			var name = fileList[i].saveName;
-// 			var ext = fileList[i].ext;
-// 			//console.log(path+'/'+name);
-// 			$('#fileDownload').append(`<p><a href="download?fileName=${path}/${name}_${orgname}.${ext}">${orgname}.${ext}</a></p> `)
-// 		}
-    </script>
+getHtml();
+</script>
 </body>
 </html>

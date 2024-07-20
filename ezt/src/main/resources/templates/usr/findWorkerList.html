@@ -21,16 +21,16 @@
     <div class="row mb-1 form-group">
   	  <div class="d-flex flex-wrap gap-2" role="group" aria-label="Basic checkbox toggle button group">
 		<th:block th:each="region : ${regionCode}">
-		  <input type="checkbox" name="regionCode" th:id="${region.codeNo}" class="btn-check"  th:value="${region.codeNo}" th:checked="${findWorkerCriteria.regionCode}!= null and ${#lists.contains(findWorkerCriteria.regionCode, region.codeNo)}">
-		  <label th:for="${region.codeNo}" class="btn btn-sm btn-outline-success m-0">[[${region.codeName}]]</label>
+		    <input type="checkbox" name="regionCode" th:id="${region.codeNo}" class="btn-check"  th:value="${region.codeNo}" th:checked="${findWorkerCriteria.regionCode}!= null and ${#lists.contains(findWorkerCriteria.regionCode, region.codeNo)}">
+		    <label th:for="${region.codeNo}" class="btn btn-sm btn-outline-success m-0">[[${region.codeName}]]</label>
 		</th:block>
 	  </div>
     </div>
     <div class="row mb-3 form-group">
 	  <div class="d-flex flex-wrap gap-2" role="group" aria-label="Basic checkbox toggle button group">
-		<th:block th:each="category : ${categoryCode}">
-		  <input type="checkbox" th:id="${category.codeNo}" class="btn-check" name="categoryCode" th:value="${category.codeNo}" th:checked="${findWorkerCriteria.categoryCode}!= null and ${#lists.contains(findWorkerCriteria.categoryCode, category.codeNo)}">
-		  <label th:for="${category.codeNo}" class="btn btn-sm btn-outline-success ">[[${category.codeName}]]</label>
+		<th:block th:each="category : ${categoryCode}" >
+		  <input type="checkbox" th:id="${category.codeNo}" class="btn-check" name="categoryCode" th:value="${category.codeNo}" th:checked="${findWorkerCriteria.categoryCode}!= null and ${#lists.contains(findWorkerCriteria.categoryCode, category.codeNo)}" >
+		  <label th:for="${category.codeNo}" class="btn btn-sm btn-outline-success " >[[${category.codeName}]]</label>
 		</th:block>
       </div>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -63,15 +63,19 @@
 				alt="..."
 			  >
 	          <h5 class="card-title">이름:[[${wkl.usersName}]]</h5>
+	          <div  style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
 	          <span>분야:</span>
 	          <th:block th:each="ctc : ${wkl.categoryCode}">
 	            <span class="card-text">[[${ctc.CATEGORY_CODE}]] </span>
-	          </th:block><br>
+	          </th:block>
+	          </div>
+	          <div  style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
 	          <span>지역:</span>
 	          <th:block th:each="rcd : ${wkl.regionCode}">
 	            <span class="card-text">[[${rcd.REGION_CODE}]]</span>
 	          </th:block>
-	        </div>
+	          </div>
+	          </div>
 	      </div>
 	    </a>
 	  </div>
