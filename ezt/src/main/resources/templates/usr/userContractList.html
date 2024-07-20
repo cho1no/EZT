@@ -31,11 +31,10 @@ button.teamBtn {
 	<th:block th:each="ctt : ${contractList}">
 		<div class="list-group m-3 list-group-item-action">
 		  <a th:href="@{/conInfo(contractNo=${ctt.contractNo})}" class="list-group-item list-group-item-action">
-		    <span>공사명 : [[${ctt.cttName}]]</span>
-		    <span>의뢰제목 : [[${ctt.title}]]</span>
-		    <span>공사 일정: [[${#dates.format(ctt.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(ctt.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
-		    <span>작성일 : [[${#dates.format(ctt.writeDt, 'yyyy-MM-dd')}]]</span>/
-		    <span>상태 : [[${ctt.contractStateNm}]]</span>
+		    <strong>공사명 </strong><span>[[${ctt.cttName}]]</span>
+		    <strong class="state" style="float:right;">[[${ctt.contractStateNm}]]</strong><br>
+		    <strong>의뢰명 </strong><span>[[${ctt.title}]]</span>
+		    <span style="float:right;">[[${#dates.format(ctt.writeDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(ctt.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
 		  </a>
 		</div>
 	</th:block>
@@ -59,7 +58,19 @@ button.teamBtn {
     </div>
     
 <script th:inline="javascript">
-
+	$(document).ready(function(){
+		$('strong.state').each((i, e) => {
+			if($(e).text() == '서명 완료'){
+				$(e).css('color', 'blue');
+			}	
+			if($(e).text() == '서명 중'){
+				$(e).css('color', 'green');
+			}	
+		})
+		
+	})
+	
+	
 	$('.pagination-wrap a').on('click', function(){
 		$('[name="pageNum"]').val($(this).data("pagenum"))
 		$('#wkrConList').submit();

@@ -6,6 +6,17 @@
 <head>
 <meta charset="UTF-8">
 <title>사용자 마이페이지</title>
+<style>
+ .star-spacing ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+      }
+      .star-spacing ul li {
+        display: inline-block;
+        margin-right: -3px;
+      }
+</style>
 </head>
 <body>
 <!-- 필터링,페이징 form에 한번에담아서 넘기기 -->
@@ -43,14 +54,42 @@
   <th:block th:each="review : ${reviewList}">
     <div class="list-group">
 	  <a th:href="@{/review/info(reviewNo=${review.reviewNo})}" class="list-group-item list-group-item-action m-2" aria-current="true">
-	    <div class="d-flex w-100 justify-content-between">
-		  <h5 class="mb-1">지역 : [[${review.regionCode}]]
-		  	, 분야 : [[${review.categoryCode}]]</h5>
-		  <small>상태 : [[${review.reviewDivision}]]</small>
-		  <small>작업자 : [[${review.workerName}]]</small>
+	  <div class="d-flex justify-content-between">
+		<div>
+			<strong>지역 </strong>
+			<span>[[${review.regionCode}]]</span>
 		</div>
-		<p class="mb-1">내용 : [[${review.content}]]</p> 
-	    <small>별점 : [[${review.star}]]</small>
+		<div>
+			<strong>분야 </strong>
+			<span>[[${review.categoryCode}]]</span>
+		</div>
+		</div>
+		<div class="p-0 star-spacing">
+		 <div style="display: inline-block;">
+		 	<strong>평점 </strong>
+		 </div>
+          <ul style="display: inline-block">
+            <th:block th:each="n : ${#numbers.sequence(1,5)}">
+              <li>
+                <img
+                  th:if="${n <= review.star}"
+                  style="width: 10px"
+                  src="/images/main/star.svg"
+                  class="star"
+                />
+                <img
+                  th:unless="${n <= review.star}"
+                  style="width: 10px"
+                  src="/images/main/star-null.svg"
+                  class="star"
+                />
+              </li>
+            </th:block>
+          </ul>
+        </div>
+		<strong class="mb-1">내용 </strong>
+		<span>[[${review.content}]]</span> 
+		<span style="float:right;">[[${#dates.format(review.writeDt, 'yyyy-MM-dd')}]]</span>
 	  </a>
 	</div>
   </th:block>

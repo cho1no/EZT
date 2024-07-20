@@ -29,9 +29,9 @@ button.teamBtn {
 	<th:block th:each="plt : ${payList}">
 		<div class="list-group m-3 list-group-item-action">
 		  <a th:href="@{/payInfo(payNo=${plt.payNo})}" class="list-group-item list-group-item-action">
-		    <span>계약서 번호:[[${plt.contractNo}]]</span><br>
-		    <span >금액 : [[${plt.price}]]</span>
-		    <span style="float:right;">결제일 : [[${#dates.format(plt.payDt, 'yyyy-MM-dd')}]]</span>
+		    <strong>계약서 번호 </strong><span>[[${plt.contractNo}]]</span><br>
+		    <strong>금액 </strong><span>[[${#numbers.formatDecimal(plt.price, 0, 'COMMA', 0,'POINT')}]]원</span>
+		    <span style="float:right;">[[${#dates.format(plt.payDt, 'yyyy-MM-dd')}]]</span>
 		  </a>
 		</div>
 	</th:block>
@@ -54,12 +54,6 @@ button.teamBtn {
     </div>
     
 <script th:inline="javascript">
-	//숫자 콤마 함수
-	function comma(str) {
-		str = String(str);
-		return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,').replace(/^0+/, '');
-	}
-	
 	$('.pagination-wrap a').on('click', function(){
 		$('[name="pageNum"]').val($(this).data("pagenum"))
 		$('#usrConList').submit();

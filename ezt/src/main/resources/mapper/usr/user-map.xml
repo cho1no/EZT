@@ -241,6 +241,7 @@
    	   		 SELECT ROWNUM as rn
    	   		 		, a.*
    	   		 FROM ( SELECT c.ctt_name
+   	   		 			   , c.contract_no
    	   		 			   , FIND_COMMONCODE(c.contract_state) as contract_state_nm
    	   		 			   , c.ctt_start_dt
    	   		 			   , c.ctt_end_dt
