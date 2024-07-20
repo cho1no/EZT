@@ -177,6 +177,9 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		 			COUNT(*)
 		 	FROM 	proposal
 		 	WHERE request_no = r.request_no) as pps_count
+		  ,(SELECT USERNAME(worker)
+            FROM proposal
+            WHERE proposal_state= 'A02' AND request_no = r.request_no) as worker_name
 	FROM request r
         JOIN users u
         ON r.requester = u.users_no
@@ -364,11 +367,11 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	    cr.CTT_REPORT_NO,
 	    cr.TITLE,
 	    cr.DETAIL_CONTENT,
-	    cr.CTT_DIVISION,
 	    cr.ACCESS_STATE,
 	    cr.CTT_REPORT_DT,
 	    cr.FILE_ID,
-	    cr.CONTRACT_NO
+	    cr.CONTRACT_NO,
+	    FIND_COMMONCODE(cr.CTT_DIVISION) ctt_division
 	FROM 
 	    CTT_REPORT cr
 	JOIN 

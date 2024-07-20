@@ -74,7 +74,7 @@ $(document).ready(function(){
 			
 			$(".reStar").css("display", "none");
 			
-			location.reload();
+			window.location.reload();
 		}
 	})
 	

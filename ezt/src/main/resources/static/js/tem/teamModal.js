@@ -37,6 +37,7 @@ $(document).ready(function() {
 					});
                     $('#deny').modal('hide');
 					$('textarea[name="content"]').val('');
+					window.location.reload();
                 }
             },
             error: function(error) {
@@ -83,6 +84,7 @@ $(document).ready(function() {
 					  icon:'success'
 					});
                         $('#volunteer').modal('hide');
+                        window.location.reload();
                     }
                 },
                 error: function(error) {
@@ -175,7 +177,6 @@ $('.endBtn').click(function(){
 		$('#worker').text($(tr).data("worker"));
 		$('#workCode').val($(tr).data("workcode"));
 		$('#usersNo').val($(tr).data("usersno"));
-		$('#modalCategoryCode').text($(tr).data("workcode")); 
 	}
 	
 	function openApplyModal(teamNo, categoryCode, workCode) {
