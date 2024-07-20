@@ -640,12 +640,19 @@
         var month = (cttStartDt.getMonth() + 1).toString().padStart(2, '0');
         var day = cttStartDt.getDate().toString().padStart(2, '0');
         var dateFormat = year + '-' + month + '-' + day;
-
-		$('#cttStartDtPlus').text(dateFormat);
+        
+        $('#cttStartDtPlus').text(dateFormat);
+		
 	}
-		let cttStartDt = new Date([[${contract.cttStartDt}]]);
+	$(document).ready(()=>{
+		
+	 	if (contract !== null){
+	 		let dt = contract.cttStartDt;
+	 		cttStartDtPlus(new Date(dt));
+	 	}
+	})
+		
 
-	   cttStartDtPlus(cttStartDt);
     </script>
     <script src="/js/req/img.js"></script>
   </body>
