@@ -3,86 +3,163 @@
   <head>
     <meta charset="UTF-8" />
   </head>
+  <style>
+    .workerImg {
+      width: 200px;
+      height: 200px;
+      border: 2px solid #dee2e6;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    .workerImg > img {
+      width: 100%;
+    }
+    .reStar label {
+      font-size: 25px;
+      margin: 0;
+    }
+  </style>
   <body>
-
     <!-- 모달 창 -->
     <div id="myModal" class="modal">
-     <div class="modal-content">
+      <div class="modal-content" style="overflow-y: scroll">
         <span class="close" id="closeBtn">&times;</span>
-        
-		<div class="row">
-			<div class="col">
-				<img class="workerProfile" src="/images/rvw/worker_common_profile.jpg">
-			</div>
-			<div class="col">
-		       	<table class="table">
-		       		
-					<tr>
-						<th>작업자명</th>
-						<td>[[${request.workerName}]]</td>
-					</tr>
-					<tr>
-						<th>지역</th>
-						<td id="regionCode">[[${request.regionCodeNm}]]</td>
-					</tr>
-					<tr>
-						<th>작업 카테고리</th>
-						<td id="categoryCode">[[${request.categoryCodeNm}]]</td>
-					</tr>
-					<tr>
-						<th>면적</th>
-						<td id="cttPlaceArea">[[${request.cttPlaceArea}]]</td>
-					</tr>
-					<tr>
-						<th>작업내용</th>
-						<td id="content">[[${request.content}]]</td>
-					</tr>
-				</table>
-			</div>
-		 </div>
-			<form name="rvInsertForm" th:action="@{/review/insert}" th:object="${review}" method="post">
-				<table class="table">
-					<td style="display:none"><input th:value="${request.requestNo}" name="requestNo"></td>
-		       		<td style="display:none"><input th:value="${writer}" name="writer"></td>
-					<tr>
-						<th>평점</th>
-						<td>
-							<fieldset class="reStar">
-								<input type="radio" th:field="*{star}" value="5" id="rate1"><label
-									for="rate1">★</label>
-								<input type="radio" th:field="*{star}"  value="4" id="rate2"><label
-									for="rate2">★</label>
-								<input type="radio" th:field="*{star}" value="3" id="rate3"><label
-									for="rate3">★</label>
-								<input type="radio" th:field="*{star}" value="2" id="rate4"><label
-									for="rate4">★</label>
-								<input type="radio" th:field="*{star}" value="1" id="rate5"><label
-									for="rate5">★</label>
-							</fieldset>
-						<td>
-					</tr>
-					<tr>
-						<th>내용</th>
-						<td>
-							<textarea th:text="${review.content}" name="content" placeholder="후기 내용을 입력하세요"></textarea>
-						</td>
-					</tr>
-				</table>
-					
-					<p class="uploadTitle mt-3">첨부 이미지 업로드(최대 5장)</p>
-					<div class="uploadDiv">
-						<label for="multiFile">파일찾기</label> <input type="file"
-							multiple="multiple" name="uploadFile" id="multiFile"
-							onChange="fileList()"  onClick="fileUploadClick()" >
-					</div>
-					<div class="uploadResult bg-light mt-3">
-					<div class="row"></div>
-					</div>
-					
-					<input style="display:none" th:field="${review.reviewDivision}" value="F">
-					<button style="float:right;" type="button" onClick="insert()">등록</button>
+
+        <div class="row">
+          <div class="col">
+            <div class="text-center workerImg" style="margin: 0 auto">
+              <img
+                th:if="${request.fileId != 0}"
+                th:src="|/display?fileName=${#strings.replace(request.savePath, '\', '/')}/${request.saveName}_${request.originalFileName}.${request.ext}|"
+                alt="작업자 프로필 이미지"
+              />
+              <img
+                th:unless="${request.fileId != 0}"
+                src="/images/usr/default_user.png"
+                alt="작업자 프로필 이미지"
+              />
+            </div>
+          </div>
+          <div class="col">
+            <table class="table">
+              <tr>
+                <th>작업자명</th>
+                <td>[[${request.workerName}]]</td>
+              </tr>
+              <tr>
+                <th>지역</th>
+                <td id="regionCode">[[${request.regionCodeNm}]]</td>
+              </tr>
+              <tr>
+                <th>작업 카테고리</th>
+                <td id="categoryCode">[[${request.categoryCodeNm}]]</td>
+              </tr>
+              <tr>
+                <th>면적</th>
+                <td id="cttPlaceArea">[[${request.cttPlaceArea}]]</td>
+              </tr>
+              <tr>
+                <th>작업내용</th>
+                <td id="content">[[${request.content}]]</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <form
+          name="rvInsertForm"
+          th:action="@{/review/insert}"
+          th:object="${review}"
+          method="post"
+        >
+          <table class="table">
+            <td style="display: none">
+              <input th:value="${request.requestNo}" name="requestNo" />
+            </td>
+            <td style="display: none">
+              <input th:value="${writer}" name="writer" />
+            </td>
+            <tr>
+              <th>평점</th>
+              <td>
+                <fieldset class="reStar">
+                  <input
+                    type="radio"
+                    th:field="*{star}"
+                    value="5"
+                    id="rate1"
+                  /><label for="rate1">★</label>
+                  <input
+                    type="radio"
+                    th:field="*{star}"
+                    value="4"
+                    id="rate2"
+                  /><label for="rate2">★</label>
+                  <input
+                    type="radio"
+                    th:field="*{star}"
+                    value="3"
+                    id="rate3"
+                  /><label for="rate3">★</label>
+                  <input
+                    type="radio"
+                    th:field="*{star}"
+                    value="2"
+                    id="rate4"
+                  /><label for="rate4">★</label>
+                  <input
+                    type="radio"
+                    th:field="*{star}"
+                    value="1"
+                    id="rate5"
+                  /><label for="rate5">★</label>
+                </fieldset>
+              </td>
+            </tr>
+
+            <tr>
+              <th>내용</th>
+              <td>
+                <textarea
+                  rows="10"
+                  class="form-control"
+                  th:text="${review.content}"
+                  name="content"
+                  placeholder="후기 내용을 입력하세요"
+                ></textarea>
+              </td>
+            </tr>
+          </table>
+
+          <p class="uploadTitle mt-3">첨부 이미지 업로드(최대 5장)</p>
+          <div class="uploadDiv">
+            <input
+              type="file"
+              class="form-control"
+              multiple="multiple"
+              name="uploadFile"
+              id="multiFile"
+              onChange="fileList()"
+              onClick="fileUploadClick()"
+            />
+          </div>
+          <div class="uploadResult bg-light mt-3">
+            <div class="row"></div>
+          </div>
+
+          <input
+            style="display: none"
+            th:field="${review.reviewDivision}"
+            value="F"
+          />
+          <button
+            class="float-end btn btn-sm btn-primary"
+            type="button"
+            onClick="insert()"
+          >
+            등록
+          </button>
         </form>
-     </div>
+      </div>
     </div>
     <script>
       // HTML 문서의 로딩이 완료되었을 때, 해당 함수를 실행
@@ -92,23 +169,23 @@
         var modal = document.getElementById("myModal");
         var closeBtn = document.getElementById("closeBtn");
 
-//         functions
-//         function toggleModal() {
-//           modal.classList.toggle("show");
-//         }
+        //         functions
+        //         function toggleModal() {
+        //           modal.classList.toggle("show");
+        //         }
 
         // events
         modalBtn.addEventListener("click", toggleModal);
         closeBtn.addEventListener("click", toggleModal);
 
-//         window.addEventListener("click", function (event) {
-//           // 모달의 검은색 배경 부분이 클릭된 경우 닫히도록 하는 코드
-//           if (event.target === modal) {
-//             toggleModal();
-//           }
-//         });
+        //         window.addEventListener("click", function (event) {
+        //           // 모달의 검은색 배경 부분이 클릭된 경우 닫히도록 하는 코드
+        //           if (event.target === modal) {
+        //             toggleModal();
+        //           }
+        //         });
       });
     </script>
-<script src="/js/rvw/reviewImg.js"></script>
-</body>
+    <script src="/js/rvw/reviewImg.js"></script>
+  </body>
 </html>
