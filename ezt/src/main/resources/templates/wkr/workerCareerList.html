@@ -56,20 +56,20 @@ div.careerList {
             class="card rounded-3"
             style="width: 100%">
             <div class="card-body p-3 ezt-text-over">
-              <h5>경력내용 : [[${#strings.abbreviate(career.careerInfo,10)}]]</h5>
-              <span>[[${career.careerAccessTf}]]</span>
+              <strong>[[${#strings.abbreviate(career.careerInfo,10)}]]</strong>
+              <span class="state" style="float:right;">[[${career.careerAccessTf}]]</span>
               <ul class="ezt-no-dot">
                 <li>
-                  신청일 [[${#dates.format(career.writeDt,'yyyy-MM-dd')}]]
+					<strong>근무기간</strong>
                 </li>
-                <li class="float-end">근무기간
-                  [[${#dates.format(career.careerStartDt,'yyyy-MM-dd')}]]~
-                  [[${#dates.format(career.careerEndDt,'yyyy-MM-dd')}]]
+                <li>
+					[[${#dates.format(career.careerStartDt,'yyyy-MM-dd')}]]~[[${#dates.format(career.careerEndDt,'yyyy-MM-dd')}]]
                 </li>
                <li>
                  <a th:href="|/download?fileName=${#strings.replace(career.savePath, '\', '/')}/${career.saveName}_${career.originalFileName}.${career.ext}|">
                    [[${career.originalFileName}]].[[${career.ext}]]
                  </a>
+				 <span style="float:right;">[[${#dates.format(career.writeDt,'yyyy-MM-dd')}]]</span>
                </li>
               </ul>
             </div>
@@ -99,7 +99,20 @@ div.careerList {
     </div>
 </body>
 <script th:inline="javascript">
-
+	$(document).ready(function () {
+			$('span.state').each((i, e) => {
+				if ($(e).text() == '승인'){
+					$(e).css('color','blue');
+				}
+				if ($(e).text() == '대기'){
+					$(e).css('color','green');
+				}
+				if ($(e).text() == '반려'){
+					$(e).css('color','red');
+				}
+			})
+		});
+		
 	$('#careerAccessTfCategory').on('change', (ev) => {
 		$('[name="careerAccessTf"]').val(ev.target.value)
 		$('#wkrCarList').submit();

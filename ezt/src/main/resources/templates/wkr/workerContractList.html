@@ -40,8 +40,8 @@ button.teamBtn {
 		<div class="list-group m-3" style="font-size:14px;">
 		  <a th:href="@{/conInfo(contractNo=${ctt.contractNo})}" class="list-group-item list-group-item-action">
 		    <strong>공사명 : [[${ctt.cttName}]]</strong>
-		    <span class="state" style="float:right;" th:if="${ctt.contractStateNm} != null">
-		      <strong>[[${ctt.contractStateNm}]]</strong>
+		    <span style="float:right;" th:if="${ctt.contractStateNm} != null">
+		      <strong class="state">[[${ctt.contractStateNm}]]</strong>
 		    </span><br>
 		    <span>작성일 : [[${#dates.format(ctt.writeDt, 'yyyy-MM-dd')}]]</span>
 		    <span style="float:right;">공사 일정: [[${#dates.format(ctt.cttStartDt, 'yyyy-MM-dd')}]] ~ [[${#dates.format(ctt.cttEndDt, 'yyyy-MM-dd')}]]</span><br>
@@ -73,7 +73,7 @@ button.teamBtn {
     
 <script th:inline="javascript">
 	$(document).ready(function () {
-		$('span.state').each((i, e) => {
+		$('strong.state').each((i, e) => {
 			if ($(e).text() == '서명 중'){
 				$(e).css('color','red');
 			}
