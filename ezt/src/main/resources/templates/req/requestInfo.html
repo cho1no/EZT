@@ -238,6 +238,8 @@
                   type="text"
                   id="input_detailAddr"
                   th:value="${request.detailAddress}"
+				  sec:authorize="isAuthenticated()" 
+  				  th:if="${#authentication.principal.userNo == request.requester}"
                   readonly
                 />
               </td>
@@ -274,7 +276,7 @@
               <th>시공 공간면적</th>
               <td>
                 <input
-                  class="form-control"
+                  style="width:50px; text-align:right;"
                   type="number"
                   min="0"
                   name="cttPlaceArea"
@@ -314,13 +316,7 @@
         <div>
           <h4>견적서</h4>
         </div>
-        <div>
-          <select class="form-select">
-          	<option> 정렬 </option>
-            <option value="price">총금액 낮은 순</option>
-            <option value="period">공사기간 짧은 순</option>
-          </select>
-        </div>
+        
       </div>
       <table class="table table-striped">
         <tr>
