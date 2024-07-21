@@ -8,6 +8,7 @@ $(document).ready(function() {
         let enrollNo = $('#enrollNo').val();
         let writer = $('#writer').val();
         let content = $('textarea[name="content"]').val();
+        let usersNo = $('#usersNo').val();
         
          // content가 null이면 alert
         if (content == null ) {
@@ -38,6 +39,29 @@ $(document).ready(function() {
                     $('#deny').modal('hide');
 					$('textarea[name="content"]').val('');
 					window.location.reload();
+					// sendAlarm 함수 정의
+                    function sendAlarm(data = { 
+						title: "반려처리되었습니다.", 
+						content: content, 
+						usersNo: usersNo }) {
+                    stomp.send(
+                        "/pub/alarm/message",
+                        {},
+                        JSON.stringify({
+                            title: data.title,
+                            content: data.content,
+                            usersNo: data.usersNo,
+                        })
+                    );
+                }
+
+                // sendAlarm 함수 호출
+                sendAlarm({
+                    title: "반려처리되었습니다.",
+                    content: content,
+                    usersNo: usersNo
+                });
+			
                 }
             },
             error: function(error) {
