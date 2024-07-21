@@ -83,9 +83,10 @@ public class UserController {
 	@PostMapping("/update")
 	@ResponseBody
 	public String userUpdate(UserVO userVO,
+							Model model,
 							@RequestParam("uploadFile")MultipartFile[] uploadFile,
 							@AuthenticationPrincipal LoginUserVO vo){
-		if (uploadFile != null) {
+		if (uploadFile != null && uploadFile.length > 0 && uploadFile[0].getSize() > 0) {
 			int result = simpleFileService.uploadFiles(uploadFile);
 			userVO.setFileId(result);
 		}
@@ -93,7 +94,11 @@ public class UserController {
 		UserVO uvo = userMapper.selectUserInfo(userVO.getUsersId());
 		vo.setUserVO(uvo);
 		log.info(vo.toString());
-		return "redirect: /user/info";
+		
+		model.addAttribute("msg", "정보수정 완료!");
+	    model.addAttribute("icon", "success");
+	    model.addAttribute("url", "/user/info");
+	    return "gongtong/message";
 	}
 
 	//비밀번호 변경 -페이지
