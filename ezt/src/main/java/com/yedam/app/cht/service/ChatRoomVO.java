@@ -1,11 +1,7 @@
 package com.yedam.app.cht.service;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
-import org.springframework.web.socket.WebSocketSession;
+import java.util.List;
 
 import lombok.Data;
 
@@ -16,6 +12,7 @@ public class ChatRoomVO {
 	private String title;
 	private String content;
 	private Date updateDt;
+	private List<Integer> usersNos;
 //	private Set<WebSocketSession> sessions = new HashSet<>();
     public static ChatRoomVO create(String title){
     	ChatRoomVO room = new ChatRoomVO();
