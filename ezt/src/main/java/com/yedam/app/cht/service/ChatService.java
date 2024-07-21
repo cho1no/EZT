@@ -14,4 +14,7 @@ public interface ChatService {
 	
 	// 채팅 입력
 	public int addChat(ChatVO chatVO);
+	
+	// 채팅방 생성
+	public int createRoom(ChatRoomVO crvo);
 }

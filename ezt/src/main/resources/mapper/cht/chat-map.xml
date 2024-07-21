@@ -3,7 +3,9 @@
 <mapper namespace="com.yedam.app.cht.mapper.ChatMapper">
 	<select id="selectMyRooms" resultType="ChatRoomVO" parameterType="int">
 		SELECT cr.chat_room_no chat_room_no
-				, cr.title title
+				, USERNAME((SELECT DISTINCT users_no
+				            FROM users_chat_room
+				            WHERE users_no != #{users_no})) title
 				, (SELECT c.content
 				   FROM chat c
 				   WHERE c.chat_room_no = cr.chat_room_no
@@ -54,6 +56,22 @@
 			, #{content}
 			, sysdate
 		)
+	</insert>
+	
+	<insert id="insertChatRoom" parameterType="ChatRoomVO">
+		<selectKey	keyProperty="chatRoomNo"
+					resultType="Integer"
+					order="BEFORE">
+			SELECT SEQ_CHAT_ROOM_NO.NEXTVAL
+			FROM dual
+		</selectKey>
+		INSERT INTO chat_room(chat_room_no, update_dt)
+		VALUES (#{chatRoomNo}, sysdate)
+	</insert>
+	
+	<insert id="insertChatRoom2User" parameterType="UsersChatRoomVO">
+		INSERT INTO users_chat_room(chat_room_no, users_no)
+		VALUES (#{chatRoomNo}, #{usersNo})
 	</insert>
 	
 </mapper>

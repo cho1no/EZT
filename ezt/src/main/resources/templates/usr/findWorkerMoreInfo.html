@@ -118,8 +118,8 @@
               style="width: 100%"
               th:if="${userInfo.fileId != 0}"
               th:src="|/display?fileName=${#strings.replace(userInfo.savePath,
-            '\',
-            '/')}/${userInfo.saveName}_${userInfo.originalFileName}.${userInfo.ext}|"
+              '\',
+              '/')}/${userInfo.saveName}_${userInfo.originalFileName}.${userInfo.ext}|"
               alt="작업자 프로필"
             />
             <img
@@ -131,6 +131,16 @@
           </div>
         </div>
         <div class="">
+          <div class="text-center mt-2" sec:authorize="isAuthenticated()">
+            <button
+              th:if="${#authentication.principal.userNo != userInfo.usersNo}"
+              class="btn btn-sm btn-primary"
+              type="button"
+              th:onclick="createChatRoom([[${userInfo.usersNo}]])"
+            >
+              채팅하기
+            </button>
+          </div>
           <h2 class="mt-2 mb-5 text-center">[[${userInfo.usersName}]]</h2>
           <table class="table mb-5" id="ezt-table">
             <tbody>

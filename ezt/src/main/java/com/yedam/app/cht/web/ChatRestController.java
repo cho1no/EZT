@@ -7,6 +7,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,5 +31,13 @@ public class ChatRestController {
 	@GetMapping("/getChats/{chatRoomNo}")
 	public List<ChatVO> getChats(@PathVariable int chatRoomNo){
 		return csv.getChatHistory(chatRoomNo);
+	}
+	
+	// 채팅방 개설
+	@PostMapping("/makeRoom")
+	public int createRoom(@RequestBody ChatRoomVO crvo) {
+		int result = csv.createRoom(crvo);
+
+		return result;
 	}
 }
