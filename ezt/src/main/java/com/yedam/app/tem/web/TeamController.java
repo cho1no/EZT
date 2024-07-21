@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.alm.service.AlarmVO;
+import com.yedam.app.alm.web.StompAlarmController;
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.req.service.Criteria;
 import com.yedam.app.req.service.PageDTO;
@@ -35,7 +37,9 @@ public class TeamController {
     @Autowired
     CommonCodeService commonCodeService;
 
-
+    @Autowired 
+    StompAlarmController sac;
+    
     // 팀 신청 전체 조회
     @GetMapping("/requestList")
     public String teamRequestList(Criteria cri, Model model) {
@@ -166,8 +170,9 @@ public class TeamController {
     
     //신청자 반려
     @GetMapping("/memberDeny")
-    public String memberDeny(Model model) {
+    public String memberDeny(Model model, MemberEnrollVO meVO) {
     	model.addAttribute("deny", new MemberDenyVO());
+    	
     	
     	return "team/teamRequestInfo";
     }

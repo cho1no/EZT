@@ -220,11 +220,11 @@
 				            </tr>
 				            <tr>
 				                <th>소개 작성</th>
-				                <td><textarea name="content" th:field="*{content}"></textarea></td>
+				                <td><textarea class="form-control" name="content" th:field="*{content}"></textarea></td>
 				            </tr>
 				        </tbody>
 				    </table>
-				    <button type="submit">신청하기</button>
+				    <button type="submit" id="applyBtn">신청하기</button>
 				</form>
 
             </div>
@@ -237,5 +237,15 @@
 
 <script src="/js/tem/teamRequestUpdate.js"></script>
 <script src="/js/tem/teamModal.js"></script>
+<script>
+	$(document).ready(function(){
+	    $('#applyBtn').click(function(){
+			Swal.fire({
+			  text:'정상적으로 신청이 완료되었습니다.',
+			  icon:'success'
+			});
+	    });
+	});
+</script>
 </body>
 </html>
