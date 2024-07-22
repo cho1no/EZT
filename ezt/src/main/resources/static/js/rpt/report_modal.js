@@ -79,10 +79,10 @@ var modalData = '';
 var uploadFiles = '';
 
 // 파일 첨부 초기화
-function fileUploadClick() {
+function fileUploadBtn() {
 
-	$('input[name="uploadFile"]').val('');
-	$('.uploadModal .row div').remove();
+	$('#reportModal input[name="uploadFile"]').val('');
+	$('#reportModal .uploadModal .row div').remove();
 };
 
 // 파일 삭제
