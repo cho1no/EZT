@@ -8,6 +8,7 @@
 <title>사용자 마이페이지</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <link rel="stylesheet" href="/css/rvw/reviewInsert.css">
+
 </head>
 <body>
 <form name="usrReqList" id="usrReqList">
@@ -45,30 +46,26 @@
 <div class="row row-cols-3 row-cols-md-2 g-2">
   <th:block th:each="req : ${requestList}">
 	  <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+    <a th:href="@{/request/info(requestNo=${req.requestNo})}">
 	    <div class="card">
-<!-- 	      <img src="..." class="card-img-top" alt="..."> -->
 	      <div class="card-body">
 	        <div class="d-flex justify-content-between">
-	        <strong class="card-title">[[${#strings.abbreviate(req.title,10)}]]</strong>
+	        <strong class="card-title">[[${#strings.abbreviate(req.title,8)}]]</strong>
 	        <p class="card-text reqState"><span>[[${req.requestStateNm}]]</span></p>
 	        </div>
 	        <div class="d-flex justify-content-between">
 	        <p class="card-text"><strong>[[${req.categoryCodeNm}]]</strong></p>
 	        <p class="card-text">[[${#dates.format(req.writeDt, 'yyyy-MM-dd')}]]</p>
 	        </div>
-	        <div class="d-flex justify-content-end">
-	        	<div class="">
-			        <button type="button" th:onclick="|location.href='@{/request/info(requestNo=${req.requestNo})}'|"
-			         class="btn btn-sm btn-primary border-width-2 d-lg-inline-block">상세</button>
-		        <th:block th:if="${req.reviewNo <= 0}">
-			        <button id="modalBtn" th:onclick="reqModal([[${req.requestNo}]])" 
-			        th:if="${req.requestState} == 'S05' or ${req.requestState} == 'S06'" 
-			        class="btn btn-sm btn-primary border-width-2 d-lg-inline-block">후기작성</button>
-		        </th:block>
-		        </div>
-	        </div>
+	       
 	      </div>
 	    </div>
+	  </a>
+       <th:block th:if="${req.reviewNo <= 0}">
+        <button id="modalBtn" th:onclick="reqModal([[${req.requestNo}]])" 
+        th:if="${req.requestState} == 'S05' or ${req.requestState} == 'S06'" 
+        class="btn btn-sm btn-primary border-width-2 d-lg-inline-block col-sm-12">후기작성</button>
+       </th:block>
 	  </div>
   </th:block>
   <!-- 데이터가 없을시 출력문구 -->
