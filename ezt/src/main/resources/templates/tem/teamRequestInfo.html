@@ -68,6 +68,7 @@
                 <td th:if="${#authentication.principal.userVO.usersNo == team.writer}">
                     <button type="button" class="btnn"
                             data-bs-toggle="modal" data-bs-target="#volunteer"
+                            th:if="${twc.partCount != twc.headcount}"
                             th:attr="onclick=|openModal('${twc.teamNo}', '${twc.categoryCode}' ,'${twc.workCode}')|">
                         신청자 확인하기([[${twc.vCount}]])
                     </button>
@@ -139,7 +140,8 @@
             				<td id="content"></td>
 							<td>           			
 								<input type="hidden" id="usersNo">
-								<input type="hidden" id="workCode">								
+								<input type="hidden" id="workCode">	
+								<input type="hidden" id="teamNo">							
 							</td>
             			</tr>
             		</tbody>
@@ -170,6 +172,7 @@
             <div class="modal-body">
                 <input type="hidden" id="enrollNo" name="enrollNo">
                 <input type="hidden" id="writer" name="writer" th:value="${#authentication.principal.userVO.usersNo}">
+                <input type="hidden" id="volunteerNo" name="volunteerNo">
                 <table class="table">
                     <tbody>
                         <tr>
@@ -224,7 +227,9 @@
 				            </tr>
 				        </tbody>
 				    </table>
-				    <button type="submit" id="applyBtn">신청하기</button>
+				    <div style="text-align:right">
+					    <button class="btn btn-primary" type="submit">신청하기</button>
+				    </div>
 				</form>
 
             </div>

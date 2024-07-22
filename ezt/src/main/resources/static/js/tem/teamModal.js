@@ -8,10 +8,10 @@ $(document).ready(function() {
         let enrollNo = $('#enrollNo').val();
         let writer = $('#writer').val();
         let content = $('textarea[name="content"]').val();
-        let usersNo = $('#usersNo').val();
+        let usersNo = $('#volunteerNo').val();
         
          // content가 null이면 alert
-        if (content == null ) {
+        if (!content) {
             Swal.fire({
 					  text:'반려사유를 입력해주세요.',
 					  icon:'warning'
@@ -24,7 +24,7 @@ $(document).ready(function() {
             writer: writer,
             content: content
         };
-
+		console.log(usersNo);
         $.ajax({
             url: '/team/memberDeny',
             type: 'POST',
@@ -38,30 +38,13 @@ $(document).ready(function() {
 					});
                     $('#deny').modal('hide');
 					$('textarea[name="content"]').val('');
+	                // sendAlarm 함수 호출
+	                sendAlarm({
+	                    title: "반려처리되었습니다.",
+	                    content: content,
+	                    usersNo: usersNo
+	                });	
 					window.location.reload();
-					// sendAlarm 함수 정의
-                    function sendAlarm(data = { 
-						title: "반려처리되었습니다.", 
-						content: content, 
-						usersNo: usersNo }) {
-                    stomp.send(
-                        "/pub/alarm/message",
-                        {},
-                        JSON.stringify({
-                            title: data.title,
-                            content: data.content,
-                            usersNo: data.usersNo,
-                        })
-                    );
-                }
-
-                // sendAlarm 함수 호출
-                sendAlarm({
-                    title: "반려처리되었습니다.",
-                    content: content,
-                    usersNo: usersNo
-                });
-			
                 }
             },
             error: function(error) {
@@ -74,27 +57,32 @@ $(document).ready(function() {
         });
     });
     
-    $('#infoBtn').click(function(e){
-		let usersNo = $('#usersNo').val();
-		
-		window.open('/find/workerMoreInfo?usersNo=' + usersNo);
-	})
-    
-      $('.approveBtn').click(function() {
-        let enrollNo = $('#enrollNo').val();
-        let usersNo = $('#usersNo').val(); 
-        let workCode = $('#workCode').val();
-        let teamNo = $('#teamNo').val();
+  $('.approveBtn').click(function() {
+    let enrollNo = $('#enrollNo').val();
+    let usersNo = $('#usersNo').val(); 
+    let workCode = $('#workCode').val();
+    let teamNo = $('#teamNo').val();
 
-
-        if (confirm('해당 작업자를 팀원으로 추가하시겠습니까?')) {
+    // SweetAlert를 사용하여 사용자에게 확인을 요청
+    Swal.fire({
+        title: '작업자 추가 확인',
+        text: '해당 작업자를 팀원으로 추가하시겠습니까?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '확인',
+        cancelButtonText: '취소'
+    }).then((result) => {
+        if (result.isConfirmed) {
             let data = {
                 enrollNo: enrollNo,
                 usersNo: usersNo,
                 workCode: workCode,
                 teamNo: teamNo,
-
             };
+
+            console.log(data);
 
             $.ajax({
                 url: '/team/approveMember',
@@ -103,24 +91,35 @@ $(document).ready(function() {
                 data: JSON.stringify(data),
                 success: function(response) {
                     if (response) {
+                        // Ajax 요청 성공 후 SweetAlert 표시
                         Swal.fire({
-					  text:'팀원으로 추가되었습니다.',
-					  icon:'success'
-					});
-                        $('#volunteer').modal('hide');
-                        window.location.reload();
+                            text: '팀원으로 추가되었습니다.',
+                            icon: 'success',
+                            onClose: function() {
+                                $('#volunteer').modal('hide');
+                                window.location.reload();
+                            }
+                        });
+
+                        // sendAlarm 함수 호출
+                        sendAlarm({
+                            title: "팀원 추가 알림",
+                            content: "팀원으로 추가되었습니다.",
+                            usersNo: usersNo
+                        });
                     }
                 },
                 error: function(error) {
                     console.log(error);
                     Swal.fire({
-					  text:'오류가 발생하였습니다.',
-					  icon:'error'
-					});
+                        text: '오류가 발생하였습니다.',
+                        icon: 'error'
+                    });
                 }
             });
         }
     });
+});
 
 
 $('.endBtn').click(function(){
@@ -175,10 +174,11 @@ $('.endBtn').click(function(){
                                   data-usersno="${result[i].usersNo}" 
                                   data-content="${result[i].content}" 
                                   data-workcode="${workCode}"
+                                  data-teamno="${result[i].teamNo}"
                                   onclick="detail(this)">
                                 <td>${i + 1}</td>
                                 <td>${result[i].worker}</td>
-                                <td>${result[i].career}</td>
+                                <td>${result[i].career}년</td>
                             </tr>`;
                 $('#volunteerBody').append(table);
             }
@@ -188,7 +188,6 @@ $('.endBtn').click(function(){
                 $('#content').text('');
                 $('#denyUser').val('');
                 $('#enrollNo').val('');
-                $('#worker').text('');
             }
         }
     });
@@ -200,7 +199,8 @@ $('.endBtn').click(function(){
 		$('#enrollNo').val($(tr).data("eno"));
 		$('#worker').text($(tr).data("worker"));
 		$('#workCode').val($(tr).data("workcode"));
-		$('#usersNo').val($(tr).data("usersno"));
+		$('#volunteerNo').val($(tr).data("usersno"));
+		$('#teamNo').val($(tr).data("teamno"));
 	}
 	
 	function openApplyModal(teamNo, categoryCode, workCode) {
