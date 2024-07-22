@@ -5,7 +5,7 @@
 		SELECT cr.chat_room_no chat_room_no
 				, USERNAME((SELECT DISTINCT users_no
 				            FROM users_chat_room
-				            WHERE users_no != #{users_no})) title
+				            WHERE users_no != #{users_no} AND ROWNUM = 1)) title
 				, (SELECT c.content
 				   FROM chat c
 				   WHERE c.chat_room_no = cr.chat_room_no
