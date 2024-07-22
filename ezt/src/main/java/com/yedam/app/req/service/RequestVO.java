@@ -52,6 +52,7 @@ public class RequestVO {
 	private String ext;					// 파일 확장자
 	private int ppsCount;  				//견적서 건수
 
+	private String worker;
 	private String usersPhone;
 	private String comments;
 	private int proposalNo;

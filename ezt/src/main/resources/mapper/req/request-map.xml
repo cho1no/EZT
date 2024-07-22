@@ -134,6 +134,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	<result property="usersName" column="users_Name"></result>
 	
 	<result property="workerName" column="worker_Name"></result>
+	<result property="worker" column="worker"></result>
 	<result property="saveName" column="save_name"></result>
 	<result property="originalFileName" column="original_file_name"></result>
 	<result property="savePath" column="save_path"></result>
@@ -177,6 +178,9 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		  ,(SELECT USERNAME(worker)
             FROM proposal
             WHERE proposal_state= 'A02' AND request_no = r.request_no) as worker_name
+		  ,(SELECT worker
+            FROM proposal
+            WHERE proposal_state= 'A02' AND request_no = r.request_no) as worker
 	FROM request r
         JOIN users u
         ON r.requester = u.users_no

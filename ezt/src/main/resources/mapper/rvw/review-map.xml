@@ -146,7 +146,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 			#{reviewNo}
 			,#{requestNo}
 			,#{writer}
-			,10002
+			,#{worker}
 			,#{star}
 			,#{content}
 			,sysdate
