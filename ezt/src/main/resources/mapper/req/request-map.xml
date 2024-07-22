@@ -134,7 +134,8 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	<result property="usersName" column="users_Name"></result>
 	
 	<result property="workerName" column="worker_Name"></result>
-	<result property="workerNo" column="worker_no"></result>
+
+	<result property="worker" column="worker"></result>
 	
 	<collection property="fileVO" ofType="FileVO">
 		<id property="fileId" column="file_id"></id>
@@ -182,9 +183,11 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		  ,(SELECT USERNAME(worker)
             FROM proposal
             WHERE proposal_state= 'A02' AND request_no = r.request_no) as worker_name
+
           ,(SELECT worker
             FROM proposal
-            WHERE proposal_state= 'A02' AND request_no = r.request_no) as worker_no
+            WHERE proposal_state= 'A02' AND request_no = r.request_no) as worker
+
 	FROM request r
         JOIN users u
         ON r.requester = u.users_no
