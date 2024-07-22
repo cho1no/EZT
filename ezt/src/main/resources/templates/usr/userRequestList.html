@@ -66,6 +66,11 @@
         th:if="${req.requestState} == 'S05' or ${req.requestState} == 'S06'" 
         class="btn btn-sm btn-primary border-width-2 d-lg-inline-block col-sm-12">후기작성</button>
        </th:block>
+       <th:block th:if="${req.reviewNo > 0}">
+        <button id="modalBtn" th:onclick="|location.href='@{/review/info(reviewNo=${req.reviewNo})}'|" 
+        th:if="${req.requestState} == 'S05' or ${req.requestState} == 'S06'" 
+        class="btn btn-sm btn-primary border-width-2 d-lg-inline-block col-sm-12">후기상세</button>
+       </th:block>
 	  </div>
   </th:block>
   <!-- 데이터가 없을시 출력문구 -->
