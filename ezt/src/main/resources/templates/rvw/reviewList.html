@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org"
-		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-		layout:decorate="~{common/layouts/default_layout}"
-		layout:fragment="Content">
-<style>
-
-	.ezt-item-box {
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{common/layouts/default_layout}"
+  layout:fragment="Content"
+>
+  <style>
+    .ezt-item-box {
       color: #1d2124;
       font-size: 14px;
     }
@@ -47,128 +48,132 @@
       right: 5px;
       background-color: transparent;
     }
-	.star-rating {
-	  display: flex;
-	}
-	.yellow{
-		color:rgba(250, 208, 0, 0.99);
-		font-size:30px;
-	}
-	.gray{
-		text-align:center;
-		color:#ebebeb;
-		font-size:30px;
-	}
-	.cursor{
-		cursor:pointer; 
-	 }
-</style>
-<head>
-<meta charset="UTF-8">
-<title>후기 목록</title>
-</head>
-<body>
-	<div class="text-center mb-5 pb-3">
+    .star-rating {
+      display: flex;
+    }
+    .yellow {
+      color: rgba(250, 208, 0, 0.99);
+      font-size: 30px;
+    }
+    .gray {
+      text-align: center;
+      color: #ebebeb;
+      font-size: 30px;
+    }
+    .cursor {
+      cursor: pointer;
+    }
+  </style>
+  <head>
+    <meta charset="UTF-8" />
+    <title>후기 목록</title>
+  </head>
+  <body>
+    <div class="text-center mb-5 pb-3">
       <h2 class="m-0" style="font-weight: 700">후기 목록</h2>
       <p class="text-success" style="font-size: 14px; font-weight: 500">
         다른 의뢰자들이 작성한 후기를 만나보세요
       </p>
     </div>
-	<div class="mb-3">
-	      <form id="searchForm" th:action="@{/review/list}" method="get">
-	        <div class="d-flex justify-content-between">
-	          <div></div>
-	          <div class="search">
-	            <div class="d-flex justify-content-end">
-	              <div class="w-25 me-1">
-	                <select
-	                  class="form-select"
-	                  name="type"
-	                  th:value="${page.cri.type}"
-	                >
-	                  <option th:selected="${page.cri.type}==''" value="">
-	                    옵션
-	                  </option>
-	                  <option th:selected="${page.cri.type}=='R'" value="R">
-	                    지역
-	                  </option>
-	                  <option th:selected="${page.cri.type}=='C'" value="C">
-	                    분야
-	                  </option>
-	                  <option th:selected="${page.cri.type}=='CR'" value="CR">
-	                    지역 또는 분야
-	                  </option>
-	                </select>
-	              </div>
-	              <div class="ezt-search-bar">
-	                <input
-	                  class="input form-control"
-	                  type="text"
-	                  name="keyword"
-	                  placeholder="검색어 입력"
-	                  th:value="${page.cri.keyword}"
-	                />
-	                <input
-	                  type="hidden"
-	                  th:name="${pageNum}"
-	                  th:value="${page.cri.pageNum}"
-	                />
-	                <input
-	                  type="hidden"
-	                  th:name="${amount}"
-	                  th:value="${page.cri.amount}"
-	                />
-	                <button class="ezt-no-style-btn">
-	                  <i class="fa-solid fa-magnifying-glass"></i>
-	                </button>
-	              </div>
-	            </div>
-	          </div>
-	        </div>
-	      </form>
-	    </div>
-		<div>
-	      <div class="row mb-5">
-	        <th:block th:each="rv : ${rvList}">
-	          <div class="col-md-6 col-lg-3 mb-5">
-	            <div
-	              class="ezt-item-box cursor p-0"
-	              th:onclick="|location.href='@{/review/info(reviewNo=${rv.reviewNo})}'|"
-	            >
-	              <div class="ezt-img-box rounded-4">
-	                <div class="ezt-img">
-	                  <th:block>
-	                    <img
-	                      th:if="${rv.fileId == 0}"
-	                      th:src="@{/images/req/default_img.png}"
-	                      alt="Image"
-	                    />
-	                    <img
-	                      th:unless="${rv.fileId == 0}"
-	                      th:src="|@{${'/display?fileName=' + request.rv.replaceAll('\\','/') +'/'+ rv.saveName + '_' + rv.originalFileName + '.' + rv.ext}}|"
-	                      alt="Image"
-	                    />
-	                  </th:block>
-	                </div>
-	              </div>
-	              <div class="ezt-item-text-section pt-2 px-1 text-truncate">
-	                <strong>[[${rv.content}]]</strong>
-	                <div>
-	                  <p th:text="${rv.star}" class="star" style="display:none"></p>
-					  <div class="stars star-rating"></div>
-	                </div>
-					<div>작업자명 : [[${rv.workerName}]]</div>
-	                <div class="d-flex justify-content-between">
-	                  <span>[[${rv.regionCode}]]</span>
-	                  <span>[[${rv.categoryCode}]]</span>
-	                </div>
-	              </div>
-	            </div>
-	          </div>
-	        </th:block>
-	      </div>
-	    </div>
-	<!-- 페이징 -->
+    <div class="mb-3">
+      <form id="searchForm" th:action="@{/review/list}" method="get">
+        <div class="d-flex justify-content-between">
+          <div></div>
+          <div class="search">
+            <div class="d-flex justify-content-end">
+              <div class="w-25 me-1">
+                <select
+                  class="form-select"
+                  name="type"
+                  th:value="${page.cri.type}"
+                >
+                  <option th:selected="${page.cri.type}==''" value="">
+                    옵션
+                  </option>
+                  <option th:selected="${page.cri.type}=='R'" value="R">
+                    지역
+                  </option>
+                  <option th:selected="${page.cri.type}=='C'" value="C">
+                    분야
+                  </option>
+                  <option th:selected="${page.cri.type}=='CR'" value="CR">
+                    지역 또는 분야
+                  </option>
+                </select>
+              </div>
+              <div class="ezt-search-bar">
+                <input
+                  class="input form-control"
+                  type="text"
+                  name="keyword"
+                  placeholder="검색어 입력"
+                  th:value="${page.cri.keyword}"
+                />
+                <input
+                  type="hidden"
+                  th:name="${pageNum}"
+                  th:value="${page.cri.pageNum}"
+                />
+                <input
+                  type="hidden"
+                  th:name="${amount}"
+                  th:value="${page.cri.amount}"
+                />
+                <button class="ezt-no-style-btn">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div>
+      <div class="row mb-5">
+        <th:block th:each="rv : ${rvList}">
+          <div class="col-md-6 col-lg-3 mb-5">
+            <div
+              class="ezt-item-box cursor p-0"
+              th:onclick="|location.href='@{/review/info(reviewNo=${rv.reviewNo})}'|"
+            >
+              <div class="ezt-img-box rounded-4">
+                <div class="ezt-img">
+                  <th:block>
+                    <img
+                      th:if="${rv.fileId == 0}"
+                      src="/images/req/default_img.png"
+                      alt="Image"
+                    />
+                    <img
+                      th:unless="${rv.fileId == 0}"
+                      th:src="|/display?fileName=${rv.savePath.replaceAll('\\','/')}/${rv.saveName}_${rv.originalFileName}.${rv.ext}|"
+                      alt="Image"
+                    />
+                  </th:block>
+                </div>
+              </div>
+              <div class="ezt-item-text-section pt-2 px-1 text-truncate">
+                <strong>[[${rv.content}]]</strong>
+                <div>
+                  <p
+                    th:text="${rv.star}"
+                    class="star"
+                    style="display: none"
+                  ></p>
+                  <div class="stars star-rating"></div>
+                </div>
+                <div>작업자명 : [[${rv.workerName}]]</div>
+                <div class="d-flex justify-content-between">
+                  <span>[[${rv.regionCode}]]</span>
+                  <span>[[${rv.categoryCode}]]</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </th:block>
+      </div>
+    </div>
+    <!-- 페이징 -->
     <div class="row pagination-wrap mt-5">
       <div class="col-md-12 text-center">
         <div class="custom-pagination ml-auto">
@@ -199,17 +204,20 @@
         </div>
       </div>
     </div>
-<script>
-	for(let i=0; i<$(".star").length; i++){
-		for(let j=0; j<parseInt($(".star:eq("+i+")").text()); j++){
-			$(".stars:eq("+i+")").append(`<div class="yellow">★</div>`);
-		}
-		for(let k=0; k<5-parseInt($(".star:eq("+i+")").text()); k++){
-			$(".stars:eq("+i+")").append(`<div class="gray">★</div>`);
-		}
-	
-	}
-</script>
-<script src="/js/rvw/reviewSearch.js"></script>
-</body>
+    <script>
+      for (let i = 0; i < $(".star").length; i++) {
+        for (let j = 0; j < parseInt($(".star:eq(" + i + ")").text()); j++) {
+          $(".stars:eq(" + i + ")").append(`<div class="yellow">★</div>`);
+        }
+        for (
+          let k = 0;
+          k < 5 - parseInt($(".star:eq(" + i + ")").text());
+          k++
+        ) {
+          $(".stars:eq(" + i + ")").append(`<div class="gray">★</div>`);
+        }
+      }
+    </script>
+    <script src="/js/rvw/reviewSearch.js"></script>
+  </body>
 </html>

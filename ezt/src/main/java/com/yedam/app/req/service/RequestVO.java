@@ -45,7 +45,7 @@ public class RequestVO {
 	//조인 컬럼
 	private String usersName;			  //유저이름
 	private String workerName;			  //작업자이름
-	
+	private int workerNo;			// 작업자 번호
 	private String savePath;			// 파일경로
 	private String saveName;			// 파일이름
 	private String originalFileName;	// 원 파일 명

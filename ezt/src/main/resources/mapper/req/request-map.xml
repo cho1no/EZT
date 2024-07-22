@@ -134,11 +134,16 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 	<result property="usersName" column="users_Name"></result>
 	
 	<result property="workerName" column="worker_Name"></result>
+
 	<result property="worker" column="worker"></result>
-	<result property="saveName" column="save_name"></result>
-	<result property="originalFileName" column="original_file_name"></result>
-	<result property="savePath" column="save_path"></result>
-	<result property="ext" column="ext"></result>
+	
+	<collection property="fileVO" ofType="FileVO">
+		<id property="fileId" column="file_id"></id>
+		<id property="saveName" column="save_name"></id>
+		<id property="originalFileName" column="original_file_name"></id>
+		<id property="savePath" column="save_path"></id>
+		<id property="ext" column="ext"></id>
+	</collection>
 </resultMap>
 
 <!-- 의뢰 단건조회 -->
@@ -162,7 +167,7 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		  ,r.request_state
 		  ,FIND_COMMONCODE(r.request_state) as request_state_nm
 		  ,r.region_code
-		  ,f.file_id
+		  ,r.file_id
 		  ,f.save_name
 		  ,f.ext
 		  ,f.original_file_name
@@ -178,19 +183,16 @@ WHERE c.rn <= #{pageNum} * #{amount} AND
 		  ,(SELECT USERNAME(worker)
             FROM proposal
             WHERE proposal_state= 'A02' AND request_no = r.request_no) as worker_name
-		  ,(SELECT worker
+
+          ,(SELECT worker
             FROM proposal
             WHERE proposal_state= 'A02' AND request_no = r.request_no) as worker
+
 	FROM request r
         JOIN users u
         ON r.requester = u.users_no
-        JOIN file_detail_info f
-        ON f.file_id = (SELECT NVL(file_id, 0)
-        				FROM users
-        				WHERE users_no = (SELECT worker
-								            FROM proposal
-								            WHERE proposal_state = 'A02' AND request_no = r.request_no)
-					   )
+        LEFT OUTER JOIN file_detail_info f
+        ON r.file_id = f.file_id
         
 	WHERE r.request_no = #{requestNo} 
 

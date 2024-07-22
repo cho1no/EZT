@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.yedam.app.adm.service.AdminService;
 import com.yedam.app.common.service.CommonCodeService;
 import com.yedam.app.common.service.FileVO;
 import com.yedam.app.fie.service.FileService;
@@ -27,6 +28,7 @@ import com.yedam.app.req.service.RequestVO;
 import com.yedam.app.rvw.service.ReviewService;
 import com.yedam.app.rvw.service.ReviewVO;
 import com.yedam.app.sgi.service.LoginUserVO;
+import com.yedam.app.usr.service.UserVO;
 //리뷰 CRUD 및 댓글 CRUD
 @RequestMapping("review")
 @Controller
@@ -40,6 +42,8 @@ public class ReviewController {
 	RequestService requestService;
 	@Autowired
 	FileService fileService;
+	@Autowired
+	AdminService admService;
 	
 	//리뷰 전체조회
 	@GetMapping("/list")
@@ -80,7 +84,8 @@ public class ReviewController {
 		//의뢰 단건조회
 		RequestVO findVO = requestService.requestInfo(requestVO);
 		model.addAttribute("request",findVO);
-		
+		UserVO uvo = admService.getUser(findVO.getWorkerNo());
+		model.addAttribute("workerInfo", uvo);
 		//후기 등록
 		model.addAttribute("review", new ReviewVO());
 		

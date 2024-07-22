@@ -55,7 +55,7 @@ $(document).ready(function () {
         });
       },
       error: function () {
-        $(".floated-body").append($("<p>대화 로딩 실패</p>"));
+        $(".floated-body").append($("<p>로그인 후 이용해주세요</p>"));
       },
     });
   }
@@ -156,4 +156,21 @@ function sendMessage() {
     })
   );
   msg.value = "";
+}
+
+function createChatRoom(usersNo = 0) {
+  send_data = { usersNos: [usersNo, uvo.usersNo] };
+  console.log(usersNo);
+  $.ajax({
+    type: "post",
+    url: "/cht/makeRoom",
+    contentType: "application/json",
+    data: JSON.stringify(send_data),
+    success: function (response) {
+      alert("채팅방 생성에 성공했습니다. \n우측 하단을 확인해주세요.");
+    },
+    error: function () {
+      alert("채팅방 생성에 실패했습니다.");
+    },
+  });
 }

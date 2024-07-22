@@ -1,117 +1,287 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org"
-		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-		layout:decorate="~{common/layouts/default_layout}"
-		layout:fragment="Content">
-<head>
-<meta charset="UTF-8">
-<title>소규모 후기 상세</title>
-<link rel="stylesheet" href="/css/rvw/rvInfo.css">
-</head>
-<body>
-	
-<form name="rvInfoForm" th:object="${review}">
-<div id="container" class="row">
-	<div class="col">
-	<p></p>
-		<img th:if="${review.fileVO != null}" th:src="|/display?fileName=${review.fileVO[0].savePath.replaceAll('\\','/')}/${review.fileVO[0].saveName}_${review.fileVO[0].originalFileName}.${review.fileVO[0].ext}|" alt="photo" id="mainPhoto">
-		<div class="star-rating">
-          	<div>
-           	<p th:text="${review.star}" class="star" style="display:none" ></p>
-           	<div class="stars star-rating">평점 : </div>
-          	</div>
-		 </div>
-		 <fieldset class="reStar" style="display:none">
-			<input type="radio" th:field="*{star}" value="5" id="rate1"><label
-				for="rate1">★</label>
-			<input type="radio" th:field="*{star}" value="4" id="rate2"><label
-				for="rate2">★</label>
-			<input type="radio" th:field="*{star}" value="3" id="rate3"><label
-				for="rate3">★</label>
-			<input type="radio" th:field="*{star}" value="2" id="rate4"><label
-				for="rate4">★</label>
-			<input type="radio" th:field="*{star}" value="1" id="rate5"><label
-				for="rate5">★</label>
-			<span class="text-bold" >평점 : </span>
-		</fieldset>
-	</div>
-	<div class="col">
-		<ul id="gallery">
-			<li>
-				<img th:each="img : ${review.fileVO}"  th:src="|/display?fileName=${img.savePath.replaceAll('\\','/')}/${img.saveName}_${img.originalFileName}.${img.ext}|" alt="thumbnail">
-			</li>
+<html
+  xmlns:th="https://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{common/layouts/default_layout}"
+  layout:fragment="Content"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>소규모 후기 상세</title>
+    <link rel="stylesheet" href="/css/rvw/rvInfo.css" />
+    <style>
+      .slide-container {
+        width: 100%;
+        padding: 40px 0;
+      }
+      .slide-content {
+        margin: 0 40px;
+        overflow: hidden;
+      }
+      .image-content,
+      .card-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .image-content {
+        position: relative;
+      }
+      .card-image {
+        position: relative;
+        background: #fff;
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+      .name {
+        font-size: 18px;
+        font-weight: 500;
+        color: #333;
+      }
+      .description {
+        font-size: 14px;
+        color: #707070;
+        text-align: center;
+      }
+      .swiper {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .swiper-navBtn {
+        color: #89ba16;
+        transition: color 0.3s ease;
+      }
+      .swiper-navBtn:hover {
+        color: #7ba714;
+      }
+      .swiper-navBtn::before,
+      .swiper-navBtn::after {
+        font-size: 38px;
+      }
+      .swiper-button-next {
+        right: 0;
+      }
+      .swiper-button-prev {
+        left: 0;
+      }
+      .swiper-pagination-bullet {
+        background-color: #89ba16;
+        opacity: 1;
+      }
+      .swiper-pagination-bullet-active {
+        background-color: #7ba714;
+      }
 
-		</ul>
-	</div>
-</div>
+      @media screen and (max-width: 768px) {
+        .slide-content {
+          margin: 0 10px;
+        }
+        .swiper-navBtn {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ezt-section-title mb-5">
+      <div class="text-center">
+        <h2 class="m-0">후기</h2>
+        <b style="font-size: 14px; color: #89ba16; font-weight: 500"
+          >후기 상세</b
+        >
+      </div>
+    </div>
+    <div class="p-3 border rounded-4 border-light-subtle bg-white mb-4">
+      <div class="row">
+        <div class="col-lg-6 col-md-12">
+          <div class="slide-container swiper">
+            <div class="slide-content">
+              <div class="card-wrapper swiper-wrapper">
+                <th:block th:each="img : ${review.fileVO}">
+                  <div
+                    class="card swiper-slide"
+                    style="
+                      width: 100%;
+                      height: 400px;
+                      display: flex;
+                      align-items: center;
+                    "
+                  >
+                    <img
+                      style="width: 100%"
+                      th:src="|/display?fileName=${img.savePath.replaceAll('\\','/')}/${img.saveName}_${img.originalFileName}.${img.ext}|"
+                      alt="thumbnail"
+                    />
+                  </div>
+                </th:block>
+              </div>
+              <div class="swiper-button-next swiper-navBtn"></div>
+              <div class="swiper-button-prev swiper-navBtn"></div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-12 pt-5">
+          <table class="table">
+            <tr>
+              <th>작성자</th>
+              <td>[[${review.writerName}]]</td>
+            </tr>
+            <tr>
+              <th>작업자</th>
+              <td>[[${review.workerName}]]</td>
+            </tr>
+            <tr>
+              <th>공간형태</th>
+              <td>[[${review.cttPlace}]]</td>
+            </tr>
+            <tr>
+              <th>평수</th>
+              <td>[[${review.cttPlaceArea}]]</td>
+            </tr>
+            <tr>
+              <th>시공지역</th>
+              <td>[[${review.regionCode}]]</td>
+            </tr>
+            <tr>
+              <th>시공분야</th>
+              <td>[[${review.categoryCode}]]</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="p-3 border rounded-4 border-light-subtle bg-white">
+      <form name="rvInfoForm" th:object="${review}">
+        <div id="container" class="float-end">
+          <div class="">
+            <div class="star-rating">
+              <div>
+                <p
+                  th:text="${review.star}"
+                  class="star"
+                  style="display: none"
+                ></p>
+                <div class="stars star-rating"></div>
+              </div>
+            </div>
+            <fieldset class="reStar" style="display: none">
+              <input
+                type="radio"
+                th:field="*{star}"
+                value="5"
+                id="rate1"
+              /><label for="rate1">★</label>
+              <input
+                type="radio"
+                th:field="*{star}"
+                value="4"
+                id="rate2"
+              /><label for="rate2">★</label>
+              <input
+                type="radio"
+                th:field="*{star}"
+                value="3"
+                id="rate3"
+              /><label for="rate3">★</label>
+              <input
+                type="radio"
+                th:field="*{star}"
+                value="2"
+                id="rate4"
+              /><label for="rate4">★</label>
+              <input
+                type="radio"
+                th:field="*{star}"
+                value="1"
+                id="rate5"
+              /><label for="rate5">★</label>
+            </fieldset>
+          </div>
+        </div>
 
-	<div >
-	<h4>후기</h4>
-		<table class="table">
-		<td><input type="hidden" th:value="${review.reviewNo}" name="reviewNo"/></td>
-		<tr>
-			<th>작성자</th>
-			<td>[[${review.writerName}]]</td>
-			<td>/</td>
-			<th>작업자</th>
-			<td>[[${review.workerName}]]</td>
-		</tr>
-		<tr>
-			<th>공간형태</th>
-			<td>[[${review.cttPlace}]]</td>
-			<td>/</td>
-			<th>평수</th>
-			<td>[[${review.cttPlaceArea}]]</td>
-		</tr>
-		<tr>
-			<th>시공지역</th>
-			<td>[[${review.regionCode}]]</td>
-			<td>/</td>
-			<th>시공분야</th>
-			<td>[[${review.categoryCode}]]</td>
-		</tr>		
-		<tr>
-			<th>내용</th>
-			<td colspan="4"><textarea class="writerContent" name="content" th:text="${review.content}" readonly></textarea></td>
-		</tr>
-		</table>
-	
-	</div>
-	<button type="button" class="btn btn-secondary upBtn update">수정</button>
-    <button type="button" class="btn btn-secondary delBtn" th:onClick = "'deleteReview(' + ${review.reviewNo} + ')'">삭제</button>
-    <button type="button" class="btn btn-secondary delBtn"  onclick="history.back()">뒤로가기</button>
-</form>	
+        <div>
+          <input type="hidden" th:value="${review.reviewNo}" name="reviewNo" />
 
-<script> 
-//이미지 클릭 시 메인이미지로 이동
-  var photo = document.getElementById("mainPhoto");
-  var thumbnail = document.querySelectorAll("#gallery > li > img");
-  for ( var i = 0; i < thumbnail.length; i++ )
-    thumbnail[i].addEventListener("click", function () {
- 
-      photo.setAttribute("src", this.getAttribute("src"));
- 
-    });
- //별점 출력
-	for(let i=0; i<$(".star").length; i++){
-		for(let j=0; j<parseInt($(".star:eq("+i+")").text()); j++){
-			$(".stars:eq("+i+")").append(`<div class="yellow">★</div>`);
-		}
-		for(let k=0; k<5-parseInt($(".star:eq("+i+")").text()); k++){
-			$(".stars:eq("+i+")").append(`<div class="gray">★</div>`);
-		}
-	
-	}
+          <h5 class="float-start">후기 내용</h5>
 
-if(/*[[${ review.fileVO}]]*/"" != null){
-      var uploadImg = /*[[${ review.fileVO}]]*/"";
-	 console.log(uploadImg);
-   }else{
- 	  var uploadImg = null;
-   }
-  console.log(/*[[${ review.fileVO}]]*/"");
-</script>
-<script src="/js/rvw/reviewUpdate.js"></script>
-<script src="/js/rvw/reviewImg.js"></script>
-</body>
+          <textarea
+            rows="10"
+            class="writerContent form-control"
+            name="content"
+            th:text="${review.content}"
+            readonly
+          ></textarea>
+        </div>
+        <div class="mt-3">
+          <button
+            type="button"
+            class="btn btn-secondary delBtn"
+            onclick="history.back()"
+          >
+            뒤로가기
+          </button>
+          <button type="button" class="btn btn-secondary upBtn update">
+            수정
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary delBtn"
+            th:onClick="'deleteReview(' + ${review.reviewNo} + ')'"
+          >
+            삭제
+          </button>
+        </div>
+      </form>
+    </div>
+    <script>
+      var swiper = new Swiper(".slide-content", {
+        slidesPerView: 1,
+        spaceBetween: 25,
+        loop: false,
+        centerSlide: "true",
+        fade: "true",
+        grabCursor: "true",
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+          dynamicBullets: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+
+        breakpoints: {
+          0: {
+            slidesPerView: 1,
+          },
+        },
+      });
+      //별점 출력
+      for (let i = 0; i < $(".star").length; i++) {
+        for (let j = 0; j < parseInt($(".star:eq(" + i + ")").text()); j++) {
+          $(".stars:eq(" + i + ")").append(`<div class="yellow">★</div>`);
+        }
+        for (
+          let k = 0;
+          k < 5 - parseInt($(".star:eq(" + i + ")").text());
+          k++
+        ) {
+          $(".stars:eq(" + i + ")").append(`<div class="gray">★</div>`);
+        }
+      }
+
+      if (/*[[${ review.fileVO}]]*/ "" != null) {
+        var uploadImg = /*[[${ review.fileVO}]]*/ "";
+        console.log(uploadImg);
+      } else {
+        var uploadImg = null;
+      }
+      console.log(/*[[${ review.fileVO}]]*/ "");
+    </script>
+    <script src="/js/rvw/reviewUpdate.js"></script>
+    <script src="/js/rvw/reviewImg.js"></script>
+  </body>
 </html>
