@@ -178,7 +178,7 @@ $('.endBtn').click(function(){
                                   onclick="detail(this)">
                                 <td>${i + 1}</td>
                                 <td>${result[i].worker}</td>
-                                <td>${result[i].career}</td>
+                                <td>${result[i].career}년</td>
                             </tr>`;
                 $('#volunteerBody').append(table);
             }

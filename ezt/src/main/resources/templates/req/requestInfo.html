@@ -606,8 +606,8 @@
 	        	 	 no = $(this).find(".ppsNo").text();
 	        	  	 total = 0;
 	              }
-	              var qty = parseFloat($(this).find(".qty").text()) || 0;
-	              var unitprice = parseFloat($(this).find(".unitprice").text()) || 0;
+	              var qty = parseFloat($(this).find(".qty").text().replaceAll(',','')) || 0;
+	              var unitprice = parseFloat($(this).find(".unitprice").text().replaceAll(',','')) || 0;
 	              var totalprice = qty * unitprice;
 	              total += totalprice;
 	              
