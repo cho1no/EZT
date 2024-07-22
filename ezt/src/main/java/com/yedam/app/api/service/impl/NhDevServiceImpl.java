@@ -94,12 +94,12 @@ public class NhDevServiceImpl implements NhDevService{
 	}
 
 	@Override
-	public Mono<Map> paymentPayoutAccountTransfer() {
+	public Mono<Map> paymentPayoutAccountTransfer(String price) {
 		String ApiNm = "PaymentPayoutAccountTransfer";
 		String APISvcCd = "10B_002_00";
 		Map<String, Object> map = createHeader(ApiNm, APISvcCd);
-		map.put("Tram", "거래금액");
-		map.put("Acno", "계좌번호를입력하세요");
+		map.put("Tram", price);
+		map.put("Acno", MOTHER_AC);
 		return sendApi(ApiNm, map);
 	}
 	

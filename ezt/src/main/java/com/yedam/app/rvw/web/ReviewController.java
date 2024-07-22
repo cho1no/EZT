@@ -84,7 +84,7 @@ public class ReviewController {
 		//의뢰 단건조회
 		RequestVO findVO = requestService.requestInfo(requestVO);
 		model.addAttribute("request",findVO);
-		UserVO uvo = admService.getUser(findVO.getWorkerNo());
+		UserVO uvo = admService.getUser(Integer.parseInt(findVO.getWorker()));
 		model.addAttribute("workerInfo", uvo);
 		//후기 등록
 		model.addAttribute("review", new ReviewVO());
