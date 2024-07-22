@@ -176,7 +176,7 @@ public class ProposalController {
 		
 		AlarmVO alarm = new AlarmVO();
 		alarm.setUsersNo(findVO.getRequester());
-		alarm.setTitle("견적서가 등록 확인");
+		alarm.setTitle("견적서 등록 확인");
 		alarm.setContent("["+ reqVO.getTitle() + "] 에서 견적서를 확인해 주세요.");
 		sac.message(alarm);
 
