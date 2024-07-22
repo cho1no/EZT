@@ -107,6 +107,15 @@
         margin: 0;
         padding: 0;
       }
+      .star-spacing ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+      }
+      .star-spacing ul li {
+        display: inline-block;
+        margin-right: -3px;
+      }
     </style>
   </head>
   <body>
@@ -279,7 +288,26 @@
                       </div>
                     </div>
                     <div class="card-content">
-                      <p class="description">[[${rev.star}]]</p>
+                      <div class="p-0 star-spacing">
+				          <ul style="display: inline-block">
+				            <th:block th:each="n : ${#numbers.sequence(1,5)}">
+				              <li>
+				                <img
+				                  th:if="${n <= rev.star}"
+				                  style="width: 10px"
+				                  src="/images/main/star.svg"
+				                  class="star"
+				                />
+				                <img
+				                  th:unless="${n <= rev.star}"
+				                  style="width: 10px"
+				                  src="/images/main/star-null.svg"
+				                  class="star"
+				                />
+				              </li>
+				            </th:block>
+				          </ul>
+				        </div>
                     </div>
                   </div>
                 </th:block>
