@@ -55,6 +55,7 @@ public class ProcessScheduler {
 			if (price <= vranSum) {
 				log.info(payVO.getPayNo().toString());
 				int result = procMap.updateRequestState(payVO.getRequestNo());
+				nhDevSvc.paymentPayoutAccountTransfer(price+"");
 				if (result > 0) {
 					AlarmVO alarm = new AlarmVO();
 					alarm.setUsersNo(payVO.getRequester());

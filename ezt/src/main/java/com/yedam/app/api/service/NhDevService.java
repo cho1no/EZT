@@ -15,5 +15,5 @@ public interface NhDevService {
 	// 타행 계좌 송금
 	public Mono<Map> receivedReceivedTransferOtherBank(Map<String, String> input);
 	// 예치금 모계좌로 송금
-	public Mono<Map> paymentPayoutAccountTransfer();
+	public Mono<Map> paymentPayoutAccountTransfer(String price);
 }
