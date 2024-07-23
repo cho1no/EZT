@@ -171,7 +171,7 @@
 										<tr class="text-center">
 											<td th:text="${list.product}" />
 											<td
-												th:text="${#numbers.formatInteger(list.unitprice,1,'COMMA')} + 원" />
+												th:text="${list.qty * list.unitprice}" />
 										</tr>
 									</th:block>
 								</tbody>
@@ -205,6 +205,15 @@
 		$('#worker_phone').val(workerPhone);
 		requesterPhone = userPhone(requesterPhone);
 		$('#requester_phone').val(requesterPhone);
+		
+		// 품목 금액(수량*단가) 계산
+		var length =  $('.pay_list tr').length;
+		for(i = 0; i < length ; i++){
+			var price = $('.pay_list tr:eq('+i+') td:eq(1)').html();
+			price = Number(price).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			$('.pay_list tr:eq('+i+') td:eq(1)').html(price + '원');
+			
+		}
 	})
 	
 	// 전화번호
