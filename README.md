@@ -36,3 +36,5 @@
     - 의뢰/팀/후기
 - **김성현 : 개발환경 담당**
   - 로그인&회원가입/마이페이지/작업자찾기페이지
+
+![footer](https://capsule-render.vercel.app/api?type=waving&color=9ACB34&height=300&section=footer&text=EZT%20&fontSize=90&fontColor=f7f5f5)
