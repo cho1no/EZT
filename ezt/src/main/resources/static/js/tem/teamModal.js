@@ -200,6 +200,7 @@ $('.endBtn').click(function(){
 		$('#worker').text($(tr).data("worker"));
 		$('#workCode').val($(tr).data("workcode"));
 		$('#volunteerNo').val($(tr).data("usersno"));
+		$('#usersNo').val($(tr).data("usersno"));
 		$('#teamNo').val($(tr).data("teamno"));
 	}
 	
